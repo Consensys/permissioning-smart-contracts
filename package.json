@@ -1,0 +1,10 @@
+{
+  "name": "permissioning-smart-contracts",
+  "repository": "permissioning-smart-contracts",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "truffle-hdwallet-provider": "^1.0.6"
+  }
+}

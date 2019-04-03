@@ -1,7 +1,10 @@
 {
   "ignore": [
     "README.md",
-    ".gitignore"
+    ".gitignore",
+    "package.json",
+    "package-lock.json"
+    
   ],
   "commands": {
     "Compile contracts": "truffle compile",
