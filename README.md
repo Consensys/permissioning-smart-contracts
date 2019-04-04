@@ -16,7 +16,7 @@
 1. Run `truffle compile`
 1. Run `truffle migrate`
 
-After this step, you should have your Rules contract deployed on the network.
+After this step, you should have your Rules contract deployed on the network. This will also update the Ingress contract with the name and version of the Rules contract.
 
 ## Add and Remove Enodes to the whitelist
 1. Run `truffle console`
@@ -26,12 +26,29 @@ After this step, you should have your Rules contract deployed on the network.
 1. Copy the truffe command output.
 1. Paste the truffle command into the console and press enter.
 
-Example truffle output from the website
+Example output:
 ```
-Rules.deployed().then(function(instance) {instance.addEnodeIpv4("0x6f8a80d14311c39f35f516fa664deaaaa13e85b2f7493f37f6144d86991ec012", "0x937307647bd3b9a82abe2974e1407241d54947bbb39763a4cac9f77166ad92a0", "0x0a033a06", "30303").then(function(tx) {console.log(tx)});});
+$ truffle console
+$ truffle(development)> Rules.deployed().then(function(instance) {instance.addEnodeIpv4("0x6f8a80d14311c39f35f516fa664deaaaa13e85b2f7493f37f6144d86991ec012", "0x937307647bd3b9a82abe2974e1407241d54947bbb39763a4cac9f77166ad92a0", "0x0a033a06", "30303").then(function(tx) {console.log(tx)});});
+undefined
+truffle(development)> { tx: '0xaecbc376089d8eba7154f93d08c6be3bdf7fa13bfe2d8dbdfe4cd323fec77160',
+  receipt:
+   { blockHash: '0x553007bb40a52e3f37f3c9b8e559816d029c9e272590efac69b96926431ebfdd',
+     blockNumber: 22264,
+     contractAddress: null,
+     cumulativeGasUsed: 596203,
+     from: '0xfe3b557e8fb62b89f4916b721be55ceb828dbd73',
+     gasUsed: 596203,
+     logs: [],
+     logsBloom: '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+     status: true,
+     to: '0xa86eb77c09ae0f2164065ab14094565011b0bfca',
+     transactionHash: '0xaecbc376089d8eba7154f93d08c6be3bdf7fa13bfe2d8dbdfe4cd323fec77160',
+     transactionIndex: 0,
+     rawLogs: [] },
+  logs: [] }
+
+undefined
 ```
 
 After this step, you should have the enode added to your whitelist. Please repeat this step for each enode that you want to add to the whitelist.
-
-## Configure Ingress contract with Rules contract address
-1. TODO
