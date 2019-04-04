@@ -13,6 +13,8 @@ contract Rules {
     mapping(address => Admin) admins;
     uint adminCount;
     address[] adminKeys;
+    // version of this contract: semver like 1.2.14 represented like 001002014
+    uint version = 1000000;
 
     struct EnodeIpv6 {
         bytes next;
@@ -110,6 +112,11 @@ contract Rules {
         require(readOnlyMode == true);
         readOnlyMode = false;
         return true;
+    }
+
+    // VERSION
+    function getContractVersion() public view returns (uint) {
+        return version;
     }
 
     // RULES - IS CONNECTION ALLOWED
