@@ -16,33 +16,21 @@ contract Rules {
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
 
-    struct EnodeIpv6 {
+    struct Enode {
         bytes next;
         bytes prev;
         bytes32 enodeHigh;
         bytes32 enodeLow;
-        bytes16 enodeHost; // Ipv6
+        bytes16 enodeHost;
         uint16 enodePort;
     }
-    struct EnodeIpv4 {
-        bytes next;
-        bytes prev;
-        bytes32 enodeHigh;
-        bytes32 enodeLow;
-        bytes4 enodeHost; // Ipv4
-        uint16 enodePort;
-    }
-    mapping(bytes => EnodeIpv6) private whitelistIpv6; // should there be a size for the whitelists?
-    mapping(bytes => EnodeIpv4) private whitelistIpv4; 
+    mapping(bytes => Enode) private whitelist; // should there be a size for the whitelists?
 
     // keys
-    uint countIpv4;
-    uint countIpv6;
-    bytes[] keysIpv4;
-    bytes[] keysIpv6;
+    uint countWhitelist;
+    bytes[] keysWhitelist;
     // head of linked list
-    bytes headIpv4; 
-    bytes headIpv6; 
+    bytes headWhitelist; 
 
 
     // AUTHORIZATION
@@ -120,154 +108,89 @@ contract Rules {
     }
 
     // RULES - IS CONNECTION ALLOWED
-    function connectionAllowedIpv6(
-        bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIpv6, uint16 sourceEnodePort, 
-        bytes32 destinationEnodeHigh, bytes32 destinationEnodeLow, bytes16 destinationEnodeIpv6, uint16 destinationEnodePort) 
+    function connectionAllowed(
+        bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort, 
+        bytes32 destinationEnodeHigh, bytes32 destinationEnodeLow, bytes16 destinationEnodeIp, uint16 destinationEnodePort) 
         public view returns (bool) {
-        return (enodeAllowedIpv6(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIpv6, sourceEnodePort) && 
-        enodeAllowedIpv6(destinationEnodeHigh, destinationEnodeLow, destinationEnodeIpv6, destinationEnodePort));
-    }
-    function connectionAllowedIpv4(
-        bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes4 sourceEnodeIpv4, uint16 sourceEnodePort, 
-        bytes32 destinationEnodeHigh, bytes32 destinationEnodeLow, bytes4 destinationEnodeIpv4, uint16 destinationEnodePort) 
-        public view returns (bool){
-        return (enodeAllowedIpv4(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIpv4, sourceEnodePort) && 
-        enodeAllowedIpv4(destinationEnodeHigh, destinationEnodeLow, destinationEnodeIpv4, destinationEnodePort));
+        return (enodeAllowed(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort) && 
+        enodeAllowed(destinationEnodeHigh, destinationEnodeLow, destinationEnodeIp, destinationEnodePort));
     }
 
     // RULES - IS ENODE ALLOWED
-    function enodeAllowedIpv6(bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIpv6, uint16 sourceEnodePort) 
+    function enodeAllowed(bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort) 
     public view returns (bool){
-        bytes memory key = computeKeyIpv6(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIpv6, sourceEnodePort);
-        EnodeIpv6 storage whitelistSource = whitelistIpv6[key];
-        if (enodeExists(whitelistSource)) {
-            return true;
-        }
-    }
-    function enodeAllowedIpv4(bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes4 sourceEnodeIpv4, uint16 sourceEnodePort) 
-    public view returns (bool){
-        bytes memory key = computeKeyIpv4(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIpv4, sourceEnodePort);
-        EnodeIpv4 storage whitelistSource = whitelistIpv4[key];
+        bytes memory key = computeKey(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort);
+        Enode storage whitelistSource = whitelist[key];
         if (enodeExists(whitelistSource)) {
             return true;
         }
     }
 
     // RULES MODIFIERS - ADD
-    function addEnodeIpv6(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeIpv6, uint16 enodePort) public onlyAdmin returns (bool) {
+    function addEnode(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeIp, uint16 enodePort) public onlyAdmin returns (bool) {
         require(readOnlyMode == false);
-        bytes memory key = computeKeyIpv6(enodeHigh, enodeLow, enodeIpv6, enodePort);
+        bytes memory key = computeKey(enodeHigh, enodeLow, enodeIp, enodePort);
         // return false if already in the list
-        if (enodeExists(whitelistIpv6[key])) {
+        if (enodeExists(whitelist[key])) {
             return false;
         }
         bytes memory next;
         bytes memory prev;
-        if (countIpv6 == 0) {
+        if (countWhitelist == 0) {
             next = key;
             prev = key;
-            headIpv6 = key;
+            headWhitelist = key;
         } else {
-            next = whitelistIpv6[headIpv6].next;
-            prev = headIpv6;
+            next = whitelist[headWhitelist].next;
+            prev = headWhitelist;
         }
-        EnodeIpv6 memory newEnode = EnodeIpv6(next, prev, enodeHigh, enodeLow, enodeIpv6, enodePort);
-        whitelistIpv6[key] = newEnode;
-        keysIpv6.push(key);
-        countIpv6 = countIpv6 + 1;
-        whitelistIpv6[newEnode.next].prev = key;
-        whitelistIpv6[headIpv6].next = key;
-        return true;
-    }
-    function addEnodeIpv4(bytes32 enodeHigh, bytes32 enodeLow, bytes4 enodeIpv4, uint16 enodePort) public onlyAdmin returns (bool) {
-        require(readOnlyMode == false);
-        bytes memory key = computeKeyIpv4(enodeHigh, enodeLow, enodeIpv4, enodePort);
-        // return false if already in the list
-        if (enodeExists(whitelistIpv4[key])) {
-            return false;
-        }
-        bytes memory next;
-        bytes memory prev;
-        if (countIpv4 == 0) {
-            next = key;
-            prev = key;
-            headIpv4 = key;
-        } else {
-            next = whitelistIpv4[headIpv4].next;
-            prev = headIpv4;
-        }
-        EnodeIpv4 memory newEnode = EnodeIpv4(next, prev, enodeHigh, enodeLow, enodeIpv4, enodePort);
-        whitelistIpv4[key] = newEnode;
-        keysIpv4.push(key);
-        countIpv4 = countIpv4 + 1;
-        whitelistIpv4[newEnode.next].prev = key;
-        whitelistIpv4[headIpv4].next = key;
+        Enode memory newEnode = Enode(next, prev, enodeHigh, enodeLow, enodeIp, enodePort);
+        whitelist[key] = newEnode;
+        keysWhitelist.push(key);
+        countWhitelist = countWhitelist + 1;
+        whitelist[newEnode.next].prev = key;
+        whitelist[headWhitelist].next = key;
         return true;
     }
 
     // RULES MODIFIERS - REMOVE
-    function removeEnodeIpv6(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeIpv6, uint16 enodePort) public onlyAdmin returns (bool) {
+    function removeEnode(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeIp, uint16 enodePort) public onlyAdmin returns (bool) {
         require(readOnlyMode == false);
-        bytes memory key = computeKeyIpv6(enodeHigh, enodeLow, enodeIpv6, enodePort);
-        if (!enodeExists(whitelistIpv6[key])) {
+        bytes memory key = computeKey(enodeHigh, enodeLow, enodeIp, enodePort);
+        if (!enodeExists(whitelist[key])) {
             return false;
         }
-        EnodeIpv6 memory e = whitelistIpv6[key];
+        Enode memory e = whitelist[key];
         // TODO only if removing the head, reset the head to head.next
-        headIpv6 = e.next;
-        whitelistIpv6[e.prev].next  = e.next;
-        whitelistIpv6[e.next].prev = e.prev;
-        countIpv6 = countIpv6 - 1;
-        delete whitelistIpv6[key];
-        return true;
-    }
-    function removeEnodeIpv4(bytes32 enodeHigh, bytes32 enodeLow, bytes4 enodeIpv4, uint16 enodePort) public onlyAdmin returns (bool) {
-        require(readOnlyMode == false);
-        bytes memory key = computeKeyIpv4(enodeHigh, enodeLow, enodeIpv4, enodePort);
-        if (!enodeExists(whitelistIpv4[key])) {
-            return false;
-        }
-        EnodeIpv4 memory e = whitelistIpv4[key];
-        // TODO only if removing the head, reset the head to head.next
-        headIpv4 = e.next;
-        whitelistIpv4[e.prev].next  = e.next;
-        whitelistIpv4[e.next].prev = e.prev;
-        countIpv4 = countIpv4 - 1;
-        delete whitelistIpv4[key];
+        headWhitelist = e.next;
+        whitelist[e.prev].next  = e.next;
+        whitelist[e.next].prev = e.prev;
+        countWhitelist = countWhitelist - 1;
+        delete whitelist[key];
         return true;
     }
 
     // RULES - LINKED LIST
-    function getHeadEnodeIpv4() public view returns (bytes memory, bytes memory, bytes32, bytes32, bytes4, uint16) {
-        require(countIpv4 > 0);
-        return getEnodeIpv4(headIpv4);
+    function getHeadEnode() public view returns (bytes memory, bytes memory, bytes32, bytes32, bytes16, uint16) {
+        require(countWhitelist > 0);
+        return getEnode(headWhitelist);
     }
-    function getEnodeIpv4(bytes memory key) public view returns (bytes memory, bytes memory, bytes32 , bytes32 , bytes4 , uint16) {
-        EnodeIpv4 memory e = whitelistIpv4[key];
+    function getEnode(bytes memory key) public view returns (bytes memory, bytes memory, bytes32 , bytes32 , bytes16 , uint16) {
+        Enode memory e = whitelist[key];
         return (e.next, e.prev, e.enodeHigh, e.enodeLow, e.enodeHost, e.enodePort);
     }
 
     // RULES - UTILS
-    function enodeExists(EnodeIpv4 memory enode) private pure returns (bool) {
+    function enodeExists(Enode memory enode) private pure returns (bool) {
         // TODO do we need to check all fields?
         return enode.enodeHost > 0 && enode.enodeHigh > 0 && enode.enodeLow > 0;
     }
-    function enodeExists(EnodeIpv6 memory enode) private pure returns (bool) {
-        return enode.enodeHost > 0 && enode.enodeHigh > 0 && enode.enodeLow > 0;
+
+    function computeKey(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeHostIp, uint16 enodePort) public pure returns (bytes memory) {
+        return abi.encode(enodeHigh, enodeLow, enodeHostIp, enodePort);
     }
 
-    function computeKeyIpv6(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeHostIpv6, uint16 enodePort) public pure returns (bytes memory) {
-        return abi.encode(enodeHigh, enodeLow, enodeHostIpv6, enodePort);
-    }
-    function computeKeyIpv4(bytes32 enodeHigh, bytes32 enodeLow, bytes4 enodeHostIpv4, uint16 enodePort) public pure returns (bytes memory) {
-        return abi.encode(enodeHigh, enodeLow, enodeHostIpv4, enodePort);
-    }
-
-    function getKeyCountIpv4() public view returns (uint) {
-        return keysIpv4.length;
-    }
-
-    function getKeyCountIpv6() public view returns (uint) {
-        return keysIpv6.length;
+    function getKeyCount() public view returns (uint) {
+        return keysWhitelist.length;
     }
 }
