@@ -1,7 +1,10 @@
 var Rules = artifacts.require("./Rules.sol");
 var Ingress = artifacts.require("./Ingress.sol");
 
-var ingressContractAddress = "0xc9bc439c8723c5c6fdbbe14e5ff3a1224f8a0f7c";
+/*
+	The ingress contract address must match the address for this contract that is being used in the genesis file
+*/
+var ingressContractAddress = "0x0000000000000000000000000000000000009999";
 var rulesContractName = "Rules";
 var rulesVersion = 1000000;
 
