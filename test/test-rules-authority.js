@@ -3,7 +3,7 @@ var proxy;
 
 var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
 var node1Low = "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
-var node1Host = "0x9bd359fd";
+var node1Host = "0x0000000000000000000011119bd359fd";
 var node1Port = 30303;
 
 var originalAdmin = "627306090abaB3A6e1400e9345bC60c78a8BEf57".toLowerCase();
@@ -52,7 +52,7 @@ contract('Authority ', () => {
 
       // add node should fail in read only mode
       try {
-        await proxy.addEnodeIpv4(node1High, node1Low, node1Host, node1Port);
+        await proxy.addEnode(node1High, node1Low, node1Host, node1Port);
       } catch (err) {
         assert(true, err.toString().includes('revert'), 'expected revert in message');
          await proxy.exitReadOnly();
