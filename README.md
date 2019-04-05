@@ -13,7 +13,6 @@
 
 
 ## How to deploy and setup contracts
-1. Run `truffle compile`
 1. Run `truffle migrate`
 
 After this step, you should have your Rules contract deployed on the network. This will also update the Ingress contract with the name and version of the Rules contract.
@@ -29,7 +28,7 @@ After this step, you should have your Rules contract deployed on the network. Th
 Example output:
 ```
 $ truffle console
-$ truffle(development)> Rules.deployed().then(function(instance) {instance.addEnodeIpv4("0x6f8a80d14311c39f35f516fa664deaaaa13e85b2f7493f37f6144d86991ec012", "0x937307647bd3b9a82abe2974e1407241d54947bbb39763a4cac9f77166ad92a0", "0x0a033a06", "30303").then(function(tx) {console.log(tx)});});
+$ truffle(development)> Rules.deployed().then(function(instance) {instance.addEnode("0x6f8a80d14311c39f35f516fa664deaaaa13e85b2f7493f37f6144d86991ec012", "0x937307647bd3b9a82abe2974e1407241d54947bbb39763a4cac9f77166ad92a0", "0x0a033a06", "30303").then(function(tx) {console.log(tx)});});
 undefined
 truffle(development)> { tx: '0xaecbc376089d8eba7154f93d08c6be3bdf7fa13bfe2d8dbdfe4cd323fec77160',
   receipt:
