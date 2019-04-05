@@ -22,14 +22,14 @@ contract ('Ingress contract with Rules proxy', () => {
           
           // Verify that the Rules contract has not been registered
           result = await icProxy.getContractDetails("rules");
-          assert.equal(result[0], "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
+          assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
 
           // Register the Rules contract
-          await icProxy.registerName("rules", rcProxy.address, 1); 
+          await icProxy.registerName("rules", rcProxy.address); 
 
           // Verify the rules contract has been registered
           result = await icProxy.getContractDetails("rules");
-          assert.equal(result[0], rcProxy.address, 'Rules contract has NOT been registered correctly');
+          assert.equal(result, rcProxy.address, 'Rules contract has NOT been registered correctly');
 
           // Verify that the nodes are not permitted to talk
           result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
@@ -58,15 +58,19 @@ contract ('Ingress contract with Rules proxy', () => {
           
           // Verify that the Rules contract has not been registered
           result = await icProxy.getContractDetails("rules");
-          assert.equal(result[0], "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
+          assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
 
           // Register the initial Rules contract
-          await icProxy.registerName("rules", rcProxy1.address, 1); 
+          await icProxy.registerName("rules", rcProxy1.address); 
 
           // Verify the initial rules contract has been registered
           result = await icProxy.getContractDetails("rules");
-          assert.equal(result[0], rcProxy1.address, 'Initial contract has NOT been registered correctly');
-          assert.equal(result[1], 1, "Registered contract version number does NOT match initial contract");
+          assert.equal(result, rcProxy1.address, 'Initial contract has NOT been registered correctly');
+
+          // Verify that the newly registered contract is the initial version
+          let contract = await RulesContract.at(result);
+          result = await contract.getContractVersion();
+          assert.equal(web3.utils.toDecimal(result), 1000000, 'Initial contract is NOT the correct version');
 
           // Verify that the nodes are not permitted to talk
           result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
@@ -85,12 +89,16 @@ contract ('Ingress contract with Rules proxy', () => {
           assert.equal(result, result2, "Call and proxy call did NOT return the same value");
 
           // Register the updated Rules contract
-          await icProxy.registerName("rules", rcProxy2.address, 2); 
+          await icProxy.registerName("rules", rcProxy2.address); 
 
           // Verify the updated rules contract has been registered
           result = await icProxy.getContractDetails("rules");
-          assert.equal(result[0], rcProxy2.address, 'Updated contract has NOT been registered correctly');
-          assert.equal(result[1], 2, "Registered contract version number does NOT match updated contract");
+          assert.equal(result, rcProxy2.address, 'Updated contract has NOT been registered correctly');
+          
+          // Verify that the newly registered contract is the updated version
+          contract = await RulesContract.at(result);
+          result = await contract.getContractVersion();
+          assert.equal(web3.utils.toDecimal(result), 1000000, 'Updated contract is NOT the correct version');
 
           // Verify that the nodes are not permitted to talk
           result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);

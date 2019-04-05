@@ -12,32 +12,26 @@ contract Ingress {
    struct ContractDetails {
       address owner;
       address contractAddress;
-      uint16 version;
    }
    mapping(string => ContractDetails) registry;
-   function registerName(string memory name, address addr, uint16 ver) public returns (bool) {
-      // versions should start from 1
-      require(ver >= 1);
-      
+   function registerName(string memory name, address addr) public returns (bool) {
       ContractDetails memory info = registry[name];
       require(info.owner == address(0) || info.owner == msg.sender);
       // create info if it doesn't exist in the registry
        if (info.contractAddress == address(0)) {
           info = ContractDetails({
              owner: msg.sender,
-             contractAddress: addr,
-             version: ver
+             contractAddress: addr
           });
        } else {
-          info.version = ver;
           info.contractAddress = addr;
        }
        // update record in the registry
        registry[name] = info;
        return true;
    }
-    function getContractDetails(string memory name) public view returns(address, uint16) {
-      return (registry[name].contractAddress, registry[name].version);
+    function getContractDetails(string memory name) public view returns(address) {
+      return (registry[name].contractAddress);
    }
 
    function connectionAllowed(bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort, 
