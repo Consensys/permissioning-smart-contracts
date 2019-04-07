@@ -16,6 +16,7 @@ var node3Low = "0x920982b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b15327401289
 var node3Host = "0x0000000000000000000011117fc359fd";
 var node3Port = 3;
 
+// use 1,2,3 as port numbers and index into this array
 var nodes = [[0,0,0,0],
               [node1High, node1Low, node1Host, node1Port],
               [node2High, node2Low, node2Host, node2Port],
