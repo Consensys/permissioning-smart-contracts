@@ -35,24 +35,24 @@ contract Ingress {
     }
 
     function connectionAllowed(
-        bytes32 sourceEnodeHigh, 
-        bytes32 sourceEnodeLow, 
-        bytes16 sourceEnodeIp, 
-        uint16 sourceEnodePort, 
-        bytes32 destinationEnodeHigh, 
-        bytes32 destinationEnodeLow, 
-        bytes16 destinationEnodeIp, 
+        bytes32 sourceEnodeHigh,
+        bytes32 sourceEnodeLow,
+        bytes16 sourceEnodeIp,
+        uint16 sourceEnodePort,
+        bytes32 destinationEnodeHigh,
+        bytes32 destinationEnodeLow,
+        bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bool) {
         return RulesProxy(registry[RULES_CONTRACT].contractAddress)
             .connectionAllowed(
-               sourceEnodeHigh, 
-               sourceEnodeLow, 
-               sourceEnodeIp, 
-               sourceEnodePort, 
-               destinationEnodeHigh, 
-               destinationEnodeLow, 
-               destinationEnodeIp, 
+               sourceEnodeHigh,
+               sourceEnodeLow,
+               sourceEnodeIp,
+               sourceEnodePort,
+               destinationEnodeHigh,
+               destinationEnodeLow,
+               destinationEnodeIp,
                destinationEnodePort
             );
     }

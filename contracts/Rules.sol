@@ -16,7 +16,7 @@ contract Rules is RulesProxy {
     uint adminCount;
     address[] adminKeys;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint version = 1_000_000;
+    uint version = 1000000;
 
     struct Enode {
         bytes next;
@@ -32,7 +32,7 @@ contract Rules is RulesProxy {
     uint countWhitelist;
     bytes[] keysWhitelist;
     // head of linked list
-    bytes headWhitelist; 
+    bytes headWhitelist;
 
 
     // AUTHORIZATION
@@ -45,12 +45,12 @@ contract Rules is RulesProxy {
     }
 
     // AUTHORIZATION: LIST OF ADMINS
-    modifier onlyAdmin() 
+    modifier onlyAdmin()
     {
         require(
             admins[msg.sender].adminAddress != address(0),
             "Sender not authorized."
-        ); 
+        );
         require(admins[msg.sender].active == true, "Sender not authorized");
         _;
     }
@@ -63,7 +63,7 @@ contract Rules is RulesProxy {
         if (admins[_newAdmin].active) {
             return false;
         }
-        adminKeys.push(_newAdmin); 
+        adminKeys.push(_newAdmin);
         Admin memory newAdmin = Admin(_newAdmin, true);
         admins[_newAdmin] = newAdmin;
         adminCount = adminCount + 1;
@@ -111,15 +111,15 @@ contract Rules is RulesProxy {
 
     // RULES - IS CONNECTION ALLOWED
     function connectionAllowed(
-        bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort, 
-        bytes32 destinationEnodeHigh, bytes32 destinationEnodeLow, bytes16 destinationEnodeIp, uint16 destinationEnodePort) 
+        bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort,
+        bytes32 destinationEnodeHigh, bytes32 destinationEnodeLow, bytes16 destinationEnodeIp, uint16 destinationEnodePort)
         public view returns (bool) {
-        return (enodeAllowed(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort) && 
+        return (enodeAllowed(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort) &&
         enodeAllowed(destinationEnodeHigh, destinationEnodeLow, destinationEnodeIp, destinationEnodePort));
     }
 
     // RULES - IS ENODE ALLOWED
-    function enodeAllowed(bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort) 
+    function enodeAllowed(bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort)
     public view returns (bool){
         bytes memory key = computeKey(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort);
         Enode storage whitelistSource = whitelist[key];
@@ -165,7 +165,7 @@ contract Rules is RulesProxy {
         Enode memory e = whitelist[key];
         // TODO only if removing the head, reset the head to head.next
         headWhitelist = e.next;
-        whitelist[e.prev].next  = e.next;
+        whitelist[e.prev].next = e.next;
         whitelist[e.next].prev = e.prev;
         countWhitelist = countWhitelist - 1;
         delete whitelist[key];
