@@ -1,6 +1,6 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import './RulesProxy.sol';
+import "./RulesProxy.sol";
 
 contract Rules is RulesProxy {
     // These will be assigned at the construction
@@ -16,7 +16,7 @@ contract Rules is RulesProxy {
     uint adminCount;
     address[] adminKeys;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint version = 1000000;
+    uint version = 1_000_000;
 
     struct Enode {
         bytes next;
@@ -49,7 +49,7 @@ contract Rules is RulesProxy {
     {
         require(
             admins[msg.sender].adminAddress != address(0),
-         "Sender not authorized."
+            "Sender not authorized."
         ); 
         require(admins[msg.sender].active == true, "Sender not authorized");
         _;
@@ -77,15 +77,15 @@ contract Rules is RulesProxy {
     }
     // return list of admins
     function getAllAdmins() public view returns (address[] memory){
-    address[] memory ret = new address[](adminCount);
-    Admin memory a;
-    for (uint i = 0; i < adminKeys.length; i++) {
-        a = admins[adminKeys[i]];
-        if (a.active) {
-            ret[i] = admins[adminKeys[i]].adminAddress;
+        address[] memory ret = new address[](adminCount);
+        Admin memory a;
+        for (uint i = 0; i < adminKeys.length; i++) {
+            a = admins[adminKeys[i]];
+            if (a.active) {
+                ret[i] = admins[adminKeys[i]].adminAddress;
+            }
         }
-    }
-    return ret;
+        return ret;
     }
 
     // READ ONLY MODE
