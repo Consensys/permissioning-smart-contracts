@@ -4,8 +4,8 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "./RulesProxy.sol";
 
-contract Ingress {
 
+contract Ingress {
     // Contract keys
     string RULES_CONTRACT = "rules";
 
@@ -13,7 +13,9 @@ contract Ingress {
         address owner;
         address contractAddress;
     }
+
     mapping(string => ContractDetails) registry;
+
     function registerName(string memory name, address addr) public returns (bool) {
         ContractDetails memory info = registry[name];
         require(info.owner == address(0) || info.owner == msg.sender);
@@ -30,6 +32,7 @@ contract Ingress {
         registry[name] = info;
         return true;
     }
+
     function getContractDetails(string memory name) public view returns(address) {
         return (registry[name].contractAddress);
     }
