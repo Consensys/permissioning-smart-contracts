@@ -54,6 +54,22 @@ undefined
 
 After this step, you should have the enode added to your whitelist. Please repeat this step for each enode that you want to add to the whitelist.
 
+## Add and Remove Admin accounts
+
+When you first deploy the Rules smart contract, the account used to deploy it will automatically be set as an Admin. Only Admin accounts can add or remove nodes from the whitelist.
+
+If you want to add or remove accounts as Admins, use the following commands in `truffle console`:
+
+**Add account `0x627306090abaB3A6e1400e9345bC60c78a8BEf57` to Admin list**
+```
+Rules.deployed().then(function(instance) {instance.addAdmin("0x627306090abaB3A6e1400e9345bC60c78a8BEf57").then(function(tx) {console.log(tx)});});
+```
+
+**Remove acccount `0x627306090abaB3A6e1400e9345bC60c78a8BEf57` from Admin list**
+```
+Rules.deployed().then(function(instance) {instance.removeAdmin("0x627306090abaB3A6e1400e9345bC60c78a8BEf57").then(function(tx) {console.log(tx)});});
+```
+
 ## Development
 
 ### Linting
