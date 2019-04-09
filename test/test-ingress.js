@@ -15,7 +15,7 @@ contract ('Ingress contract', () => {
           assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
         });
 
-        it('Should return true if contract registered successfully', async () => {
+        it('Should register contract successfully', async () => {
             let result;
             
             const icProxy = await IngressContract.new();
@@ -50,5 +50,39 @@ contract ('Ingress contract', () => {
             assert.equal(result[0], RULES, 'Rules contract SHOULD be registered');
             assert.equal(result[1], ADMIN, 'Admin contract SHOULD be registered');
         });
+    }),
+    describe('Ingress contract should delete specified contract', () => {
+        it('Should delete a specified contract', async () => {
+            let result;
+            
+            const icProxy = await IngressContract.new();
+            const rcProxy = await RulesContract.new();
+            
+            // Verify that the Rules contract has not yet been registered
+            result = await icProxy.getContractAddress(RULES);
+            assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
+
+            // Register the Rules contract
+            result = await icProxy.setContractAddress(RULES, rcProxy.address); 
+
+            // Verify the Rules contract address
+            result = await icProxy.getContractAddress(RULES);
+            assert.equal(result, rcProxy.address, 'Rules contract address SHOULD be correct');
+
+            // Verify correct number of Contracts
+            result = await icProxy.getAllContactKeys();
+            assert.equal(result.length, 1, '1 key SHOULD be registered');
+
+            // Delete the Rules contract
+            await icProxy.deleteContract(RULES);
+
+            // Verify that the Rules contract has been deleted
+            result = await icProxy.getContractAddress(RULES);
+            assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract SHOULD have been deleted');
+
+            // Verify correct number of Contracts
+            result = await icProxy.getAllContactKeys();
+            assert.equal(result.length, 0, '0 keys SHOULD be registered');
+        })
     });
 });

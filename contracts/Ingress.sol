@@ -14,7 +14,6 @@ contract Ingress {
     bytes32 ADMIN_CONTRACT = 0x61646d696e697374726174696f6e000000000000000000000000000000000000; // "administration"
 
     // Registry mapping indexing
-    uint contractCount = 0;
     bytes32[] contractKeys;
 
     struct ContractDetails {
@@ -25,6 +24,7 @@ contract Ingress {
     mapping(bytes32 => ContractDetails) registry;
 
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
+        require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         ContractDetails memory info = registry[name];
         require(info.owner == address(0) || info.owner == msg.sender, "Not authorized to update contract registry.");
         // create info if it doesn't exist in the registry
@@ -41,7 +41,6 @@ contract Ingress {
 
         // Update registry indexing
         contractKeys.push(name);
-        contractCount = contractCount + 1;
 
         return true;
     }
@@ -51,7 +50,24 @@ contract Ingress {
     }
 
     function getContractAddress(bytes32 name) public view returns(address) {
+        require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         return (registry[name].contractAddress);
+    }
+
+    function deleteContract(bytes32 name) public returns(bool) {
+        require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
+        require(contractKeys.length > 0, "Must have at least one registered contract to execute delete operation.");
+        for (uint i = 0; i < contractKeys.length; i++) {
+            // Delete the key from the array + mapping if it is present
+            if (contractKeys[i] == name) {
+                delete registry[contractKeys[i]];
+                contractKeys[i] = contractKeys[contractKeys.length - 1];
+                delete contractKeys[contractKeys.length - 1];
+                contractKeys.length--;
+                return true;
+            }
+        }
+        return false;
     }
 
     function isConnectionAllowed(
