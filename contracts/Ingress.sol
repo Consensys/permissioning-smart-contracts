@@ -54,7 +54,7 @@ contract Ingress {
         return (registry[name].contractAddress);
     }
 
-    function deleteContract(bytes32 name) public returns(bool) {
+    function removeContract(bytes32 name) public returns(bool) {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         require(contractKeys.length > 0, "Must have at least one registered contract to execute delete operation.");
         for (uint i = 0; i < contractKeys.length; i++) {

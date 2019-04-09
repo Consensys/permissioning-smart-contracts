@@ -74,7 +74,7 @@ contract ('Ingress contract', () => {
             assert.equal(result.length, 1, '1 key SHOULD be registered');
 
             // Delete the Rules contract
-            await icProxy.deleteContract(RULES);
+            await icProxy.removeContract(RULES);
 
             // Verify that the Rules contract has been deleted
             result = await icProxy.getContractAddress(RULES);
