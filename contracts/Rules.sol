@@ -1,6 +1,7 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import './RulesProxy.sol';
+import "./RulesProxy.sol";
+
 
 contract Rules is RulesProxy {
     // These will be assigned at the construction
@@ -32,7 +33,7 @@ contract Rules is RulesProxy {
     uint countWhitelist;
     bytes[] keysWhitelist;
     // head of linked list
-    bytes headWhitelist; 
+    bytes headWhitelist;
 
 
     // AUTHORIZATION
@@ -45,12 +46,12 @@ contract Rules is RulesProxy {
     }
 
     // AUTHORIZATION: LIST OF ADMINS
-    modifier onlyAdmin() 
+    modifier onlyAdmin()
     {
         require(
             admins[msg.sender].adminAddress != address(0),
-         "Sender not authorized."
-        ); 
+            "Sender not authorized."
+        );
         require(admins[msg.sender].active == true, "Sender not authorized");
         _;
     }
@@ -63,7 +64,7 @@ contract Rules is RulesProxy {
         if (admins[_newAdmin].active) {
             return false;
         }
-        adminKeys.push(_newAdmin); 
+        adminKeys.push(_newAdmin);
         Admin memory newAdmin = Admin(_newAdmin, true);
         admins[_newAdmin] = newAdmin;
         adminCount = adminCount + 1;
@@ -75,17 +76,18 @@ contract Rules is RulesProxy {
         adminCount = adminCount - 1;
         return true;
     }
+
     // return list of admins
     function getAllAdmins() public view returns (address[] memory){
-    address[] memory ret = new address[](adminCount);
-    Admin memory a;
-    for (uint i = 0; i < adminKeys.length; i++) {
-        a = admins[adminKeys[i]];
-        if (a.active) {
-            ret[i] = admins[adminKeys[i]].adminAddress;
+        address[] memory ret = new address[](adminCount);
+        Admin memory a;
+        for (uint i = 0; i < adminKeys.length; i++) {
+            a = admins[adminKeys[i]];
+            if (a.active) {
+                ret[i] = admins[adminKeys[i]].adminAddress;
+            }
         }
-    }
-    return ret;
+        return ret;
     }
 
     // READ ONLY MODE
@@ -98,6 +100,7 @@ contract Rules is RulesProxy {
         readOnlyMode = true;
         return true;
     }
+
     function exitReadOnly() public onlyAdmin returns (bool) {
         require(readOnlyMode == true);
         readOnlyMode = false;
@@ -111,17 +114,43 @@ contract Rules is RulesProxy {
 
     // RULES - IS CONNECTION ALLOWED
     function connectionAllowed(
-        bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort, 
-        bytes32 destinationEnodeHigh, bytes32 destinationEnodeLow, bytes16 destinationEnodeIp, uint16 destinationEnodePort) 
-        public view returns (bool) {
-        return (enodeAllowed(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort) && 
-        enodeAllowed(destinationEnodeHigh, destinationEnodeLow, destinationEnodeIp, destinationEnodePort));
+        bytes32 sourceEnodeHigh,
+        bytes32 sourceEnodeLow,
+        bytes16 sourceEnodeIp,
+        uint16 sourceEnodePort,
+        bytes32 destinationEnodeHigh,
+        bytes32 destinationEnodeLow,
+        bytes16 destinationEnodeIp,
+        uint16 destinationEnodePort
+    ) public view returns (bool) {
+        return (
+            enodeAllowed(
+                sourceEnodeHigh,
+                sourceEnodeLow,
+                sourceEnodeIp,
+                sourceEnodePort
+            ) && enodeAllowed(
+                destinationEnodeHigh,
+                destinationEnodeLow,
+                destinationEnodeIp,
+                destinationEnodePort
+            )
+        );
     }
 
     // RULES - IS ENODE ALLOWED
-    function enodeAllowed(bytes32 sourceEnodeHigh, bytes32 sourceEnodeLow, bytes16 sourceEnodeIp, uint16 sourceEnodePort) 
-    public view returns (bool){
-        bytes memory key = computeKey(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort);
+    function enodeAllowed(
+        bytes32 sourceEnodeHigh,
+        bytes32 sourceEnodeLow,
+        bytes16 sourceEnodeIp,
+        uint16 sourceEnodePort
+    ) public view returns (bool){
+        bytes memory key = computeKey(
+            sourceEnodeHigh,
+            sourceEnodeLow,
+            sourceEnodeIp,
+            sourceEnodePort
+        );
         Enode storage whitelistSource = whitelist[key];
         if (enodeExists(whitelistSource)) {
             return true;
@@ -129,9 +158,19 @@ contract Rules is RulesProxy {
     }
 
     // RULES MODIFIERS - ADD
-    function addEnode(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeIp, uint16 enodePort) public onlyAdmin returns (bool) {
+    function addEnode(
+        bytes32 enodeHigh,
+        bytes32 enodeLow,
+        bytes16 enodeIp,
+        uint16 enodePort
+    ) public onlyAdmin returns (bool) {
         require(readOnlyMode == false);
-        bytes memory key = computeKey(enodeHigh, enodeLow, enodeIp, enodePort);
+        bytes memory key = computeKey(
+            enodeHigh,
+            enodeLow,
+            enodeIp,
+            enodePort
+        );
         // return false if already in the list
         if (enodeExists(whitelist[key])) {
             return false;
@@ -146,7 +185,14 @@ contract Rules is RulesProxy {
             next = whitelist[headWhitelist].next;
             prev = headWhitelist;
         }
-        Enode memory newEnode = Enode(next, prev, enodeHigh, enodeLow, enodeIp, enodePort);
+        Enode memory newEnode = Enode(
+            next,
+            prev,
+            enodeHigh,
+            enodeLow,
+            enodeIp,
+            enodePort
+        );
         whitelist[key] = newEnode;
         keysWhitelist.push(key);
         countWhitelist = countWhitelist + 1;
@@ -156,16 +202,26 @@ contract Rules is RulesProxy {
     }
 
     // RULES MODIFIERS - REMOVE
-    function removeEnode(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeIp, uint16 enodePort) public onlyAdmin returns (bool) {
+    function removeEnode(
+        bytes32 enodeHigh,
+        bytes32 enodeLow,
+        bytes16 enodeIp,
+        uint16 enodePort
+    ) public onlyAdmin returns (bool) {
         require(readOnlyMode == false);
-        bytes memory key = computeKey(enodeHigh, enodeLow, enodeIp, enodePort);
+        bytes memory key = computeKey(
+            enodeHigh,
+            enodeLow,
+            enodeIp,
+            enodePort
+        );
         if (!enodeExists(whitelist[key])) {
             return false;
         }
         Enode memory e = whitelist[key];
         // TODO only if removing the head, reset the head to head.next
         headWhitelist = e.next;
-        whitelist[e.prev].next  = e.next;
+        whitelist[e.prev].next = e.next;
         whitelist[e.next].prev = e.prev;
         countWhitelist = countWhitelist - 1;
         delete whitelist[key];
@@ -177,6 +233,7 @@ contract Rules is RulesProxy {
         require(countWhitelist > 0);
         return getEnode(headWhitelist);
     }
+
     function getEnode(bytes memory key) public view returns (bytes memory, bytes memory, bytes32 , bytes32 , bytes16 , uint16) {
         Enode memory e = whitelist[key];
         return (e.next, e.prev, e.enodeHigh, e.enodeLow, e.enodeHost, e.enodePort);
@@ -188,8 +245,18 @@ contract Rules is RulesProxy {
         return enode.enodeHost > 0 && enode.enodeHigh > 0 && enode.enodeLow > 0;
     }
 
-    function computeKey(bytes32 enodeHigh, bytes32 enodeLow, bytes16 enodeHostIp, uint16 enodePort) public pure returns (bytes memory) {
-        return abi.encode(enodeHigh, enodeLow, enodeHostIp, enodePort);
+    function computeKey(
+        bytes32 enodeHigh,
+        bytes32 enodeLow,
+        bytes16 enodeHostIp,
+        uint16 enodePort
+    ) public pure returns (bytes memory) {
+        return abi.encode(
+            enodeHigh,
+            enodeLow,
+            enodeHostIp,
+            enodePort
+        );
     }
 
     function getKeyCount() public view returns (uint) {

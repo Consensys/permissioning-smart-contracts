@@ -3,8 +3,14 @@
   "repository": "permissioning-smart-contracts",
   "license": "Apache-2.0",
   "private": true,
+  "scripts": {
+    "lint": "solium -d contracts"
+  },
   "dependencies": {
     "dotenv": "^7.0.0",
     "truffle-hdwallet-provider": "^1.0.6"
+  },
+  "devDependencies": {
+    "solium": "^1.2.4"
   }
 }

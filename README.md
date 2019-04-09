@@ -53,3 +53,8 @@ undefined
 ```
 
 After this step, you should have the enode added to your whitelist. Please repeat this step for each enode that you want to add to the whitelist.
+
+## Development
+
+### Linting
+Linting is set up using solium. To run it over your code execute `npm run lint`.
