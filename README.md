@@ -8,8 +8,10 @@
 ## Initial setup
 1. Run `npm install`.
 1. Open `truffle-config.js`.
-1. Update `address` and `privateKey` variable to match your account and the corresponding private key.
-1. If your node is not using the default JSON-RPC host and port, update line 12 (`http://127.0.0.1:8545`) to match your node configuration.
+1. Create the following environment variables:
+    - `PANTHEON_NODE_PERM_ACCOUNT` - Set the value to the adress of the account used to interact with the permissioning contracts.
+    - `PANTHEON_NODE_PERM_KEY` - Set the value to the private key associated with the account.
+1. If your node is not using the default JSON-RPC host and port (`http://127.0.0.1:8545`), create a environment variable named `PANTHEON_NODE_PERM_ENDPOINT` and set its value to match your node endpoint.
 
 
 ## How to deploy and setup contracts
