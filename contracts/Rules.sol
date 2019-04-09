@@ -113,7 +113,7 @@ contract Rules is RulesProxy {
     }
 
     // RULES - IS CONNECTION ALLOWED
-    function connectionAllowed(
+    function isConnectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
         bytes16 sourceEnodeIp,
