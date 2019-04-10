@@ -35,6 +35,9 @@ contract Rules is RulesProxy {
     // head of linked list
     bytes headWhitelist;
 
+    function getWhitelistKey(uint index) public view returns(bytes memory) {
+        return keysWhitelist[index];
+    }
 
     // AUTHORIZATION
     constructor () public {
