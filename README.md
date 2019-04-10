@@ -8,8 +8,10 @@
 ## Initial setup
 1. Run `npm install`.
 1. Open `truffle-config.js`.
-1. Update `address` and `privateKey` variable to match your account and the corresponding private key.
-1. If your node is not using the default JSON-RPC host and port, update line 12 (`http://127.0.0.1:8545`) to match your node configuration.
+1. Create the following environment variables:
+    - `PANTHEON_NODE_PERM_ACCOUNT` - Set the value to the adress of the account used to interact with the permissioning contracts.
+    - `PANTHEON_NODE_PERM_KEY` - Set the value to the private key associated with the account.
+1. If your node is not using the default JSON-RPC host and port (`http://127.0.0.1:8545`), create a environment variable named `PANTHEON_NODE_PERM_ENDPOINT` and set its value to match your node endpoint.
 
 
 ## How to deploy and setup contracts
@@ -51,3 +53,24 @@ undefined
 ```
 
 After this step, you should have the enode added to your whitelist. Please repeat this step for each enode that you want to add to the whitelist.
+
+## Add and Remove Admin accounts
+
+When you first deploy the Rules smart contract, the account used to deploy it will automatically be set as an Admin. Only Admin accounts can add or remove nodes from the whitelist.
+
+If you want to add or remove accounts as Admins, use the following commands in `truffle console`:
+
+**Add account `0x627306090abaB3A6e1400e9345bC60c78a8BEf57` to Admin list**
+```
+Rules.deployed().then(function(instance) {instance.addAdmin("0x627306090abaB3A6e1400e9345bC60c78a8BEf57").then(function(tx) {console.log(tx)});});
+```
+
+**Remove acccount `0x627306090abaB3A6e1400e9345bC60c78a8BEf57` from Admin list**
+```
+Rules.deployed().then(function(instance) {instance.removeAdmin("0x627306090abaB3A6e1400e9345bC60c78a8BEf57").then(function(tx) {console.log(tx)});});
+```
+
+## Development
+
+### Linting
+Linting is set up using solium. To run it over your code execute `npm run lint`.
