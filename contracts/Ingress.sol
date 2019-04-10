@@ -2,6 +2,7 @@ pragma solidity >=0.4.22 <0.6.0;
 // THIS CONTRACT IS FOR TESTING PURPOSES ONLY
 // DO NOT USE THIS CONTRACT IN PRODUCTION APPLICATIONS
 
+import "./AdminProxy.sol";
 import "./RulesProxy.sol";
 
 
@@ -25,8 +26,9 @@ contract Ingress {
 
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
+        require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
+
         ContractDetails memory info = registry[name];
-        require(info.owner == address(0) || info.owner == msg.sender, "Not authorized to update contract registry.");
         // create info if it doesn't exist in the registry
         if (info.contractAddress == address(0)) {
             info = ContractDetails({
@@ -57,6 +59,7 @@ contract Ingress {
     function removeContract(bytes32 name) public returns(bool) {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         require(contractKeys.length > 0, "Must have at least one registered contract to execute delete operation.");
+        require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
         for (uint i = 0; i < contractKeys.length; i++) {
             // Delete the key from the array + mapping if it is present
             if (contractKeys[i] == name) {
@@ -68,6 +71,14 @@ contract Ingress {
             }
         }
         return false;
+    }
+
+    function isAuthorized(address account) public view returns(bool) {
+        if(getContractAddress(ADMIN_CONTRACT) == address(0)) {
+            return true;
+        } else {
+            return AdminProxy(registry[ADMIN_CONTRACT].contractAddress).isAuthorized(account);
+        }
     }
 
     function isConnectionAllowed(
