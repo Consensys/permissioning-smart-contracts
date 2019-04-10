@@ -103,7 +103,7 @@ contract Ingress {
         );
     }
 
-    function getAllContactKeys() public view returns(bytes32[] memory) {
+    function getAllContractKeys() public view returns(bytes32[] memory) {
         return contractKeys;
     }
 }
