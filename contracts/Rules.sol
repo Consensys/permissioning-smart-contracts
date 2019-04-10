@@ -36,7 +36,6 @@ contract Rules is AdminProxy, RulesProxy {
     // head of linked list
     bytes headWhitelist;
 
-
     // AUTHORIZATION
     constructor () public {
         // add the deploying contract address as first admin
@@ -97,13 +96,13 @@ contract Rules is AdminProxy, RulesProxy {
     }
 
     function enterReadOnly() public onlyAdmin returns (bool) {
-        require(readOnlyMode == false);
+        require(readOnlyMode == false, "Already in read only mode");
         readOnlyMode = true;
         return true;
     }
 
     function exitReadOnly() public onlyAdmin returns (bool) {
-        require(readOnlyMode == true);
+        require(readOnlyMode == true, "Not in read only mode");
         readOnlyMode = false;
         return true;
     }
@@ -165,7 +164,7 @@ contract Rules is AdminProxy, RulesProxy {
         bytes16 enodeIp,
         uint16 enodePort
     ) public onlyAdmin returns (bool) {
-        require(readOnlyMode == false);
+        require(readOnlyMode == false, "In read only mode: rules cannot be modified");
         bytes memory key = computeKey(
             enodeHigh,
             enodeLow,
@@ -209,7 +208,7 @@ contract Rules is AdminProxy, RulesProxy {
         bytes16 enodeIp,
         uint16 enodePort
     ) public onlyAdmin returns (bool) {
-        require(readOnlyMode == false);
+        require(readOnlyMode == false, "In read only mode: rules cannot be modified");
         bytes memory key = computeKey(
             enodeHigh,
             enodeLow,
@@ -231,7 +230,7 @@ contract Rules is AdminProxy, RulesProxy {
 
     // RULES - LINKED LIST
     function getHeadEnode() public view returns (bytes memory, bytes memory, bytes32, bytes32, bytes16, uint16) {
-        require(countWhitelist > 0);
+        require(countWhitelist > 0, "Whitelist is empty");
         return getEnode(headWhitelist);
     }
 
@@ -241,6 +240,10 @@ contract Rules is AdminProxy, RulesProxy {
     }
 
     // RULES - UTILS
+    function getWhitelistKey(uint index) public view returns(bytes memory) {
+        return keysWhitelist[index];
+    }
+
     function enodeExists(Enode memory enode) private pure returns (bool) {
         // TODO do we need to check all fields?
         return enode.enodeHost > 0 && enode.enodeHigh > 0 && enode.enodeLow > 0;

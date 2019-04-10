@@ -14,7 +14,7 @@ module.exports = function(deployer, network) {
     deployer.deploy(Rules).then(function() {
       return Ingress.at(ingressContractAddress);
     }).then(function(ingress){
-      ingress.registerName(rulesContractName, Rules.address);
+      ingress.setContractAddress(rulesContractName, Rules.address);
     }).then(function() {
       console.log("   > Updated Ingress contract with Rules name = " + rulesContractName + " and address = " + Rules.address);
     });
