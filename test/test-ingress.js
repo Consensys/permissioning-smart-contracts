@@ -89,7 +89,7 @@ contract ('Ingress contract', (accounts) => {
             result = await icProxy.removeContract(RULES);
 
             // assert values in the RegistryUpdate event
-            assert.equal(result.logs[0].args[0], rcProxy.address, 'Event address SHOULD be correct');
+            assert.equal(result.logs[0].args[0], 0, 'Event address from REMOVE SHOULD be zero');
             assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
 
             // Verify that the Rules contract has been deleted

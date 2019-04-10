@@ -67,19 +67,15 @@ contract Ingress {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         require(contractKeys.length > 0, "Must have at least one registered contract to execute delete operation.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
-        address addr;
         for (uint i = 0; i < contractKeys.length; i++) {
             // Delete the key from the array + mapping if it is present
             if (contractKeys[i] == name) {
-                // get the stored address to include in emitted event
-                addr = registry[contractKeys[i]].contractAddress;
-
                 delete registry[contractKeys[i]];
                 contractKeys[i] = contractKeys[contractKeys.length - 1];
                 delete contractKeys[contractKeys.length - 1];
                 contractKeys.length--;
                 
-                emit RegistryUpdate(addr,name);
+                emit RegistryUpdate(address(0),name);
                 return true;
             }
         }
