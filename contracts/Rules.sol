@@ -1,9 +1,10 @@
 pragma solidity >=0.4.22 <0.6.0;
 
+import "./AdminProxy.sol";
 import "./RulesProxy.sol";
 
 
-contract Rules is RulesProxy {
+contract Rules is AdminProxy, RulesProxy {
     // These will be assigned at the construction
     // phase, where `msg.sender` is the account
     // creating this contract.
