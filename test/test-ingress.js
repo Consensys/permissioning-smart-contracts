@@ -45,7 +45,7 @@ contract ('Ingress contract', (accounts) => {
             // Register an 'Admin' contract
             await icProxy.setContractAddress(ADMIN, rcProxy.address);
 
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
         
             assert.equal(result[0], RULES, 'Rules contract SHOULD be registered');
             assert.equal(result[1], ADMIN, 'Admin contract SHOULD be registered');
@@ -70,7 +70,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, rcProxy.address, 'Rules contract address SHOULD be correct');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 1, '1 key SHOULD be registered');
 
             // Delete the Rules contract
@@ -81,7 +81,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract SHOULD have been deleted');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 0, '0 keys SHOULD be registered');
         })
     }),
@@ -106,7 +106,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, rcProxy.address, 'Admin contract address SHOULD be correct');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 1, '1 key SHOULD be registered');
         }),
         it('Should not allow an unauthorized account to perform administration operations', async () => {
@@ -129,7 +129,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, rcProxy.address, 'Admin contract address SHOULD be correct');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 1, '1 key SHOULD be registered');
 
             // Verify sender is initially authorized
@@ -155,7 +155,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, 0x0000000000000000000000000000000000000000, 'Rules contract should NOT be deployed');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 1, '1 key SHOULD be registered');
 
             // Attempt to remove the Admin contract
@@ -166,7 +166,7 @@ contract ('Ingress contract', (accounts) => {
             }            
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 1, '1 key SHOULD be registered');
         }),
         it('Should allow authorized account to perform administration operations', async () => {
@@ -189,7 +189,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, rcProxy.address, 'Admin contract address SHOULD be correct');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 1, '1 key SHOULD be registered');
 
             // Verify sender is initially authorized
@@ -204,7 +204,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, rcProxy.address, 'Rules contract SHOULD be registered');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 2, '2 keys SHOULD be registered');
 
             // Remove the Rules contract
@@ -215,7 +215,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT be registered');
 
             // Verify correct number of Contracts
-            result = await icProxy.getAllContactKeys();
+            result = await icProxy.getAllContractKeys();
             assert.equal(result.length, 1, '1 keys SHOULD be registered');
         })
     });
