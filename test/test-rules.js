@@ -1,3 +1,4 @@
+const Ingress = artifacts.require('Ingress.sol');
 const TestPermissioning = artifacts.require('Rules.sol');
 var proxy;
 
@@ -18,10 +19,18 @@ var node3Port = 30305;
 
 var newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
+// Contract keys
+var RULES_CONTRACT = "0x72756c6573000000000000000000000000000000000000000000000000000000";
+
 contract('Permissioning WITH AUTHORITY ', () => {
+  let icProxy;
+  let proxy;
+  
   describe('Function: Permissioning + Authority', () => {
     it('Should NOT permit any node when none have been added', async () => {
-      proxy = await TestPermissioning.new();
+      icProxy = await Ingress.new();
+      proxy = await TestPermissioning.new(icProxy.address);
+
       let permitted = await proxy.enodeAllowed(node1High, node1Low, node1Host, node1Port);
       assert.equal(permitted, false, 'expected node NOT permitted');
     });
@@ -36,6 +45,9 @@ contract('Permissioning WITH AUTHORITY ', () => {
     });
 
     it('Should add a node to the whitelist and then permit that node', async () => {
+      // Register the Rules contract to permit adding enodes
+      await icProxy.setContractAddress(RULES_CONTRACT, proxy.address);
+
       // add node1
       await proxy.addEnode(node1High, node1Low, node1Host, node1Port);
       let permitted = await proxy.enodeAllowed(node1High, node1Low, node1Host, node1Port);
