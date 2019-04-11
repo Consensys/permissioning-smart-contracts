@@ -90,7 +90,7 @@ contract Ingress {
         }
     }
 
-    function isConnectionAllowed(
+    function connectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
         bytes16 sourceEnodeIp,
@@ -100,7 +100,7 @@ contract Ingress {
         bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bool) {
-        return RulesProxy(registry[RULES_CONTRACT].contractAddress).isConnectionAllowed(
+        return RulesProxy(registry[RULES_CONTRACT].contractAddress).connectionAllowed(
             sourceEnodeHigh,
             sourceEnodeLow,
             sourceEnodeIp,
