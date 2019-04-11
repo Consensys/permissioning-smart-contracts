@@ -29,6 +29,10 @@ contract Ingress {
         bytes32 contractName
     );
 
+    event NodePermissionsUpdated(
+        bool addsRestrictions
+    );
+
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
@@ -88,6 +92,11 @@ contract Ingress {
         } else {
             return AdminProxy(registry[ADMIN_CONTRACT].contractAddress).isAuthorized(account);
         }
+    }
+
+    function emitRulesChangeEvent(bool addsRestrictions) public {
+        require(registry[RULES_CONTRACT].contractAddress == msg.sender, "Only Rules contract can trigger Rules change events");
+        emit NodePermissionsUpdated(addsRestrictions);
     }
 
     function connectionAllowed(
