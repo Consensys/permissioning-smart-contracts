@@ -28,7 +28,7 @@ contract ('Ingress contract', (accounts) => {
             // Register the Rules contract
             result = await icProxy.setContractAddress(RULES, rcProxy.address);
 
-            // assert values in the RegistryUpdate event
+            // assert values in the RegistryUpdated event
             assert.equal(result.logs[0].args[0], rcProxy.address, 'Event address SHOULD be correct');
             assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
 
@@ -46,14 +46,14 @@ contract ('Ingress contract', (accounts) => {
             // Register a Rules contract
             result = await icProxy.setContractAddress(RULES, rcProxy.address);
 
-            // assert values in the RegistryUpdate event
+            // assert values in the RegistryUpdated event
             assert.equal(result.logs[0].args[0], rcProxy.address, 'Event address SHOULD be correct');
             assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
             
             // Register an 'Admin' contract
             result = await icProxy.setContractAddress(ADMIN, rcProxy.address);
 
-            // assert values in the RegistryUpdate event
+            // assert values in the RegistryUpdated event
             assert.equal(result.logs[0].args[0], rcProxy.address, 'Event address SHOULD be correct');
             assert.equal(result.logs[0].args[1], ADMIN, 'Event name SHOULD be correct');
 
@@ -88,7 +88,7 @@ contract ('Ingress contract', (accounts) => {
             // Delete the Rules contract
             result = await icProxy.removeContract(RULES);
 
-            // assert values in the RegistryUpdate event
+            // assert values in the RegistryUpdated event
             assert.equal(result.logs[0].args[0], 0, 'Event address from REMOVE SHOULD be zero');
             assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
 
