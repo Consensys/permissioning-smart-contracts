@@ -1,13 +1,11 @@
 pragma solidity >=0.4.22 <0.6.0;
-// THIS CONTRACT IS FOR TESTING PURPOSES ONLY
-// DO NOT USE THIS CONTRACT IN PRODUCTION APPLICATIONS
 
 import "./AdminProxy.sol";
 import "./RulesProxy.sol";
 
 
 contract Ingress {
-    // version of this contract: semver like 1.2.14 represented like 001002014
+    // version of this contract: semver eg 1.2.14 represented like 001002014
     uint version = 1000000;
 
     // Contract keys
