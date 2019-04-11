@@ -35,8 +35,8 @@ contract ('Ingress contract with Rules proxy', () => {
           assert.equal(result, rcProxy.address, 'Rules contract has NOT been registered correctly');
 
           // Verify that the nodes are not permitted to talk
-          result = await icProxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-          result2 = await rcProxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result2 = await rcProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
           // assert.equal(result, false, "Connection should NOT be allowed before Enodes have been registered");
           assert.equal(result, result2, "Call and proxy call did NOT return the same value");
 
@@ -45,8 +45,8 @@ contract ('Ingress contract with Rules proxy', () => {
           result = await rcProxy.addEnode(node2High, node2Low, node2Host, node2Port);
 
           // Verify that the nodes are now able to talk
-          result = await icProxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-          result2 = await rcProxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result2 = await rcProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
           assert.equal(result, true, "Connection SHOULD be allowed after Enodes have been registered");
           assert.equal(result, result2, "Call and proxy call did NOT return the same value");
         });
@@ -76,8 +76,8 @@ contract ('Ingress contract with Rules proxy', () => {
           assert.equal(web3.utils.toDecimal(result), 1000000, 'Initial contract is NOT the correct version');
 
           // Verify that the nodes are not permitted to talk
-          result = await icProxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-          result2 = await rcProxy1.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result2 = await rcProxy1.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
           assert.equal(result, false, "Connection should NOT be allowed before Enodes have been registered");
           assert.equal(result, result2, "Call and proxy call did NOT return the same value");
 
@@ -86,8 +86,8 @@ contract ('Ingress contract with Rules proxy', () => {
           result = await rcProxy1.addEnode(node2High, node2Low, node2Host, node2Port);
 
           // Verify that the nodes are now able to talk
-          result = await icProxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-          result2 = await rcProxy1.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result2 = await rcProxy1.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
           assert.equal(result, true, "Connection SHOULD be allowed after Enodes have been registered");
           assert.equal(result, result2, "Call and proxy call did NOT return the same value");
 
@@ -104,8 +104,8 @@ contract ('Ingress contract with Rules proxy', () => {
           assert.equal(web3.utils.toDecimal(result), 1000000, 'Updated contract is NOT the correct version');
 
           // Verify that the nodes are not permitted to talk
-          result = await icProxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-          result2 = await rcProxy2.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result = await icProxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+          result2 = await rcProxy2.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
           assert.equal(result, false, "Connection should NOT be allowed before Enodes have been registered");
           assert.equal(result, result2, "Call and proxy call did NOT return the same value");
         });

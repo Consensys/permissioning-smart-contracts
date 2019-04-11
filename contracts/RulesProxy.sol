@@ -1,7 +1,7 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 interface RulesProxy {
-    function isConnectionAllowed(
+    function connectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
         bytes16 sourceEnodeIp,
