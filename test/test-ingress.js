@@ -26,7 +26,11 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
 
             // Register the Rules contract
-            result = await icProxy.setContractAddress(RULES, rcProxy.address); 
+            result = await icProxy.setContractAddress(RULES, rcProxy.address);
+
+            // assert values in the RegistryUpdate event
+            assert.equal(result.logs[0].args[0], rcProxy.address, 'Event address SHOULD be correct');
+            assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
 
             // Verify the Rules contract address
             result = await icProxy.getContractAddress(RULES);
@@ -40,10 +44,18 @@ contract ('Ingress contract', (accounts) => {
             const rcProxy = await RulesContract.new();
 
             // Register a Rules contract
-            await icProxy.setContractAddress(RULES, rcProxy.address);
+            result = await icProxy.setContractAddress(RULES, rcProxy.address);
+
+            // assert values in the RegistryUpdate event
+            assert.equal(result.logs[0].args[0], rcProxy.address, 'Event address SHOULD be correct');
+            assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
             
             // Register an 'Admin' contract
-            await icProxy.setContractAddress(ADMIN, rcProxy.address);
+            result = await icProxy.setContractAddress(ADMIN, rcProxy.address);
+
+            // assert values in the RegistryUpdate event
+            assert.equal(result.logs[0].args[0], rcProxy.address, 'Event address SHOULD be correct');
+            assert.equal(result.logs[0].args[1], ADMIN, 'Event name SHOULD be correct');
 
             result = await icProxy.getAllContractKeys();
         
@@ -74,7 +86,11 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result.length, 1, '1 key SHOULD be registered');
 
             // Delete the Rules contract
-            await icProxy.removeContract(RULES);
+            result = await icProxy.removeContract(RULES);
+
+            // assert values in the RegistryUpdate event
+            assert.equal(result.logs[0].args[0], 0, 'Event address from REMOVE SHOULD be zero');
+            assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
 
             // Verify that the Rules contract has been deleted
             result = await icProxy.getContractAddress(RULES);
