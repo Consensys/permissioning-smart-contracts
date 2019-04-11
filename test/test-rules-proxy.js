@@ -21,7 +21,7 @@ contract ('Ingress contract with Rules proxy', () => {
           let result2;
           
           const icProxy = await IngressContract.new();
-          const rcProxy = await RulesContract.new();
+          const rcProxy = await RulesContract.new(icProxy.address);
           
           // Verify that the Rules contract has not been registered
           result = await icProxy.getContractAddress(RULES);
@@ -56,8 +56,8 @@ contract ('Ingress contract with Rules proxy', () => {
           let result2;
           
           const icProxy = await IngressContract.new();
-          const rcProxy1 = await RulesContract.new();
-          const rcProxy2 = await RulesContract.new();
+          const rcProxy1 = await RulesContract.new(icProxy.address);
+          const rcProxy2 = await RulesContract.new(icProxy.address);
           
           // Verify that the Rules contract has not been registered
           result = await icProxy.getContractAddress(RULES);

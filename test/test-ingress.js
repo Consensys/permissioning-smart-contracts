@@ -10,11 +10,19 @@ var nodeHost = "0x0000000000000000000011119bd359fd";
 var nodePort = 30303;
 
 contract ('Ingress contract', (accounts) => {
+    let icProxy;
+    let rcProxy;
+
+    // Reset state before each run
+    beforeEach('create a new contract for each test', async () => {
+        icProxy = await IngressContract.new();
+        rcProxy = await RulesContract.new(icProxy.address);
+    })
+
     describe('Ingress contract should register contract', () => {
         it('Should return empty value if contract not registered', async () => {
           let result;
-          
-          const icProxy = await IngressContract.new();
+                    
           // Verify that the Rules contract has not been registered
           result = await icProxy.getContractAddress(RULES);
           assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
@@ -22,10 +30,7 @@ contract ('Ingress contract', (accounts) => {
 
         it('Should register contract successfully', async () => {
             let result;
-            
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
-            
+
             // Verify that the Rules contract has not yet been registered
             result = await icProxy.getContractAddress(RULES);
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
@@ -44,9 +49,6 @@ contract ('Ingress contract', (accounts) => {
 
         it('Should return all registered contracts', async () => {
             let result;
-            
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
 
             // Register a Rules contract
             result = await icProxy.setContractAddress(RULES, rcProxy.address);
@@ -71,9 +73,6 @@ contract ('Ingress contract', (accounts) => {
     describe('Ingress contract should delete specified contract', () => {
         it('Should delete a specified contract', async () => {
             let result;
-            
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
             
             // Verify that the Rules contract has not yet been registered
             result = await icProxy.getContractAddress(RULES);
@@ -110,9 +109,6 @@ contract ('Ingress contract', (accounts) => {
         it('Should allow an unauthorized account to initially deploy Administration Contract', async () => {
             let result;
             
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
-            
             // Verify that the contracts have not yet been registered
             result = await icProxy.getContractAddress(RULES);
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
@@ -132,9 +128,6 @@ contract ('Ingress contract', (accounts) => {
         }),
         it('Should not allow an unauthorized account to perform administration operations', async () => {
             let result;
-            
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
             
             // Verify that the contracts have not yet been registered
             result = await icProxy.getContractAddress(RULES);
@@ -193,9 +186,6 @@ contract ('Ingress contract', (accounts) => {
         it('Should allow authorized account to perform administration operations', async () => {
             let result;
             
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
-            
             // Verify that the contracts have not yet been registered
             result = await icProxy.getContractAddress(RULES);
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
@@ -244,9 +234,6 @@ contract ('Ingress contract', (accounts) => {
         it('Should emit an event when the Rules are updated', async () => {
             let result;
             
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
-            
             // Verify that the Rules contract has not yet been registered
             result = await icProxy.getContractAddress(RULES);
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
@@ -282,9 +269,7 @@ contract ('Ingress contract', (accounts) => {
         }),
         it('Should only trigger Rules update events when issued from Rules contract', async () => {
             let result;
-            
-            const icProxy = await IngressContract.new();
-            const rcProxy = await RulesContract.new(icProxy.address);
+
             const acProxy = await RulesContract.new(icProxy.address);
             
             // Verify that the contracts have not yet been registered
