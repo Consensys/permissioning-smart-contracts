@@ -24,7 +24,7 @@ contract Ingress {
 
     mapping(bytes32 => ContractDetails) registry;
 
-    event RegistryUpdate(
+    event RegistryUpdated(
         address contractAddress,
         bytes32 contractName
     );
@@ -53,7 +53,7 @@ contract Ingress {
         // Update registry indexing
         contractKeys.push(name);
 
-        emit RegistryUpdate(addr,name);
+        emit RegistryUpdated(addr,name);
 
         return true;
     }
@@ -78,8 +78,8 @@ contract Ingress {
                 contractKeys[i] = contractKeys[contractKeys.length - 1];
                 delete contractKeys[contractKeys.length - 1];
                 contractKeys.length--;
-
-                emit RegistryUpdate(address(0),name);
+                
+                emit RegistryUpdated(address(0),name);
                 return true;
             }
         }
