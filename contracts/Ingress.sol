@@ -24,6 +24,11 @@ contract Ingress {
 
     mapping(bytes32 => ContractDetails) registry;
 
+    event RegistryUpdate(
+        address contractAddress,
+        bytes32 contractName
+    );
+
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
@@ -43,6 +48,8 @@ contract Ingress {
 
         // Update registry indexing
         contractKeys.push(name);
+
+        emit RegistryUpdate(addr,name);
 
         return true;
     }
@@ -67,6 +74,8 @@ contract Ingress {
                 contractKeys[i] = contractKeys[contractKeys.length - 1];
                 delete contractKeys[contractKeys.length - 1];
                 contractKeys.length--;
+                
+                emit RegistryUpdate(address(0),name);
                 return true;
             }
         }
