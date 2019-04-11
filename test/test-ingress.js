@@ -256,7 +256,7 @@ contract ('Ingress contract', (accounts) => {
             result = await icProxy.getPastEvents('NodePermissionsUpdated', {fromBlock: 0, toBlock: 'latest' });
 
             // Verify the NodePermissionsUpdated event
-            assert.equal(result[0].returnValues.addsRestrictions, true, 'addsRestrictions SHOULD be true');
+            assert.equal(result[0].returnValues.addsRestrictions, false, 'addsRestrictions SHOULD be true');
 
             // Add a less restrictive rule
             result = await rcProxy.removeEnode(nodeHigh, nodeLow, nodeHost, nodePort);
@@ -265,7 +265,7 @@ contract ('Ingress contract', (accounts) => {
             result = await icProxy.getPastEvents('NodePermissionsUpdated', {fromBlock: 0, toBlock: 'latest' });
 
             // Verify the NodePermissionsUpdated event
-            assert.equal(result[1].returnValues.addsRestrictions, false, 'addsRestrictions SHOULD be false');
+            assert.equal(result[1].returnValues.addsRestrictions, true, 'addsRestrictions SHOULD be false');
         }),
         it('Should only trigger Rules update events when issued from Rules contract', async () => {
             let result;

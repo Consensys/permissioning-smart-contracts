@@ -205,7 +205,7 @@ contract Rules is AdminProxy, RulesProxy {
         whitelist[newEnode.next].prev = key;
         whitelist[headWhitelist].next = key;
 
-        triggerRulesChangeEvent(true);
+        triggerRulesChangeEvent(false);
 
         return true;
     }
@@ -235,7 +235,7 @@ contract Rules is AdminProxy, RulesProxy {
         countWhitelist = countWhitelist - 1;
         delete whitelist[key];
 
-        triggerRulesChangeEvent(false);
+        triggerRulesChangeEvent(true);
 
         return true;
     }
