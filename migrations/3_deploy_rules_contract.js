@@ -7,7 +7,7 @@ const Ingress = artifacts.require("./Ingress.sol");
 const rulesContractName = Web3Utils.utf8ToHex("rules");
 
 module.exports = async(deployer, network) => {
-    await deployer.deploy(Rules);
+    await deployer.deploy(Rules, Ingress.address);
     const ingressInstance = await Ingress.deployed();
     await ingressInstance.setContractAddress(rulesContractName, Rules.address);
     console.log("   > Updated Ingress contract with Rules address = " + Rules.address);
