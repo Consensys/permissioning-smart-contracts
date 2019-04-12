@@ -27,7 +27,7 @@ pipeline {
         stage('Coverage') {
             steps {
                 sh 'npm run coverage'
-                sh './node_modules/.bin/istanbul report cobertura --root coverage.json'
+                sh './node_modules/.bin/istanbul report cobertura --root .'
             }
         }
     }
