@@ -27,13 +27,14 @@ pipeline {
         stage('Coverage') {
             steps {
                 sh 'npm run coverage'
+                sh './node_modules/.bin/istanbul report cobertura --root coverage.json'
             }
         }
     }
     post {
         always {
             junit 'test-results/**/*.xml'
-            publishCoverage adapters: [antPath('coverage.json')]
+            publishCoverage adapters: [istanbulCoberturaAdapter('coverage/cobertura-coverage.xml')]
         }
       }
 }
