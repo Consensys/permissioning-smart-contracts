@@ -33,7 +33,7 @@ pipeline {
     post {
         always {
             junit 'test-results/**/*.xml'
-            publishCoverage adapters: [llvmAdapter('coverage.json')]
+            publishCoverage adapters: [antPath('coverage.json')]
         }
       }
 }
