@@ -4,6 +4,11 @@ pipeline {
     }
 
     stages {
+        stage('Setup') {
+            steps {
+                sh 'apk add git python make g++'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'npm install'
@@ -17,6 +22,11 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'npm test'
+            }
+        }
+        stage('Coverage') {
+            steps {
+                sh 'npm run coverage'
             }
         }
     }
