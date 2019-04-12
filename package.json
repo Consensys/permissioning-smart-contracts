@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "lint": "solium -d contracts",
-    "test": "truffle test --network develop"
+    "test": "truffle test --network develop",
+    "coverage": "solidity-coverage"
   },
   "dependencies": {
     "dotenv": "^7.0.0",
@@ -13,6 +14,7 @@
     "web3-utils": "^1.0.0-beta.52"
   },
   "devDependencies": {
+    "solidity-coverage": "^0.5.11",
     "solium": "^1.2.4",
     "truffle": "^5.0.12"
   }
