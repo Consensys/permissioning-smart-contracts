@@ -4,6 +4,11 @@ pipeline {
     }
 
     stages {
+        stage('Setup') {
+            steps {
+                sh 'apk add git'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'npm install'
