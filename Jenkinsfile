@@ -34,7 +34,10 @@ pipeline {
     post {
         always {
             junit 'test-results/**/*.xml'
-            publishCoverage adapters: [istanbulCoberturaAdapter('coverage/cobertura-coverage.xml')]
+            publishCoverage adapters: [
+                istanbulCoberturaAdapter(
+                    path: 'coverage/cobertura-coverage.xml', 
+                    thresholds: [[failUnhealthy: true, thresholdTarget: 'File', unhealthyThreshold: 80.0, unstableThreshold: 86.0]])]
         }
       }
 }
