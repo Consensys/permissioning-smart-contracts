@@ -37,14 +37,14 @@ pipeline {
             publishCoverage adapters: [
                 istanbulCoberturaAdapter(
                     path: 'coverage/cobertura-coverage.xml', 
-                    thresholds: [[failUnhealthy: true, thresholdTarget: 'Function', unhealthyThreshold: 80.0, unstableThreshold: 86.0]])]
+                    thresholds: [[failUnhealthy: true, thresholdTarget: 'Function', unhealthyThreshold: 80.0, unstableThreshold: 85.0]])]
             publishHTML([
                 allowMissing: false, 
                 alwaysLinkToLastBuild: false, 
                 keepAll: false, 
                 reportDir: 'coverage', 
                 reportFiles: 'index.html', 
-                reportName: 'Coverage Report', 
+                reportName: 'Coverage Report (HTML)', 
                 reportTitles: ''])
         }
       }
