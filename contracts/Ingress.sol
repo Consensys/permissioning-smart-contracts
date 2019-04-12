@@ -76,7 +76,7 @@ contract Ingress {
                 contractKeys[i] = contractKeys[contractKeys.length - 1];
                 delete contractKeys[contractKeys.length - 1];
                 contractKeys.length--;
-                
+
                 emit RegistryUpdated(address(0),name);
                 return true;
             }
