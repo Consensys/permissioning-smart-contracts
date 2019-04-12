@@ -14,13 +14,10 @@ pipeline {
                 sh 'npm run lint'
             }
         }
-        // Ignore tests until passing
-        /*
         stage('Test') {
             steps {
                 sh 'npm test'
             }
         }
-        */
     }
 }

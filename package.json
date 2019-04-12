@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "dotenv": "^7.0.0",
-    "truffle-hdwallet-provider": "^1.0.6"
+    "truffle-hdwallet-provider": "^1.0.6",
+    "web3-utils": "^1.0.0-beta.52"
   },
   "devDependencies": {
     "solium": "^1.2.4",
