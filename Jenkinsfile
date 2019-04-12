@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'apk add git'
+                sh 'apk add git python'
             }
         }
         stage('Build') {
