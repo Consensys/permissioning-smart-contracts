@@ -27,12 +27,25 @@ pipeline {
         stage('Coverage') {
             steps {
                 sh 'npm run coverage'
+                sh './node_modules/.bin/istanbul report cobertura --root .'
             }
         }
     }
     post {
         always {
             junit 'test-results/**/*.xml'
+            publishCoverage adapters: [
+                istanbulCoberturaAdapter(
+                    path: 'coverage/cobertura-coverage.xml', 
+                    thresholds: [[failUnhealthy: true, thresholdTarget: 'Function', unhealthyThreshold: 80.0, unstableThreshold: 85.0]])]
+            publishHTML([
+                allowMissing: false, 
+                alwaysLinkToLastBuild: false, 
+                keepAll: false, 
+                reportDir: 'coverage', 
+                reportFiles: 'index.html', 
+                reportName: 'Coverage Report (HTML)', 
+                reportTitles: ''])
         }
-    }
+      }
 }
