@@ -19,7 +19,7 @@ module.exports = async(deployer, network) => {
 
     } 
         // If supplied an address, make sure there's something there
-        let ingressInstance = await Ingress.at(ingressAddress);
+        const ingressInstance = await Ingress.at(ingressAddress);
         try {
             let result = await ingressInstance.getContractVersion();
             console.log("   > Ingress contract previously initialised at address = " + ingressAddress + " version=" + result);
