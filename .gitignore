@@ -19,6 +19,7 @@ config/development/*.sol.js
 config/test/contracts.json
 build
 dist
+test-results/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -34,6 +35,7 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
+coverage.json
 
 # nyc test coverage
 .nyc_output
@@ -96,3 +98,6 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# VSCode settings
+.vscode/

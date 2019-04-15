@@ -1,7 +1,10 @@
+const Ingress = artifacts.require('Ingress.sol');
 const TestPermissioning = artifacts.require('Rules.sol');
-var proxy;
+let icProxy;
+let proxy;
 
 var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
+var node1HighCopy = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
 var node1Low = "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 var node1Host = "0x0000000000000000000011119bd359fd";
 var node1Port = 1;
@@ -24,10 +27,14 @@ var nodes = [[0,0,0,0],
 
 var newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
+// Contract keys
+var RULES_CONTRACT = "0x72756c6573000000000000000000000000000000000000000000000000000000";
+
 contract('Permissioning WITH AUTHORITY ', () => {
   describe('Function: Rules + Authority - iterate through all added enodes', () => {
     it('Should NOT permit any node when none have been added', async () => {
-      proxy = await TestPermissioning.new();
+      icProxy = await Ingress.new();
+      proxy = await TestPermissioning.new(icProxy.address);
       try {
         let permitted = await proxy.enodeAllowed(node1High, node1Low, node1Host, node1Port);
         assert.equal(permitted, false, 'expected node NOT permitted');
@@ -41,6 +48,9 @@ contract('Permissioning WITH AUTHORITY ', () => {
     });
 
     it('Should add a node to the whitelist and then permit that node', async () => {
+      // Register the Rules contract to permit adding enodes
+      await icProxy.setContractAddress(RULES_CONTRACT, proxy.address);
+
       // add node1
       await proxy.addEnode(node1High, node1Low, node1Host, node1Port);
 
@@ -91,6 +101,9 @@ contract('Permissioning WITH AUTHORITY ', () => {
       assert.equal(foundNode1, true, 'expected to find node1');
       assert.equal(foundNode2, true, 'expected to find node2');
       assert.equal(foundNode3, true, 'expected to find node3');
+      // test keycount 
+      result = await proxy.getKeyCount();
+      assert.equal(result, 3, 'expected count 3');
     });
 
     it('Should remove a node from the whitelist and then NOT find it in the list', async () => {
@@ -135,7 +148,16 @@ contract('Permissioning WITH AUTHORITY ', () => {
       assert.equal(foundNode2, true, 'expected to find node2');
       assert.equal(foundNode3, true, 'expected to find node3');
       assert.equal(i, 2, 'expected 2 values');
+      result = await proxy.getKeyCount();
+      assert.equal(result, 2, 'expected count 2');
     });
 
+    it('Should compare bytes', async () => {
+      result = await proxy.bytesEqual(node1High, node1Low);
+      assert.equal(result, false, 'expected not equal');
+
+      result = await proxy.bytesEqual(node1High, node1HighCopy);
+      assert.equal(result, true, 'expected equal');
+    });
   });
 });
