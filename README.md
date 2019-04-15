@@ -74,3 +74,6 @@ Rules.deployed().then(function(instance) {instance.removeAdmin("0x627306090abaB3
 
 ### Linting
 Linting is set up using solium. To run it over your code execute `npm run lint`.
+
+### Testing
+`npm test`

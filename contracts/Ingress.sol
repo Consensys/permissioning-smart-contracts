@@ -1,13 +1,11 @@
 pragma solidity >=0.4.22 <0.6.0;
-// THIS CONTRACT IS FOR TESTING PURPOSES ONLY
-// DO NOT USE THIS CONTRACT IN PRODUCTION APPLICATIONS
 
 import "./AdminProxy.sol";
 import "./RulesProxy.sol";
 
 
 contract Ingress {
-    // version of this contract: semver like 1.2.14 represented like 001002014
+    // version of this contract: semver eg 1.2.14 represented like 001002014
     uint version = 1000000;
 
     // Contract keys
@@ -27,6 +25,10 @@ contract Ingress {
     event RegistryUpdated(
         address contractAddress,
         bytes32 contractName
+    );
+
+    event NodePermissionsUpdated(
+        bool addsRestrictions
     );
 
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
@@ -74,7 +76,7 @@ contract Ingress {
                 contractKeys[i] = contractKeys[contractKeys.length - 1];
                 delete contractKeys[contractKeys.length - 1];
                 contractKeys.length--;
-                
+
                 emit RegistryUpdated(address(0),name);
                 return true;
             }
@@ -90,7 +92,12 @@ contract Ingress {
         }
     }
 
-    function isConnectionAllowed(
+    function emitRulesChangeEvent(bool addsRestrictions) public {
+        require(registry[RULES_CONTRACT].contractAddress == msg.sender, "Only Rules contract can trigger Rules change events");
+        emit NodePermissionsUpdated(addsRestrictions);
+    }
+
+    function connectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
         bytes16 sourceEnodeIp,
@@ -100,7 +107,7 @@ contract Ingress {
         bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bool) {
-        return RulesProxy(registry[RULES_CONTRACT].contractAddress).isConnectionAllowed(
+        return RulesProxy(registry[RULES_CONTRACT].contractAddress).connectionAllowed(
             sourceEnodeHigh,
             sourceEnodeLow,
             sourceEnodeIp,

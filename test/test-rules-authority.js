@@ -1,5 +1,7 @@
+const Ingress = artifacts.require('Ingress.sol');
 const TestPermissioning = artifacts.require('Rules.sol');
-var proxy;
+let proxy;
+let icProxy;
 
 var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
 var node1Low = "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
@@ -12,7 +14,8 @@ var newAdmin2 = "fe3b557e8fb62b89f4916b721be55ceb828dbd73".toLowerCase();
 contract('Authority ', (accounts) => {
   describe('Function: Authority checks', () => {
     it('add an admin and check if they are authorized', async () => {
-      proxy = await TestPermissioning.new();
+      icProxy = await Ingress.new();
+      proxy = await TestPermissioning.new(icProxy.address);
       
       let resultAdmins = await proxy.getAllAdmins();
       assert.equal(resultAdmins[0], accounts[0], 'expected first admin to be the deployer');
@@ -75,7 +78,7 @@ contract('Authority ', (accounts) => {
     });
 
     it('get all admins', async () => {
-      proxy = await TestPermissioning.new();
+      proxy = await TestPermissioning.new(icProxy.address);
       let result = await proxy.addAdmin(newAdmin);
       await proxy.addAdmin(newAdmin2);
 

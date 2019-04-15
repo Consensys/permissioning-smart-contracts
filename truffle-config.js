@@ -40,5 +40,13 @@ module.exports = {
        },
       }
     }
+  },
+
+  mocha: {
+    useColors: true,
+    reporter: 'mocha-multi-reporters',
+    reporterOptions: {
+      configFile: './mocha-reporter-config.json',
+    },
   }
 };

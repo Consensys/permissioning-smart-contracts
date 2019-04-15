@@ -1,3 +1,4 @@
+const Ingress = artifacts.require('Ingress.sol');
 const TestPermissioning = artifacts.require('Rules.sol');
 var proxy;
 
@@ -18,10 +19,18 @@ var node3Port = 30305;
 
 var newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
+// Contract keys
+var RULES_CONTRACT = "0x72756c6573000000000000000000000000000000000000000000000000000000";
+
 contract('Permissioning WITH AUTHORITY ', () => {
+  let icProxy;
+  let proxy;
+  
   describe('Function: Permissioning + Authority', () => {
     it('Should NOT permit any node when none have been added', async () => {
-      proxy = await TestPermissioning.new();
+      icProxy = await Ingress.new();
+      proxy = await TestPermissioning.new(icProxy.address);
+
       let permitted = await proxy.enodeAllowed(node1High, node1Low, node1Host, node1Port);
       assert.equal(permitted, false, 'expected node NOT permitted');
     });
@@ -36,6 +45,9 @@ contract('Permissioning WITH AUTHORITY ', () => {
     });
 
     it('Should add a node to the whitelist and then permit that node', async () => {
+      // Register the Rules contract to permit adding enodes
+      await icProxy.setContractAddress(RULES_CONTRACT, proxy.address);
+
       // add node1
       await proxy.addEnode(node1High, node1Low, node1Host, node1Port);
       let permitted = await proxy.enodeAllowed(node1High, node1Low, node1Host, node1Port);
@@ -64,11 +76,11 @@ contract('Permissioning WITH AUTHORITY ', () => {
     });
 
     it('Should allow a connection between 2 added nodes', async () => {
-      let permitted = await proxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+      let permitted = await proxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
       assert.equal(permitted, true, 'expected permitted node1 <> node2');
-      permitted = await proxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node3High, node3Low, node3Host, node3Port);
+      permitted = await proxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node3High, node3Low, node3Host, node3Port);
       assert.equal(permitted, true, 'expected permitted node1 <> node3');
-      permitted = await proxy.isConnectionAllowed(node2High, node2Low, node2Host, node2Port, node3High, node3Low, node3Host, node3Port);
+      permitted = await proxy.connectionAllowed(node2High, node2Low, node2Host, node2Port, node3High, node3Low, node3Host, node3Port);
       assert.equal(permitted, true, 'expected permitted node2 <> node3');
     });
 
@@ -77,7 +89,7 @@ contract('Permissioning WITH AUTHORITY ', () => {
       let permitted = await proxy.enodeAllowed(node1High, node1Low, node1Host, node1Port);
       assert.equal(permitted, false, 'expected removed node NOT permitted');
 
-      permitted = await proxy.isConnectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+      permitted = await proxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
       assert.equal(permitted, false, 'expected source disallowed since it was removed');
     });
   });

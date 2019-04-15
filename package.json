@@ -5,13 +5,19 @@
   "private": true,
   "scripts": {
     "lint": "solium -d contracts",
-    "test": "truffle test --network develop"
+    "test": "truffle test --network develop",
+    "coverage": "solidity-coverage"
   },
   "dependencies": {
     "dotenv": "^7.0.0",
-    "truffle-hdwallet-provider": "^1.0.6"
+    "truffle-hdwallet-provider": "^1.0.6",
+    "web3-utils": "^1.0.0-beta.52"
   },
   "devDependencies": {
+    "istanbul": "^0.4.5",
+    "mocha-junit-reporter": "^1.21.0",
+    "mocha-multi-reporters": "^1.1.7",
+    "solidity-coverage": "^0.5.11",
     "solium": "^1.2.4",
     "truffle": "^5.0.12"
   }
