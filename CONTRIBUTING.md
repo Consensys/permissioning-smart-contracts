@@ -48,7 +48,7 @@ you are agreeing to uphold this code. Please report unacceptable behavior. Pleas
 an **executable test case** demonstrating the unexpected behavior.
 * Describe the **exact steps** to **reproduce the problem** in as many details as possible. When 
 listing steps, don't just say what you did, but explain how you did it. For example, the exact 
-commands used in the terminal to start permissioning-smart-contracts. 
+the exact commands used on the command line or Truffle console.
 * Provide **specific examples** to demonstrate the steps. Include links to files or GitHub projects, or 
 copy/pasteable snippets, which you use in those examples. If you're providing snippets in the issue, 
 use [Markdown code blocks](https://help.github.com/articles/getting-started-with-writing-and-formatting-on-github/).
