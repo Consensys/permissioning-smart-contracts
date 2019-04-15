@@ -228,7 +228,17 @@ contract Rules is AdminProxy, RulesProxy {
             return false;
         }
         Enode memory e = whitelist[key];
-        // TODO only if removing the head, reset the head to head.next
+
+        // update keys
+        for (uint i = 0; i < keysWhitelist.length; i++) {
+            if (bytesEqual(keysWhitelist[i], key)) {
+                keysWhitelist[i] = keysWhitelist[keysWhitelist.length - 1];
+                delete keysWhitelist[keysWhitelist.length - 1];
+                keysWhitelist.length--;
+            }
+        }
+
+        // update linked list
         headWhitelist = e.next;
         whitelist[e.prev].next = e.next;
         whitelist[e.next].prev = e.prev;
@@ -237,6 +247,21 @@ contract Rules is AdminProxy, RulesProxy {
 
         triggerRulesChangeEvent(true);
 
+        return true;
+    }
+
+    function bytesEqual(bytes memory a, bytes memory b) public pure returns(bool) {
+
+        if (a.length != b.length) {
+            return false;
+        } else {
+            // check each byte
+            for (uint j = 0; j < b.length; j++) {
+                if (a[j] != b[j]) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
