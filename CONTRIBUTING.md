@@ -20,9 +20,6 @@ and feel free to propose changes to this document in a pull request.
 
 [Styleguides](#styleguides)
 
-* [Java Styleguide](#java-styleguide)
-* [Coding Conventions](#coding-conventions)
-* [Documentation Styleguide](#documentation-style-guide)
 * [Git Commit Messages & Pull Request Messages](#git-commit-messages--pull-request-messages)
 
 ## Code of Conduct
@@ -80,8 +77,6 @@ Complete the CLA, as described in [CLA.md].
 
 There are a number of automated checks:
 * unit tests
-* integration tests
-* acceptance tests
 * code formatting 
 
 If these checks pass, pull requests will be reviewed by the project team against criteria including:
@@ -93,6 +88,8 @@ If these checks pass, pull requests will be reviewed by the project team against
 
 Always write a clear log message for your commits. One-line messages are fine for small changes, but 
 bigger changes should contain more detail.
+
+## Styleguides
 
 ## Git Commit Messages & Pull Request Messages
 * Use the present tense ("Add feature" not "Added feature")
