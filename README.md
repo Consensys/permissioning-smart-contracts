@@ -2,7 +2,7 @@
 
 ## Requirements
 1. [NodeJS](https://nodejs.org/en/) v8.9.4 or later
-1. A Pantheon node running with a [permissioning enabled genesis](https://github.com/PegaSysEng/pantheon) file (genesis file with the Ingress contract embedded).
+1. A [Pantheon node](https://github.com/PegaSysEng/pantheon) running with a [permissioning enabled genesis](genesis.json) file (genesis file with the Ingress contract embedded).
 1. [Truffle installed](https://truffleframework.com/docs/truffle/getting-started/installation)
 
 ## Initial setup
