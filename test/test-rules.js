@@ -107,5 +107,17 @@ contract('Permissioning WITH AUTHORITY ', () => {
       let result = await proxy.getKeyCount();
       assert.equal(result, 1, "expected number of nodes");
     });
+
+    it('Should remove a node from the whitelist and then NOT permit that node', async () => {
+      await proxy.removeEnode(node2High, node2Low, node2Host, node2Port);
+      let permitted = await proxy.enodeAllowed(node2High, node2Low, node2Host, node2Port);
+      assert.equal(permitted, false, 'expected removed node NOT permitted');
+
+      permitted = await proxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
+      assert.equal(permitted, false, 'expected source disallowed since it was removed');
+
+      let result = await proxy.getKeyCount();
+      assert.equal(result, 0, "expected number of nodes");
+    });
   });
 });
