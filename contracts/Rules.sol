@@ -2,6 +2,7 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "./AdminProxy.sol";
 import "./RulesProxy.sol";
+import "./Ingress.sol";
 
 
 contract Rules is AdminProxy, RulesProxy {
@@ -20,6 +21,8 @@ contract Rules is AdminProxy, RulesProxy {
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
 
+    address ingressContractAddress;
+
     struct Enode {
         bytes next;
         bytes prev;
@@ -37,12 +40,15 @@ contract Rules is AdminProxy, RulesProxy {
     bytes headWhitelist;
 
     // AUTHORIZATION
-    constructor () public {
+    constructor (address ingressAddress) public {
         // add the deploying contract address as first admin
         Admin memory orig = Admin(msg.sender, true);
         admins[msg.sender] = orig;
         adminKeys.push(msg.sender);
         adminCount = adminCount + 1;
+
+        // Record the Ingress contract's address
+        ingressContractAddress = ingressAddress;
     }
 
     // AUTHORIZATION: LIST OF ADMINS
@@ -113,7 +119,7 @@ contract Rules is AdminProxy, RulesProxy {
     }
 
     // RULES - IS CONNECTION ALLOWED
-    function isConnectionAllowed(
+    function connectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
         bytes16 sourceEnodeIp,
@@ -198,6 +204,9 @@ contract Rules is AdminProxy, RulesProxy {
         countWhitelist = countWhitelist + 1;
         whitelist[newEnode.next].prev = key;
         whitelist[headWhitelist].next = key;
+
+        triggerRulesChangeEvent(false);
+
         return true;
     }
 
@@ -235,6 +244,9 @@ contract Rules is AdminProxy, RulesProxy {
         whitelist[e.next].prev = e.prev;
         countWhitelist = countWhitelist - 1;
         delete whitelist[key];
+
+        triggerRulesChangeEvent(true);
+
         return true;
     }
 
@@ -290,5 +302,10 @@ contract Rules is AdminProxy, RulesProxy {
 
     function getKeyCount() public view returns (uint) {
         return keysWhitelist.length;
+    }
+
+    function triggerRulesChangeEvent(bool addsRestrictions) public {
+        Ingress i = Ingress(ingressContractAddress);
+        i.emitRulesChangeEvent(addsRestrictions);
     }
 }
