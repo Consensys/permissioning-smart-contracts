@@ -84,7 +84,7 @@ contract('Permissioning WITH AUTHORITY ', () => {
       assert.equal(permitted, true, 'expected permitted node2 <> node3');
     });
 
-    it('Should remove LAST node from the whitelist and then NOT permit that node', async () => {
+    it('Should remove END node from the whitelist and then NOT permit that node', async () => {
       await proxy.removeEnode(node3High, node3Low, node3Host, node3Port);
       let permitted = await proxy.enodeAllowed(node3High, node3Low, node3Host, node3Port);
       assert.equal(permitted, false, 'expected removed node NOT permitted');
@@ -108,7 +108,7 @@ contract('Permissioning WITH AUTHORITY ', () => {
       assert.equal(result, 1, "expected number of nodes");
     });
 
-    it('Should remove a node from the whitelist and then NOT permit that node', async () => {
+    it('Should remove FINAL node from the whitelist AND then NOT permit that node AND list now empty', async () => {
       await proxy.removeEnode(node2High, node2Low, node2Host, node2Port);
       let permitted = await proxy.enodeAllowed(node2High, node2Low, node2Host, node2Port);
       assert.equal(permitted, false, 'expected removed node NOT permitted');
