@@ -3,6 +3,7 @@ pragma solidity >=0.4.22 <0.6.0;
 import "./AdminProxy.sol";
 import "./AdminList.sol";
 
+
 contract Admin is AdminProxy, AdminList {
     modifier onlyAdmin() {
         require(isAuthorized(msg.sender), "Sender not authorized");
@@ -39,7 +40,7 @@ contract Admin is AdminProxy, AdminList {
                 adresses[i] = _address;
             }
         }
-        
+
         return adresses;
     }
 }

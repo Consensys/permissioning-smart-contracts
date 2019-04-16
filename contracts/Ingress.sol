@@ -3,6 +3,7 @@ pragma solidity >=0.4.22 <0.6.0;
 import "./AdminProxy.sol";
 import "./RulesProxy.sol";
 
+
 contract Ingress {
     // version of this contract: semver eg 1.2.14 represented like 001002014
     uint version = 1000000;

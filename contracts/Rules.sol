@@ -4,6 +4,7 @@ import "./RulesProxy.sol";
 import "./Ingress.sol";
 import "./Admin.sol";
 
+
 contract Rules is RulesProxy, Admin {
 
     // on read-only mode rules can't be added/removed
