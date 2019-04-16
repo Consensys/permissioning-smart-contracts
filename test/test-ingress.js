@@ -16,12 +16,12 @@ var node2Port = 30304;
 
 contract ('Ingress contract', (accounts) => {
     let ingressContract;
-    let rulsContract;
+    let rulesContract;
 
     // Reset state before each run
     beforeEach('create a new contract for each test', async () => {
         ingressContract = await IngressContract.new();
-        rulsContract = await RulesContract.new(ingressContract.address);
+        rulesContract = await RulesContract.new(ingressContract.address);
     })
 
     describe('Ingress contract without Rules address in the registry', () => {
@@ -51,32 +51,32 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
 
             // Register the Rules contract
-            result = await ingressContract.setContractAddress(RULES, rulsContract.address);
+            result = await ingressContract.setContractAddress(RULES, rulesContract.address);
 
             // assert values in the RegistryUpdated event
-            assert.equal(result.logs[0].args[0], rulsContract.address, 'Event address SHOULD be correct');
+            assert.equal(result.logs[0].args[0], rulesContract.address, 'Event address SHOULD be correct');
             assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
 
             // Verify the Rules contract address
             result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result, rulsContract.address, 'Rules contract address SHOULD be correct');
+            assert.equal(result, rulesContract.address, 'Rules contract address SHOULD be correct');
         });
 
         it('Should return all registered contracts', async () => {
             let result;
 
             // Register a Rules contract
-            result = await ingressContract.setContractAddress(RULES, rulsContract.address);
+            result = await ingressContract.setContractAddress(RULES, rulesContract.address);
 
             // assert values in the RegistryUpdated event
-            assert.equal(result.logs[0].args[0], rulsContract.address, 'Event address SHOULD be correct');
+            assert.equal(result.logs[0].args[0], rulesContract.address, 'Event address SHOULD be correct');
             assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
             
             // Register an 'Admin' contract
-            result = await ingressContract.setContractAddress(ADMIN, rulsContract.address);
+            result = await ingressContract.setContractAddress(ADMIN, rulesContract.address);
 
             // assert values in the RegistryUpdated event
-            assert.equal(result.logs[0].args[0], rulsContract.address, 'Event address SHOULD be correct');
+            assert.equal(result.logs[0].args[0], rulesContract.address, 'Event address SHOULD be correct');
             assert.equal(result.logs[0].args[1], ADMIN, 'Event name SHOULD be correct');
 
             result = await ingressContract.getAllContractKeys();
@@ -94,11 +94,11 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
 
             // Register the Rules contract
-            result = await ingressContract.setContractAddress(RULES, rulsContract.address); 
+            result = await ingressContract.setContractAddress(RULES, rulesContract.address); 
 
             // Verify the Rules contract address
             result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result, rulsContract.address, 'Rules contract address SHOULD be correct');
+            assert.equal(result, rulesContract.address, 'Rules contract address SHOULD be correct');
 
             // Verify correct number of Contracts
             result = await ingressContract.getAllContractKeys();
@@ -132,11 +132,11 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Admin contract should NOT already be registered');
 
             // Register the contracts
-            await ingressContract.setContractAddress(ADMIN, rulsContract.address); 
+            await ingressContract.setContractAddress(ADMIN, rulesContract.address); 
 
             // Verify the contract address
             result = await ingressContract.getContractAddress(ADMIN);
-            assert.equal(result, rulsContract.address, 'Admin contract address SHOULD be correct');
+            assert.equal(result, rulesContract.address, 'Admin contract address SHOULD be correct');
 
             // Verify correct number of Contracts
             result = await ingressContract.getAllContractKeys();
@@ -152,11 +152,11 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Admin contract should NOT already be registered');
 
             // Register the contracts
-            await ingressContract.setContractAddress(ADMIN, rulsContract.address); 
+            await ingressContract.setContractAddress(ADMIN, rulesContract.address); 
 
             // Verify the contract address
             result = await ingressContract.getContractAddress(ADMIN);
-            assert.equal(result, rulsContract.address, 'Admin contract address SHOULD be correct');
+            assert.equal(result, rulesContract.address, 'Admin contract address SHOULD be correct');
 
             // Verify correct number of Contracts
             result = await ingressContract.getAllContractKeys();
@@ -167,7 +167,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, true, 'Sender account SHOULD be authorized');
 
             // Remove sender from admin list
-            await rulsContract.removeAdmin(accounts[0]);
+            await rulesContract.removeAdmin(accounts[0]);
 
             // Verify sender is no longer authorized
             result = await ingressContract.isAuthorized(accounts[0]); 
@@ -175,7 +175,7 @@ contract ('Ingress contract', (accounts) => {
 
             // Attempt to register an additional contract
             try {
-                await ingressContract.setContractAddress(RULES, rulsContract.address);
+                await ingressContract.setContractAddress(RULES, rulesContract.address);
                 assert.fail("Unauthorized sender was able to set Contract in registry");
             } catch (err) {
                 assert.isOk(err.toString().includes('Not authorized to update contract registry'), 'Expected revert in message');
@@ -211,11 +211,11 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Admin contract should NOT already be registered');
 
             // Register the Admin contract
-            await ingressContract.setContractAddress(ADMIN, rulsContract.address); 
+            await ingressContract.setContractAddress(ADMIN, rulesContract.address); 
 
             // Verify the Admin contract address
             result = await ingressContract.getContractAddress(ADMIN);
-            assert.equal(result, rulsContract.address, 'Admin contract address SHOULD be correct');
+            assert.equal(result, rulesContract.address, 'Admin contract address SHOULD be correct');
 
             // Verify correct number of Contracts
             result = await ingressContract.getAllContractKeys();
@@ -226,11 +226,11 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, true, 'Sender account SHOULD be authorized');
 
             // Register the Rules contract
-            await ingressContract.setContractAddress(RULES, rulsContract.address);
+            await ingressContract.setContractAddress(RULES, rulesContract.address);
             
             // Verify the Rules contract is registered
             result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result, rulsContract.address, 'Rules contract SHOULD be registered');
+            assert.equal(result, rulesContract.address, 'Rules contract SHOULD be registered');
 
             // Verify correct number of Contracts
             result = await ingressContract.getAllContractKeys();
@@ -258,18 +258,18 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
 
             // Register the Rules contract
-            result = await ingressContract.setContractAddress(RULES, rulsContract.address); 
+            result = await ingressContract.setContractAddress(RULES, rulesContract.address); 
 
             // Verify the Rules contract address
             result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result, rulsContract.address, 'Rules contract address SHOULD be correct');
+            assert.equal(result, rulesContract.address, 'Rules contract address SHOULD be correct');
 
             // Verify correct number of Contracts
             result = await ingressContract.getAllContractKeys();
             assert.equal(result.length, 1, '1 key SHOULD be registered');
 
             // Add a more restrictive rule
-            await rulsContract.addEnode(nodeHigh, nodeLow, nodeHost, nodePort);
+            await rulesContract.addEnode(nodeHigh, nodeLow, nodeHost, nodePort);
 
             // Get the events
             result = await ingressContract.getPastEvents('NodePermissionsUpdated', {fromBlock: 0, toBlock: 'latest' });
@@ -278,7 +278,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result[0].returnValues.addsRestrictions, false, 'addsRestrictions SHOULD be false');
 
             // Add a less restrictive rule
-            result = await rulsContract.removeEnode(nodeHigh, nodeLow, nodeHost, nodePort);
+            result = await rulesContract.removeEnode(nodeHigh, nodeLow, nodeHost, nodePort);
 
             // Get the events
             result = await ingressContract.getPastEvents('NodePermissionsUpdated', {fromBlock: 0, toBlock: 'latest' });
@@ -298,12 +298,12 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Admin contract should NOT already be registered');
 
             // Register the contracts
-            await ingressContract.setContractAddress(RULES, rulsContract.address); 
+            await ingressContract.setContractAddress(RULES, rulesContract.address); 
             await ingressContract.setContractAddress(ADMIN, acProxy.address); 
 
             // Verify the contract addresses
             result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result, rulsContract.address, 'Rules contract address SHOULD be correct');
+            assert.equal(result, rulesContract.address, 'Rules contract address SHOULD be correct');
             result = await ingressContract.getContractAddress(ADMIN);
             assert.equal(result, acProxy.address, 'Admin contract address SHOULD be correct');
 
@@ -312,7 +312,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result.length, 2, '2 keys SHOULD be registered');
 
             // Trigger an event from Rules contract
-            await rulsContract.triggerRulesChangeEvent(true);
+            await rulesContract.triggerRulesChangeEvent(true);
 
             // Get the events
             result = await ingressContract.getPastEvents('NodePermissionsUpdated', {fromBlock: 0, toBlock: 'latest' });
