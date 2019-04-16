@@ -128,8 +128,8 @@ contract Rules is AdminProxy, RulesProxy {
         bytes32 destinationEnodeLow,
         bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
-    ) public view returns (bool) {
-        return (
+    ) public view returns (bytes32) {
+        if (
             enodeAllowed(
                 sourceEnodeHigh,
                 sourceEnodeLow,
@@ -141,7 +141,11 @@ contract Rules is AdminProxy, RulesProxy {
                 destinationEnodeIp,
                 destinationEnodePort
             )
-        );
+        ) {
+            return 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+        } else {
+            return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+        }
     }
 
     // RULES - IS ENODE ALLOWED

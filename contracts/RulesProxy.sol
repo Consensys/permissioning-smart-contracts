@@ -10,5 +10,5 @@ interface RulesProxy {
         bytes32 destinationEnodeLow,
         bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
-    ) external view returns (bool);
+    ) external view returns (bytes32);
 }
