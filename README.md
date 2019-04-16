@@ -15,6 +15,10 @@
 
 
 ## How to deploy and setup contracts
+1. add .env file with the address of the ingress contract (so that the Truffle migration scripts know where to find it)
+```
+INGRESS_CONTRACT_ADDRESS="0x0000000000000000000000000000000000009999"
+```
 1. Run `truffle migrate`
 
 After this step, you should have your Rules contract deployed on the network. This will also update the Ingress contract with the name and version of the Rules contract.

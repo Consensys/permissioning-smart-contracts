@@ -107,6 +107,10 @@ contract Ingress {
         bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bool) {
+        if(getContractAddress(RULES_CONTRACT) == address(0)) {
+            return false;
+        }
+
         return RulesProxy(registry[RULES_CONTRACT].contractAddress).connectionAllowed(
             sourceEnodeHigh,
             sourceEnodeLow,
