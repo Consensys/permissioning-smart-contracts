@@ -5,6 +5,8 @@ const Ingress = artifacts.require("./Ingress.sol");
 
 // "rules" as bytes32
 const rulesContractName = Web3Utils.utf8ToHex("rules");
+// "administration" as bytes32
+const adminContractName = Web3Utils.utf8ToHex("administration");
 
 /* The address of the ingress contract if pre deployed */
 let ingressAddress = process.env.INGRESS_CONTRACT_ADDRESS;
@@ -31,4 +33,7 @@ module.exports = async(deployer, network) => {
     console.log("   > Rules deployed with Ingress.address = " + ingressAddress);
     await ingressInstance.setContractAddress(rulesContractName, Rules.address);
     console.log("   > Updated Ingress contract with Rules address = " + Rules.address);
+    // set Rules contract as admin contract
+    await ingressInstance.setContractAddress(adminContractName, Rules.address);
+    console.log("   > Updated Ingress contract with Admin address = " + Rules.address);
 }
