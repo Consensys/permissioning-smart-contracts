@@ -178,7 +178,7 @@ contract ('Ingress contract', (accounts) => {
                 await ingressContract.setContractAddress(RULES, rulesContract.address);
                 assert.fail("Unauthorized sender was able to set Contract in registry");
             } catch (err) {
-                assert.isOk(err.toString().includes('Not authorized to update contract registry'), 'Expected revert in message');
+                assert.isOk(err.toString().includes('revert'), 'Expected revert in message');
             }
 
             // Verify the contract address
@@ -194,7 +194,7 @@ contract ('Ingress contract', (accounts) => {
                 await ingressContract.removeContract(ADMIN);
                 assert.fail("Unauthorized sender was able to remove Contract in registry");
             } catch (err) {
-                assert.isOk(err.toString().includes('Not authorized to update contract registry'), 'Expected revert in message');
+                assert.isOk(err.toString().includes('revert'), 'Expected revert in message');
             }            
 
             // Verify correct number of Contracts
@@ -325,7 +325,7 @@ contract ('Ingress contract', (accounts) => {
                 await acProxy.triggerRulesChangeEvent(true);
                 assert.fail("Unauthorized contract was allowed to trigger event")
             } catch (err) {
-                assert.isOk(err.toString().includes('Only Rules contract can trigger Rules change events'), 'Expected revert in message');
+                assert.isOk(err.toString().includes('revert'), 'Expected revert in message');
             }
 
             // Get the events
