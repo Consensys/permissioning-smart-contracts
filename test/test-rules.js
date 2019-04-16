@@ -77,11 +77,11 @@ contract('Permissioning WITH AUTHORITY ', () => {
 
     it('Should allow a connection between 2 added nodes', async () => {
       let permitted = await proxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-      assert.equal(permitted, true, 'expected permitted node1 <> node2');
+      assert.equal(permitted, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 'expected permitted node1 <> node2');
       permitted = await proxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node3High, node3Low, node3Host, node3Port);
-      assert.equal(permitted, true, 'expected permitted node1 <> node3');
+      assert.equal(permitted, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 'expected permitted node1 <> node3');
       permitted = await proxy.connectionAllowed(node2High, node2Low, node2Host, node2Port, node3High, node3Low, node3Host, node3Port);
-      assert.equal(permitted, true, 'expected permitted node2 <> node3');
+      assert.equal(permitted, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 'expected permitted node2 <> node3');
     });
 
     it('Should remove a node from the whitelist and then NOT permit that node', async () => {
@@ -90,7 +90,7 @@ contract('Permissioning WITH AUTHORITY ', () => {
       assert.equal(permitted, false, 'expected removed node NOT permitted');
 
       permitted = await proxy.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-      assert.equal(permitted, false, 'expected source disallowed since it was removed');
+      assert.equal(permitted, "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 'expected source disallowed since it was removed');
     });
   });
 });
