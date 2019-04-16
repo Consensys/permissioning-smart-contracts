@@ -30,7 +30,7 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT be registered');
 
             let permitted = await ingressContract.connectionAllowed(nodeHigh, nodeLow, nodeHost, nodePort, node2High, node2Low, node2Host, node2Port);
-            assert.equal(permitted, false, 'expected connectionAllowed to return false');
+            assert.equal(permitted, "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 'expected connectionAllowed to return false');
         })
     }),
 
