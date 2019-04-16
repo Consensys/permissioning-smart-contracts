@@ -14,7 +14,7 @@ var node2Low = "0xcb320c1b62f37892092b7f59bd359fdc3a2ed5df436c3d8914b15327401289
 var node2Host = "0x0000000000000000000011119bd359fd";
 var node2Port = 2;
 
-contract ('Ingress contract with Rules proxy', () => {
+contract ('Ingress (proxying permissioning check to rules contract)', () => {
     describe('Ingress contract should execute proxied call', () => {
         it('Should execute proxied call correctly', async () => {
           let result;
