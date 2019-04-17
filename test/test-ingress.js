@@ -14,6 +14,8 @@ var node2Low = "0xcb320c1b62f37892092b7f59bd359fdc3a2ed5df436c3d8914b15327401289
 var node2Host = "0x0000000000000000000011119bd359fd";
 var node2Port = 30304;
 
+const address2 = "0x345ca3e014aaf5dca488057592ee47305d9b3e10".toLowerCase();
+
 contract ('Ingress contract', (accounts) => {
     let ingressContract;
     let rulesContract;
@@ -120,6 +122,40 @@ contract ('Ingress contract', (accounts) => {
             assert.equal(result.length, 0, '0 keys SHOULD be registered');
         })
     }),
+
+    it('Should update a specified contract', async () => {
+        let result;
+        
+        // Verify that the Rules contract has not yet been registered
+        result = await ingressContract.getContractAddress(RULES);
+        assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
+
+        // Register the Rules contract
+        result = await ingressContract.setContractAddress(RULES, rulesContract.address); 
+
+        // Verify the Rules contract address
+        result = await ingressContract.getContractAddress(RULES);
+        assert.equal(result, rulesContract.address, 'Rules contract address SHOULD be correct');
+
+        // Verify correct number of Contracts
+        result = await ingressContract.getAllContractKeys();
+        assert.equal(result.length, 1, '1 key SHOULD be registered');
+
+        // Update the Rules contract
+        result = await ingressContract.setContractAddress(RULES, address2);
+
+        // assert values in the RegistryUpdated event
+        assert.equal(result.logs[0].args[0].toLowerCase(), address2, 'Event address from REMOVE SHOULD be zero');
+        assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
+
+        // Verify that the Rules contract has been deleted
+        result = await ingressContract.getContractAddress(RULES);
+        assert.equal(result.toLowerCase(), address2, 'Rules contract SHOULD have been updated');
+
+        // Verify correct number of Contracts
+        result = await ingressContract.getAllContractKeys();
+        assert.equal(result.length, 1, '1 keys SHOULD be registered');
+    });
 
     describe('Ingress contract should enforce Admin authorization', () => {
         it('Should allow an unauthorized account to initially deploy Administration Contract', async () => {
