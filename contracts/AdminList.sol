@@ -59,4 +59,36 @@ contract AdminList {
             return (false, address(0));
         }
     }
+
+    function getAll() public view returns (address[] memory) {
+        uint listSize = list.sizeOf();
+        if (listSize == 0) {
+            return new address[](0);
+        }
+
+        address[] memory allAddresses = new address[](listSize);
+
+        bool hasNext = true;
+        uint counter = 0;
+        uint pointer = 0;
+
+        while(hasNext) {
+            (bool nodeExists, uint256 prev, uint256 next) = list.getNode(pointer);
+            if (nodeExists) {
+                if (pointer > 0) {
+                    allAddresses[counter++] = address(pointer);
+                }
+
+                if (prev != 0) {
+                    pointer = prev;
+                } else {
+                    hasNext = false;
+                }
+            }
+            //Getting rid of unused variable warning
+            next;
+        }
+
+        return allAddresses;
+    }
 }

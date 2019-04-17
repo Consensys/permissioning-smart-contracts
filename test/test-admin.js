@@ -10,13 +10,13 @@ contract("Admin (admin management)", async accounts => {
 
   it("accounts that deployed contract should be admin", async () => {
     let isAuthorized = await adminContract.isAuthorized(accounts[0]);
-    
+
     assert.ok(isAuthorized);
   });
 
   it("non-deployer account should not be admin", async () => {
     let isAuthorized = await adminContract.isAuthorized(accounts[1]);
-    
+
     assert.notOk(isAuthorized);
   });
 
@@ -72,13 +72,13 @@ contract("Admin (admin management)", async accounts => {
     }
   });
 
-  it("get admin list", async () => {
+  it("get admins list", async () => {
     let admins = await adminContract.getAdmins.call();
 
     assert.sameMembers([accounts[0]], admins)
   });
 
-  it("get admin list reflect changes", async () => {
+  it("get admins list reflect changes", async () => {
     let admins = await adminContract.getAdmins.call();
     assert.sameMembers([accounts[0]], admins)
 

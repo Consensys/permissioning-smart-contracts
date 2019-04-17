@@ -32,15 +32,6 @@ contract Admin is AdminProxy, AdminList {
     }
 
     function getAdmins() public view returns (address[] memory){
-        address[] memory adresses = new address[](size());
-
-        for(uint i = 0; i < adresses.length; i++) {
-            (bool _exists, address _address) = get(i);
-            if (_exists) {
-                adresses[i] = _address;
-            }
-        }
-
-        return adresses;
+        return getAll();
     }
 }
