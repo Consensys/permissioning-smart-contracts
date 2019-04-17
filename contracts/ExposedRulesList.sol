@@ -3,7 +3,7 @@ pragma solidity >=0.4.22 <0.6.0;
 import "./RulesList.sol";
 
 
-contract ExposedRulesList is RulesList{
+contract ExposedRulesList is RulesList {
 
     function _calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public pure returns(uint256) {
         return calculateKey(_enodeHigh, _enodeLow, _ip, _port);
@@ -19,8 +19,8 @@ contract ExposedRulesList is RulesList{
 
     function _add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public returns (bool) {
         return add(_enodeHigh, _enodeLow, _ip, _port);
-
     }
+
     function _remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public returns (bool) {
         return remove(_enodeHigh, _enodeLow, _ip, _port);
     }

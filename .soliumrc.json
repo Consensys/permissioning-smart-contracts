@@ -18,6 +18,9 @@
     ],
     "blank-lines": "error",
     "no-trailing-whitespace": "error",
-    "arg-overflow": "error"
+    "arg-overflow": [
+      "error",
+      4
+    ]
   }
 }
