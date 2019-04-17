@@ -43,8 +43,8 @@ contract Ingress {
                 contractAddress: addr
             });
 
-        // Update registry indexing
-        contractKeys.push(name);
+            // Update registry indexing
+            contractKeys.push(name);
        } else {
             info.contractAddress = addr;
        }
