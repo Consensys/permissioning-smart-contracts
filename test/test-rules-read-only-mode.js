@@ -10,7 +10,7 @@ var node1Port = 30303;
 var newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732".toLowerCase();
 var newAdmin2 = "fe3b557e8fb62b89f4916b721be55ceb828dbd73".toLowerCase();
 
-contract('Rules (Read-only mode)', (accounts) => {
+contract('Rules (Read-only mode)', () => {
 
   let ingressContract;
   let adminContract;
@@ -18,7 +18,6 @@ contract('Rules (Read-only mode)', (accounts) => {
 
   beforeEach(async () => {
     ingressContract = await Ingress.deployed();
-    // adminContract = await Admin.new();
     rulesContract = await Rules.new(Ingress.address);
   })
 
@@ -60,7 +59,7 @@ contract('Rules (Read-only mode)', (accounts) => {
   });
 
   it("should fail when attempting to exit read-only mode and contract is not in read-only mode", async () => {
-  
+
     try {
       await rulesContract.exitReadOnly();
       assert.fail("Expected error when exiting read-only mode not being in read-only mode");
@@ -71,7 +70,7 @@ contract('Rules (Read-only mode)', (accounts) => {
 
   it("should fail when attempting to enter read-only mode and contract is alread in read-only mode", async () => {
     await rulesContract.enterReadOnly();
-    
+
     try {
       await rulesContract.enterReadOnly();
       assert.fail("Expected error when entering read-only mode being in read-only mode");
