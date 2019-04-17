@@ -123,41 +123,39 @@ contract ('Ingress contract', (accounts) => {
         })
     }),
 
-    describe('Ingress contract adding same contract key updates that registry entry', () => {
-        it('Should update a specified contract', async () => {
-            let result;
-            
-            // Verify that the Rules contract has not yet been registered
-            result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
+    it('Should update a specified contract', async () => {
+        let result;
+        
+        // Verify that the Rules contract has not yet been registered
+        result = await ingressContract.getContractAddress(RULES);
+        assert.equal(result, "0x0000000000000000000000000000000000000000", 'Rules contract should NOT already be registered');
 
-            // Register the Rules contract
-            result = await ingressContract.setContractAddress(RULES, rulesContract.address); 
+        // Register the Rules contract
+        result = await ingressContract.setContractAddress(RULES, rulesContract.address); 
 
-            // Verify the Rules contract address
-            result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result, rulesContract.address, 'Rules contract address SHOULD be correct');
+        // Verify the Rules contract address
+        result = await ingressContract.getContractAddress(RULES);
+        assert.equal(result, rulesContract.address, 'Rules contract address SHOULD be correct');
 
-            // Verify correct number of Contracts
-            result = await ingressContract.getAllContractKeys();
-            assert.equal(result.length, 1, '1 key SHOULD be registered');
+        // Verify correct number of Contracts
+        result = await ingressContract.getAllContractKeys();
+        assert.equal(result.length, 1, '1 key SHOULD be registered');
 
-            // Update the Rules contract
-            result = await ingressContract.setContractAddress(RULES, address2);
+        // Update the Rules contract
+        result = await ingressContract.setContractAddress(RULES, address2);
 
-            // assert values in the RegistryUpdated event
-            assert.equal(result.logs[0].args[0].toLowerCase(), address2, 'Event address from REMOVE SHOULD be zero');
-            assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
+        // assert values in the RegistryUpdated event
+        assert.equal(result.logs[0].args[0].toLowerCase(), address2, 'Event address from REMOVE SHOULD be zero');
+        assert.equal(result.logs[0].args[1], RULES, 'Event name SHOULD be correct');
 
-            // Verify that the Rules contract has been deleted
-            result = await ingressContract.getContractAddress(RULES);
-            assert.equal(result.toLowerCase(), address2, 'Rules contract SHOULD have been updated');
+        // Verify that the Rules contract has been deleted
+        result = await ingressContract.getContractAddress(RULES);
+        assert.equal(result.toLowerCase(), address2, 'Rules contract SHOULD have been updated');
 
-            // Verify correct number of Contracts
-            result = await ingressContract.getAllContractKeys();
-            assert.equal(result.length, 1, '1 keys SHOULD be registered');
-        })
-    }),
+        // Verify correct number of Contracts
+        result = await ingressContract.getAllContractKeys();
+        assert.equal(result.length, 1, '1 keys SHOULD be registered');
+    });
 
     describe('Ingress contract should enforce Admin authorization', () => {
         it('Should allow an unauthorized account to initially deploy Administration Contract', async () => {
