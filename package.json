@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "dotenv": "^7.0.0",
+    "solidity-linked-list": "^2.0.2",
     "truffle-hdwallet-provider": "^1.0.6",
     "web3-utils": "^1.0.0-beta.52"
   },

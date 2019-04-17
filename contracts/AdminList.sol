@@ -1,6 +1,6 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./libs/StructuredLinkedList.sol";
+import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 
 
 //TODO change methods to internal and create exposed contract for testing
