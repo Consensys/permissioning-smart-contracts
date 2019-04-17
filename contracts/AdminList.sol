@@ -9,24 +9,24 @@ contract AdminList {
 
     StructuredLinkedList.List private list;
 
-    function size() public view returns (uint256) {
+    function size() internal view returns (uint256) {
         return list.sizeOf();
     }
 
-    function exists(address _address) public view returns (bool) {
+    function exists(address _address) internal view returns (bool) {
         return list.nodeExists(uint256(_address));
     }
 
-    function add(address _address) public returns (bool) {
+    function add(address _address) internal returns (bool) {
         return list.push(uint(_address), true);
     }
 
-    function remove(address _address) public returns (bool) {
+    function remove(address _address) internal returns (bool) {
         uint node = uint(_address);
         return list.remove(node) != 0 ? true : false;
     }
 
-    function get(uint index) public view returns (bool _exists, address _address) {
+    function get(uint index) internal view returns (bool _exists, address _address) {
         uint listSize = list.sizeOf();
         if (index >= listSize) {
             return (false, address(0));
@@ -60,7 +60,7 @@ contract AdminList {
         }
     }
 
-    function getAll() public view returns (address[] memory) {
+    function getAll() internal view returns (address[] memory) {
         uint listSize = list.sizeOf();
         if (listSize == 0) {
             return new address[](0);
