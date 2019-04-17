@@ -42,14 +42,14 @@ contract Ingress {
                 owner: msg.sender,
                 contractAddress: addr
             });
+
+            // Update registry indexing
+            contractKeys.push(name);
        } else {
             info.contractAddress = addr;
        }
         // update record in the registry
         registry[name] = info;
-
-        // Update registry indexing
-        contractKeys.push(name);
 
         emit RegistryUpdated(addr,name);
 
