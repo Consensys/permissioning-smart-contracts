@@ -1,5 +1,8 @@
 const Ingress = artifacts.require('Ingress.sol');
 const Rules = artifacts.require('Rules.sol');
+const Admin = artifacts.require('Admin.sol');
+
+const ADMIN_NAME = "0x61646d696e697374726174696f6e000000000000000000000000000000000000";
 
 var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
 var node1HighCopy = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
@@ -31,9 +34,12 @@ var RULES_CONTRACT = "0x72756c65730000000000000000000000000000000000000000000000
 contract('Rules (node permissioning)', () => {
   let ingressContract;
   let rulesContract;
+  let adminContract;
 
   before(async () => {
     ingressContract = await Ingress.new();
+    adminContract = await Admin.new();
+    result = await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
     rulesContract = await Rules.new(ingressContract.address);
   })
 
@@ -104,7 +110,7 @@ contract('Rules (node permissioning)', () => {
     assert.equal(foundNode1, true, 'expected to find node1');
     assert.equal(foundNode2, true, 'expected to find node2');
     assert.equal(foundNode3, true, 'expected to find node3');
-    // test keycount 
+    // test keycount
     result = await rulesContract.getKeyCount();
     assert.equal(result, 3, 'expected count 3');
   });
@@ -115,7 +121,7 @@ contract('Rules (node permissioning)', () => {
 
     // remove node3
     result = await rulesContract.removeEnode(node1High, node1Low, node1Host, node1Port);
-    
+
     result = await rulesContract.getHeadEnode();
     key = result[0];
     let foundNode1 = false;

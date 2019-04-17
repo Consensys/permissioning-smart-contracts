@@ -17,7 +17,7 @@ module.exports = async(deployer, network) => {
         console.log("   > Deployed Ingress contract to address = " + Ingress.address);
         ingressAddress = Ingress.address;
 
-    } 
+    }
     // If supplied an address, make sure there's something there
     const ingressInstance = await Ingress.at(ingressAddress);
     try {

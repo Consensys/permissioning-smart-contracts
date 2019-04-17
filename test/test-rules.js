@@ -1,5 +1,10 @@
-const Ingress = artifacts.require('Ingress.sol');
-const Rules = artifacts.require('Rules.sol');
+const IngressContract = artifacts.require('Ingress.sol');
+const RulesContract = artifacts.require('Rules.sol');
+const AdminContract = artifacts.require('Admin.sol');
+
+// Contract keys
+const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";
+const ADMIN_NAME = "0x61646d696e697374726174696f6e000000000000000000000000000000000000";
 
 var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
 var node1Low = "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
@@ -18,16 +23,22 @@ var node3Port = 30305;
 
 var newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
-// Contract keys
-var RULES_CONTRACT = "0x72756c6573000000000000000000000000000000000000000000000000000000";
-
-contract('Rules', () => {
+contract("Rules", () => {
   let ingressContract;
   let rulesContract;
-  
+  let adminContract;
+
+  before(async () => {
+    ingressContract = await IngressContract.new();
+    adminContract = await AdminContract.new();
+    result = await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
+    rulesContract = await RulesContract.new(ingressContract.address);
+  });
+
   it('Should NOT permit any node when none have been added', async () => {
-    ingressContract = await Ingress.new();
-    rulesContract = await Rules.new(ingressContract.address);
+    ingressContract = await IngressContract.new();
+    result = await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
+    rulesContract = await RulesContract.new(ingressContract.address);
 
     let permitted = await rulesContract.enodeAllowed(node1High, node1Low, node1Host, node1Port);
     assert.equal(permitted, false, 'expected node NOT permitted');
@@ -50,7 +61,7 @@ contract('Rules', () => {
 
   it('Should add a node to the whitelist and then permit that node', async () => {
     // Register the Rules contract to permit adding enodes
-    await ingressContract.setContractAddress(RULES_CONTRACT, rulesContract.address);
+    await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
 
     // add node1
     await rulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
@@ -95,7 +106,7 @@ contract('Rules', () => {
 
     permitted = await rulesContract.connectionAllowed(node3High, node3Low, node3Host, node3Port, node2High, node2Low, node2Host, node2Port);
     assert.equal(permitted, "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 'expected source disallowed since it was removed');
-    
+
     let result = await rulesContract.getKeyCount();
     assert.equal(result, 2, "expected number of nodes");
   });

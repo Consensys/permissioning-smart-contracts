@@ -5,14 +5,12 @@ import "./Ingress.sol";
 import "./Admin.sol";
 
 
-contract Rules is RulesProxy, Admin {
+contract Rules is RulesProxy {
 
     // on read-only mode rules can't be added/removed
     bool readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
-
-    address ingressContractAddress;
 
     struct Enode {
         bytes next;
@@ -30,13 +28,24 @@ contract Rules is RulesProxy, Admin {
     // head of linked list
     bytes headWhitelist;
 
+    address private ingressContractAddress;
+    address private adminContractAddress;
+
     modifier onlyOnEditMode() {
         require(!readOnlyMode, "In read only mode: rules cannot be modified");
         _;
     }
 
+    modifier onlyAdmin() {
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
+        _;
+    }
+
     constructor (address ingressAddress) public {
         ingressContractAddress = ingressAddress;
+        Ingress ingressContract = Ingress(ingressContractAddress);
+        adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
     }
 
     // VERSION
@@ -250,7 +259,6 @@ contract Rules is RulesProxy, Admin {
     }
 
     function triggerRulesChangeEvent(bool addsRestrictions) public {
-        Ingress i = Ingress(ingressContractAddress);
-        i.emitRulesChangeEvent(addsRestrictions);
+        Ingress(ingressContractAddress).emitRulesChangeEvent(addsRestrictions);
     }
 }
