@@ -22,6 +22,9 @@ contract Rules is RulesProxy, RulesList {
     }
 
     modifier onlyAdmin() {
+        Ingress ingressContract = Ingress(ingressContractAddress);
+        adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
         _;
@@ -29,8 +32,6 @@ contract Rules is RulesProxy, RulesList {
 
     constructor (address ingressAddress) public {
         ingressContractAddress = ingressAddress;
-        Ingress ingressContract = Ingress(ingressContractAddress);
-        adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
     }
 
     // VERSION
