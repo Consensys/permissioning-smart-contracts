@@ -1,4 +1,5 @@
 const HDWalletProvider = require('truffle-hdwallet-provider');
+const path = require("path");
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -37,6 +38,8 @@ module.exports = {
       gasPrice: 0x01
     }
   },
+
+  contracts_build_directory: path.join(__dirname, "app/src/contracts"),
 
   compilers: {
     solc: {
