@@ -17,7 +17,7 @@ contract AdminList {
     }
 
     function add(address _address) internal returns (bool) {
-        return list.push(uint(_address), true);
+        return list.push(uint(_address), false);
     }
 
     function remove(address _address) internal returns (bool) {
@@ -43,13 +43,13 @@ contract AdminList {
                     break;
                 } else {
                     counter++;
-                    pointer = prev;
+                    pointer = next;
                 }
             } else {
                 break;
             }
             //Getting rid of unused variable warning
-            next;
+            prev;
         }
 
         if (hasFound) {
@@ -78,14 +78,14 @@ contract AdminList {
                     allAddresses[counter++] = address(pointer);
                 }
 
-                if (prev != 0) {
-                    pointer = prev;
+                if (next != 0) {
+                    pointer = next;
                 } else {
                     hasNext = false;
                 }
             }
             //Getting rid of unused variable warning
-            next;
+            prev;
         }
 
         return allAddresses;

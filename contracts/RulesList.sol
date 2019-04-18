@@ -40,7 +40,7 @@ contract RulesList {
             );
             enodeMapping[key] = newEnode;
 
-            return list.push(calculateKey(_enodeHigh, _enodeLow, _ip, _port), true);
+            return list.push(calculateKey(_enodeHigh, _enodeLow, _ip, _port), false);
         } else {
             return false;
         }
@@ -74,13 +74,13 @@ contract RulesList {
                     break;
                 } else {
                     counter++;
-                    pointer = prev;
+                    pointer = next;
                 }
             } else {
                 break;
             }
             //Getting rid of unused variable warning
-            next;
+            prev;
         }
 
         if (hasFound) {
