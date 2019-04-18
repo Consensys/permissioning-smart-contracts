@@ -4,10 +4,9 @@ import classNames from 'classnames';
 import { DrizzleContext } from "drizzle-react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
-import { AppBar, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, 
+import { AppBar, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemIcon,
     ListItemText, Toolbar, Typography } from "@material-ui/core";
 import { AssignmentInd, ChevronLeft, ImportExport, Menu } from '@material-ui/icons';
-import ReadOnlyToggle from "./ReadOnlyToggle";
 import RulesPage from './RulesPage';
 import AdminPage from './AdminPage';
 
@@ -68,7 +67,7 @@ const styles = theme => ({
       marginLeft: 0,
     },
   });
-  
+
   function Rules() {
     return (
       <DrizzleContext.Consumer>
@@ -81,7 +80,7 @@ const styles = theme => ({
       </DrizzleContext.Consumer>
     )
   }
-  
+
   function Admin() {
     return (
       <DrizzleContext.Consumer>
@@ -117,14 +116,14 @@ class Main extends React.Component {
             <div className={classes.root}>
             <Router>
                 <CssBaseline>
-                    <AppBar 
+                    <AppBar
                         position="fixed"
                         className={classNames(classes.appBar, {
                             [classes.appBarShift]: drawerOpen,
                         })}>
                         <Toolbar disableGutters={!drawerOpen}>
-                            <IconButton 
-                                color="inherit" 
+                            <IconButton
+                                color="inherit"
                                 aria-label="Menu"
                                 onClick={() => this.toggleDrawer(true)}
                                 className={classNames(classes.menuButton, drawerOpen && classes.hide)}>
@@ -144,50 +143,36 @@ class Main extends React.Component {
                         classes={{
                             paper: classes.drawerPaper,
                         }}>
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={() => this.toggleDrawer(false)}>
-                        <ChevronLeft />
-                        </IconButton>
-                    </div>
-                    <Divider />
-                    <div className={classes.list}>
-                        <Typography 
-                          variant="h6" 
-                          color="inherit">
-                        Management
-                        </Typography>
-                        <List>
-                            <ListItem 
-                                button 
-                                key='rules'
-                                component={Link}
-                                to='/rules/'
-                                onClick={() => this.toggleDrawer(false)}>
-                                <ListItemIcon><ImportExport /></ListItemIcon>
-                                <ListItemText 
-                                  primary='Permissioning Rules'/>
-                            </ListItem>
-                            <ListItem 
-                                button 
-                                key='admin'
-                                component={Link}
-                                to='/admin/'
-                                onClick={() => this.toggleDrawer(false)}>
-                                <ListItemIcon><AssignmentInd /></ListItemIcon>
-                                <ListItemText primary='Admin Accounts' />
-                            </ListItem>
-                        </List>
-                        <Divider/>
-
-                        <DrizzleContext.Consumer>
-                            {drizzleContext => {
-                                const { drizzle, drizzleState } = drizzleContext;
-                                return (
-                                    <ReadOnlyToggle drizzle={drizzle} drizzleState={drizzleState}/>
-                                );
-                            }}
-                        </DrizzleContext.Consumer>
-                    </div>
+                      <div className={classes.drawerHeader}>
+                          <IconButton onClick={() => this.toggleDrawer(false)}>
+                          <ChevronLeft />
+                          </IconButton>
+                      </div>
+                      <Divider />
+                      <div className={classes.list}>
+                          <List>
+                              <ListItem
+                                  button
+                                  key='rules'
+                                  component={Link}
+                                  to='/rules/'
+                                  onClick={() => this.toggleDrawer(false)}>
+                                  <ListItemIcon><ImportExport /></ListItemIcon>
+                                  <ListItemText
+                                    primary='Permissioning Rules'/>
+                              </ListItem>
+                              <ListItem
+                                  button
+                                  key='admin'
+                                  component={Link}
+                                  to='/admin/'
+                                  onClick={() => this.toggleDrawer(false)}>
+                                  <ListItemIcon><AssignmentInd /></ListItemIcon>
+                                  <ListItemText primary='Admin Accounts' />
+                              </ListItem>
+                          </List>
+                          <Divider/>
+                      </div>
                     </Drawer>
 
                     <main className={classNames(classes.content, {[classes.contentShift]: drawerOpen})}>
@@ -195,7 +180,7 @@ class Main extends React.Component {
                             <Route path="/" exact component={Rules} />
                             <Route path="/rules" exact component={Rules} />
                             <Route path="/admin" component={Admin} />
-                        </main> 
+                        </main>
                     </CssBaseline>
                 </Router>
             </div>

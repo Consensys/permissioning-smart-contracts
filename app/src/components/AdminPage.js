@@ -46,7 +46,7 @@ class AdminPage extends Component {
   handleRemove = (i) => {
     const Admin = this.props.drizzle.contracts.Admin;
     var adminToBeRemoved = this.getAdmins()[i]
-    Admin.methods.removeAdmin.cacheSend(adminToBeRemoved);
+    Admin.methods.removeAdmin.cacheSend(adminToBeRemoved, { from: this.props.drizzleState.accounts[0] });
   }
 
   handleClickOpen = () => {
@@ -61,7 +61,7 @@ class AdminPage extends Component {
     const Admin = this.props.drizzle.contracts.Admin;
     const accountToAdd = this.state.addTextField
     if (accountToAdd && accountToAdd !== '') {
-      Admin.methods.addAdmin.cacheSend(accountToAdd);
+      Admin.methods.addAdmin.cacheSend(accountToAdd, { from: this.props.drizzleState.accounts[0] });
     }
     this.handleClose()
   };
@@ -73,7 +73,7 @@ class AdminPage extends Component {
       return admins.map((row, i) => (
         <TableRow key={i}>
           <TableCell component="th" scope="row">{row}</TableCell>
-          <TableCell>
+          <TableCell align="right">
             { this.renderDeleteButton(row, i) }
           </TableCell>
           </TableRow>
@@ -108,7 +108,7 @@ class AdminPage extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>Account Address</TableCell>
-                <TableCell align="left"></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

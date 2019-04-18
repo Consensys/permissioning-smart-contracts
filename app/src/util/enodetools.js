@@ -62,8 +62,8 @@ export function isSameEnodeList(list, another) {
     }
 
     for (var i = 0; i < list.length; i++) {
-        if (list[i].nodeId !== another[i].nodeId || 
-            list[i].ip !== another[i].ip || 
+        if (list[i].nodeId !== another[i].nodeId ||
+            list[i].ip !== another[i].ip ||
             list[i].port !== another[i].port) {
             return false;
         }
@@ -75,8 +75,8 @@ export function isSameEnodeList(list, another) {
 export function containsEnodeObject(obj, list) {
     var i;
     for (i = 0; i < list.length; i++) {
-        if (obj.nodeId === list[i].nodeId && 
-            obj.ip === list[i].ip && 
+        if (obj.nodeId === list[i].nodeId &&
+            obj.ip === list[i].ip &&
             obj.port === list[i].port) {
             return true;
         }

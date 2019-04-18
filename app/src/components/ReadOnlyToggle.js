@@ -26,9 +26,9 @@ export default class ReadOnlyToggle extends Component {
         const hasBeenChecked = event.target.checked
 
         if (!isReadOnly && hasBeenChecked) {
-            Rules.methods.enterReadOnly.cacheSend();
+            Rules.methods.enterReadOnly.cacheSend({ from: this.props.drizzleState.accounts[0] });
         } else if (isReadOnly && !hasBeenChecked) {
-            Rules.methods.exitReadOnly.cacheSend();
+            Rules.methods.exitReadOnly.cacheSend({ from: this.props.drizzleState.accounts[0] });
         }
       };
 
@@ -46,17 +46,14 @@ export default class ReadOnlyToggle extends Component {
     render() {
     return (
         <div>
-            <Typography variant="h6" color="inherit">
-                Read-only mode
-                </Typography>
-                <FormGroup>
-                    <FormControlLabel
-                        control={
-                        <Switch checked={this.state.isReadOnly} onChange={this.handleChange} aria-label="LoginSwitch" />
-                        }
-                        label={this.state.isReadOnly ? 'Enabled' : 'Disabled '}
-                    />
-                    </FormGroup>
+            <FormGroup>
+                <FormControlLabel
+                    control={
+                    <Switch checked={this.state.isReadOnly} onChange={this.handleChange} aria-label="LoginSwitch" />
+                    }
+                    label={this.state.isReadOnly ? 'Read-Only Enabled' : 'Read-Only Disabled '}
+                />
+            </FormGroup>
         </div>
     )
     }
