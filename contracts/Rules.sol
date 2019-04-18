@@ -29,7 +29,6 @@ contract Rules is RulesProxy {
     bytes headWhitelist;
 
     address private ingressContractAddress;
-    address private adminContractAddress;
 
     modifier onlyOnEditMode() {
         require(!readOnlyMode, "In read only mode: rules cannot be modified");
@@ -38,7 +37,7 @@ contract Rules is RulesProxy {
 
     modifier onlyAdmin() {
         Ingress ingressContract = Ingress(ingressContractAddress);
-        adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
