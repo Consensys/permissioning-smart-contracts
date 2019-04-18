@@ -26,6 +26,8 @@ class RulesPage extends Component {
   _isMounted = false;
 
   state = {
+    selectedAddress: '',
+    isAdminKey: null,
     rulesCountKey: null,
     isReadOnlyKey: null,
     rulesCount: 0,
@@ -37,7 +39,17 @@ class RulesPage extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { drizzle } = this.props;
-    const Rules = drizzle.contracts.Rules;
+    const { Admin, Rules } = drizzle.contracts;
+
+    drizzle.web3.currentProvider.publicConfigStore.on('update', (e) => {
+      console.log(e.selectedAddress)
+      Admin.methods.isAuthorized(e.selectedAddress).call().then((result) => {
+        this.setState({
+          selectedAddress: e.selectedAddress,
+          isAdmin: result
+        });
+      });
+    });
 
     this.setState({
         rulesCountKey: Rules.methods.getSize.cacheCall(),
@@ -127,7 +139,7 @@ handleSubmit = () => {
   this.handleClose()
 };
 
-renderTable = (isReadOnly) => {
+renderTable = (isEditable) => {
   const { classes } = this.props;
   const { rules } = this.state;
 
@@ -139,7 +151,7 @@ renderTable = (isReadOnly) => {
         <TableCell align="left">{row.port}</TableCell>
         <TableCell align="right">
           {
-            !isReadOnly && (
+            isEditable && (
               <IconButton
                 className={classes.button}
                 aria-label="Delete"
@@ -157,6 +169,7 @@ renderTable = (isReadOnly) => {
 render() {
   const { classes } = this.props;
   let isReadOnly = this.isReadOnly();
+  let isAdmin = this.state.isAdmin;
 
   return (
     <div>
@@ -164,7 +177,10 @@ render() {
         <Typography variant="h4" color="inherit">
           Active Rules
         </Typography>
-        <ReadOnlyToggle drizzle={this.props.drizzle} drizzleState={this.props.drizzleState}/>
+        <ReadOnlyToggle
+          drizzle={this.props.drizzle}
+          drizzleState={this.props.drizzleState}
+          isAdmin={this.state.isAdmin}/>
       </div>
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -177,12 +193,12 @@ render() {
             </TableRow>
           </TableHead>
           <TableBody>
-            { this.renderTable(isReadOnly) }
+            { this.renderTable(!isReadOnly && isAdmin) }
           </TableBody>
         </Table>
       </Paper>
       {
-        !isReadOnly && (
+        !isReadOnly && isAdmin && (
           <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleClickOpen}>
             <Add />
           </Fab>

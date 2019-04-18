@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FormControlLabel, FormGroup, Switch, Typography } from '@material-ui/core/';
+import { FormControlLabel, FormGroup, Switch } from '@material-ui/core/';
 
 export default class ReadOnlyToggle extends Component {
 
@@ -49,7 +49,7 @@ export default class ReadOnlyToggle extends Component {
             <FormGroup>
                 <FormControlLabel
                     control={
-                    <Switch checked={this.state.isReadOnly} onChange={this.handleChange} aria-label="LoginSwitch" />
+                    <Switch disabled={!this.props.isAdmin} checked={this.state.isReadOnly} onChange={this.handleChange} aria-label="LoginSwitch" />
                     }
                     label={this.state.isReadOnly ? 'Read-Only Enabled' : 'Read-Only Disabled '}
                 />

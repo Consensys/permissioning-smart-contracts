@@ -22,18 +22,29 @@ const styles = theme => ({
 
 class AdminPage extends Component {
   state = {
+    selectedAddress: '',
+    isAdminKey: null,
     getAdminsKey: null,
     addPopupOpen: false,
     addTextField: '',
   };
 
   componentDidMount() {
-    this._isMounted = true;
     const { drizzle } = this.props;
     const Admin = drizzle.contracts.Admin;
 
+    drizzle.web3.currentProvider.publicConfigStore.on('update', (e) => {
+      console.log(e.selectedAddress)
+      Admin.methods.isAuthorized(e.selectedAddress).call().then((result) => {
+        this.setState({
+          selectedAddress: e.selectedAddress,
+          isAdmin: result
+        });
+      });
+    });
+
     this.setState({
-      getAdminsKey: Admin.methods.getAdmins.cacheCall()
+      getAdminsKey: Admin.methods.getAdmins.cacheCall(),
     })
  }
 
@@ -66,16 +77,16 @@ class AdminPage extends Component {
     this.handleClose()
   };
 
-  renderTable = () => {
+  renderTable = (isAdmin) => {
     const admins = this.getAdmins();
 
     if (admins) {
       return admins.map((row, i) => (
         <TableRow key={i}>
           <TableCell component="th" scope="row">{row}</TableCell>
-          <TableCell align="right">
-            { this.renderDeleteButton(row, i) }
-          </TableCell>
+            <TableCell align="right">
+            { isAdmin && this.renderDeleteButton(row, i) }
+            </TableCell>
           </TableRow>
       ))
     }
@@ -97,6 +108,7 @@ class AdminPage extends Component {
 
   render() {
     const { classes } = this.props;
+    const isAdmin = this.state.isAdmin;
 
     return (
       <div>
@@ -112,13 +124,16 @@ class AdminPage extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              { this.renderTable() }
+              { this.renderTable(isAdmin) }
             </TableBody>
           </Table>
         </Paper>
-        <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleClickOpen}>
-            <Add />
-        </Fab>
+        {
+          isAdmin &&
+          (<Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleClickOpen}>
+              <Add />
+          </Fab>)
+        }
         <Dialog
           open={this.state.addPopupOpen}
           onClose={this.handleClose}
