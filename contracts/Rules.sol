@@ -1,27 +1,16 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./AdminProxy.sol";
 import "./RulesProxy.sol";
 import "./Ingress.sol";
+import "./Admin.sol";
 
 
-contract Rules is AdminProxy, RulesProxy {
-    // These will be assigned at the construction
-    // phase, where `msg.sender` is the account
-    // creating this contract.
-    address public admin = msg.sender;
+contract Rules is RulesProxy {
+
+    // on read-only mode rules can't be added/removed
     bool readOnlyMode = false;
-    struct Admin {
-        address adminAddress;
-        bool active;
-    }
-    mapping(address => Admin) admins;
-    uint adminCount;
-    address[] adminKeys;
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
-
-    address ingressContractAddress;
 
     struct Enode {
         bytes next;
@@ -39,61 +28,29 @@ contract Rules is AdminProxy, RulesProxy {
     // head of linked list
     bytes headWhitelist;
 
-    // AUTHORIZATION
-    constructor (address ingressAddress) public {
-        // add the deploying contract address as first admin
-        Admin memory orig = Admin(msg.sender, true);
-        admins[msg.sender] = orig;
-        adminKeys.push(msg.sender);
-        adminCount = adminCount + 1;
+    address private ingressContractAddress;
 
-        // Record the Ingress contract's address
-        ingressContractAddress = ingressAddress;
-    }
-
-    // AUTHORIZATION: LIST OF ADMINS
-    modifier onlyAdmin()
-    {
-        require(
-            admins[msg.sender].adminAddress != address(0),
-            "Sender not authorized."
-        );
-        require(admins[msg.sender].active == true, "Sender not authorized");
+    modifier onlyOnEditMode() {
+        require(!readOnlyMode, "In read only mode: rules cannot be modified");
         _;
     }
 
-    function isAuthorized(address source) public view returns (bool) {
-        return admins[source].active;
+    modifier onlyAdmin() {
+        Ingress ingressContract = Ingress(ingressContractAddress);
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
+        _;
     }
 
-    function addAdmin(address _newAdmin) public onlyAdmin returns (bool) {
-        if (admins[_newAdmin].active) {
-            return false;
-        }
-        adminKeys.push(_newAdmin);
-        Admin memory newAdmin = Admin(_newAdmin, true);
-        admins[_newAdmin] = newAdmin;
-        adminCount = adminCount + 1;
-        return true;
+    constructor (address ingressAddress) public {
+        ingressContractAddress = ingressAddress;
     }
 
-    function removeAdmin(address oldAdmin) public onlyAdmin returns (bool) {
-        admins[oldAdmin].active = false;
-        adminCount = adminCount - 1;
-        return true;
-    }
-
-    // return list of admins
-    function getAllAdmins() public view returns (address[] memory){
-        address[] memory ret = new address[](adminCount);
-        Admin memory a;
-        for (uint i = 0; i < adminKeys.length; i++) {
-            a = admins[adminKeys[i]];
-            if (a.active) {
-                ret[i] = admins[adminKeys[i]].adminAddress;
-            }
-        }
-        return ret;
+    // VERSION
+    function getContractVersion() public view returns (uint) {
+        return version;
     }
 
     // READ ONLY MODE
@@ -111,11 +68,6 @@ contract Rules is AdminProxy, RulesProxy {
         require(readOnlyMode == true, "Not in read only mode");
         readOnlyMode = false;
         return true;
-    }
-
-    // VERSION
-    function getContractVersion() public view returns (uint) {
-        return version;
     }
 
     // RULES - IS CONNECTION ALLOWED
@@ -173,8 +125,7 @@ contract Rules is AdminProxy, RulesProxy {
         bytes32 enodeLow,
         bytes16 enodeIp,
         uint16 enodePort
-    ) public onlyAdmin returns (bool) {
-        require(readOnlyMode == false, "In read only mode: rules cannot be modified");
+    ) public onlyAdmin onlyOnEditMode returns (bool) {
         bytes memory key = computeKey(
             enodeHigh,
             enodeLow,
@@ -220,8 +171,7 @@ contract Rules is AdminProxy, RulesProxy {
         bytes32 enodeLow,
         bytes16 enodeIp,
         uint16 enodePort
-    ) public onlyAdmin returns (bool) {
-        require(readOnlyMode == false, "In read only mode: rules cannot be modified");
+    ) public onlyAdmin onlyOnEditMode returns (bool) {
         bytes memory key = computeKey(
             enodeHigh,
             enodeLow,
@@ -309,7 +259,6 @@ contract Rules is AdminProxy, RulesProxy {
     }
 
     function triggerRulesChangeEvent(bool addsRestrictions) public {
-        Ingress i = Ingress(ingressContractAddress);
-        i.emitRulesChangeEvent(addsRestrictions);
+        Ingress(ingressContractAddress).emitRulesChangeEvent(addsRestrictions);
     }
 }
