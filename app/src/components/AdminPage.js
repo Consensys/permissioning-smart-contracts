@@ -21,25 +21,39 @@ const styles = theme => ({
   });
 
 class AdminPage extends Component {
+  _isMounted = false;
+
   state = {
     selectedAddress: '',
-    isAdminKey: null,
     getAdminsKey: null,
     addPopupOpen: false,
     addTextField: '',
   };
 
   componentDidMount() {
-    const { drizzle } = this.props;
+    this._isMounted = true;
+    const { drizzle, drizzleState } = this.props;
     const Admin = drizzle.contracts.Admin;
 
-    drizzle.web3.currentProvider.publicConfigStore.on('update', (e) => {
-      console.log(e.selectedAddress)
-      Admin.methods.isAuthorized(e.selectedAddress).call().then((result) => {
+    // check if current account is admin
+    Admin.methods.isAuthorized(drizzleState.accounts[0]).call().then((result) => {
+      if (this._isMounted) {
         this.setState({
-          selectedAddress: e.selectedAddress,
+          selectedAddress: drizzleState.accounts[0],
           isAdmin: result
         });
+      }
+    });
+
+    // check if newly selected account is admin
+    drizzle.web3.currentProvider.publicConfigStore.on('update', (e) => {
+      Admin.methods.isAuthorized(e.selectedAddress).call().then((result) => {
+        if (this._isMounted) {
+          this.setState({
+            selectedAddress: e.selectedAddress,
+            isAdmin: result
+        });
+        }
       });
     });
 
@@ -47,6 +61,10 @@ class AdminPage extends Component {
       getAdminsKey: Admin.methods.getAdmins.cacheCall(),
     })
  }
+
+ componentWillUnmount() {
+  this._isMounted = false;
+}
 
  getAdmins = () => {
   const { getAdminsKey } = this.state;

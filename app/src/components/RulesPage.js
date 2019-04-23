@@ -38,11 +38,21 @@ class RulesPage extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const { drizzle } = this.props;
+    const { drizzle, drizzleState } = this.props;
     const { Admin, Rules } = drizzle.contracts;
 
+    // check if current account is admin
+    Admin.methods.isAuthorized(drizzleState.accounts[0]).call().then((result) => {
+      if (this._isMounted) {
+        this.setState({
+          selectedAddress: drizzleState.accounts[0],
+          isAdmin: result
+        });
+      }
+    });
+
+    // check if newly selected account is admin
     drizzle.web3.currentProvider.publicConfigStore.on('update', (e) => {
-      console.log(e.selectedAddress)
       Admin.methods.isAuthorized(e.selectedAddress).call().then((result) => {
         this.setState({
           selectedAddress: e.selectedAddress,
