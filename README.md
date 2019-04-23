@@ -18,7 +18,7 @@
 ## How to deploy and setup contracts
 1. Run `truffle migrate`
 
-After this step, you should have your Rules contract deployed on the network. This will also update the Ingress contract with the name and version of the Rules contract.
+After this step, you should have your Rules and Admin contracts deployed on the network. This will also update the Ingress contract with the name and version of the Rules and Admin contracts.
 
 ## Add and Remove Enodes to the whitelist
 1. Run `truffle console`
@@ -55,14 +55,14 @@ undefined
 
 After this step, you should have the enode added to your whitelist. Please repeat this step for each enode that you want to add to the whitelist.
 
-## View the whitelist ##
+**View the whitelist**
 ```
 Rules.deployed().then(function(instance) {instance.getSize().then(function(txCount) {console.log("size of whitelist: " + txCount); var i=txCount; while(i>=0) {instance.getByIndex(i--).then(function(tx) {console.log(tx)})}});});
 ```
 
 ## Add and Remove Admin accounts
 
-When you first deploy the Rules smart contract, the account used to deploy it will automatically be set as an Admin. Only Admin accounts can add or remove nodes from the whitelist.
+When you first deploy the Rules and Admin smart contracts, the account used to deploy them will automatically be set as an Admin. Only Admin accounts can add or remove nodes from the whitelist.
 
 If you want to add or remove accounts as Admins, use the following commands in `truffle console`:
 
