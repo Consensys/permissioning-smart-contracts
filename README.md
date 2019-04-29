@@ -1,7 +1,7 @@
 # Permissioning Smart Contracts
 
 **Note:** The contracts in this repository are currently in the process of going through a third party audit. [Please
-contact us](support@pegasys.tech) before using in a production environment. 
+contact us](https://pegasys.tech/contact/) before using in a production environment. 
 
 ## Using 
 
