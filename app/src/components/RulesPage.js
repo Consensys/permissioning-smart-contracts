@@ -54,10 +54,12 @@ class RulesPage extends Component {
     // check if newly selected account is admin
     drizzle.web3.currentProvider.publicConfigStore.on('update', (e) => {
       Admin.methods.isAuthorized(e.selectedAddress).call().then((result) => {
-        this.setState({
-          selectedAddress: e.selectedAddress,
-          isAdmin: result
-        });
+        if (this._isMounted) {
+          this.setState({
+            selectedAddress: e.selectedAddress,
+            isAdmin: result
+          });
+        }
       });
     });
 
