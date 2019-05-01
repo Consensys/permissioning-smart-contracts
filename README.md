@@ -22,7 +22,7 @@ The Permissisioning Management Dapp is still in BETA. It is under active develop
 
 The Dapp will facilitate managing permissioning rules and maintaining the list of admin accounts that can edit rules.
 
-At the moment, the instruction won't say anything about linking the Dapp with your Pantheon node. This integration will documented in the future. The instructions here are target to developers working on the Dapp development, not users.
+At the moment, these instructions won't say anything about linking the Dapp with your Pantheon node. This integration will be documented in the future. The instructions here are targeted to developers working on the Dapp development, not users.
 
 This is the easiest way to get started:
 
