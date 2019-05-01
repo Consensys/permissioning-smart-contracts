@@ -85,7 +85,7 @@ componentWillUpdate() {
                 if (result) {
                   //TODO fix IP display
                   let enode = {
-                    nodeId: result.enodeHigh.substring(2) + result.enodeLow.substring(2),
+                    nodeId: result.enodeHigh.substring(2).substring(0, 8) + '...' + result.enodeLow.substring(2).substring(56, 64),
                     ip: result.ip,
                     port: result.port,
                   }
