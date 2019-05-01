@@ -23,6 +23,11 @@ config/test/contracts.json
 build
 dist
 test-results/
+node_modules
+build
+app/src/contracts
+.DS_Store
+.idea
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
