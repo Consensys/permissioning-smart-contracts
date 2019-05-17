@@ -15,6 +15,7 @@ pipeline {
         stage('Contracts: Build') {
             steps {
                 sh 'npm install'
+                sh 'truffle compile'
             }
         }
         stage('Contracts: Lint') {
