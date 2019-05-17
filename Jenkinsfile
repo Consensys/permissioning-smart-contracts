@@ -45,7 +45,7 @@ pipeline {
         stage('Dapp: Test') {
             steps {
                 dir('app') {
-                    sh 'npm test:ci'
+                    sh 'npm run test:ci'
                 }
             }
         }
