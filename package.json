@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "solium -d contracts",
     "test": "truffle test --network develop",
-    "coverage": "solidity-coverage"
+    "coverage": "solidity-coverage",
+    "build": "truffle compile"
   },
   "dependencies": {
     "dotenv": "^7.0.0",

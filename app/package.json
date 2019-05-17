@@ -7,6 +7,7 @@
     "@material-ui/icons": "^3.0.2",
     "drizzle": "^1.4.0",
     "drizzle-react": "^1.2.0",
+    "jest-junit": "^6.4.0",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -20,6 +21,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:ci": "react-scripts test --reporters=default --reporters=jest-junit",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
