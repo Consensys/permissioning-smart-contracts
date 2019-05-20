@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Initializer /> web3Initialized=false matches snapshot 1`] = `
+<Initializer
+  NoProvider={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+  WrongNetwork={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+/>
+`;
+
+exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=false matches snapshot 1`] = `
+<Initializer
+  NoProvider={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+  WrongNetwork={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+>
+  <Component
+    networkId={0}
+  >
+    <div
+      className="wrongNetwork"
+    />
+  </Component>
+</Initializer>
+`;
+
+exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=true matches snapshot 1`] = `
+<Initializer
+  NoProvider={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+  WrongNetwork={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+>
+  <div
+    className="test"
+  />
+</Initializer>
+`;
+
+exports[`<Initializer /> web3Initialized=true, networkId=undefined matches snapshot 1`] = `
+<Initializer
+  NoProvider={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+  WrongNetwork={
+    Object {
+      "$$typeof": Symbol(react.memo),
+      "compare": null,
+      "type": [Function],
+    }
+  }
+>
+  <Component>
+    <div
+      className="noProvider"
+    />
+  </Component>
+</Initializer>
+`;
