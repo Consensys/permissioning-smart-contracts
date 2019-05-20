@@ -16,20 +16,19 @@ const WrongNetwork = ({ networkId }) => (
         </Flex>
         <Flex alignItems="center">
             <div className={styles.icon} />
-            <Text>
+            <Text className="wrongNetworkMessage">
                 Change your network using MetaMask.
-                {networkId === 1 &&
-                    " You're currently on the Main Ethereum Network."}
-                {networkId === 2 &&
-                    " You're currently on the Morden Classic Test Network."}
-                {networkId === 3 &&
-                    " You're currently on the Ropsten Test Network."}
-                {networkId === 4 &&
-                    " You're currently on the Rinkeby Test Network."}
-                {networkId === 5 &&
-                    " You're currently on the Goerli Test Network."}
-                {networkId > 5 &&
-                    ` You're currently on unknown network of id ${networkId}.`}
+                {networkId === 1
+                    ? " You're currently on the Main Ethereum Network."
+                    : networkId === 2
+                    ? " You're currently on the Morden Classic Test Network."
+                    : networkId === 3
+                    ? " You're currently on the Ropsten Test Network."
+                    : networkId === 4
+                    ? " You're currently on the Rinkeby Test Network."
+                    : networkId === 5
+                    ? " You're currently on the Goerli Test Network."
+                    : ` You're currently on unknown network of id ${networkId}.`}
             </Text>
         </Flex>
     </Flash>

@@ -5,7 +5,7 @@ import { Flash, Text, Link, Icon, Flex } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const WrongNetwork = () => (
+const NoProvider = () => (
     <Flash variant="danger">
         <Flex alignItems="center">
             <Icon name="Warning" className={styles.icon} />
@@ -27,4 +27,4 @@ const WrongNetwork = () => (
     </Flash>
 );
 
-export default memo(WrongNetwork);
+export default memo(NoProvider);

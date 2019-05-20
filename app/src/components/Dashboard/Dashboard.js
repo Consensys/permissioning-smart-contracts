@@ -1,12 +1,11 @@
 // Libs
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 // Components
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
 
-const Dashboard = ({ dataReady }) => (
-    <Fragment>{!dataReady ? <LoadingPage /> : <div>Ready</div>}</Fragment>
-);
+const Dashboard = ({ dataReady }) =>
+    !dataReady ? <LoadingPage /> : <div>Ready</div>;
 
 Dashboard.propTypes = {
     dataReady: PropTypes.bool.isRequired
