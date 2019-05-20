@@ -1,35 +1,33 @@
 // Libs
 import React from "react";
-import { Drizzle, generateStore } from 'drizzle';
-import { DrizzleContext } from "drizzle-react";
 import { ThemeProvider } from "styled-components";
 // Components
-import Main from "./components/Main";
+import Layout from "./components/Layout/Layout";
+import Initializer from "./containers/Layout/Initializer";
+import Dashboard from "./containers/Dashboard/Dashboard";
+import NoProviderFlash from "./components/Flashes/NoProvider";
+import WrongNetworkFlash from "./components/Flashes/WrongNetwork";
 // Theme
 import theme from "./constants/theme";
-// Drizzle configuration
-import drizzleOptions from "./drizzleOptions";
-const drizzleStore = generateStore(drizzleOptions);
-const drizzle = new Drizzle(drizzleOptions, drizzleStore);
+// Context
+import { NetworkProvider } from "./context/network";
+import { DataProvider } from "./context/data";
 
 const App = () => (
-  <DrizzleContext.Provider drizzle={drizzle}>
     <ThemeProvider theme={theme}>
-      <DrizzleContext.Consumer>
-        {drizzleContext => {
-          const { initialized } = drizzleContext;
-
-          if (!initialized) {
-            return "Loading...";
-          }
-
-          return (
-            <Main />
-          );
-        }}
-      </DrizzleContext.Consumer>
+        <NetworkProvider>
+            <Layout>
+                <Initializer
+                    NoProvider={NoProviderFlash}
+                    WrongNetwork={WrongNetworkFlash}
+                >
+                    <DataProvider>
+                        <Dashboard />
+                    </DataProvider>
+                </Initializer>
+            </Layout>
+        </NetworkProvider>
     </ThemeProvider>
-  </DrizzleContext.Provider>
 );
 
 export default App;
