@@ -1,9 +1,11 @@
 // Libs
-import React from "react";
+import React, { useState } from "react";
 import toJson from "enzyme-to-json";
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 // Components
 import Dashboard from "../Dashboard";
+// Constant
+import { ADMIN_TAB } from "../../../constants/tabs";
 
 const mockUseData = jest.fn().mockReturnValue({ dataReady: true });
 
@@ -17,7 +19,8 @@ describe("<Dashboard />", () => {
     let wrapper;
 
     beforeEach(() => {
-        wrapper = shallow(<Dashboard />);
+        jest.clearAllMocks();
+        wrapper = mount(<Dashboard hook={() => useState(ADMIN_TAB)} />);
     });
 
     it("has called useData once", () => {
