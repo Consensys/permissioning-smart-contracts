@@ -41,3 +41,22 @@ function toHex(number) {
     const num = Number(number).toString(16);
     return num.length < 2 ? `0${num}` : num;
 }
+
+export const identifierToParams = identifier => {
+    const [enodeHigh, enodeLow, ip, port] = identifier.split("_");
+    return {
+        enodeHigh,
+        enodeLow,
+        ip,
+        port,
+        identifier
+    };
+};
+
+export const identifierToEnodeHighAndLow = identifier => {
+    if (identifier) {
+        const [enodeHigh, enodeLow] = identifier.split("_");
+        return `${enodeHigh}${enodeLow}`;
+    }
+    return "";
+};

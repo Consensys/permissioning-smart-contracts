@@ -1,0 +1,49 @@
+.fieldInput {
+  &:focus {
+    border-color: #CCC;
+  }
+}
+
+.validField {
+  div input {
+    border-style: solid;
+    border-color: #28C081;
+
+    &:focus {
+      border-style: solid;
+      border-color: #28C081;
+    }
+  }
+
+  div svg {
+    &:nth-of-type(1) {
+      visibility: visible;
+    }
+  }
+}
+
+.closeIcon {
+  position: absolute;
+}
+
+
+.invalidField {
+  div input {
+    border-style: solid;
+    border-color: #EC9081;
+
+    &:focus {
+      border-style: solid;
+      border-color: #EC9081;
+    }
+  }
+  div svg {
+    &:last-child {
+        visibility: visible;
+    }
+  }
+}
+
+.break {
+  word-break: break-all;
+}
