@@ -1,0 +1,42 @@
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+}
+
+
+.fadeInOut {
+  opacity: 0;
+  animation-duration: 5s;
+  animation-name: fadeInOut;
+  animation-iteration-count: 1;
+}
+
+.fadeIn {
+  opacity: 1;
+  animation-duration: 5s;
+  animation-name: fadeIn;
+  animation-iteration-count: 1;
+}

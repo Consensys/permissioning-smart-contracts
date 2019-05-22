@@ -1,30 +1,34 @@
 // Libs
-import React, { useState } from "react";
+import React from "react";
 import toJson from "enzyme-to-json";
-import { mount } from "enzyme";
+import { shallow } from "enzyme";
 // Components
-import Dashboard from "../Dashboard";
-// Constant
-import { ADMIN_TAB } from "../../../constants/tabs";
-
-const mockUseData = jest.fn().mockReturnValue({ dataReady: true });
+import DashboardContainer from "../Dashboard";
+// Context
+import { useData } from "../../../context/data";
 
 jest.mock("../../../context/data", () => {
     return {
-        useData: () => mockUseData()
+        useData: jest.fn()
     };
 });
 
-describe("<Dashboard />", () => {
+describe("<Dashboard Container />", () => {
     let wrapper;
+
+    beforeAll(() => {
+        useData.mockImplementation(() => ({
+            dataReady: true
+        }));
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();
-        wrapper = mount(<Dashboard hook={() => useState(ADMIN_TAB)} />);
+        wrapper = shallow(<DashboardContainer />);
     });
 
     it("has called useData once", () => {
-        expect(mockUseData).toHaveBeenCalledTimes(1);
+        expect(useData).toHaveBeenCalledTimes(1);
     });
 
     it("matches snapshot", () => {

@@ -4,19 +4,21 @@ import PropTypes from "prop-types";
 // Components
 import LoadingPage from "../LoadingPage/LoadingPage";
 import TabSelector from "./TabSelector";
+import AdminTab from "../../containers/Tabs/Admin";
 // Constants
-import { ADMIN_TAB, ENODE_TAB } from "../../constants/tabs";
+import { ADMIN_TAB } from "../../constants/tabs";
 
 const Dashboard = ({ tab, setTab, dataReady }) => (
     <Fragment>
         <TabSelector setTab={setTab} tab={tab} />
         {!dataReady ? (
             <LoadingPage />
-        ) : tab === ADMIN_TAB ? (
-            <div className="adminTable" />
-        ) : tab === ENODE_TAB ? (
-            <div className="enodeTable" />
-        ) : null}
+        ) : (
+            <Fragment>
+                <AdminTab isOpen={tab === ADMIN_TAB} />
+                <div className="enodeTab" />
+            </Fragment>
+        )}
     </Fragment>
 );
 

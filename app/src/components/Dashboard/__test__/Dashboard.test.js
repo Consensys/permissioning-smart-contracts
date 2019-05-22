@@ -1,18 +1,68 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { mount } from "enzyme";
+import { mount, shallow } from "enzyme";
+import { drizzleReactHooks } from "drizzle-react";
 // Components
 import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
 import LoadingPage from "../../LoadingPage/LoadingPage";
+import AdminTab from "../../../containers/Tabs/Admin";
 // Constants
 import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
+// Context
+import { useData } from "../../../context/data";
+import useTab from "../../../containers/Tabs/useTab";
+
+jest.mock("../../../context/data", () => {
+    return {
+        useData: jest.fn()
+    };
+});
+
+jest.mock("../../../containers/Tabs/useTab", () => {
+    return jest.fn();
+});
+
+jest.mock("drizzle-react", () => {
+    return {
+        drizzleReactHooks: {
+            useDrizzle: jest.fn().mockImplementation(() => ({
+                drizzle: {
+                    contracts: {
+                        Admin: {
+                            methods: {
+                                addAdmin: console.log,
+                                removeAdmin: console.log
+                            }
+                        }
+                    }
+                }
+            }))
+        }
+    };
+});
 
 describe("<Dashboard />", () => {
     let wrapper;
 
     describe("data not ready", () => {
+        beforeAll(() => {
+            useData.mockImplementation(() => ({
+                dataReady: false,
+                admins: []
+            }));
+            useTab.mockImplementation(() => ({
+                list: [],
+                toasts: [],
+                closeToast: console.log,
+                modals: {},
+                toggleModal: console.log,
+                isAdmin: true,
+                deleteTransaction: console.log
+            }));
+        });
+
         beforeEach(() => {
             wrapper = mount(
                 <Dashboard
@@ -45,6 +95,26 @@ describe("<Dashboard />", () => {
     });
 
     describe("data ready", () => {
+        beforeAll(() => {
+            jest.clearAllMocks();
+            useData.mockImplementation(() => ({
+                dataReady: true,
+                admins: [],
+                whitelist: [],
+                userAddress: "test",
+                isAdmin: true,
+                isReadOnly: true
+            }));
+            useTab.mockImplementation(() => ({
+                list: [],
+                toasts: [],
+                closeToast: console.log,
+                modals: {},
+                toggleModal: console.log,
+                isAdmin: true,
+                deleteTransaction: console.log
+            }));
+        });
         describe("tab=ADMIN_TAB", () => {
             beforeEach(() => {
                 wrapper = mount(
@@ -76,10 +146,16 @@ describe("<Dashboard />", () => {
                 ).toEqual(true);
             });
 
-            it('renders <div className="adminTable" />', () => {
-                expect(
-                    wrapper.contains(<div className="adminTable" />)
-                ).toEqual(true);
+            it("renders AdminTab with isOpen=true", () => {
+                expect(wrapper.contains(<AdminTab isOpen={true} />)).toEqual(
+                    true
+                );
+            });
+
+            it('renders <div className="enodeTab" />', () => {
+                expect(wrapper.contains(<div className="enodeTab" />)).toEqual(
+                    true
+                );
             });
 
             it("matches snapshot", () => {
@@ -118,10 +194,16 @@ describe("<Dashboard />", () => {
                 ).toEqual(true);
             });
 
-            it('renders <div className="enodeTable" />', () => {
-                expect(
-                    wrapper.contains(<div className="enodeTable" />)
-                ).toEqual(true);
+            it("renders AdminTab with isOpen=false", () => {
+                expect(wrapper.contains(<AdminTab isOpen={false} />)).toEqual(
+                    true
+                );
+            });
+
+            it('renders <div className="enodeTab" />', () => {
+                expect(wrapper.contains(<div className="enodeTab" />)).toEqual(
+                    true
+                );
             });
 
             it("matches snapshot", () => {
