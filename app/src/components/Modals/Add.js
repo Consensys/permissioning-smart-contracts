@@ -1,6 +1,7 @@
 // Libs
 import React from "react";
 import PropTypes from "prop-types";
+import classnames from "classnames";
 // Rimble Components
 import { Modal, Card, Button, Flex, Box, Heading, Form, Text } from "rimble-ui";
 // Styles
@@ -56,8 +57,17 @@ const AddModal = ({
                             required
                         />
                     </Form.Field>
-                    <Text color="red" height="30px" fontSize="14px">
-                        {!validated && input && display.errorMessage}
+                    <Text
+                        color="red"
+                        height="30px"
+                        fontSize="14px"
+                        className={
+                            !validated && input
+                                ? classnames(styles.errorMessage, styles.show)
+                                : styles.errorMessage
+                        }
+                    >
+                        {display.errorMessage}
                     </Text>
                 </Box>
                 <Flex

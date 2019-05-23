@@ -8,6 +8,7 @@ import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
 import LoadingPage from "../../LoadingPage/LoadingPage";
 import AdminTab from "../../../containers/Tabs/Admin";
+import EnodeTab from "../../../containers/Tabs/Enode";
 // Constants
 import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
 // Context
@@ -35,6 +36,12 @@ jest.mock("drizzle-react", () => {
                                 addAdmin: console.log,
                                 removeAdmin: console.log
                             }
+                        },
+                        Rules: {
+                            methods: {
+                                enterReadOnly: console.log,
+                                exitReadOnly: console.log
+                            }
                         }
                     }
                 }
@@ -59,7 +66,8 @@ describe("<Dashboard />", () => {
                 modals: {},
                 toggleModal: console.log,
                 isAdmin: true,
-                deleteTransaction: console.log
+                deleteTransaction: console.log,
+                transactions: new Map()
             }));
         });
 
@@ -112,7 +120,8 @@ describe("<Dashboard />", () => {
                 modals: {},
                 toggleModal: console.log,
                 isAdmin: true,
-                deleteTransaction: console.log
+                deleteTransaction: console.log,
+                transactions: new Map()
             }));
         });
         describe("tab=ADMIN_TAB", () => {
@@ -152,8 +161,8 @@ describe("<Dashboard />", () => {
                 );
             });
 
-            it('renders <div className="enodeTab" />', () => {
-                expect(wrapper.contains(<div className="enodeTab" />)).toEqual(
+            it("renders EnodeTab with isOpen=false", () => {
+                expect(wrapper.contains(<EnodeTab isOpen={false} />)).toEqual(
                     true
                 );
             });
@@ -200,8 +209,8 @@ describe("<Dashboard />", () => {
                 );
             });
 
-            it('renders <div className="enodeTab" />', () => {
-                expect(wrapper.contains(<div className="enodeTab" />)).toEqual(
+            it("renders EnodeTab with isOpen=true", () => {
+                expect(wrapper.contains(<EnodeTab isOpen={true} />)).toEqual(
                     true
                 );
             });

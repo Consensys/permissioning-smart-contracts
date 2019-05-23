@@ -250,6 +250,7 @@ exports[`<Layout /> matches snapshot 1`] = `
 >
   <AppBar />
   <Box
+    mb={3}
     mt={5}
     textAlign="left"
     theme={

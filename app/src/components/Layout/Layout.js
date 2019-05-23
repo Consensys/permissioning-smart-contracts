@@ -16,7 +16,7 @@ const Layout = ({ children }) => (
         alignItems="center"
     >
         <AppBar />
-        <Box width={4 / 5} mt={5}>
+        <Box width={4 / 5} mt={5} mb={3}>
             {children}
         </Box>
     </Flex>
