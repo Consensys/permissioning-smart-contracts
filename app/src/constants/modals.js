@@ -2,7 +2,7 @@ import { identifierToEnodeHighAndLow } from "../util/enodetools";
 
 export const addAdminDisplay = {
     submitText: "Add Admin Account",
-    errorMessage: "Account address is not correct",
+    errorMessage: "Account address is not correct.",
     inputPlaceholder: "Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A",
     label: "Account Address",
     heading: "Add Admin Account",
@@ -11,13 +11,14 @@ export const addAdminDisplay = {
 
 export const removeAdminDisplay = value => ({
     heading: "Are you sure?",
-    subHeading: `Remove "${value}" as an admin account?`
+    subHeading: `Remove “${value}” as an admin account?`
 });
 
 export const addEnodeDisplay = {
     submitText: "Add Whitelisted Node",
     errorMessage: "Enode URL must include Address, IP address and Port.",
-    inputPlaceholder: "Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A",
+    inputPlaceholder:
+        "Ex: enode://72b0d3ee9e86e072cca078b2588163bf8d9b85fa93923a31f4b97d13cf5280b3d32de9c13d4b7e3cc615d8c1347c97da760a689fac05d9ec80bda4517015ee78@127.0.0.1:30304",
     label: "Enode URL",
     heading: "Add Whitelisted Node",
     subHeading:
@@ -26,7 +27,7 @@ export const addEnodeDisplay = {
 
 export const removeEnodeDisplay = value => ({
     heading: "Are you sure?",
-    subHeading: `Remove "${identifierToEnodeHighAndLow(
+    subHeading: `Remove “${identifierToEnodeHighAndLow(
         value
-    )}" as a whitelisted node?`
+    )}” as a whitelisted node?`
 });

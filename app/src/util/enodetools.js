@@ -60,3 +60,9 @@ export const identifierToEnodeHighAndLow = identifier => {
     }
     return "";
 };
+
+export const isValidEnode = str => {
+    const params = enodeToParams(str);
+    const hasValues = !Object.values(params).some(value => !value);
+    return hasValues;
+};

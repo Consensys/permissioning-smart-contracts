@@ -75,9 +75,9 @@ export const useData = () => {
     }, [whitelistSize, setWhitelist, getByIndex]);
 
     const dataReady =
-        isReadOnly !== undefined &&
-        admins !== undefined &&
-        whitelist !== undefined;
+        typeof isReadOnly === "boolean" &&
+        Array.isArray(admins) &&
+        Array.isArray(whitelist);
 
     const isAdmin = dataReady ? admins.includes(userAddress) : false;
 

@@ -5,8 +5,9 @@ import PropTypes from "prop-types";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import TabSelector from "./TabSelector";
 import AdminTab from "../../containers/Tabs/Admin";
+import EnodeTab from "../../containers/Tabs/Enode";
 // Constants
-import { ADMIN_TAB } from "../../constants/tabs";
+import { ADMIN_TAB, ENODE_TAB } from "../../constants/tabs";
 
 const Dashboard = ({ tab, setTab, dataReady }) => (
     <Fragment>
@@ -16,7 +17,7 @@ const Dashboard = ({ tab, setTab, dataReady }) => (
         ) : (
             <Fragment>
                 <AdminTab isOpen={tab === ADMIN_TAB} />
-                <div className="enodeTab" />
+                <EnodeTab isOpen={tab === ENODE_TAB} />
             </Fragment>
         )}
     </Fragment>

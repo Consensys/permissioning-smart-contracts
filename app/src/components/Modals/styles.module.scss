@@ -1,6 +1,19 @@
 .fieldInput {
+  padding-right: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   &:focus {
     border-color: #CCC;
+  }
+}
+
+.errorMessage {
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+
+  &.show {
+    opacity: 1;
   }
 }
 
