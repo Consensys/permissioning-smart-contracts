@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 // Rimble Components
-import { Pill, Flex, Text, Button } from "rimble-ui";
+import { Pill, Flex, Button } from "rimble-ui";
 // Constant
 import {
     PENDING_ADDITION,
@@ -10,6 +10,8 @@ import {
     FAIL_ADDITION,
     FAIL_REMOVAL
 } from "../../constants/transactions";
+// Components
+import TextWithTooltip from "./TextWithTooltip";
 // Styles
 import styles from "./styles.module.scss";
 
@@ -23,14 +25,12 @@ const AdminRow = ({
 }) => (
     <tr className={styles.row}>
         <td>
-            <Flex alignItems="center">
-                {status === PENDING_REMOVAL ? (
-                    <Text.s opacity="0.5" fontSize="14px">
-                        {address}
-                    </Text.s>
-                ) : (
-                    <Text fontSize="14px">{address}</Text>
-                )}
+            <Flex alignItems="center" className={styles.tooltipFix}>
+                <TextWithTooltip
+                    status={status}
+                    text={address}
+                    isAdmin={isAdmin}
+                />
             </Flex>
         </td>
         <td>

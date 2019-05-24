@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 // Rimble Components
-import { Flex, Box, Heading, Button } from "rimble-ui";
+import { Flex, Box, Heading, Button, Tooltip } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
@@ -32,25 +32,37 @@ const TableHeader = ({
                 Add Whitelisted Node
             </Button>
             {!isReadOnly && !pendingLock && (
-                <Button.Outline
-                    icon="LockOpen"
-                    mainColor="black"
-                    onClick={openLockModal}
-                    disabled={disabledLock}
-                    className={styles.lockButton}
+                <Tooltip
+                    message="Prevent any changes to the contracts."
+                    placement="bottom"
+                    variant="dark"
                 >
-                    Lock Values
-                </Button.Outline>
+                    <Button.Outline
+                        icon="LockOpen"
+                        mainColor="black"
+                        onClick={openLockModal}
+                        disabled={disabledLock}
+                        className={styles.lockButton}
+                    >
+                        Lock Values
+                    </Button.Outline>
+                </Tooltip>
             )}
             {isReadOnly && !pendingLock && (
-                <Button
-                    variant="danger"
-                    icon="Lock"
-                    onClick={openLockModal}
-                    disabled={disabledLock}
+                <Tooltip
+                    message="Unlock to make changes."
+                    placement="bottom"
+                    variant="dark"
                 >
-                    Allow Changes
-                </Button>
+                    <Button
+                        variant="danger"
+                        icon="Lock"
+                        onClick={openLockModal}
+                        disabled={disabledLock}
+                    >
+                        Allow Changes
+                    </Button>
+                </Tooltip>
             )}
             {isReadOnly && pendingLock && (
                 <Button variant="danger" disabled>
