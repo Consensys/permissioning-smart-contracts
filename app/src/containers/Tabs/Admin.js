@@ -9,6 +9,15 @@ import { useData } from "../../context/data";
 import useTab from "./useTab";
 // Components
 import AdminTab from "../../components/AdminTab/AdminTab";
+// Constants
+import {
+    PENDING_ADDITION,
+    FAIL_ADDITION,
+    PENDING_REMOVAL,
+    FAIL_REMOVAL,
+    SUCCESS,
+    FAIL
+} from "../../constants/transactions";
 
 const AdminTabContainer = ({ isOpen }) => {
     const { admins, isAdmin, userAddress } = useData();
@@ -20,9 +29,7 @@ const AdminTabContainer = ({ isOpen }) => {
         addTransaction,
         updateTransaction,
         deleteTransaction,
-        toasts,
-        openToast,
-        closeToast
+        openToast
     } = useTab(admins, identifier => ({ address: identifier }));
 
     const { drizzle } = drizzleReactHooks.useDrizzle();
@@ -37,21 +44,21 @@ const AdminTabContainer = ({ isOpen }) => {
             .send({ from: userAddress, gasLimit: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("add")();
-                addTransaction(value, "pendingAddition");
+                addTransaction(value, PENDING_ADDITION);
             })
             .on("receipt", () => {
                 openToast(
                     value,
-                    "success",
+                    SUCCESS,
                     `New admin account processed: ${value}`
                 );
             })
             .on("error", () => {
                 toggleModal("add")();
-                updateTransaction(value, "failAddition");
+                updateTransaction(value, FAIL_ADDITION);
                 openToast(
                     value,
-                    "fail",
+                    FAIL,
                     "Could not add acount as admin",
                     `${value} was unable to be added. Please try again.`
                 );
@@ -66,21 +73,21 @@ const AdminTabContainer = ({ isOpen }) => {
             .send({ from: userAddress, gasLimit: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("remove")();
-                addTransaction(value, "pendingRemoval");
+                addTransaction(value, PENDING_REMOVAL);
             })
             .on("receipt", () => {
                 openToast(
                     value,
-                    "success",
+                    SUCCESS,
                     `Removal of admin account processed: ${value}`
                 );
             })
             .on("error", () => {
                 toggleModal("remove")();
-                updateTransaction(value, "failRemoval");
+                updateTransaction(value, FAIL_REMOVAL);
                 openToast(
                     value,
-                    "fail",
+                    FAIL,
                     "Could not remove admin account",
                     `${value} was unable to be removed. Please try again.`
                 );
@@ -90,8 +97,6 @@ const AdminTabContainer = ({ isOpen }) => {
     return (
         <AdminTab
             list={list}
-            toasts={toasts}
-            closeToast={closeToast}
             userAddress={userAddress}
             modals={modals}
             toggleModal={toggleModal}

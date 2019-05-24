@@ -1,5 +1,5 @@
 // Libs
-import React, { memo } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 // Rimble Components
 import { Flash, Text, Icon, Flex } from "rimble-ui";
@@ -38,4 +38,4 @@ WrongNetwork.propTypes = {
     networkId: PropTypes.number.isRequired
 };
 
-export default memo(WrongNetwork);
+export default WrongNetwork;

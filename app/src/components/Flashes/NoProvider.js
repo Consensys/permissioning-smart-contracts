@@ -1,5 +1,5 @@
 // Libs
-import React, { memo } from "react";
+import React from "react";
 // Rimble Components
 import { Flash, Text, Link, Icon, Flex } from "rimble-ui";
 // Styles
@@ -27,4 +27,4 @@ const NoProvider = () => (
     </Flash>
 );
 
-export default memo(NoProvider);
+export default NoProvider;

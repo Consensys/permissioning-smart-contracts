@@ -3,6 +3,13 @@ import React from "react";
 import PropTypes from "prop-types";
 // Rimble Components
 import { Pill, Flex, Text, Button } from "rimble-ui";
+// Constant
+import {
+    PENDING_ADDITION,
+    PENDING_REMOVAL,
+    FAIL_ADDITION,
+    FAIL_REMOVAL
+} from "../../constants/transactions";
 // Styles
 import styles from "./styles.module.scss";
 
@@ -17,7 +24,7 @@ const AdminRow = ({
     <tr className={styles.row}>
         <td>
             <Flex alignItems="center">
-                {status === "pendingRemoval" ? (
+                {status === PENDING_REMOVAL ? (
                     <Text.s opacity="0.5" fontSize="14px">
                         {address}
                     </Text.s>
@@ -32,15 +39,15 @@ const AdminRow = ({
                     <Pill color="#018002" className={styles.pill}>
                         Active
                     </Pill>
-                ) : status === "pendingAddition" ? (
+                ) : status === PENDING_ADDITION ? (
                     <Pill color="#FFA505" className={styles.pill}>
                         Pending Addition
                     </Pill>
-                ) : status === "pendingRemoval" ? (
+                ) : status === PENDING_REMOVAL ? (
                     <Pill color="#FFA505" className={styles.pill}>
                         Pending Removal
                     </Pill>
-                ) : status === "failAddition" ? (
+                ) : status === FAIL_ADDITION ? (
                     <Flex>
                         <Pill color="#FF1C1E" className={styles.pill}>
                             Addition Failed
@@ -54,7 +61,7 @@ const AdminRow = ({
                             Clear
                         </Pill>
                     </Flex>
-                ) : status === "failRemoval" ? (
+                ) : status === FAIL_REMOVAL ? (
                     <Flex>
                         <Pill color="#FF1C1E" className={styles.pill}>
                             Removal Failed
