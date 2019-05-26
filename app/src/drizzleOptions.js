@@ -2,19 +2,15 @@ import Rules from "./contracts/Rules.json";
 import Admin from "./contracts/Admin.json";
 
 const options = {
-  web3: {
-    block: false,
-    fallback: {
-      type: "ws",
-      url: "ws://127.0.0.1:9545",
+    web3: {
+        block: false,
+        fallback: {}
     },
-  },
-  contracts: [Rules, Admin],
-  events: {
-  },
-  polls: {
-    accounts: 1500,
-  },
+    contracts: [Rules, Admin],
+    events: {},
+    polls: {
+        accounts: 1500
+    }
 };
 
 export default options;
@@ -28,5 +24,5 @@ export default options;
 // Using an action
 // dispatch({type: 'ADD_CONTRACT', drizzle, contractConfig, events, web3})
 
- // Or using the Drizzle context object
+// Or using the Drizzle context object
 // this.context.drizzle.addContract({contractConfig, events})

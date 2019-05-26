@@ -1,0 +1,22 @@
+.choicesContainer {
+  border-bottom: 1px solid #CCC;
+}
+
+.choiceBox {
+  border-bottom: 5px solid transparent;
+  transition: all .3s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    div {
+      transition: all .3s ease-in-out;
+      color: #25D78F;
+      opacity: 0.9;
+    }
+  }
+  &.selected {
+    border-bottom: 5px solid #25D78F;
+    div {
+        color: #25D78F;
+    }
+  }
+}
