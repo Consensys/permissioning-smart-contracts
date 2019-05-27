@@ -5,7 +5,11 @@ import { mount } from "enzyme";
 // Components
 import TabSelector from "../TabSelector";
 // Constants
-import tabs, { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
+import tabs, {
+    ACCOUNT_TAB,
+    ADMIN_TAB,
+    ENODE_TAB
+} from "../../../constants/tabs";
 
 const mockSetTab = jest.fn();
 
@@ -47,6 +51,47 @@ describe("<TabSelector />", () => {
         });
     });
 
+    describe("tab=ACCOUNT_TAB", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+            wrapper = mount(
+                <TabSelector tab={ACCOUNT_TAB} setTab={mockSetTab} />
+            );
+        });
+
+        it("has props tab=ACCOUNT_TAB", () => {
+            expect(wrapper.props().tab).toEqual(ACCOUNT_TAB);
+        });
+
+        it("has props setTab=mockSetTab", () => {
+            expect(wrapper.props().setTab).toEqual(mockSetTab);
+        });
+
+        it("renders tabs.length box of class choiceBox", () => {
+            expect(wrapper.find("Box.choiceBox")).toHaveLength(tabs.length);
+        });
+
+        it("calls mockSetTab when clicking on a box", () => {
+            const box = wrapper.find("Box.choiceBox:first-child");
+            box.simulate("click");
+            expect(mockSetTab).toHaveBeenCalledTimes(1);
+        });
+
+        it("renders one box of class selected and choiceBox", () => {
+            expect(wrapper.find("Box.selected.choiceBox")).toHaveLength(1);
+        });
+
+        it("renders one box of class selected and choiceBox with appropriate text", () => {
+            expect(wrapper.find("Box.selected.choiceBox").text()).toEqual(
+                tabs[0].text
+            );
+        });
+
+        it("matches snapshot", () => {
+            expect(toJson(wrapper)).toMatchSnapshot();
+        });
+    });
+
     describe("tab=ADMIN_TAB", () => {
         beforeEach(() => {
             jest.clearAllMocks();
@@ -79,7 +124,7 @@ describe("<TabSelector />", () => {
 
         it("renders one box of class selected and choiceBox with appropriate text", () => {
             expect(wrapper.find("Box.selected.choiceBox").text()).toEqual(
-                tabs[0].text
+                tabs[1].text
             );
         });
 
@@ -120,7 +165,7 @@ describe("<TabSelector />", () => {
 
         it("renders one box of class selected and choiceBox with appropriate text", () => {
             expect(wrapper.find("Box.selected.choiceBox").text()).toEqual(
-                tabs[1].text
+                tabs[2].text
             );
         });
 
