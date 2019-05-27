@@ -42,6 +42,20 @@ tr td.emptyLine {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: all 0.2s ease-in-out;
+
+  &.pendingAddition {
+    opacity: 0.5;
+  }
+
+  &.lock {
+    opacity: 0.5;
+  }
+
+  &.pendingRemoval {
+    opacity: 0.5;
+    text-decoration: line-through;
+  }
 }
 
 .lockButton {
@@ -50,5 +64,11 @@ tr td.emptyLine {
   &:hover {
     border-color: #DC2C10;
     color: #DC2C10;
+  }
+}
+
+.tooltipFix {
+  span {
+    max-width: 100%;
   }
 }
