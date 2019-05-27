@@ -4898,7 +4898,7 @@ exports[`<TabSelector /> tab="unknownTab" matches snapshot 1`] = `
 </TabSelector>
 `;
 
-exports[`<TabSelector /> tab=ADMIN_TAB matches snapshot 1`] = `
+exports[`<TabSelector /> tab=admin matches snapshot 1`] = `
 <TabSelector
   setTab={[MockFunction]}
   tab="admin"
@@ -9796,7 +9796,7 @@ exports[`<TabSelector /> tab=ADMIN_TAB matches snapshot 1`] = `
 </TabSelector>
 `;
 
-exports[`<TabSelector /> tab=ENODE_TAB matches snapshot 1`] = `
+exports[`<TabSelector /> tab=enode matches snapshot 1`] = `
 <TabSelector
   setTab={[MockFunction]}
   tab="enode"

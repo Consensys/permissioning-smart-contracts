@@ -1,5 +1,5 @@
 // Libs
-import React, { memo } from "react";
+import React from "react";
 import toJson from "enzyme-to-json";
 import { mount } from "enzyme";
 // Components
@@ -13,11 +13,45 @@ jest.mock("../../../context/network", () => {
     };
 });
 
-const NoProvider = memo(() => <div className="noProvider" />);
-const WrongNetwork = memo(({ networkId }) => <div className="wrongNetwork" />);
+const NoProvider = () => <div className="noProvider" />;
+const WrongNetwork = ({ networkId }) => <div className="wrongNetwork" />;
 
 describe("<Initializer />", () => {
     let wrapper;
+
+    beforeAll(() => {
+        useNetwork.mockImplementation(() => ({
+            web3Initialized: false,
+            networkId: undefined,
+            isCorrectNetwork: null
+        }));
+    });
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+
+        wrapper = mount(
+            <Initializer NoProvider={NoProvider} WrongNetwork={WrongNetwork}>
+                <div className="test" />
+            </Initializer>
+        );
+    });
+
+    it("has called useNetwork once", () => {
+        expect(useNetwork).toHaveBeenCalledTimes(1);
+    });
+
+    it("contains NoProvider={NoProvider} as a props", () => {
+        expect(wrapper.props().NoProvider).toEqual(NoProvider);
+    });
+
+    it("contains WrongNetwork={WrongNetwork} as a props", () => {
+        expect(wrapper.props().WrongNetwork).toEqual(WrongNetwork);
+    });
+
+    it('contains children={<div className="test" />} as a props', () => {
+        expect(wrapper.props().children).toEqual(<div className="test" />);
+    });
 
     describe("web3Initialized=false", () => {
         beforeAll(() => {
@@ -26,19 +60,6 @@ describe("<Initializer />", () => {
                 networkId: undefined,
                 isCorrectNetwork: null
             }));
-        });
-
-        beforeEach(() => {
-            jest.clearAllMocks();
-
-            wrapper = mount(
-                <Initializer
-                    NoProvider={NoProvider}
-                    WrongNetwork={WrongNetwork}
-                >
-                    <div className="test" />
-                </Initializer>
-            );
         });
 
         it("does not render children when passed in", () => {
@@ -56,30 +77,11 @@ describe("<Initializer />", () => {
 
     describe("web3Initialized=true, networkId=undefined", () => {
         beforeAll(() => {
-            jest.restoreAllMocks();
-
             useNetwork.mockImplementation(() => ({
                 web3Initialized: true,
                 networkId: undefined,
                 isCorrectNetwork: null
             }));
-        });
-
-        beforeEach(() => {
-            jest.clearAllMocks();
-
-            wrapper = mount(
-                <Initializer
-                    NoProvider={NoProvider}
-                    WrongNetwork={WrongNetwork}
-                >
-                    <div className="test" />
-                </Initializer>
-            );
-        });
-
-        it("has called useNetwork once", () => {
-            expect(useNetwork).toHaveBeenCalledTimes(1);
         });
 
         it("does not render children when passed in", () => {
@@ -101,30 +103,11 @@ describe("<Initializer />", () => {
 
     describe("web3Initialized=true, networkId=0, isCorrectNetwork=false", () => {
         beforeAll(() => {
-            jest.restoreAllMocks();
-
             useNetwork.mockImplementation(() => ({
                 web3Initialized: true,
                 networkId: 0,
                 isCorrectNetwork: false
             }));
-        });
-
-        beforeEach(() => {
-            jest.clearAllMocks();
-
-            wrapper = mount(
-                <Initializer
-                    NoProvider={NoProvider}
-                    WrongNetwork={WrongNetwork}
-                >
-                    <div className="test" />
-                </Initializer>
-            );
-        });
-
-        it("has called useNetwork once", () => {
-            expect(useNetwork).toHaveBeenCalledTimes(1);
         });
 
         it("does not render children when passed in", () => {
@@ -148,30 +131,11 @@ describe("<Initializer />", () => {
 
     describe("web3Initialized=true, networkId=0, isCorrectNetwork=true", () => {
         beforeAll(() => {
-            jest.restoreAllMocks();
-
             useNetwork.mockImplementation(() => ({
                 web3Initialized: true,
                 networkId: 0,
                 isCorrectNetwork: true
             }));
-        });
-
-        beforeEach(() => {
-            jest.clearAllMocks();
-
-            wrapper = mount(
-                <Initializer
-                    NoProvider={NoProvider}
-                    WrongNetwork={WrongNetwork}
-                >
-                    <div className="test" />
-                </Initializer>
-            );
-        });
-
-        it("has called useNetwork once", () => {
-            expect(useNetwork).toHaveBeenCalledTimes(1);
         });
 
         it("render children when passed in", () => {

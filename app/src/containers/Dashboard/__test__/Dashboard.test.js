@@ -9,18 +9,12 @@ import { useData } from "../../../context/data";
 
 jest.mock("../../../context/data", () => {
     return {
-        useData: jest.fn()
+        useData: jest.fn().mockImplementation(() => ({ dataReady: true }))
     };
 });
 
 describe("<Dashboard Container />", () => {
     let wrapper;
-
-    beforeAll(() => {
-        useData.mockImplementation(() => ({
-            dataReady: true
-        }));
-    });
 
     beforeEach(() => {
         jest.clearAllMocks();

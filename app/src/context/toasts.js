@@ -37,7 +37,7 @@ export const ToastProvider = props => {
 export const useToast = () => {
     const context = useContext(ToastContext);
     if (!context) {
-        throw new Error("useData must be used within a DataProvider.");
+        throw new Error("useToast must be used within a DataProvider.");
     }
 
     const { addTimeout } = useTimeout();
