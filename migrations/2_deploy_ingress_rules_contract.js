@@ -1,6 +1,7 @@
 const Web3Utils = require("web3-utils");
 
-const NodeRules = artifacts.require("./Rules.sol");
+const Rules = artifacts.require("./Rules.sol");
+const type = "NODE RULES";
 const Ingress = artifacts.require("./Ingress.sol");
 const Admin = artifacts.require("./Admin.sol");
 
@@ -11,6 +12,7 @@ const rulesContractName = Web3Utils.utf8ToHex("rules");
 let ingressAddress = process.env.INGRESS_CONTRACT_ADDRESS;
 
 module.exports = async(deployer, network) => {
+    console.log("Deploying " + type);
     if (! ingressAddress) {
         // Only deploy if we haven't been provided a predeployed address
         await deployer.deploy(Ingress);
@@ -33,8 +35,8 @@ module.exports = async(deployer, network) => {
     await ingressInstance.setContractAddress(adminContractName, Admin.address);
     console.log("   > Updated Ingress with Admin  address = " + Admin.address);
 
-    await deployer.deploy(NodeRules, ingressAddress);
-    console.log("   > Node Rules deployed with Ingress.address = " + ingressAddress);
-    await ingressInstance.setContractAddress(rulesContractName, NodeRules.address);
-    console.log("   > Updated Ingress contract with Node Rules address = " + NodeRules.address);
+    await deployer.deploy(Rules, ingressAddress);
+    console.log("   > Rules deployed with Ingress.address = " + ingressAddress);
+    await ingressInstance.setContractAddress(rulesContractName, Rules.address);
+    console.log("   > Updated Ingress contract with Rules address = " + Rules.address);
 }
