@@ -1,45 +1,104 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { mount } from "enzyme";
+import { mount, shallow } from "enzyme";
+import { drizzleReactHooks } from "drizzle-react";
 // Components
+import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
+import LoadingPage from "../../LoadingPage/LoadingPage";
+import AdminTab from "../../../containers/Tabs/Admin";
+import EnodeTab from "../../../containers/Tabs/Enode";
+import Toasts from "../../../containers/Toasts/Toasts";
+import { ToastProvider } from "../../../context/toasts";
 // Constants
-import tabs, { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
+import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
+// Context
+import { useData } from "../../../context/data";
+import useTab from "../../../containers/Tabs/useTab";
 
-const mockSetTab = jest.fn();
+jest.mock("../../../context/data", () => {
+    return {
+        useData: jest.fn()
+    };
+});
 
-describe("<TabSelector />", () => {
+jest.mock("../../../containers/Tabs/useTab", () => {
+    return jest.fn().mockImplementation(() => ({
+        list: [],
+        toasts: [],
+        modals: { add: false, remove: false, lock: false },
+        toggleModal: () => () => {},
+        closeModal: () => {},
+        deleteTransaction: () => {},
+        transactions: new Map()
+    }));
+});
+
+jest.mock("drizzle-react", () => {
+    return {
+        drizzleReactHooks: {
+            useDrizzle: jest.fn().mockImplementation(() => ({
+                drizzle: {
+                    contracts: {
+                        Admin: {
+                            methods: {
+                                addAdmin: () => {},
+                                removeAdmin: () => {}
+                            }
+                        },
+                        Rules: {
+                            methods: {
+                                enterReadOnly: () => {},
+                                exitReadOnly: () => {}
+                            }
+                        }
+                    }
+                }
+            }))
+        }
+    };
+});
+
+describe("<Dashboard />", () => {
     let wrapper;
 
-    describe("general", () => {
+    describe("data not ready", () => {
+        beforeAll(() => {
+            useData.mockImplementation(() => ({
+                dataReady: false,
+                admins: [],
+                whitelist: [],
+                userAddress: "test",
+                isAdmin: true,
+                isReadOnly: true
+            }));
+        });
+
         beforeEach(() => {
-            wrapper = mount(<TabSelector tab="testTab" setTab={mockSetTab} />);
-        });
-
-        it("has props tab='testTab'", () => {
-            expect(wrapper.props().tab).toEqual("testTab");
-        });
-
-        it("has props setTab=mockSetTab", () => {
-            expect(wrapper.props().setTab).toEqual(mockSetTab);
-        });
-
-        it("renders tabs.length box of class choiceBox", () => {
-            expect(wrapper.find("Box.choiceBox")).toHaveLength(tabs.length);
-        });
-    });
-
-    describe('tab="unknownTab"', () => {
-        beforeEach(() => {
-            jest.clearAllMocks();
             wrapper = mount(
-                <TabSelector tab="unknownTab" setTab={mockSetTab} />
+                <Dashboard
+                    dataReady={false}
+                    tab={ADMIN_TAB}
+                    setTab={console.log}
+                />
             );
         });
 
-        it("renders zero box of class selected and choiceBox", () => {
-            expect(wrapper.find("Box.selected.choiceBox")).toHaveLength(0);
+        it("has props dataReady=true", () => {
+            expect(wrapper.props().dataReady).toEqual(false);
+        });
+
+        it("renders LoadingPage", () => {
+            expect(wrapper.contains(<LoadingPage />)).toEqual(true);
+        });
+
+        it("renders TabSelector", () => {
+            expect(
+                wrapper.contains(
+                    <TabSelector tab={ADMIN_TAB} setTab={console.log} />
+                )
+            ).toEqual(true);
         });
 
         it("matches snapshot", () => {
@@ -47,20 +106,62 @@ describe("<TabSelector />", () => {
         });
     });
 
-    tabs.forEach(({ id, text }) => {
-        describe(`tab=${id}`, () => {
+    describe("data ready", () => {
+        beforeAll(() => {
+            jest.clearAllMocks();
+            useData.mockImplementation(() => ({
+                dataReady: true,
+                admins: [],
+                whitelist: [],
+                userAddress: "test",
+                isAdmin: true,
+                isReadOnly: true
+            }));
+        });
+        describe("tab=ADMIN_TAB", () => {
             beforeEach(() => {
-                jest.clearAllMocks();
-                wrapper = mount(<TabSelector tab={id} setTab={mockSetTab} />);
+                wrapper = mount(
+                    <Dashboard
+                        dataReady={true}
+                        tab={ADMIN_TAB}
+                        setTab={console.log}
+                    />
+                );
             });
 
-            it("renders one box of class selected and choiceBox", () => {
-                expect(wrapper.find("Box.selected.choiceBox")).toHaveLength(1);
+            it("has props dataReady=true", () => {
+                expect(wrapper.props().dataReady).toEqual(true);
             });
 
-            it("renders one box of class selected and choiceBox with appropriate text", () => {
-                expect(wrapper.find("Box.selected.choiceBox").text()).toEqual(
-                    text
+            it("has props tab=ADMIN_TAB", () => {
+                expect(wrapper.props().tab).toEqual(ADMIN_TAB);
+            });
+
+            it("has props setTab=console.log", () => {
+                expect(wrapper.props().setTab).toEqual(console.log);
+            });
+
+            it("renders TabSelector", () => {
+                expect(
+                    wrapper.contains(
+                        <TabSelector tab={ADMIN_TAB} setTab={console.log} />
+                    )
+                ).toEqual(true);
+            });
+
+            it("renders Toasts", () => {
+                expect(wrapper.contains(<Toasts />)).toEqual(true);
+            });
+
+            it("renders AdminTab with isOpen=true", () => {
+                expect(wrapper.contains(<AdminTab isOpen={true} />)).toEqual(
+                    true
+                );
+            });
+
+            it("renders EnodeTab with isOpen=false", () => {
+                expect(wrapper.contains(<EnodeTab isOpen={false} />)).toEqual(
+                    true
                 );
             });
 
@@ -68,36 +169,61 @@ describe("<TabSelector />", () => {
                 expect(toJson(wrapper)).toMatchSnapshot();
             });
         });
-    });
 
-    describe("simulate click from tabs[1] to tabs[0]", () => {
-        beforeAll(() => {
-            wrapper = mount(
-                <TabSelector tab={tabs[1].id} setTab={mockSetTab} />
-            );
-        });
+        describe("tab=ENODE_TAB", () => {
+            beforeEach(() => {
+                wrapper = mount(
+                    <Dashboard
+                        dataReady={true}
+                        tab={ENODE_TAB}
+                        setTab={console.log}
+                    />
+                );
+            });
 
-        beforeEach(() => {
-            jest.clearAllMocks();
-        });
+            it("has props dataReady=true", () => {
+                expect(wrapper.props().dataReady).toEqual(true);
+            });
 
-        it("renders one box of class selected and choiceBox with appropriate text", () => {
-            expect(wrapper.find("Box.selected.choiceBox").text()).toEqual(
-                tabs[1].text
-            );
-        });
+            it("has props tab=ADMIN_TAB", () => {
+                expect(wrapper.props().tab).toEqual(ENODE_TAB);
+            });
 
-        it("calls mockSetTab when clicking on a box", () => {
-            const box = wrapper.find("Box.choiceBox:first-child");
-            box.simulate("click");
-            expect(mockSetTab).toHaveBeenCalledTimes(1);
-        });
+            it("has props setTab=console.log", () => {
+                expect(wrapper.props().setTab).toEqual(console.log);
+            });
 
-        it("renders one box of class selected and choiceBox with appropriate text", () => {
-            wrapper.setProps({ tab: tabs[0].id });
-            expect(wrapper.find("Box.selected.choiceBox").text()).toEqual(
-                tabs[0].text
-            );
+            it("renders ToastProvider", () => {
+                expect(wrapper.find(ToastProvider)).toHaveLength(1);
+            });
+
+            it("renders TabSelector", () => {
+                expect(
+                    wrapper.contains(
+                        <TabSelector tab={ENODE_TAB} setTab={console.log} />
+                    )
+                ).toEqual(true);
+            });
+
+            it("renders Toasts", () => {
+                expect(wrapper.contains(<Toasts />)).toEqual(true);
+            });
+
+            it("renders AdminTab with isOpen=false", () => {
+                expect(wrapper.contains(<AdminTab isOpen={false} />)).toEqual(
+                    true
+                );
+            });
+
+            it("renders EnodeTab with isOpen=true", () => {
+                expect(wrapper.contains(<EnodeTab isOpen={true} />)).toEqual(
+                    true
+                );
+            });
+
+            it("matches snapshot", () => {
+                expect(toJson(wrapper)).toMatchSnapshot();
+            });
         });
     });
 });
