@@ -4,9 +4,6 @@ const Admin = artifacts.require('Admin.sol');
 
 var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
 
-var newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732".toLowerCase();
-var newAdmin2 = "fe3b557e8fb62b89f4916b721be55ceb828dbd73".toLowerCase();
-
 contract('Account Rules (Read-only mode)', () => {
 
   let ingressContract;
@@ -38,7 +35,7 @@ contract('Account Rules (Read-only mode)', () => {
 
     try {
       await rulesContract.addAccount(address1);
-      assert.fail("Expected error when adding enode on readOnly mode");
+      assert.fail("Expected error when adding on readOnly mode");
     } catch (err) {
       expect(err.reason).to.contain("In read only mode: rules cannot be modified");
     }
@@ -49,7 +46,7 @@ contract('Account Rules (Read-only mode)', () => {
 
     try {
       await rulesContract.removeAccount(address1);
-      assert.fail("Expected error when adding enode on readOnly mode");
+      assert.fail("Expected error when adding on readOnly mode");
     } catch (err) {
       expect(err.reason).to.contain("In read only mode: rules cannot be modified");
     }
