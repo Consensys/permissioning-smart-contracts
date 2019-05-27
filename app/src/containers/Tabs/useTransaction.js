@@ -1,29 +1,29 @@
 // Libs
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export default () => {
     const [transactions, setTransactions] = useState(new Map());
 
-    const addTransaction = (identifier, status) => {
+    const addTransaction = useCallback((identifier, status) => {
         setTransactions(transactions => {
             const updatedTransactions = new Map([...transactions]);
             updatedTransactions.set(identifier, status);
             return updatedTransactions;
         });
-    };
+    }, []);
 
-    const updateTransaction = (identifier, status) =>
-        addTransaction(identifier, status);
+    const updateTransaction = useCallback(
+        (identifier, status) => addTransaction(identifier, status),
+        [addTransaction]
+    );
 
-    const deleteTransaction = identifier => {
-        const updatedTransactions = new Map([...transactions]);
-        updatedTransactions.delete(identifier);
+    const deleteTransaction = useCallback(identifier => {
         setTransactions(transactions => {
             const updatedTransactions = new Map([...transactions]);
             updatedTransactions.delete(identifier);
             return updatedTransactions;
         });
-    };
+    }, []);
 
     return {
         transactions,

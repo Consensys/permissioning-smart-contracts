@@ -1,11 +1,14 @@
 // Libs
-import React, { Fragment } from "react";
+import React, { Fragment, memo } from "react";
 import PropTypes from "prop-types";
 // Components
 import LoadingPage from "../LoadingPage/LoadingPage";
 import TabSelector from "./TabSelector";
+import Toasts from "../../containers/Toasts/Toasts";
 import AdminTab from "../../containers/Tabs/Admin";
 import EnodeTab from "../../containers/Tabs/Enode";
+// Context
+import { ToastProvider } from "../../context/toasts";
 // Constants
 import { ADMIN_TAB, ENODE_TAB } from "../../constants/tabs";
 
@@ -15,10 +18,11 @@ const Dashboard = ({ tab, setTab, dataReady }) => (
         {!dataReady ? (
             <LoadingPage />
         ) : (
-            <Fragment>
+            <ToastProvider>
+                <Toasts />
                 <AdminTab isOpen={tab === ADMIN_TAB} />
                 <EnodeTab isOpen={tab === ENODE_TAB} />
-            </Fragment>
+            </ToastProvider>
         )}
     </Fragment>
 );
@@ -29,4 +33,4 @@ Dashboard.propTypes = {
     dataReady: PropTypes.bool.isRequired
 };
 
-export default Dashboard;
+export default memo(Dashboard);

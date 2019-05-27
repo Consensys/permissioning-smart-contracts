@@ -14,6 +14,17 @@ import {
 } from "../../util/enodetools";
 // Components
 import EnodeTab from "../../components/EnodeTab/EnodeTab";
+// Constants
+import {
+    PENDING_ADDITION,
+    PENDING_REMOVAL,
+    FAIL_ADDITION,
+    FAIL_REMOVAL,
+    PENDING_LOCK,
+    PENDING,
+    SUCCESS,
+    FAIL
+} from "../../constants/transactions";
 
 const EnodeTabContainer = ({ isOpen }) => {
     const { whitelist, isAdmin, userAddress, isReadOnly } = useData();
@@ -26,10 +37,8 @@ const EnodeTabContainer = ({ isOpen }) => {
         addTransaction,
         updateTransaction,
         deleteTransaction,
-        toasts,
         openToast,
-        updateToast,
-        closeToast
+        updateToast
     } = useTab(whitelist, identifierToParams);
 
     const { drizzle } = drizzleReactHooks.useDrizzle();
@@ -59,21 +68,21 @@ const EnodeTabContainer = ({ isOpen }) => {
             .send({ from: userAddress, gasLimit: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("add")();
-                addTransaction(identifier, "pendingAddition");
+                addTransaction(identifier, PENDING_ADDITION);
             })
             .on("receipt", () => {
                 openToast(
                     identifier,
-                    "success",
+                    SUCCESS,
                     `New whitelisted node processed: ${enodeHigh}${enodeLow}`
                 );
             })
             .on("error", () => {
                 toggleModal("add")();
-                updateTransaction(identifier, "failAddition");
+                updateTransaction(identifier, FAIL_ADDITION);
                 openToast(
                     identifier,
-                    "fail",
+                    FAIL,
                     "Could not add node to whitelist",
                     `${enodeHigh}${enodeLow} was unable to be added. Please try again`
                 );
@@ -92,21 +101,21 @@ const EnodeTabContainer = ({ isOpen }) => {
             .send({ from: userAddress, gasLimit: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("remove")();
-                addTransaction(value, "pendingRemoval");
+                addTransaction(value, PENDING_REMOVAL);
             })
             .on("receipt", () => {
                 openToast(
                     value,
-                    "success",
+                    SUCCESS,
                     `Removal of whitelisted node processed: ${enodeHigh}${enodeLow}`
                 );
             })
             .on("error", () => {
                 toggleModal("remove")();
-                updateTransaction(value, "failRemoval");
+                updateTransaction(value, FAIL_REMOVAL);
                 openToast(
                     value,
-                    "fail",
+                    FAIL,
                     "Could not remove node to whitelist",
                     `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
                 );
@@ -120,10 +129,10 @@ const EnodeTabContainer = ({ isOpen }) => {
             .send({ from: userAddress, gasLimit: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("lock")();
-                addTransaction("lock", "pendingLock");
+                addTransaction("lock", PENDING_LOCK);
                 openToast(
                     "lock",
-                    "pending",
+                    PENDING,
                     isReadOnly
                         ? "Please wait while we unlock the values."
                         : "Please wait while we lock the whitelisted nodes. Once completed no changes can be made until you unlock the values.",
@@ -135,7 +144,7 @@ const EnodeTabContainer = ({ isOpen }) => {
                 deleteTransaction("lock");
                 updateToast(
                     "lock",
-                    "success",
+                    SUCCESS,
                     isReadOnly
                         ? "Values have been unlocked!"
                         : "Changes have been locked!"
@@ -146,7 +155,7 @@ const EnodeTabContainer = ({ isOpen }) => {
                 deleteTransaction("lock");
                 updateToast(
                     "lock",
-                    "fail",
+                    FAIL,
                     isReadOnly
                         ? "Could not unlock values."
                         : "Could not lock changes.",
@@ -158,8 +167,6 @@ const EnodeTabContainer = ({ isOpen }) => {
     return (
         <EnodeTab
             list={list}
-            toasts={toasts}
-            closeToast={closeToast}
             userAddress={userAddress}
             modals={modals}
             toggleModal={toggleModal}

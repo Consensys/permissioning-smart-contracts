@@ -3,6 +3,13 @@ import React from "react";
 import PropTypes from "prop-types";
 // Rimble Components
 import { Pill, Flex, Text, Button } from "rimble-ui";
+// Constant
+import {
+    PENDING_ADDITION,
+    PENDING_REMOVAL,
+    FAIL_ADDITION,
+    FAIL_REMOVAL
+} from "../../constants/transactions";
 // Styles
 import styles from "./styles.module.scss";
 
@@ -22,7 +29,7 @@ const EnodeRow = ({
     <tr className={styles.row}>
         <td colSpan="2">
             <Flex alignItems="center">
-                {status === "pendingRemoval" ? (
+                {status === PENDING_REMOVAL ? (
                     <Text.s
                         className={styles.ellipsis}
                         fontSize="14px"
@@ -37,7 +44,7 @@ const EnodeRow = ({
         </td>
         <td>
             <Flex alignItems="center">
-                {status === "pendingRemoval" ? (
+                {status === PENDING_REMOVAL ? (
                     <Text.s className={styles.ellipsis} fontSize="14px">
                         {ip}
                     </Text.s>
@@ -50,7 +57,7 @@ const EnodeRow = ({
         </td>
         <td>
             <Flex alignItems="center">
-                {status === "pendingRemoval" ? (
+                {status === PENDING_REMOVAL ? (
                     <Text.s className={styles.ellipsis} fontSize="14px">
                         {port}
                     </Text.s>
@@ -67,15 +74,15 @@ const EnodeRow = ({
                     <Pill color="#018002" className={styles.pill}>
                         Active
                     </Pill>
-                ) : status === "pendingAddition" ? (
+                ) : status === PENDING_ADDITION ? (
                     <Pill color="#FFA505" className={styles.pill}>
                         Pending Addition
                     </Pill>
-                ) : status === "pendingRemoval" ? (
+                ) : status === PENDING_REMOVAL ? (
                     <Pill color="#FFA505" className={styles.pill}>
                         Pending Removal
                     </Pill>
-                ) : status === "failAddition" ? (
+                ) : status === FAIL_ADDITION ? (
                     <Flex>
                         <Pill color="#FF1C1E" className={styles.pill}>
                             Addition Failed
@@ -89,7 +96,7 @@ const EnodeRow = ({
                             Clear
                         </Pill>
                     </Flex>
-                ) : status === "failRemoval" ? (
+                ) : status === FAIL_REMOVAL ? (
                     <Flex>
                         <Pill color="#FF1C1E" className={styles.pill}>
                             Removal Failed

@@ -20,6 +20,18 @@ const drizzle = new Drizzle(drizzleOptions, drizzleStore);
 
 const NetworkContext = createContext();
 
+/**
+ * Provider for the network context that contains informations about the
+ * blockchain provider
+ * @param {Object} props Props given to the NetworkProvider
+ * @return The provider with the following value:
+ *  - isCorrectNetwork: true if the detected network is one of the allowed
+ *  networks by the contracts, false if it is not, null if there is no detected
+ *  network
+ *  - setIsCorrectNetwork: setter of isCorrectNetwork
+ *  - web3Initialized: true if Drizzle has initialized web3, false otherwise
+ *  - setWeb3Initialized: setter for web3Initialized
+ */
 export const NetworkProvider = props => {
     const [isCorrectNetwork, setIsCorrectNetwork] = useState(null);
     const [web3Initialized, setWeb3Initialized] = useState(false);
@@ -46,13 +58,27 @@ export const NetworkProvider = props => {
     );
 };
 
+/**
+ * Synchronize with the blockchain network
+ * @return {Object} The network informations:
+ *  - isCorrectNetwork: true if the detected network is one of the allowed
+ *  networks by the contracts, false if it is not, null if there is no detected
+ *  network,
+ *  - networkId: The id of the network,
+ *  - web3Initialized: true if Drizzle has initialized web3, false otherwise
+ */
 export const useNetwork = () => {
+    const context = useContext(NetworkContext);
+    if (!context) {
+        throw new Error("useData must be used within a DataProvider.");
+    }
+
     const {
         isCorrectNetwork,
         setIsCorrectNetwork,
         web3Initialized,
         setWeb3Initialized
-    } = useContext(NetworkContext);
+    } = context;
 
     const { networkId, status } = drizzleReactHooks.useDrizzleState(
         drizzleState => ({

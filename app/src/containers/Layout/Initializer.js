@@ -18,8 +18,8 @@ const Initializer = ({ children, NoProvider, WrongNetwork }) => {
 
 Initializer.propTypes = {
     children: PropTypes.object.isRequired,
-    NoProvider: PropTypes.object.isRequired,
-    WrongNetwork: PropTypes.object.isRequired
+    NoProvider: PropTypes.func.isRequired,
+    WrongNetwork: PropTypes.func.isRequired
 };
 
 export default Initializer;

@@ -6,14 +6,11 @@ import EnodeTable from "./Table";
 import AddModal from "../../containers/Modals/Add";
 import RemoveModal from "../../containers/Modals/Remove";
 import LockModal from "../Modals/Lock";
-import Toasts from "../Toasts/Toasts";
 // Constants
 import { addEnodeDisplay, removeEnodeDisplay } from "../../constants/modals";
 
 const EnodeTab = ({
     list,
-    toasts,
-    closeToast,
     userAddress,
     modals,
     toggleModal,
@@ -28,7 +25,6 @@ const EnodeTab = ({
     isOpen
 }) => (
     <Fragment>
-        <Toasts toasts={toasts} closeToast={closeToast} />
         {isOpen && (
             <Fragment>
                 <EnodeTable
@@ -67,8 +63,6 @@ const EnodeTab = ({
 
 EnodeTab.propTypes = {
     list: PropTypes.arrayOf(PropTypes.object).isRequired,
-    toasts: PropTypes.arrayOf(PropTypes.object).isRequired,
-    closeToast: PropTypes.func.isRequired,
     userAddress: PropTypes.string,
     modals: PropTypes.object.isRequired,
     toggleModal: PropTypes.func.isRequired,

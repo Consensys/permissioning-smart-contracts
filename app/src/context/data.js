@@ -12,8 +12,15 @@ import { paramsToIdentifier } from "../util/enodetools";
 
 const DataContext = createContext();
 
+/**
+ * Provider for the data context that contains the whitelist
+ * @param {Object} props Props given to the DataProvider
+ * @return The provider with the following value:
+ *  - whitelist: list of whiteliist enode from Rules contract
+ *  - setWhitelist: setter for the whitelist state
+ */
 export const DataProvider = props => {
-    const [whitelist, setWhitelist] = useState();
+    const [whitelist, setWhitelist] = useState([]);
 
     const value = useMemo(() => ({ whitelist, setWhitelist }), [
         whitelist,
@@ -24,11 +31,14 @@ export const DataProvider = props => {
 
 /**
  * Fetch the appropriate data on chain and synchronize with it
- * @return {[Object]} Contains data of interest:
- *  - isReadOnly (Rules contract),
- *  - whitelist (Rules contract)
- *  - admins (Admin contract)
- *  - dataReady (above data correctly fetched)
+ * @return {Object} Contains data of interest:
+ *  - isReadOnly: Rules contract is lock or unlock,
+ *  - whitelist: list of whitelist enode from Rules contract,
+ *  - admins: list of admin address from Admin contract,
+ *  - dataReady: true if isReadOnly, whitelist and admins are correctly fetched,
+ *  false otherwise
+ *  - userAddress: Address of the user
+ *  - isAdmin: true if address of the user is includes in the admin list
  */
 export const useData = () => {
     const context = useContext(DataContext);
@@ -44,11 +54,11 @@ export const useData = () => {
 
     const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
 
-    const { getByIndex } = drizzle.contracts.Rules.methods;
-
     const isReadOnly = useCacheCall("Rules", "isReadOnly");
     const whitelistSize = useCacheCall("Rules", "getSize");
     const admins = useCacheCall("Admin", "getAdmins");
+
+    const { getByIndex } = drizzle.contracts.Rules.methods;
 
     useEffect(() => {
         const promises = [];
@@ -56,7 +66,7 @@ export const useData = () => {
             promises.push(getByIndex(index).call());
         }
         Promise.all(promises).then(responses => {
-            const whitelist = responses.map(
+            const updatedWhitelist = responses.map(
                 ({ enodeHigh, enodeLow, ip, port }) => ({
                     enodeHigh,
                     enodeLow,
@@ -70,30 +80,40 @@ export const useData = () => {
                     })
                 })
             );
-            setWhitelist(whitelist);
+            setWhitelist(updatedWhitelist);
         });
     }, [whitelistSize, setWhitelist, getByIndex]);
 
-    const dataReady =
-        typeof isReadOnly === "boolean" &&
-        Array.isArray(admins) &&
-        Array.isArray(whitelist);
+    const dataReady = useMemo(
+        () =>
+            typeof isReadOnly === "boolean" &&
+            Array.isArray(admins) &&
+            Array.isArray(whitelist),
+        [isReadOnly, admins, whitelist]
+    );
 
-    const isAdmin = dataReady ? admins.includes(userAddress) : false;
+    const isAdmin = useMemo(
+        () => (dataReady ? admins.includes(userAddress) : false),
+        [dataReady, admins, userAddress]
+    );
 
-    const formattedAdmins = admins
-        ? admins
-              .map(address => ({
-                  address,
-                  identifier: address,
-                  status: "active"
-              }))
-              .reverse()
-        : undefined;
+    const formattedAdmins = useMemo(() => {
+        return admins
+            ? admins
+                  .map(address => ({
+                      address,
+                      identifier: address,
+                      status: "active"
+                  }))
+                  .reverse()
+            : undefined;
+    }, [admins]);
 
-    const formattedWhitelist = whitelist
-        ? whitelist.map(enode => ({ ...enode, status: "active" })).reverse()
-        : undefined;
+    const formattedWhitelist = useMemo(() => {
+        return whitelist
+            ? whitelist.map(enode => ({ ...enode, status: "active" })).reverse()
+            : undefined;
+    }, [whitelist]);
 
     return {
         userAddress,

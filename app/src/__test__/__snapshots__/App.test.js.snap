@@ -244,20 +244,8 @@ exports[`<App /> matches snapshot 1`] = `
   <NetworkProvider>
     <Layout>
       <Initializer
-        NoProvider={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          }
-        }
-        WrongNetwork={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          }
-        }
+        NoProvider={[Function]}
+        WrongNetwork={[Function]}
       >
         <DataProvider>
           <DashboardContainer />
