@@ -14,6 +14,20 @@ export const removeAdminDisplay = value => ({
     subHeading: `Remove “${value}” as an admin account?`
 });
 
+export const addAccountDisplay = {
+    submitText: "Add Whitelisted Account",
+    errorMessage: "Account address is not correct.",
+    inputPlaceholder: "Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A",
+    label: "Account Address",
+    heading: "Add Whitelisted Account",
+    subHeading: "Whitelisted accounts may submit transactions on the network."
+};
+
+export const removeAccountDisplay = value => ({
+    heading: "Are you sure?",
+    subHeading: `Remove “${value}” as a whitelisted account?`
+});
+
 export const addEnodeDisplay = {
     submitText: "Add Whitelisted Node",
     errorMessage: "Enode URL must include Address, IP address and Port.",

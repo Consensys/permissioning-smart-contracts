@@ -4,6 +4,6 @@ exports[`<Dashboard Container /> matches snapshot 1`] = `
 <Dashboard
   dataReady={true}
   setTab={[Function]}
-  tab="admin"
+  tab="accountTab"
 />
 `;
