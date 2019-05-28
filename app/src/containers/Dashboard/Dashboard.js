@@ -5,10 +5,10 @@ import Dashboard from "../../components/Dashboard/Dashboard";
 // Context
 import { useData } from "../../context/data";
 // Constant
-import { ADMIN_TAB } from "../../constants/tabs";
+import { ACCOUNT_TAB } from "../../constants/tabs";
 
 const DashboardContainer = () => {
-    const [tab, setTab] = useState(ADMIN_TAB);
+    const [tab, setTab] = useState(ACCOUNT_TAB);
     const { dataReady } = useData();
 
     return <Dashboard tab={tab} setTab={setTab} dataReady={dataReady} />;
