@@ -2,7 +2,7 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "./RulesProxy.sol";
 import "./RulesList.sol";
-import "./Ingress.sol";
+import "./NodeIngress.sol";
 import "./Admin.sol";
 
 
@@ -13,7 +13,7 @@ contract Rules is RulesProxy, RulesList {
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
 
-    address private ingressContractAddress;
+    address private nodeIngressContractAddress;
 
     modifier onlyOnEditMode() {
         require(!readOnlyMode, "In read only mode: rules cannot be modified");
@@ -21,16 +21,16 @@ contract Rules is RulesProxy, RulesList {
     }
 
     modifier onlyAdmin() {
-        Ingress ingressContract = Ingress(ingressContractAddress);
-        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+        NodeIngress nodeIngressContract = NodeIngress(nodeIngressContractAddress);
+        address adminContractAddress = nodeIngressContract.getContractAddress(nodeIngressContract.ADMIN_CONTRACT());
 
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
         _;
     }
 
-    constructor (address ingressAddress) public {
-        ingressContractAddress = ingressAddress;
+    constructor (address nodeIngressAddress) public {
+        nodeIngressContractAddress = nodeIngressAddress;
     }
 
     // VERSION
@@ -135,6 +135,6 @@ contract Rules is RulesProxy, RulesList {
     }
 
     function triggerRulesChangeEvent(bool addsRestrictions) public {
-        Ingress(ingressContractAddress).emitRulesChangeEvent(addsRestrictions);
+        NodeIngress(nodeIngressContractAddress).emitRulesChangeEvent(addsRestrictions);
     }
 }

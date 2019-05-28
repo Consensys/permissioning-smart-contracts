@@ -15,10 +15,9 @@ import TextWithTooltip from "./TextWithTooltip";
 // Styles
 import styles from "./styles.module.scss";
 
-const AdminRow = ({
+const AccountRow = ({
     address,
     status,
-    isSelf,
     isAdmin,
     deleteTransaction,
     openRemoveModal
@@ -78,7 +77,7 @@ const AdminRow = ({
                 ) : (
                     <div />
                 )}
-                {!isSelf && isAdmin && status === "active" && (
+                {isAdmin && status === "active" && (
                     <Button.Text
                         mainColor="#CCC"
                         icon="Delete"
@@ -92,13 +91,12 @@ const AdminRow = ({
     </tr>
 );
 
-AdminRow.propTypes = {
+AccountRow.propTypes = {
     address: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
-    isSelf: PropTypes.bool.isRequired,
     isAdmin: PropTypes.bool.isRequired,
     deleteTransaction: PropTypes.func.isRequired,
     openRemoveModal: PropTypes.func.isRequired
 };
 
-export default AdminRow;
+export default AccountRow;

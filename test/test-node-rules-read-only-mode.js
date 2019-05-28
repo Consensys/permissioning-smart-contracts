@@ -1,4 +1,4 @@
-const Ingress = artifacts.require('Ingress.sol');
+const NodeIngress = artifacts.require('NodeIngress.sol');
 const Rules = artifacts.require('Rules.sol');
 const Admin = artifacts.require('Admin.sol');
 
@@ -12,13 +12,13 @@ var newAdmin2 = "fe3b557e8fb62b89f4916b721be55ceb828dbd73".toLowerCase();
 
 contract('Rules (Read-only mode)', () => {
 
-  let ingressContract;
+  let nodeIngressContract;
   let adminContract;
   let rulesContract;
 
   beforeEach(async () => {
-    ingressContract = await Ingress.deployed();
-    rulesContract = await Rules.new(Ingress.address);
+    nodeIngressContract = await NodeIngress.deployed();
+    rulesContract = await Rules.new(NodeIngress.address);
   })
 
   it("should toggle read-only flag on enter/exit read-mode method invocation", async () => {
