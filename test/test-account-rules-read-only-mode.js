@@ -1,4 +1,4 @@
-const Ingress = artifacts.require('Ingress.sol');
+const Ingress = artifacts.require('AccountIngress.sol');
 const Rules = artifacts.require('AccountRules.sol');
 const Admin = artifacts.require('Admin.sol');
 
