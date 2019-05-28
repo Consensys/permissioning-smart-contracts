@@ -1,40 +1,40 @@
 const Web3Utils = require("web3-utils");
 
 const Rules = artifacts.require("./Rules.sol");
-const Ingress = artifacts.require("./Ingress.sol");
+const NodeIngress = artifacts.require("./NodeIngress.sol");
 const Admin = artifacts.require("./Admin.sol");
 
 const adminContractName = Web3Utils.utf8ToHex("administration");
 const rulesContractName = Web3Utils.utf8ToHex("rules");
 
-/* The address of the ingress contract if pre deployed */
-let ingressAddress = process.env.INGRESS_CONTRACT_ADDRESS;
+/* The address of the node ingress contract if pre deployed */
+let nodeIngress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
 
 module.exports = async(deployer, network) => {
-    if (! ingressAddress) {
+    if (! nodeIngress) {
         // Only deploy if we haven't been provided a predeployed address
-        await deployer.deploy(Ingress);
-        console.log("   > Deployed Ingress contract to address = " + Ingress.address);
-        ingressAddress = Ingress.address;
+        await deployer.deploy(NodeIngress);
+        console.log("   > Deployed NodeIngress contract to address = " + NodeIngress.address);
+        nodeIngress = NodeIngress.address;
 
     }
     // If supplied an address, make sure there's something there
-    const ingressInstance = await Ingress.at(ingressAddress);
+    const nodeIngressInstance = await NodeIngress.at(nodeIngress);
     try {
-        const result = await ingressInstance.getContractVersion();
-        console.log("   > Ingress contract initialised at address = " + ingressAddress + " version=" + result);
+        const result = await nodeIngressInstance.getContractVersion();
+        console.log("   > NodeIngress contract initialised at address = " + nodeIngress + " version=" + result);
     } catch (err) {
         console.log(err);
-        console.error("   > Predeployed Ingress contract is not responding like an Ingress contract at address = " + ingressAddress);
+        console.error("   > Predeployed NodeIngress contract is not responding like an NodeIngress contract at address = " + nodeIngress);
     }
 
     await deployer.deploy(Admin);
     console.log("   > Admin contract deployed");
-    await ingressInstance.setContractAddress(adminContractName, Admin.address);
-    console.log("   > Updated Ingress with Admin  address = " + Admin.address);
+    await nodeIngressInstance.setContractAddress(adminContractName, Admin.address);
+    console.log("   > Updated NodeIngress with Admin  address = " + Admin.address);
 
-    await deployer.deploy(Rules, ingressAddress);
-    console.log("   > Rules deployed with Ingress.address = " + ingressAddress);
-    await ingressInstance.setContractAddress(rulesContractName, Rules.address);
-    console.log("   > Updated Ingress contract with Rules address = " + Rules.address);
+    await deployer.deploy(Rules, nodeIngress);
+    console.log("   > Rules deployed with NodeIngress.address = " + nodeIngress);
+    await nodeIngressInstance.setContractAddress(rulesContractName, Rules.address);
+    console.log("   > Updated NodeIngress contract with Rules address = " + Rules.address);
 }

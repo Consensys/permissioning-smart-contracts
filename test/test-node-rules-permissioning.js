@@ -1,4 +1,4 @@
-const IngressContract = artifacts.require('Ingress.sol');
+const NodeIngressContract = artifacts.require('NodeIngress.sol');
 const RulesContract = artifacts.require('Rules.sol');
 const AdminContract = artifacts.require('Admin.sol');
 
@@ -28,18 +28,18 @@ const node3Port = 30305;
 const newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
 contract("Rules (Permissioning)", (accounts) => {
-  let ingressContract;
+  let nodeIngressContract;
   let rulesContract;
   let adminContract;
 
   before(async () => {
-    ingressContract = await IngressContract.new();
+    nodeIngressContract = await NodeIngressContract.new();
 
     adminContract = await AdminContract.new();
-    await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
+    await nodeIngressContract.setContractAddress(ADMIN_NAME, adminContract.address);
 
-    rulesContract = await RulesContract.new(ingressContract.address);
-    await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
+    rulesContract = await RulesContract.new(nodeIngressContract.address);
+    await nodeIngressContract.setContractAddress(RULES_NAME, rulesContract.address);
   });
 
   it('should NOT permit node when whitelist is empty', async () => {
