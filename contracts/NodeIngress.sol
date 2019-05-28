@@ -4,7 +4,7 @@ import "./AdminProxy.sol";
 import "./RulesProxy.sol";
 
 
-contract Ingress {
+contract NodeIngress {
     // version of this contract: semver eg 1.2.14 represented like 001002014
     uint version = 1000000;
 
