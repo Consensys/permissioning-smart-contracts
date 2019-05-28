@@ -7,6 +7,6 @@ interface AccountRulesProxy {
         uint256 value,
         uint256 gasPrice,
         uint256 gasLimit,
-        bytes calldata payload)
-        external view returns (bool);
+        bytes calldata payload
+    ) external view returns (bool);
 }
