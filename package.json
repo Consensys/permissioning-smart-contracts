@@ -19,7 +19,7 @@
     "istanbul": "^0.4.5",
     "mocha-junit-reporter": "^1.21.0",
     "mocha-multi-reporters": "^1.1.7",
-    "solidity-coverage": "^0.5.11",
+    "solidity-coverage": "github:sc-forks/solidity-coverage#leapdao",
     "solium": "^1.2.4",
     "truffle": "^5.0.12"
   }
