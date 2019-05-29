@@ -63,6 +63,17 @@ contract("Account Rules (Permissioning)", (accounts) => {
     assert.ok(permitted, 'expected account 3 added to be in whitelist');
   });
 
+  it("getByIndex returns expected order", async () => {
+    let result = await rulesContract.getByIndex(0);
+    assert.equal(result.toLowerCase(), address1.toLowerCase());
+
+    result = await rulesContract.getByIndex(1);
+    assert.equal(result.toLowerCase(), address2.toLowerCase());
+
+    result = await rulesContract.getByIndex(2);
+    assert.equal(result.toLowerCase(), address3.toLowerCase());
+  });
+
   it('should allow a transaction from account added to the whitelist', async () => {
     let permitted = await rulesContract.transactionAllowed(address1, address2, txValue, txGasPrice, txGasLimit, txPayload);
     assert.equal(permitted, true, 'expected permitted address1');
