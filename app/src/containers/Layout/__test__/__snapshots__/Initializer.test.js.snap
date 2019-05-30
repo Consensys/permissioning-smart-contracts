@@ -2,66 +2,30 @@
 
 exports[`<Initializer /> web3Initialized=false matches snapshot 1`] = `
 <Initializer
-  NoProvider={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
-  WrongNetwork={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
+  NoProvider={[Function]}
+  WrongNetwork={[Function]}
 />
 `;
 
 exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=false matches snapshot 1`] = `
 <Initializer
-  NoProvider={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
-  WrongNetwork={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
+  NoProvider={[Function]}
+  WrongNetwork={[Function]}
 >
-  <Component
+  <WrongNetwork
     networkId={0}
   >
     <div
       className="wrongNetwork"
     />
-  </Component>
+  </WrongNetwork>
 </Initializer>
 `;
 
 exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=true matches snapshot 1`] = `
 <Initializer
-  NoProvider={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
-  WrongNetwork={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
+  NoProvider={[Function]}
+  WrongNetwork={[Function]}
 >
   <div
     className="test"
@@ -71,25 +35,13 @@ exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=tru
 
 exports[`<Initializer /> web3Initialized=true, networkId=undefined matches snapshot 1`] = `
 <Initializer
-  NoProvider={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
-  WrongNetwork={
-    Object {
-      "$$typeof": Symbol(react.memo),
-      "compare": null,
-      "type": [Function],
-    }
-  }
+  NoProvider={[Function]}
+  WrongNetwork={[Function]}
 >
-  <Component>
+  <NoProvider>
     <div
       className="noProvider"
     />
-  </Component>
+  </NoProvider>
 </Initializer>
 `;

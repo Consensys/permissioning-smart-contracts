@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ToastProvider /> matches snapshot 1`] = `
+<ContextProvider
+  value={
+    Object {
+      "setToasts": [Function],
+      "toasts": Array [],
+    }
+  }
+>
+  <div
+    className="test"
+  />
+</ContextProvider>
+`;

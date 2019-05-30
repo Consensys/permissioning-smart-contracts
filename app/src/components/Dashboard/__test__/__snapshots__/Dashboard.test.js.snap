@@ -17447,7 +17447,13 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
         isOpen={false}
         isValid={[Function]}
         list={Array []}
-        modals={Object {}}
+        modals={
+          Object {
+            "add": false,
+            "lock": false,
+            "remove": false,
+          }
+        }
         toggleModal={[Function]}
         userAddress="test"
       />
@@ -17463,7 +17469,13 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
         isOpen={true}
         isValid={[Function]}
         list={Array []}
-        modals={Object {}}
+        modals={
+          Object {
+            "add": false,
+            "lock": false,
+            "remove": false,
+          }
+        }
         toggleModal={[Function]}
         userAddress="test"
       >
@@ -18343,6 +18355,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
                 <TableHeader
                   disabledAdd={false}
                   number={0}
+                  openAddModal={[Function]}
                 >
                   <Flex
                     alignItems="center"
@@ -22760,6 +22773,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
                                 icon="AddCircleOutline"
                                 m={0}
                                 mainColor="#25D78F"
+                                onClick={[Function]}
                                 px={4}
                                 py={0}
                                 size="medium"
@@ -23016,6 +23030,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
                                   fontWeight={3}
                                   m={0}
                                   mainColor="#25D78F"
+                                  onClick={[Function]}
                                   px={4}
                                   py={0}
                                   size="medium"
@@ -23790,6 +23805,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
                                     forwardedRef={null}
                                     m={0}
                                     mainColor="#25D78F"
+                                    onClick={[Function]}
                                     px={4}
                                     py={0}
                                     size="medium"
@@ -24040,6 +24056,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
                                       fontFamily="sansSerif"
                                       fontSize="inherit"
                                       fontWeight={3}
+                                      onClick={[Function]}
                                       size="medium"
                                     >
                                       <ButtonBody
@@ -25088,6 +25105,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
           </Box>
         </AdminTable>
         <AddModalContainer
+          closeModal={[Function]}
           display={
             Object {
               "errorMessage": "Account address is not correct.",
@@ -25099,6 +25117,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
             }
           }
           handleAdd={[Function]}
+          isOpen={false}
           isValid={[Function]}
         >
           <AddModal
@@ -25115,32 +25134,42 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
             }
             handleSubmit={[Function]}
             input=""
+            isOpen={false}
             modifyInput={[Function]}
             validated={false}
           >
-            <Modal />
+            <Modal
+              isOpen={false}
+            />
           </AddModal>
         </AddModalContainer>
         <RemoveModalContainer
+          closeModal={[Function]}
           display={
             Object {
               "heading": "Are you sure?",
-              "subHeading": "Remove “undefined” as an admin account?",
+              "subHeading": "Remove “false” as an admin account?",
             }
           }
           handleRemove={[Function]}
+          isOpen={false}
+          value={false}
         >
           <RemoveModal
             closeModal={[Function]}
             display={
               Object {
                 "heading": "Are you sure?",
-                "subHeading": "Remove “undefined” as an admin account?",
+                "subHeading": "Remove “false” as an admin account?",
               }
             }
             handleSubmit={[Function]}
+            isOpen={false}
+            value={false}
           >
-            <Modal />
+            <Modal
+              isOpen={false}
+            />
           </RemoveModal>
         </RemoveModalContainer>
       </AdminTab>
@@ -25158,7 +25187,13 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
         isReadOnly={true}
         isValid={[Function]}
         list={Array []}
-        modals={Object {}}
+        modals={
+          Object {
+            "add": false,
+            "lock": false,
+            "remove": false,
+          }
+        }
         pendingLock={false}
         toggleModal={[Function]}
         userAddress="test"
@@ -32991,7 +33026,13 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
         isOpen={false}
         isValid={[Function]}
         list={Array []}
-        modals={Object {}}
+        modals={
+          Object {
+            "add": false,
+            "lock": false,
+            "remove": false,
+          }
+        }
         toggleModal={[Function]}
         userAddress="test"
       />
@@ -33007,7 +33048,13 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
         isOpen={false}
         isValid={[Function]}
         list={Array []}
-        modals={Object {}}
+        modals={
+          Object {
+            "add": false,
+            "lock": false,
+            "remove": false,
+          }
+        }
         toggleModal={[Function]}
         userAddress="test"
       />
@@ -33025,7 +33072,13 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
         isReadOnly={true}
         isValid={[Function]}
         list={Array []}
-        modals={Object {}}
+        modals={
+          Object {
+            "add": false,
+            "lock": false,
+            "remove": false,
+          }
+        }
         pendingLock={false}
         toggleModal={[Function]}
         userAddress="test"
@@ -33910,6 +33963,8 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                   disabledLock={false}
                   isReadOnly={true}
                   number={0}
+                  openAddModal={[Function]}
+                  openLockModal={[Function]}
                   pendingLock={false}
                 >
                   <Flex
@@ -38329,6 +38384,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                 m={0}
                                 mainColor="#25D78F"
                                 mr={3}
+                                onClick={[Function]}
                                 px={4}
                                 py={0}
                                 size="medium"
@@ -38586,6 +38642,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                   m={0}
                                   mainColor="#25D78F"
                                   mr={3}
+                                  onClick={[Function]}
                                   px={4}
                                   py={0}
                                   size="medium"
@@ -39361,6 +39418,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                     m={0}
                                     mainColor="#25D78F"
                                     mr={3}
+                                    onClick={[Function]}
                                     px={4}
                                     py={0}
                                     size="medium"
@@ -39611,6 +39669,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                       fontFamily="sansSerif"
                                       fontSize="inherit"
                                       fontWeight={3}
+                                      onClick={[Function]}
                                       size="medium"
                                     >
                                       <ButtonBody
@@ -39996,6 +40055,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                                 icon="Lock"
                                                 m={0}
                                                 mainColor="primary"
+                                                onClick={[Function]}
                                                 px={4}
                                                 py={0}
                                                 size="medium"
@@ -40253,6 +40313,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                                   fontWeight={3}
                                                   m={0}
                                                   mainColor="primary"
+                                                  onClick={[Function]}
                                                   px={4}
                                                   py={0}
                                                   size="medium"
@@ -41028,6 +41089,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                                     forwardedRef={null}
                                                     m={0}
                                                     mainColor="primary"
+                                                    onClick={[Function]}
                                                     px={4}
                                                     py={0}
                                                     size="medium"
@@ -41279,6 +41341,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                                       fontFamily="sansSerif"
                                                       fontSize="inherit"
                                                       fontWeight={3}
+                                                      onClick={[Function]}
                                                       size="medium"
                                                     >
                                                       <ButtonBody
@@ -42357,6 +42420,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
           </Box>
         </EnodeTable>
         <AddModalContainer
+          closeModal={[Function]}
           display={
             Object {
               "errorMessage": "Enode URL must include Address, IP address and Port.",
@@ -42368,6 +42432,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
             }
           }
           handleAdd={[Function]}
+          isOpen={false}
           isValid={[Function]}
         >
           <AddModal
@@ -42384,13 +42449,17 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
             }
             handleSubmit={[Function]}
             input=""
+            isOpen={false}
             modifyInput={[Function]}
             validated={false}
           >
-            <Modal />
+            <Modal
+              isOpen={false}
+            />
           </AddModal>
         </AddModalContainer>
         <RemoveModalContainer
+          closeModal={[Function]}
           display={
             Object {
               "heading": "Are you sure?",
@@ -42398,6 +42467,8 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
             }
           }
           handleRemove={[Function]}
+          isOpen={false}
+          value={false}
         >
           <RemoveModal
             closeModal={[Function]}
@@ -42408,15 +42479,23 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
               }
             }
             handleSubmit={[Function]}
+            isOpen={false}
+            value={false}
           >
-            <Modal />
+            <Modal
+              isOpen={false}
+            />
           </RemoveModal>
         </RemoveModalContainer>
         <LockModal
+          closeModal={[Function]}
           handleLock={[Function]}
+          isOpen={false}
           isReadOnly={true}
         >
-          <Modal />
+          <Modal
+            isOpen={false}
+          />
         </LockModal>
       </EnodeTab>
     </EnodeTabContainer>
