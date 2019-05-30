@@ -2,7 +2,6 @@
 // import React from "../../__mocks__/react";
 import React from "react";
 // import { act } from 'react-dom/test-utils';
-import toJson from "enzyme-to-json";
 import { shallow } from "enzyme";
 import { useNetwork } from "../network";
 import { testHook } from "../../test-utils/testHook";
@@ -30,10 +29,6 @@ describe("<NetworkProvider />", () => {
 
     it("renders children when passed in", () => {
         expect(wrapper.contains(<div className="test" />)).toEqual(true);
-    });
-
-    it("matches snapshot", () => {
-        expect(toJson(wrapper)).toMatchSnapshot();
     });
 });
 
