@@ -1,5 +1,5 @@
 const BN = web3.utils.BN;
-const RulesList = artifacts.require('ExposedRulesList.sol');
+const NodeRulesList = artifacts.require('ExposedNodeRulesList.sol');
 
 const node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
 const node1Low = "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
@@ -14,12 +14,12 @@ const node3Low = "0x920982b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b153274012
 const node3Host = "0x0000000000000000000011117fc359fd";
 const node3Port = 30305;
 
-contract("RulesList (list manipulation)", async () => {
+contract("NodeRulesList (list manipulation)", async () => {
 
   let rulesListContract;
 
   beforeEach(async () => {
-    rulesListContract = await RulesList.new();
+    rulesListContract = await NodeRulesList.new();
   });
 
   it("should calculate same key for same enode", async () => {

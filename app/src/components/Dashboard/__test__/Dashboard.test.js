@@ -47,7 +47,7 @@ jest.mock("drizzle-react", () => {
                                 removeAdmin: () => {}
                             }
                         },
-                        Rules: {
+                        NodeRules: {
                             methods: {
                                 enterReadOnly: () => {},
                                 exitReadOnly: () => {}
