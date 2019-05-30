@@ -1,12 +1,12 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./RulesProxy.sol";
-import "./RulesList.sol";
+import "./NodeRulesProxy.sol";
+import "./NodeRulesList.sol";
 import "./NodeIngress.sol";
 import "./Admin.sol";
 
 
-contract Rules is RulesProxy, RulesList {
+contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     // on read-only mode rules can't be added/removed
     bool readOnlyMode = false;

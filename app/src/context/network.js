@@ -10,7 +10,8 @@ import { Drizzle, generateStore } from "drizzle";
 import { drizzleReactHooks } from "drizzle-react";
 // Constants
 import drizzleOptions from "../drizzleOptions";
-import Rules from "../contracts/Rules.json";
+import NodeRules from "../contracts/NodeRules.json";
+import AccountRules from "../contracts/AccountRules.json";
 import Admin from "../contracts/Admin.json";
 // Utils
 import { getAllowedNetworks } from "../util/contracts";
@@ -89,7 +90,11 @@ export const useNetwork = () => {
 
     useEffect(() => {
         if (status === "initialized") {
-            const allowedNetworks = getAllowedNetworks([Rules, Admin]);
+            const allowedNetworks = getAllowedNetworks([
+                AccountRules,
+                NodeRules,
+                Admin
+            ]);
             if (networkId) {
                 const isCorrectNetwork = allowedNetworks.includes(networkId);
                 setIsCorrectNetwork(isCorrectNetwork);

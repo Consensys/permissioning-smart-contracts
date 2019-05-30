@@ -48,7 +48,7 @@ const EnodeTabContainer = ({ isOpen }) => {
         removeEnode,
         enterReadOnly,
         exitReadOnly
-    } = drizzle.contracts.Rules.methods;
+    } = drizzle.contracts.NodeRules.methods;
 
     const handleAdd = async value => {
         const { enodeHigh, enodeLow, ip, port } = enodeToParams(value);

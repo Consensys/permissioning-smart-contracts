@@ -1,6 +1,6 @@
 const Web3Utils = require("web3-utils");
 
-const Rules = artifacts.require("./Rules.sol");
+const NodeRules = artifacts.require("./NodeRules.sol");
 const NodeIngress = artifacts.require("./NodeIngress.sol");
 const Admin = artifacts.require("./Admin.sol");
 
@@ -33,8 +33,8 @@ module.exports = async(deployer, network) => {
     await nodeIngressInstance.setContractAddress(adminContractName, Admin.address);
     console.log("   > Updated NodeIngress with Admin  address = " + Admin.address);
 
-    await deployer.deploy(Rules, nodeIngress);
-    console.log("   > Rules deployed with NodeIngress.address = " + nodeIngress);
-    await nodeIngressInstance.setContractAddress(rulesContractName, Rules.address);
-    console.log("   > Updated NodeIngress contract with Rules address = " + Rules.address);
+    await deployer.deploy(NodeRules, nodeIngress);
+    console.log("   > NodeRules deployed with NodeIngress.address = " + nodeIngress);
+    await nodeIngressInstance.setContractAddress(rulesContractName, NodeRules.address);
+    console.log("   > Updated NodeIngress contract with NodeRules address = " + NodeRules.address);
 }

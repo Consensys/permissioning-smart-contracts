@@ -1,9 +1,9 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./RulesList.sol";
+import "./NodeRulesList.sol";
 
 
-contract ExposedRulesList is RulesList {
+contract ExposedNodeRulesList is NodeRulesList {
 
     function _calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public pure returns(uint256) {
         return calculateKey(_enodeHigh, _enodeLow, _ip, _port);

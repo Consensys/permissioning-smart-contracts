@@ -3,7 +3,7 @@ pragma solidity >=0.4.22 <0.6.0;
 import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 
 
-contract RulesList {
+contract NodeRulesList {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     // struct size = 82 bytes

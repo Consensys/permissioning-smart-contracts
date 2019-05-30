@@ -1,6 +1,6 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "./RulesProxy.sol";
+import "./NodeRulesProxy.sol";
 import "./Ingress.sol";
 
 
@@ -35,7 +35,7 @@ contract NodeIngress is Ingress {
             return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         }
 
-        return RulesProxy(registry[RULES_CONTRACT].contractAddress).connectionAllowed(
+        return NodeRulesProxy(registry[RULES_CONTRACT].contractAddress).connectionAllowed(
             sourceEnodeHigh,
             sourceEnodeLow,
             sourceEnodeIp,

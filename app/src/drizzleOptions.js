@@ -1,4 +1,5 @@
-import Rules from "./contracts/Rules.json";
+import NodeRules from "./contracts/NodeRules.json";
+import AccountRules from "./contracts/AccountRules.json";
 import Admin from "./contracts/Admin.json";
 
 const options = {
@@ -6,7 +7,7 @@ const options = {
         block: false,
         fallback: {}
     },
-    contracts: [Rules, Admin],
+    contracts: [AccountRules, NodeRules, Admin],
     events: {},
     polls: {
         accounts: 1500
