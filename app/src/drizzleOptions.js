@@ -1,5 +1,5 @@
-import NodeRules from "./contracts/NodeRules.json";
 import AccountRules from "./contracts/AccountRules.json";
+import NodeRules from "./contracts/NodeRules.json";
 import Admin from "./contracts/Admin.json";
 
 const options = {
