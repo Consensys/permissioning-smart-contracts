@@ -1,12 +1,12 @@
 // Libs
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 import toJson from "enzyme-to-json";
 // Components
 import App from "../App";
 
 describe("<App />", () => {
-    let wrapper;
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         wrapper = shallow(<App />);

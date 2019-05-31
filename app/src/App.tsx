@@ -13,7 +13,7 @@ import theme from "./constants/theme";
 import { NetworkProvider } from "./context/network";
 import { DataProvider } from "./context/data";
 
-const App = () => (
+const App: React.FC = () => (
     <ThemeProvider theme={theme}>
         <NetworkProvider>
             <Layout>

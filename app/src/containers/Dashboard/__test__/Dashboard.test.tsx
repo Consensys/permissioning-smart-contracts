@@ -1,7 +1,7 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 // Components
 import DashboardContainer from "../Dashboard";
 // Context
@@ -14,7 +14,7 @@ jest.mock("../../../context/data", () => {
 });
 
 describe("<Dashboard Container />", () => {
-    let wrapper;
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         jest.clearAllMocks();

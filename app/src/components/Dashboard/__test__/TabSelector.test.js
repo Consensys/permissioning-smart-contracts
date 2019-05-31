@@ -1,8 +1,7 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { mount, shallow } from "enzyme";
-import { drizzleReactHooks } from "drizzle-react";
+import { mount } from "enzyme";
 // Components
 import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
@@ -15,7 +14,6 @@ import { ToastProvider } from "../../../context/toasts";
 import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
 // Context
 import { useData } from "../../../context/data";
-import useTab from "../../../containers/Tabs/useTab";
 
 jest.mock("../../../context/data", () => {
     return {
