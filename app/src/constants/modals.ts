@@ -9,7 +9,7 @@ export const addAdminDisplay = {
     subHeading: "Admin accounts can..."
 };
 
-export const removeAdminDisplay = value => ({
+export const removeAdminDisplay = (value: string) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${value}” as an admin account?`
 });
@@ -23,7 +23,7 @@ export const addAccountDisplay = {
     subHeading: "Whitelisted accounts may submit transactions on the network."
 };
 
-export const removeAccountDisplay = value => ({
+export const removeAccountDisplay = (value: string) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${value}” as a whitelisted account?`
 });
@@ -39,7 +39,7 @@ export const addEnodeDisplay = {
         "Nodes can connect to each other if they are both whitelisted. See formatting details here."
 };
 
-export const removeEnodeDisplay = value => ({
+export const removeEnodeDisplay = (value: string) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${identifierToEnodeHighAndLow(
         value
