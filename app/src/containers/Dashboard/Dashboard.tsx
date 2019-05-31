@@ -7,7 +7,7 @@ import { useData } from "../../context/data";
 // Constant
 import { ACCOUNT_TAB } from "../../constants/tabs";
 
-const DashboardContainer = () => {
+const DashboardContainer: React.FC = () => {
     const [tab, setTab] = useState(ACCOUNT_TAB);
     const { dataReady } = useData();
 
