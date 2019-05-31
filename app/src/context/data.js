@@ -16,15 +16,15 @@ const DataContext = createContext();
  * Provider for the data context that contains the whitelist
  * @param {Object} props Props given to the DataProvider
  * @return The provider with the following value:
- *  - whitelist: list of whiteliist enode from Rules contract
- *  - setWhitelist: setter for the whitelist state
+ *  - nodeWhitelist: list of whiteliist enode from Node Rules contract
+ *  - setNodeWhitelist: setter for the whitelist state
  */
 export const DataProvider = props => {
-    const [whitelist, setWhitelist] = useState([]);
+    const [nodeWhitelist, setNodeWhitelist] = useState([]);
 
-    const value = useMemo(() => ({ whitelist, setWhitelist }), [
-        whitelist,
-        setWhitelist
+    const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist }), [
+        nodeWhitelist,
+        setNodeWhitelist
     ]);
     return <DataContext.Provider value={value} {...props} />;
 };
@@ -33,7 +33,7 @@ export const DataProvider = props => {
  * Fetch the appropriate data on chain and synchronize with it
  * @return {Object} Contains data of interest:
  *  - isReadOnly: Rules contract is lock or unlock,
- *  - whitelist: list of whitelist enode from Rules contract,
+ *  - nodeWhitelist: list of whitelist enode from Rules contract,
  *  - admins: list of admin address from Admin contract,
  *  - dataReady: true if isReadOnly, whitelist and admins are correctly fetched,
  *  false otherwise
@@ -46,7 +46,7 @@ export const useData = () => {
         throw new Error("useData must be used within a DataProvider.");
     }
 
-    const { whitelist, setWhitelist } = context;
+    const { nodeWhitelist, setNodeWhitelist } = context;
 
     const { userAddress } = drizzleReactHooks.useDrizzleState(drizzleState => ({
         userAddress: drizzleState.accounts[0]
@@ -55,18 +55,18 @@ export const useData = () => {
     const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
 
     const isReadOnly = useCacheCall("NodeRules", "isReadOnly");
-    const whitelistSize = useCacheCall("NodeRules", "getSize");
+    const nodeWhitelistSize = useCacheCall("NodeRules", "getSize");
     const admins = useCacheCall("Admin", "getAdmins");
 
     const { getByIndex } = drizzle.contracts.NodeRules.methods;
 
     useEffect(() => {
         const promises = [];
-        for (let index = 0; index < whitelistSize; index++) {
+        for (let index = 0; index < nodeWhitelistSize; index++) {
             promises.push(getByIndex(index).call());
         }
         Promise.all(promises).then(responses => {
-            const updatedWhitelist = responses.map(
+            const updatedNodeWhitelist = responses.map(
                 ({ enodeHigh, enodeLow, ip, port }) => ({
                     enodeHigh,
                     enodeLow,
@@ -80,16 +80,16 @@ export const useData = () => {
                     })
                 })
             );
-            setWhitelist(updatedWhitelist);
+            setNodeWhitelist(updatedNodeWhitelist);
         });
-    }, [whitelistSize, setWhitelist, getByIndex]);
+    }, [nodeWhitelistSize, setNodeWhitelist, getByIndex]);
 
     const dataReady = useMemo(
         () =>
             typeof isReadOnly === "boolean" &&
             Array.isArray(admins) &&
-            Array.isArray(whitelist),
-        [isReadOnly, admins, whitelist]
+            Array.isArray(nodeWhitelist),
+        [isReadOnly, admins, nodeWhitelist]
     );
 
     const isAdmin = useMemo(
@@ -109,11 +109,13 @@ export const useData = () => {
             : undefined;
     }, [admins]);
 
-    const formattedWhitelist = useMemo(() => {
-        return whitelist
-            ? whitelist.map(enode => ({ ...enode, status: "active" })).reverse()
+    const formattedNodeWhitelist = useMemo(() => {
+        return nodeWhitelist
+            ? nodeWhitelist
+                  .map(enode => ({ ...enode, status: "active" }))
+                  .reverse()
             : undefined;
-    }, [whitelist]);
+    }, [nodeWhitelist]);
 
     return {
         userAddress,
@@ -121,6 +123,6 @@ export const useData = () => {
         isAdmin,
         isReadOnly,
         admins: formattedAdmins,
-        whitelist: formattedWhitelist
+        nodeWhitelist: formattedNodeWhitelist
     };
 };
