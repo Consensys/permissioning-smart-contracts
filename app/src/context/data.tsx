@@ -7,10 +7,18 @@ import React, {
     useMemo
 } from "react";
 import { drizzleReactHooks } from "drizzle-react";
+
 // Utils
 import { paramsToIdentifier } from "../util/enodetools";
 
-const DataContext = createContext();
+type Enode = {enodeHigh: string, enodeLow: string, identifier: string, ip: string, port: string};
+
+type ContextType = {
+    nodeWhitelist?: Enode[],
+    setNodeWhitelist?: (enode: Enode[]) => void
+}
+
+const DataContext = createContext<ContextType>({});
 
 /**
  * Provider for the data context that contains the whitelist
@@ -19,8 +27,8 @@ const DataContext = createContext();
  *  - nodeWhitelist: list of whiteliist enode from Node Rules contract
  *  - setNodeWhitelist: setter for the whitelist state
  */
-export const DataProvider = props => {
-    const [nodeWhitelist, setNodeWhitelist] = useState([]);
+export const DataProvider = (props: React.Props<{}>) => {
+    const [nodeWhitelist, setNodeWhitelist] = useState<Enode[]>([]);
 
     const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist }), [
         nodeWhitelist,
@@ -48,15 +56,15 @@ export const useData = () => {
 
     const { nodeWhitelist, setNodeWhitelist } = context;
 
-    const { userAddress } = drizzleReactHooks.useDrizzleState(drizzleState => ({
+    const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
         userAddress: drizzleState.accounts[0]
     }));
 
     const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
 
-    const isReadOnly = useCacheCall("NodeRules", "isReadOnly");
-    const nodeWhitelistSize = useCacheCall("NodeRules", "getSize");
-    const admins = useCacheCall("Admin", "getAdmins");
+    const isReadOnly: boolean = useCacheCall("NodeRules", "isReadOnly");
+    const nodeWhitelistSize: number = useCacheCall("NodeRules", "getSize");
+    const admins: string[] = useCacheCall("Admin", "getAdmins");
 
     const { getByIndex } = drizzle.contracts.NodeRules.methods;
 
@@ -80,7 +88,7 @@ export const useData = () => {
                     })
                 })
             );
-            setNodeWhitelist(updatedNodeWhitelist);
+            setNodeWhitelist!(updatedNodeWhitelist);
         });
     }, [nodeWhitelistSize, setNodeWhitelist, getByIndex]);
 
