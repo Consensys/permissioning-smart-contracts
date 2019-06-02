@@ -15,7 +15,9 @@ type Enode = {enodeHigh: string, enodeLow: string, identifier: string, ip: strin
 
 type ContextType = {
     nodeWhitelist?: Enode[],
-    setNodeWhitelist?: (enode: Enode[]) => void
+    setNodeWhitelist?: (enode: Enode[]) => void,
+    accountWhitelist?: string[],
+    setAccountWhitelist?: (account: string[]) => void
 }
 
 const DataContext = createContext<ContextType>({});
@@ -29,10 +31,13 @@ const DataContext = createContext<ContextType>({});
  */
 export const DataProvider: React.FC = (props: React.Props<{}>) => {
     const [nodeWhitelist, setNodeWhitelist] = useState<Enode[]>([]);
+    const [accountWhitelist, setAccountWhitelist] = useState<string[]>([]);
 
-    const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist }), [
+    const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist, accountWhitelist, setAccountWhitelist }), [
         nodeWhitelist,
-        setNodeWhitelist
+        setNodeWhitelist,
+        accountWhitelist,
+        setAccountWhitelist
     ]);
     return <DataContext.Provider value={value} {...props} />;
 };
@@ -55,7 +60,7 @@ export const useData = () => {
         throw new Error("useData must be used within a DataProvider.");
     }
 
-    const { nodeWhitelist, setNodeWhitelist } = context;
+    const { nodeWhitelist, setNodeWhitelist, accountWhitelist, setAccountWhitelist } = context;
 
     const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
         userAddress: drizzleState.accounts[0]
@@ -65,14 +70,16 @@ export const useData = () => {
 
     const nodeIsReadOnly: boolean = useCacheCall("NodeRules", "isReadOnly");
     const nodeWhitelistSize: number = useCacheCall("NodeRules", "getSize");
+    const accountIsReadOnly: boolean = useCacheCall("AccountRules", "isReadOnly");
+    const accountWhitelistSize: number = useCacheCall("AccountRules", "getSize");
     const admins: string[] = useCacheCall("Admin", "getAdmins");
 
-    const { getByIndex } = drizzle.contracts.NodeRules.methods;
+    const { getByIndex: getNodeByIndex } = drizzle.contracts.NodeRules.methods;
 
     useEffect(() => {
         const promises = [];
         for (let index = 0; index < nodeWhitelistSize; index++) {
-            promises.push(getByIndex(index).call());
+            promises.push(getNodeByIndex(index).call());
         }
         Promise.all(promises).then(responses => {
             const updatedNodeWhitelist = responses.map(
@@ -91,14 +98,28 @@ export const useData = () => {
             );
             setNodeWhitelist!(updatedNodeWhitelist);
         });
-    }, [nodeWhitelistSize, setNodeWhitelist, getByIndex]);
+    }, [nodeWhitelistSize, setNodeWhitelist, getNodeByIndex]);
+
+    const { getByIndex: getAccountByIndex } = drizzle.contracts.AccountRules.methods;
+
+    useEffect(() => {
+        const promises = [];
+        for (let index = 0; index < accountWhitelistSize; index++) {
+            promises.push(getAccountByIndex(index).call());
+        }
+        Promise.all(promises).then(responses => {
+            const updatedAccountWhitelist = responses;
+            setAccountWhitelist!(updatedAccountWhitelist);
+        });
+    }, [accountWhitelistSize, setAccountWhitelist, getAccountByIndex]);
 
     const dataReady = useMemo(
         () =>
             typeof nodeIsReadOnly === "boolean" &&
             Array.isArray(admins) &&
-            Array.isArray(nodeWhitelist),
-        [nodeIsReadOnly, admins, nodeWhitelist]
+            Array.isArray(nodeWhitelist) &&
+            Array.isArray(accountWhitelist),
+        [nodeIsReadOnly, admins, nodeWhitelist, accountWhitelist]
     );
 
     const isAdmin = useMemo(
@@ -134,6 +155,10 @@ export const useData = () => {
         node: {
             whitelist: formattedNodeWhitelist,
             isReadOnly: nodeIsReadOnly
+        },
+        account: {
+            whitelist: accountWhitelist,
+            isReadOnly: accountIsReadOnly
         }
     };
 };

@@ -4,7 +4,9 @@ exports[`<DataProvider /> matches snapshot 1`] = `
 <ContextProvider
   value={
     Object {
+      "accountWhitelist": Array [],
       "nodeWhitelist": Array [],
+      "setAccountWhitelist": [Function],
       "setNodeWhitelist": [Function],
     }
   }
