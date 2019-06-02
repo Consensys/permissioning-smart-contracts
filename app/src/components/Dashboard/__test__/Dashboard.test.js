@@ -66,10 +66,12 @@ describe("<Dashboard />", () => {
             useData.mockImplementation(() => ({
                 dataReady: false,
                 admins: [],
-                whitelist: [],
                 userAddress: "test",
                 isAdmin: true,
-                isReadOnly: true
+                node: {
+                    isReadOnly: true,
+                    whitelist: []
+                }
             }));
         });
 
@@ -110,10 +112,12 @@ describe("<Dashboard />", () => {
             useData.mockImplementation(() => ({
                 dataReady: true,
                 admins: [],
-                whitelist: [],
                 userAddress: "test",
                 isAdmin: true,
-                isReadOnly: true
+                node: {
+                    whitelist: [],
+                    isReadOnly: true
+                }
             }));
         });
         describe("tab=ADMIN_TAB", () => {

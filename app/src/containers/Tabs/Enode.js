@@ -27,7 +27,11 @@ import {
 } from "../../constants/transactions";
 
 const EnodeTabContainer = ({ isOpen }) => {
-    const { nodeWhitelist, isAdmin, userAddress, isReadOnly } = useData();
+    const {
+        isAdmin,
+        userAddress,
+        node: { whitelist, isReadOnly }
+    } = useData();
 
     const {
         list,
@@ -39,7 +43,7 @@ const EnodeTabContainer = ({ isOpen }) => {
         deleteTransaction,
         openToast,
         updateToast
-    } = useTab(nodeWhitelist, identifierToParams);
+    } = useTab(whitelist, identifierToParams);
 
     const { drizzle } = drizzleReactHooks.useDrizzle();
 

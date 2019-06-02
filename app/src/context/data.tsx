@@ -27,7 +27,7 @@ const DataContext = createContext<ContextType>({});
  *  - nodeWhitelist: list of whiteliist enode from Node Rules contract
  *  - setNodeWhitelist: setter for the whitelist state
  */
-export const DataProvider = (props: React.Props<{}>) => {
+export const DataProvider: React.FC = (props: React.Props<{}>) => {
     const [nodeWhitelist, setNodeWhitelist] = useState<Enode[]>([]);
 
     const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist }), [
@@ -40,13 +40,14 @@ export const DataProvider = (props: React.Props<{}>) => {
 /**
  * Fetch the appropriate data on chain and synchronize with it
  * @return {Object} Contains data of interest:
- *  - isReadOnly: Rules contract is lock or unlock,
- *  - nodeWhitelist: list of whitelist enode from Rules contract,
  *  - admins: list of admin address from Admin contract,
  *  - dataReady: true if isReadOnly, whitelist and admins are correctly fetched,
  *  false otherwise
  *  - userAddress: Address of the user
  *  - isAdmin: true if address of the user is includes in the admin list
+ *  - node: Object containing node relevant data
+ *    - isReadOnly: Rules contract is lock or unlock,
+ *    - whitelist: list of whitelist enode from Rules contract,
  */
 export const useData = () => {
     const context = useContext(DataContext);
@@ -62,7 +63,7 @@ export const useData = () => {
 
     const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
 
-    const isReadOnly: boolean = useCacheCall("NodeRules", "isReadOnly");
+    const nodeIsReadOnly: boolean = useCacheCall("NodeRules", "isReadOnly");
     const nodeWhitelistSize: number = useCacheCall("NodeRules", "getSize");
     const admins: string[] = useCacheCall("Admin", "getAdmins");
 
@@ -94,10 +95,10 @@ export const useData = () => {
 
     const dataReady = useMemo(
         () =>
-            typeof isReadOnly === "boolean" &&
+            typeof nodeIsReadOnly === "boolean" &&
             Array.isArray(admins) &&
             Array.isArray(nodeWhitelist),
-        [isReadOnly, admins, nodeWhitelist]
+        [nodeIsReadOnly, admins, nodeWhitelist]
     );
 
     const isAdmin = useMemo(
@@ -129,8 +130,10 @@ export const useData = () => {
         userAddress,
         dataReady,
         isAdmin,
-        isReadOnly,
         admins: formattedAdmins,
-        nodeWhitelist: formattedNodeWhitelist
+        node: {
+            whitelist: formattedNodeWhitelist,
+            isReadOnly: nodeIsReadOnly
+        }
     };
 };
