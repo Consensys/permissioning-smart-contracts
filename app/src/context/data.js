@@ -54,11 +54,11 @@ export const useData = () => {
 
     const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
 
-    const isReadOnly = useCacheCall("Rules", "isReadOnly");
-    const whitelistSize = useCacheCall("Rules", "getSize");
+    const isReadOnly = useCacheCall("NodeRules", "isReadOnly");
+    const whitelistSize = useCacheCall("NodeRules", "getSize");
     const admins = useCacheCall("Admin", "getAdmins");
 
-    const { getByIndex } = drizzle.contracts.Rules.methods;
+    const { getByIndex } = drizzle.contracts.NodeRules.methods;
 
     useEffect(() => {
         const promises = [];

@@ -1,19 +1,19 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { mount, shallow } from "enzyme";
-import { drizzleReactHooks } from "drizzle-react";
+import { mount } from "enzyme";
 // Components
 import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
 import LoadingPage from "../../LoadingPage/LoadingPage";
 import AdminTab from "../../../containers/Tabs/Admin";
 import EnodeTab from "../../../containers/Tabs/Enode";
+import Toasts from "../../../containers/Toasts/Toasts";
+import { ToastProvider } from "../../../context/toasts";
 // Constants
 import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
 // Context
 import { useData } from "../../../context/data";
-import useTab from "../../../containers/Tabs/useTab";
 
 jest.mock("../../../context/data", () => {
     return {
@@ -22,7 +22,15 @@ jest.mock("../../../context/data", () => {
 });
 
 jest.mock("../../../containers/Tabs/useTab", () => {
-    return jest.fn();
+    return jest.fn().mockImplementation(() => ({
+        list: [],
+        toasts: [],
+        modals: { add: false, remove: false, lock: false },
+        toggleModal: () => () => {},
+        closeModal: () => {},
+        deleteTransaction: () => {},
+        transactions: new Map()
+    }));
 });
 
 jest.mock("drizzle-react", () => {
@@ -33,14 +41,14 @@ jest.mock("drizzle-react", () => {
                     contracts: {
                         Admin: {
                             methods: {
-                                addAdmin: console.log,
-                                removeAdmin: console.log
+                                addAdmin: () => {},
+                                removeAdmin: () => {}
                             }
                         },
-                        Rules: {
+                        NodeRules: {
                             methods: {
-                                enterReadOnly: console.log,
-                                exitReadOnly: console.log
+                                enterReadOnly: () => {},
+                                exitReadOnly: () => {}
                             }
                         }
                     }
@@ -57,17 +65,11 @@ describe("<Dashboard />", () => {
         beforeAll(() => {
             useData.mockImplementation(() => ({
                 dataReady: false,
-                admins: []
-            }));
-            useTab.mockImplementation(() => ({
-                list: [],
-                toasts: [],
-                closeToast: console.log,
-                modals: {},
-                toggleModal: console.log,
+                admins: [],
+                whitelist: [],
+                userAddress: "test",
                 isAdmin: true,
-                deleteTransaction: console.log,
-                transactions: new Map()
+                isReadOnly: true
             }));
         });
 
@@ -113,16 +115,6 @@ describe("<Dashboard />", () => {
                 isAdmin: true,
                 isReadOnly: true
             }));
-            useTab.mockImplementation(() => ({
-                list: [],
-                toasts: [],
-                closeToast: console.log,
-                modals: {},
-                toggleModal: console.log,
-                isAdmin: true,
-                deleteTransaction: console.log,
-                transactions: new Map()
-            }));
         });
         describe("tab=ADMIN_TAB", () => {
             beforeEach(() => {
@@ -153,6 +145,10 @@ describe("<Dashboard />", () => {
                         <TabSelector tab={ADMIN_TAB} setTab={console.log} />
                     )
                 ).toEqual(true);
+            });
+
+            it("renders Toasts", () => {
+                expect(wrapper.contains(<Toasts />)).toEqual(true);
             });
 
             it("renders AdminTab with isOpen=true", () => {
@@ -195,12 +191,20 @@ describe("<Dashboard />", () => {
                 expect(wrapper.props().setTab).toEqual(console.log);
             });
 
+            it("renders ToastProvider", () => {
+                expect(wrapper.find(ToastProvider)).toHaveLength(1);
+            });
+
             it("renders TabSelector", () => {
                 expect(
                     wrapper.contains(
                         <TabSelector tab={ENODE_TAB} setTab={console.log} />
                     )
                 ).toEqual(true);
+            });
+
+            it("renders Toasts", () => {
+                expect(wrapper.contains(<Toasts />)).toEqual(true);
             });
 
             it("renders AdminTab with isOpen=false", () => {

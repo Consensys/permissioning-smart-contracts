@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<Dashboard Container /> matches snapshot 1`] = `
-<Dashboard
-  dataReady={true}
-  setTab={[Function]}
-  tab="admin"
-/>
-`;

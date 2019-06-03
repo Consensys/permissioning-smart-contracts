@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 // Rimble Components
-import { Pill, Flex, Text, Button } from "rimble-ui";
+import { Pill, Flex, Button } from "rimble-ui";
 // Constant
 import {
     PENDING_ADDITION,
@@ -10,6 +10,8 @@ import {
     FAIL_ADDITION,
     FAIL_REMOVAL
 } from "../../constants/transactions";
+// Components
+import TextWithTooltip from "./TextWithTooltip";
 // Styles
 import styles from "./styles.module.scss";
 
@@ -28,44 +30,33 @@ const EnodeRow = ({
 }) => (
     <tr className={styles.row}>
         <td colSpan="2">
-            <Flex alignItems="center">
-                {status === PENDING_REMOVAL ? (
-                    <Text.s
-                        className={styles.ellipsis}
-                        fontSize="14px"
-                    >{`${enodeHigh}${enodeLow}`}</Text.s>
-                ) : (
-                    <Text
-                        className={styles.ellipsis}
-                        fontSize="14px"
-                    >{`${enodeHigh}${enodeLow}`}</Text>
-                )}
+            <Flex alignItems="center" className={styles.tooltipFix}>
+                <TextWithTooltip
+                    isReadOnly={isReadOnly || (!isReadOnly && pendingLock)}
+                    isAdmin={isAdmin}
+                    status={status}
+                    text={`${enodeHigh}${enodeLow}`}
+                />
             </Flex>
         </td>
         <td>
-            <Flex alignItems="center">
-                {status === PENDING_REMOVAL ? (
-                    <Text.s className={styles.ellipsis} fontSize="14px">
-                        {ip}
-                    </Text.s>
-                ) : (
-                    <Text className={styles.ellipsis} fontSize="14px">
-                        {ip}
-                    </Text>
-                )}
+            <Flex alignItems="center" className={styles.tooltipFix}>
+                <TextWithTooltip
+                    isReadOnly={isReadOnly || (!isReadOnly && pendingLock)}
+                    isAdmin={isAdmin}
+                    status={status}
+                    text={ip}
+                />
             </Flex>
         </td>
         <td>
-            <Flex alignItems="center">
-                {status === PENDING_REMOVAL ? (
-                    <Text.s className={styles.ellipsis} fontSize="14px">
-                        {port}
-                    </Text.s>
-                ) : (
-                    <Text className={styles.ellipsis} fontSize="14px">
-                        {port}
-                    </Text>
-                )}
+            <Flex alignItems="center" className={styles.tooltipFix}>
+                <TextWithTooltip
+                    isReadOnly={isReadOnly || (!isReadOnly && pendingLock)}
+                    isAdmin={isAdmin}
+                    status={status}
+                    text={port}
+                />
             </Flex>
         </td>
         <td>
