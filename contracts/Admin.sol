@@ -34,4 +34,8 @@ contract Admin is AdminProxy, AdminList {
     function getAdmins() public view returns (address[] memory){
         return getAll();
     }
+
+    function addAdmins(address[] memory accounts) public onlyAdmin returns (bool) {
+        return addAll(accounts);
+    }
 }

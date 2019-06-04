@@ -20,6 +20,15 @@ contract AdminList {
         return list.push(uint(_address), false);
     }
 
+    function addAll(address[] memory accounts) internal returns (bool) {
+        bool allAdded = true;
+        for (uint i = 0; i<accounts.length; i++) {
+            allAdded = allAdded && add(accounts[i]);
+        }
+
+        return allAdded;
+    }
+
     function remove(address _address) internal returns (bool) {
         uint node = uint(_address);
         return list.remove(node) != 0 ? true : false;
