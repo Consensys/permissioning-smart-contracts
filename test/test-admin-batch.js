@@ -13,13 +13,13 @@ contract("Admin batch (list manipulation)", async () => {
     rulesListContract = await RulesList.new();
   });
 
-  it("batch add addresses to list should add to the list and increase list size", async () => {
+  it("batch add 3 different addresses to list should add to the list and increase list size", async () => {
     let exists = await rulesListContract._exists(address3);
     assert.notOk(exists);
     let size = await rulesListContract._size();
     assert.equal(size, 0);
 
-    await rulesListContract._addBatch([address1,address2,address3]);
+    let allAdded = await rulesListContract._addBatch([address1,address2,address3]);
 
     // assert all three were added
     exists = await rulesListContract._exists(address3);
@@ -31,5 +31,27 @@ contract("Admin batch (list manipulation)", async () => {
 
     size = await rulesListContract._size();
     assert.equal(size, 3);
+
+    assert.ok(allAdded);
+  });
+
+
+  it("batch add 3 addresses with a duplicate to list should add 2 to the list and increase list size by 2", async () => {
+    let exists = await rulesListContract._exists(address3);
+    assert.notOk(exists);
+    let size = await rulesListContract._size();
+    assert.equal(size, 0);
+
+    let allAdded = await rulesListContract._addBatch([address1,address1,address3]);
+
+    exists = await rulesListContract._exists(address1);
+    assert.ok(exists);
+    exists = await rulesListContract._exists(address3);
+    assert.ok(exists);
+
+    size = await rulesListContract._size();
+    assert.equal(size, 2);
+
+    assert.ok(allAdded);
   });
 });

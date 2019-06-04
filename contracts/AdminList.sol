@@ -23,7 +23,9 @@ contract AdminList {
     function addAll(address[] memory accounts) internal returns (bool) {
         bool allAdded = true;
         for (uint i = 0; i<accounts.length; i++) {
-            allAdded = allAdded && add(accounts[i]);
+            if (!exists(accounts[i])) {
+                allAdded = allAdded && add(accounts[i]);
+            }
         }
 
         return allAdded;
