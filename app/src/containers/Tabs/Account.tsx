@@ -18,24 +18,29 @@ import // PENDING_ADDITION,
 // FAIL
 "../../constants/transactions";
 
-const AccountTabContainer = ({ isOpen }) => {
-    const { isAdmin, userAddress } = useData();
+type AccountTabContainerProps = {
+  isOpen: boolean
+}
+
+const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
+    const { isAdmin, userAddress, account: {whitelist, isReadOnly} } = useData();
 
     const {
         list,
         modals,
         toggleModal,
+        transactions,
         // addTransaction,
         // updateTransaction,
         deleteTransaction
         // openToast
-    } = useTab([], identifier => ({ address: identifier }));
+    } = useTab(whitelist, (identifier: string) => ({ address: identifier }));
 
-    const handleAdd = async value => {
+    const handleAdd = async (value: any) => {
         console.log(value);
     };
 
-    const handleRemove = async value => {
+    const handleRemove = async (value: any) => {
         console.log(value);
     };
 
@@ -51,6 +56,8 @@ const AccountTabContainer = ({ isOpen }) => {
             deleteTransaction={deleteTransaction}
             isValid={isAddress}
             isOpen={isOpen}
+            isReadOnly={isReadOnly}
+            pendingLock={!!transactions.get("lock")}
         />
     );
 };

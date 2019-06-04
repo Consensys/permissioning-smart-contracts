@@ -9,7 +9,7 @@ import { useData } from "../../../context/data";
 
 jest.mock("../../../context/data", () => {
     return {
-        useData: jest.fn().mockImplementation(() => ({ dataReady: true }))
+        useData: jest.fn().mockImplementation(() => ({ dataReady: true, node:{} }))
     };
 });
 
