@@ -68,6 +68,10 @@ describe("<Dashboard />", () => {
                 admins: [],
                 userAddress: "test",
                 isAdmin: true,
+                account: {
+                    whitelist: [],
+                    isReadOnly: true
+                },
                 node: {
                     isReadOnly: true,
                     whitelist: []
@@ -114,6 +118,10 @@ describe("<Dashboard />", () => {
                 admins: [],
                 userAddress: "test",
                 isAdmin: true,
+                account: {
+                    whitelist: [],
+                    isReadOnly: true
+                },
                 node: {
                     whitelist: [],
                     isReadOnly: true
