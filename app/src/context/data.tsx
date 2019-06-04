@@ -12,12 +12,13 @@ import { drizzleReactHooks } from "drizzle-react";
 import { paramsToIdentifier } from "../util/enodetools";
 
 type Enode = {enodeHigh: string, enodeLow: string, identifier: string, ip: string, port: string};
+type Account = {address: string};
 
 type ContextType = {
     nodeWhitelist?: Enode[],
     setNodeWhitelist?: (enode: Enode[]) => void,
-    accountWhitelist?: string[],
-    setAccountWhitelist?: (account: string[]) => void
+    accountWhitelist?: Account[],
+    setAccountWhitelist?: (account: Account[]) => void
 }
 
 const DataContext = createContext<ContextType>({});
@@ -31,7 +32,7 @@ const DataContext = createContext<ContextType>({});
  */
 export const DataProvider: React.FC = (props: React.Props<{}>) => {
     const [nodeWhitelist, setNodeWhitelist] = useState<Enode[]>([]);
-    const [accountWhitelist, setAccountWhitelist] = useState<string[]>([]);
+    const [accountWhitelist, setAccountWhitelist] = useState<Account[]>([]);
 
     const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist, accountWhitelist, setAccountWhitelist }), [
         nodeWhitelist,
@@ -108,7 +109,7 @@ export const useData = () => {
             promises.push(getAccountByIndex(index).call());
         }
         Promise.all(promises).then(responses => {
-            const updatedAccountWhitelist = responses;
+            const updatedAccountWhitelist = responses.map((address: string) => ({address}));
             setAccountWhitelist!(updatedAccountWhitelist);
         });
     }, [accountWhitelistSize, setAccountWhitelist, getAccountByIndex]);
@@ -147,6 +148,14 @@ export const useData = () => {
             : undefined;
     }, [nodeWhitelist]);
 
+    const formattedAccountWhitelist = useMemo(() => {
+        return accountWhitelist
+            ? accountWhitelist
+                  .map(account => ({ ...account, status: "active" }))
+                  .reverse()
+            : undefined;
+    }, [accountWhitelist]);
+
     return {
         userAddress,
         dataReady,
@@ -157,7 +166,7 @@ export const useData = () => {
             isReadOnly: nodeIsReadOnly
         },
         account: {
-            whitelist: accountWhitelist,
+            whitelist: formattedAccountWhitelist,
             isReadOnly: accountIsReadOnly
         }
     };

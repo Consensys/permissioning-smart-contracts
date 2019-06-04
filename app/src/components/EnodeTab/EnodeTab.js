@@ -1,7 +1,6 @@
 // Libs
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
-// Components
+import PropTypes from "prop-types"; // Components
 import EnodeTable from "./Table";
 import AddModal from "../../containers/Modals/Add";
 import RemoveModal from "../../containers/Modals/Remove";
