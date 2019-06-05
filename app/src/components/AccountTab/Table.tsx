@@ -10,12 +10,24 @@ import EmptyRow from "./EmptyRow";
 // Styles
 import styles from "./styles.module.scss";
 
-const AccountTable = ({
+type AccountTable = {
+  list: {address: string, status: string}[],
+  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean) => void,
+  deleteTransaction: () => void,
+  isAdmin: boolean,
+  userAddress: string,
+  isReadOnly: boolean,
+  pendingLock: boolean
+}
+
+const AccountTable: React.FC<AccountTable> = ({
     list,
     toggleModal,
     deleteTransaction,
     isAdmin,
-    userAddress
+    userAddress,
+    isReadOnly,
+    pendingLock
 }) => (
     <Box mt={5}>
         <AccountTableHeader
@@ -48,11 +60,13 @@ const AccountTable = ({
 );
 
 AccountTable.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    list: PropTypes.array.isRequired,
     toggleModal: PropTypes.func.isRequired,
     deleteTransaction: PropTypes.func.isRequired,
     isAdmin: PropTypes.bool.isRequired,
-    userAddress: PropTypes.string.isRequired
+    userAddress: PropTypes.string.isRequired,
+    isReadOnly: PropTypes.bool.isRequired,
+    pendingLock: PropTypes.bool.isRequired
 };
 
 export default AccountTable;

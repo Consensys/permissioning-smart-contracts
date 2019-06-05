@@ -17445,6 +17445,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
         handleRemove={[Function]}
         isAdmin={true}
         isOpen={false}
+        isReadOnly={true}
         isValid={[Function]}
         list={Array []}
         modals={
@@ -17454,6 +17455,7 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
             "remove": false,
           }
         }
+        pendingLock={false}
         toggleModal={[Function]}
         userAddress="test"
       />
@@ -33024,6 +33026,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
         handleRemove={[Function]}
         isAdmin={true}
         isOpen={false}
+        isReadOnly={true}
         isValid={[Function]}
         list={Array []}
         modals={
@@ -33033,6 +33036,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
             "remove": false,
           }
         }
+        pendingLock={false}
         toggleModal={[Function]}
         userAddress="test"
       />
