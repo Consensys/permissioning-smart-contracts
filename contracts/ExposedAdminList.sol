@@ -29,4 +29,8 @@ contract ExposedAdminList is AdminList {
     function _getAll() public view returns (address[] memory) {
         return getAll();
     }
+
+    function _addBatch(address[] memory _addresses) public returns (bool) {
+        return addAll(_addresses);
+    }
 }

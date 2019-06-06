@@ -11,7 +11,26 @@ import {
     removeAccountDisplay
 } from "../../constants/modals";
 
-const AccountTab = ({
+type AccountTab = {
+  list: any[],
+  userAddress?: string,
+  modals: {
+    add: boolean,
+    remove: boolean,
+    lock: boolean
+  },
+  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean) => void,
+  handleAdd: (value: any) => Promise<void>,
+  handleRemove: (value: any) => Promise<void>,
+  isAdmin: boolean,
+  deleteTransaction: () => void,
+  isValid: (address: string) => boolean,
+  isOpen: boolean,
+  isReadOnly: boolean,
+  pendingLock: boolean
+};
+
+const AccountTab: React.FC<AccountTab> = ({
     list,
     userAddress,
     modals,
@@ -21,17 +40,21 @@ const AccountTab = ({
     isAdmin,
     deleteTransaction,
     isValid,
-    isOpen
+    isOpen,
+    isReadOnly,
+    pendingLock
 }) => (
     <Fragment>
         {isOpen && (
             <Fragment>
                 <AccountTable
                     list={list}
-                    userAddress={userAddress}
+                    userAddress={userAddress!}
                     toggleModal={toggleModal}
                     isAdmin={isAdmin}
                     deleteTransaction={deleteTransaction}
+                    pendingLock={pendingLock}
+                    isReadOnly={isReadOnly}
                 />
                 <AddModal
                     isOpen={modals.add && isAdmin}
@@ -45,7 +68,7 @@ const AccountTab = ({
                     value={modals.remove}
                     closeModal={toggleModal("remove")}
                     handleRemove={handleRemove}
-                    display={removeAccountDisplay(modals.remove)}
+                    display={removeAccountDisplay("nope")}
                 />
             </Fragment>
         )}
@@ -53,15 +76,21 @@ const AccountTab = ({
 );
 
 AccountTab.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    list: PropTypes.array.isRequired,
     userAddress: PropTypes.string,
-    modals: PropTypes.object.isRequired,
+    modals: PropTypes.shape({
+      add: PropTypes.bool.isRequired,
+      remove: PropTypes.bool.isRequired,
+      lock: PropTypes.bool.isRequired
+    }).isRequired,
     toggleModal: PropTypes.func.isRequired,
     handleAdd: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
     isAdmin: PropTypes.bool.isRequired,
     deleteTransaction: PropTypes.func.isRequired,
-    isValid: PropTypes.func.isRequired
+    isValid: PropTypes.func.isRequired,
+    pendingLock: PropTypes.bool.isRequired,
+    isReadOnly: PropTypes.bool.isRequired
 };
 
 export default AccountTab;

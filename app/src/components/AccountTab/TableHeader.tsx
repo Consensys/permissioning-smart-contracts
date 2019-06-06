@@ -6,7 +6,13 @@ import { Flex, Box, Heading, Button, Icon, Tooltip } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const TableHeader = ({ number, openAddModal, disabledAdd }) => (
+type TableHeader = {
+  number: Number,
+  openAddModal: () => void,
+  disabledAdd: boolean
+}
+
+const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd }) => (
     <Flex alignItems="center" justifyContent="space-between">
         <Box display="flex" alignItems="center">
             <Heading.h2 fontWeight="700">
