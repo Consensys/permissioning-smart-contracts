@@ -59,7 +59,7 @@ const AdminTabContainer = ({ isOpen }) => {
                 openToast(
                     value,
                     FAIL,
-                    "Could not add acount as admin",
+                    "Could not add account as admin",
                     `${value} was unable to be added. Please try again.`
                 );
             });
