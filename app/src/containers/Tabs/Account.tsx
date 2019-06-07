@@ -41,7 +41,6 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     const { addAccount, removeAccount } = drizzle.contracts.AccountRules.methods;
 
     const handleAdd = async (value: any) => {
-        console.log(value);
         const gasLimit = await addAccount(value).estimateGas({
             from: userAddress
         });
@@ -71,7 +70,6 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     };
 
     const handleRemove = async (value: any) => {
-        console.log(value);
         const gasLimit = await removeAccount(value).estimateGas({
             from: userAddress
         });
