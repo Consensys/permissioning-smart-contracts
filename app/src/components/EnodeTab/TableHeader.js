@@ -18,7 +18,7 @@ const TableHeader = ({
     <Flex alignItems="center" justifyContent="space-between">
         <Box>
             <Heading.h2 fontWeight="700">
-                Whitelested Nodes ({number})
+                Whitelisted Nodes ({number})
             </Heading.h2>
         </Box>
         <Flex alignItems="center">
