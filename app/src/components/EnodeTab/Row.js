@@ -3,6 +3,8 @@ import React from "react";
 import PropTypes from "prop-types";
 // Rimble Components
 import { Pill, Flex, Button } from "rimble-ui";
+// Util Helper
+import hexToIp from "../../util/ipConverter";
 // Constant
 import {
     PENDING_ADDITION,
@@ -45,7 +47,7 @@ const EnodeRow = ({
                     isReadOnly={isReadOnly || (!isReadOnly && pendingLock)}
                     isAdmin={isAdmin}
                     status={status}
-                    text={ip}
+                    text={hexToIp(ip)}
                 />
             </Flex>
         </td>
