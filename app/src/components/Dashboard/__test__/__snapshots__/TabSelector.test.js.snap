@@ -37457,7 +37457,7 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
                                     fontSize={5}
                                     fontWeight="700"
                                   >
-                                    Whitelested Nodes (
+                                    Whitelisted Nodes (
                                     0
                                     )
                                   </h2>
