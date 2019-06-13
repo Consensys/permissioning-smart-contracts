@@ -41,7 +41,7 @@ This is the easiest way to get started for development with the permissioning Da
 
 #### Build the permissioning Dapp for deployment ####
 
-1. First [Compile and migrate the contracts](#compile-and-migrate-the-contracts)
+1. [Compile and migrate the contracts](#compile-and-migrate-the-contracts)
 1. In a new terminal session, navigate to the `app/` directory
 1. Run `npm run build` will assemble index.html and all other files in `build/`
 1. You can use your preferred web server technology to serve the contents of `build/` as static files.
