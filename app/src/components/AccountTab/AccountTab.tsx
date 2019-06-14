@@ -19,7 +19,7 @@ type AccountTab = {
     remove: boolean,
     lock: boolean
   },
-  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean) => void,
+  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean | string) => void,
   handleAdd: (value: any) => Promise<void>,
   handleRemove: (value: any) => Promise<void>,
   isAdmin: boolean,
@@ -68,7 +68,7 @@ const AccountTab: React.FC<AccountTab> = ({
                     value={modals.remove}
                     closeModal={toggleModal("remove")}
                     handleRemove={handleRemove}
-                    display={removeAccountDisplay("nope")}
+                    display={removeAccountDisplay(modals.remove)}
                 />
             </Fragment>
         )}
