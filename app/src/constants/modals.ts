@@ -23,7 +23,7 @@ export const addAccountDisplay = {
     subHeading: "Whitelisted accounts may submit transactions on the network."
 };
 
-export const removeAccountDisplay = (value: string) => ({
+export const removeAccountDisplay = (value: string | boolean) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${value}” as a whitelisted account?`
 });

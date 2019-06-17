@@ -50,6 +50,9 @@ jest.mock("drizzle-react", () => {
                                 enterReadOnly: () => {},
                                 exitReadOnly: () => {}
                             }
+                        },
+                        AccountRules: {
+                            methods: {}
                         }
                     }
                 }

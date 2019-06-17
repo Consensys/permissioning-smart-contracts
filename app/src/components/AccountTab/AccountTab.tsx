@@ -16,10 +16,10 @@ type AccountTab = {
   userAddress?: string,
   modals: {
     add: boolean,
-    remove: boolean,
+    remove: boolean | string,
     lock: boolean
   },
-  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean) => void,
+  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean | string) => void,
   handleAdd: (value: any) => Promise<void>,
   handleRemove: (value: any) => Promise<void>,
   isAdmin: boolean,
@@ -64,11 +64,11 @@ const AccountTab: React.FC<AccountTab> = ({
                     isValid={isValid}
                 />
                 <RemoveModal
-                    isOpen={modals.remove && isAdmin}
+                    isOpen={Boolean(modals.remove) && isAdmin}
                     value={modals.remove}
                     closeModal={toggleModal("remove")}
                     handleRemove={handleRemove}
-                    display={removeAccountDisplay("nope")}
+                    display={removeAccountDisplay(modals.remove)}
                 />
             </Fragment>
         )}
@@ -80,7 +80,7 @@ AccountTab.propTypes = {
     userAddress: PropTypes.string,
     modals: PropTypes.shape({
       add: PropTypes.bool.isRequired,
-      remove: PropTypes.bool.isRequired,
+      remove: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
       lock: PropTypes.bool.isRequired
     }).isRequired,
     toggleModal: PropTypes.func.isRequired,
