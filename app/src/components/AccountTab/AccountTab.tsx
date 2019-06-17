@@ -57,7 +57,7 @@ const AccountTab: React.FC<AccountTab> = ({
                     isReadOnly={isReadOnly}
                 />
                 <AddModal
-                    isOpen={modals.add && isAdmin}
+                    isOpen={Boolean(modals.add) && isAdmin}
                     closeModal={toggleModal("add")}
                     handleAdd={handleAdd}
                     display={addAccountDisplay}
