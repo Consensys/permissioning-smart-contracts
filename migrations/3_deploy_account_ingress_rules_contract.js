@@ -8,7 +8,7 @@ const adminContractName = Web3Utils.utf8ToHex("administration");
 const rulesContractName = Web3Utils.utf8ToHex("rules");
 
 /* The address of the node ingress contract if pre deployed */
-let nodeIngress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
+let nodeIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
 
 module.exports = async(deployer, network) => {
     if (! nodeIngress) {
