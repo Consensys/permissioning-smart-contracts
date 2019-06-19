@@ -19,7 +19,7 @@ const AppBar = () => (
         width="100%"
         zIndex="2"
     >
-        <Heading.h3>Pantheon Node Permissioning</Heading.h3>
+        <Heading.h3>Pantheon Permissioning</Heading.h3>
     </Flex>
 );
 
