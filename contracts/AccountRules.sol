@@ -31,6 +31,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     constructor (address ingressAddress) public {
         ingressContractAddress = ingressAddress;
+        add(msg.sender);
     }
 
     // VERSION
