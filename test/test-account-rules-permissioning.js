@@ -30,6 +30,8 @@ contract("Account Rules (Permissioning)", (accounts) => {
 
     rulesContract = await RulesContract.new(ingressContract.address);
     await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
+    let initialAccount = await rulesContract.getByIndex(0);
+    await rulesContract.removeAccount(initialAccount);
   });
 
   it('should NOT permit account when whitelist is empty', async () => {
