@@ -30,7 +30,7 @@ contract AccountIngress is Ingress {
         bytes memory payload
     ) public view returns (bool) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {
-            return false;
+            return true;
         }
 
         return AccountRulesProxy(registry[RULES_CONTRACT].contractAddress).transactionAllowed(
