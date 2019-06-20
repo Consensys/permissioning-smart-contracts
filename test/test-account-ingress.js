@@ -15,7 +15,7 @@ contract ("Account Ingress (no contracts registered)", (accounts) => {
         adminContract = await AdminContract.new();
     })
 
-    it("should forbid any account if rules contract has not been registered", async () => {
+    it("should allow any account if rules contract has not been registered", async () => {
         result = await accountIngressContract.getContractAddress(RULES);
         assert.equal(result, "0x0000000000000000000000000000000000000000", "Rules contract should NOT be registered");
 
@@ -27,7 +27,7 @@ contract ("Account Ingress (no contracts registered)", (accounts) => {
             0,
             "0x00"
         );
-        assert.equal(permitted, false, "expected transactionAllowed to return false");
+        assert.equal(permitted, true, "expected transactionAllowed to return true when rules contract hasn't been set");
     });
 
     it("should return a logical version number", async () => {
