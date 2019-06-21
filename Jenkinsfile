@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Contracts: Test') {
             steps {
-                sh 'npm test:contracts'
+                sh 'npm run test:contracts'
             }
         }
         stage('Contracts: Coverage') {
