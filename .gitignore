@@ -26,6 +26,7 @@ test-results/
 node_modules
 build
 app/src/contracts
+src/chain/abis
 .DS_Store
 .idea
 

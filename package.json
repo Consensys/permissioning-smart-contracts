@@ -4,9 +4,12 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "lint": "solium -d contracts",
-    "test": "truffle test --network develop",
-    "coverage": "solidity-coverage",
+    "lint:contracts": "solium -d contracts",
+    "lint": "npm run lint:contracts",
+    "test:contracts": "truffle test --network develop",
+    "test": "npm run test:contracts",
+    "coverage:contracts": "solidity-coverage",
+    "coverage": "npm run coverage:contracts",
     "build": "truffle compile"
   },
   "dependencies": {
