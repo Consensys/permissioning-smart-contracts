@@ -1,6 +1,6 @@
-import AccountRules from "./contracts/AccountRules.json";
-import NodeRules from "./contracts/NodeRules.json";
-import Admin from "./contracts/Admin.json";
+import AccountRules from "./chain/abis/AccountRules.json";
+import NodeRules from "./chain/abis/NodeRules.json";
+import Admin from "./chain/abis/Admin.json";
 
 const options = {
     web3: {
