@@ -36,17 +36,12 @@ pipeline {
         }
         stage('Dapp: Build') {
             steps {
-                dir('app') {
-                    sh 'npm install'
-                    sh 'npm run build:app'
-                }
+                sh 'npm run build:app'
             }
         }
         stage('Dapp: Test') {
             steps {
-                dir('app') {
-                    sh 'npm run test:app:ci'
-                }
+                sh 'npm run test:app:ci'
             }
         }
     }
