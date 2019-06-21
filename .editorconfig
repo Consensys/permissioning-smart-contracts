@@ -1,17 +1,17 @@
 root = true
 
 [*]
+charset = utf-8
 end_of_line = lf
 insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
 
 [src/**.{css,js,jsx,ts,tsx}]
-charset = utf-8
-trim_trailing_whitespace = true
-indent_style = space
 indent_size = 2
 
-[package.json]
-charset = utf-8
-trim_trailing_whitespace = true
-indent_style = space
+[*.json]
 indent_size = 2
+
+[*.sol]
+indent_size = 4
