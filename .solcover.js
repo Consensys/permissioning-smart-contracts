@@ -1,3 +1,3 @@
 module.exports = {
-    buildDirPath: '/app/src/contracts'
+    buildDirPath: '/src/chain/abis'
 };

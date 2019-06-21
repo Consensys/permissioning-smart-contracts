@@ -10,9 +10,9 @@ import { Drizzle, generateStore } from "drizzle";
 import { drizzleReactHooks } from "drizzle-react";
 // Constants
 import drizzleOptions from "../drizzleOptions";
-import NodeRules from "../contracts/NodeRules.json";
-import AccountRules from "../contracts/AccountRules.json";
-import Admin from "../contracts/Admin.json";
+import NodeRules from "../chain/abis/NodeRules.json";
+import AccountRules from "../chain/abis/AccountRules.json";
+import Admin from "../chain/abis/Admin.json";
 // Utils
 import { getAllowedNetworks } from "../util/contracts";
 
