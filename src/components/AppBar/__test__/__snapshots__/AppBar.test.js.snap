@@ -255,9 +255,11 @@ exports[`<AppBar /> matches snapshot 1`] = `
 >
   <Styled(Styled(Text))
     as="h3"
+    color="copyColor"
     fontFamily="sansSerif"
     fontSize={4}
     fontWeight={3}
+    lineHeight="copy"
     my={3}
     textAlign="left"
     theme={
