@@ -98,6 +98,19 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
             });
     };
 
+    const isValidAccount = (address: string) => {
+        let isValidAddress = isAddress(address);
+        if (!isValidAddress) {
+            return {
+                valid: false
+            }
+        }
+
+        return {
+            valid: true
+        }
+    }
+
     return (
         <AccountTab
             list={list}
@@ -108,7 +121,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
             handleRemove={handleRemove}
             isAdmin={isAdmin}
             deleteTransaction={deleteTransaction}
-            isValid={isAddress}
+            isValid={isValidAccount}
             isOpen={isOpen}
             isReadOnly={isReadOnly}
             pendingLock={!!transactions.get("lock")}

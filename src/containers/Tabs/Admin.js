@@ -94,6 +94,27 @@ const AdminTabContainer = ({ isOpen }) => {
             });
     };
 
+    const isValidAdmin = address => {
+        let isValidAddress = isAddress(address);
+        if (!isValidAddress) {
+            return {
+                valid: false
+            };
+        }
+
+        let isAdmin = list.filter(item => item.address === address).length > 0;
+        if (isAdmin) {
+            return {
+                valid: false,
+                msg: "Account address is already an admin."
+            };
+        }
+
+        return {
+            valid: true
+        };
+    };
+
     return (
         <AdminTab
             list={list}
@@ -104,7 +125,7 @@ const AdminTabContainer = ({ isOpen }) => {
             handleRemove={handleRemove}
             isAdmin={isAdmin}
             deleteTransaction={deleteTransaction}
-            isValid={isAddress}
+            isValid={isValidAdmin}
             isOpen={isOpen}
         />
     );
