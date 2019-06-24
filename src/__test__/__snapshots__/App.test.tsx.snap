@@ -247,9 +247,7 @@ exports[`<App /> matches snapshot 1`] = `
         NoProvider={[Function]}
         WrongNetwork={[Function]}
       >
-        <DataProvider>
-          <DashboardContainer />
-        </DataProvider>
+        <DashboardContainer />
       </Initializer>
     </Layout>
   </NetworkProvider>

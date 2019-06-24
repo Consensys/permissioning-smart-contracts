@@ -4,11 +4,13 @@ import PropTypes from "prop-types";
 import { drizzleReactHooks } from "drizzle-react";
 import { isAddress } from "web3-utils";
 // Context
-import { useData } from "../../context/data";
+import { useAccountData } from "../../context/accountData";
+import { useAdminData } from "../../context/adminData";
 // Utils
 import useTab from "./useTab";
 // Components
 import AccountTab from "../../components/AccountTab/AccountTab";
+import LoadingPage from "../../components/LoadingPage/LoadingPage";
 // Constants
 import {PENDING_ADDITION,
 FAIL_ADDITION,
@@ -23,7 +25,8 @@ type AccountTabContainerProps = {
 }
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
-    const { isAdmin, userAddress, account: {whitelist, isReadOnly} } = useData();
+    const { isAdmin, dataReady: adminDataReady } = useAdminData();
+    const { userAddress, whitelist, isReadOnly, dataReady } = useAccountData();
 
     const {
         list,
@@ -111,7 +114,10 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         }
     }
 
-    return (
+    return isOpen ?
+         !(dataReady && adminDataReady) ? (
+            <LoadingPage />
+            ) : (
         <AccountTab
             list={list}
             userAddress={userAddress}
@@ -126,7 +132,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
             isReadOnly={isReadOnly}
             pendingLock={!!transactions.get("lock")}
         />
-    );
+    ) : <div></div>;
 };
 
 AccountTabContainer.propTypes = {

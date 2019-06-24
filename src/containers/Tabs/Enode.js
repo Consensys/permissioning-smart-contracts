@@ -3,7 +3,8 @@ import React from "react";
 import { drizzleReactHooks } from "drizzle-react";
 import PropTypes from "prop-types";
 // Context
-import { useData } from "../../context/data";
+import { useAdminData } from "../../context/adminData";
+import { useNodeData } from "../../context/nodeData";
 // Utils
 import useTab from "./useTab";
 import {
@@ -14,6 +15,7 @@ import {
 } from "../../util/enodetools";
 // Components
 import EnodeTab from "../../components/EnodeTab/EnodeTab";
+import LoadingPage from "../../components/LoadingPage/LoadingPage";
 // Constants
 import {
     PENDING_ADDITION,
@@ -27,11 +29,8 @@ import {
 } from "../../constants/transactions";
 
 const EnodeTabContainer = ({ isOpen }) => {
-    const {
-        isAdmin,
-        userAddress,
-        node: { whitelist, isReadOnly }
-    } = useData();
+    const { isAdmin, dataReady: adminDataReady } = useAdminData();
+    const { userAddress, whitelist, isReadOnly, dataReady } = useNodeData();
 
     const {
         list,
@@ -168,22 +167,28 @@ const EnodeTabContainer = ({ isOpen }) => {
             });
     };
 
-    return (
-        <EnodeTab
-            list={list}
-            userAddress={userAddress}
-            modals={modals}
-            toggleModal={toggleModal}
-            handleAdd={handleAdd}
-            handleRemove={handleRemove}
-            handleLock={handleLock}
-            isAdmin={isAdmin}
-            deleteTransaction={deleteTransaction}
-            isValid={isValidEnode}
-            pendingLock={!!transactions.get("lock")}
-            isReadOnly={isReadOnly}
-            isOpen={isOpen}
-        />
+    return isOpen ? (
+        !(dataReady && adminDataReady) ? (
+            <LoadingPage />
+        ) : (
+            <EnodeTab
+                list={list}
+                userAddress={userAddress}
+                modals={modals}
+                toggleModal={toggleModal}
+                handleAdd={handleAdd}
+                handleRemove={handleRemove}
+                handleLock={handleLock}
+                isAdmin={isAdmin}
+                deleteTransaction={deleteTransaction}
+                isValid={isValidEnode}
+                pendingLock={!!transactions.get("lock")}
+                isReadOnly={isReadOnly}
+                isOpen={isOpen}
+            />
+        )
+    ) : (
+        <div />
     );
 };
 

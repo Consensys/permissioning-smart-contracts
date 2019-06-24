@@ -3,16 +3,16 @@ import React from "react";
 import toJson from "enzyme-to-json";
 import { shallow } from "enzyme";
 // Components
-import { DataProvider } from "../data";
+import { NodeDataProvider } from "../nodeData";
 
-describe("<DataProvider />", () => {
+describe("<NodeDataProvider />", () => {
     let wrapper;
 
     beforeEach(() => {
         wrapper = shallow(
-            <DataProvider>
+            <NodeDataProvider>
                 <div className="test" />
-            </DataProvider>
+            </NodeDataProvider>
         );
     });
 
