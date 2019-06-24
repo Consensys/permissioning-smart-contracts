@@ -25150,7 +25150,11 @@ exports[`<Dashboard /> data ready tab=ADMIN_TAB matches snapshot 1`] = `
             input=""
             isOpen={false}
             modifyInput={[Function]}
-            validated={false}
+            validationResult={
+              Object {
+                "valid": false,
+              }
+            }
           >
             <Modal
               isOpen={false}
@@ -42479,7 +42483,11 @@ exports[`<Dashboard /> data ready tab=ENODE_TAB matches snapshot 1`] = `
             input=""
             isOpen={false}
             modifyInput={[Function]}
-            validated={false}
+            validationResult={
+              Object {
+                "valid": false,
+              }
+            }
           >
             <Modal
               isOpen={false}

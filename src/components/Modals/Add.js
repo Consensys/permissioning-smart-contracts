@@ -9,7 +9,7 @@ import styles from "./styles.module.scss";
 
 const AddModal = ({
     input,
-    validated,
+    validationResult,
     modifyInput,
     handleSubmit,
     isOpen,
@@ -39,7 +39,7 @@ const AddModal = ({
                         className={
                             input
                                 ? `${
-                                      validated
+                                      validationResult.valid
                                           ? styles.validField
                                           : styles.invalidField
                                   }`
@@ -62,12 +62,14 @@ const AddModal = ({
                         height="30px"
                         fontSize="14px"
                         className={
-                            !validated && input
+                            !validationResult.valid && input
                                 ? classnames(styles.errorMessage, styles.show)
                                 : styles.errorMessage
                         }
                     >
-                        {display.errorMessage}
+                        {validationResult.msg
+                            ? validationResult.msg
+                            : display.errorMessage}
                     </Text>
                 </Box>
                 <Flex
@@ -93,7 +95,7 @@ const AddModal = ({
                         hovercolor="#25D78F"
                         border={1}
                         onClick={handleSubmit}
-                        disabled={!validated}
+                        disabled={!validationResult.valid}
                     >
                         {display.submitText}
                     </Button>
@@ -105,7 +107,7 @@ const AddModal = ({
 
 AddModal.propTypes = {
     input: PropTypes.string.isRequired,
-    validated: PropTypes.bool.isRequired,
+    validationResult: PropTypes.object.isRequired,
     modifyInput: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
