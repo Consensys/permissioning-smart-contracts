@@ -15,7 +15,7 @@
     "coverage:contracts": "solidity-coverage",
     "coverage": "npm run coverage:contracts",
     "build:app": "react-scripts build",
-    "build:contracts": "truffle compile",
+    "build:contracts": "truffle compile && typechain --target truffle --outDir ./src/chain/types 'src/chain/abis/*.json'",
     "build": "npm run build:contracts && npm run build:app",
     "start": "react-scripts start",
     "eject": "react-scripts eject"
@@ -72,7 +72,9 @@
     "prettier": "^1.17.0",
     "solidity-coverage": "github:sc-forks/solidity-coverage#leapdao",
     "solium": "^1.2.4",
-    "truffle": "^5.0.12"
+    "truffle": "^5.0.12",
+    "truffle-typings": "^1.0.8",
+    "typechain": "^0.3.17"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
