@@ -78,7 +78,7 @@ export const useAccountData = () => {
     const formattedAccountWhitelist = useMemo(() => {
         return accountWhitelist
             ? accountWhitelist
-                  .map(account => ({ ...account, status: "active" }))
+                  .map(account => ({ ...account, identifier: account.address.toLowerCase(), status: "active" }))
                   .reverse()
             : undefined
     }, [accountWhitelist])
