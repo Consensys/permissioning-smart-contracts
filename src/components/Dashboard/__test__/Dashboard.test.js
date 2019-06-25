@@ -5,7 +5,6 @@ import { mount } from "enzyme";
 // Components
 import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
-import LoadingPage from "../../LoadingPage/LoadingPage";
 import AdminTab from "../../../containers/Tabs/Admin";
 import EnodeTab from "../../../containers/Tabs/Enode";
 import Toasts from "../../../containers/Toasts/Toasts";
@@ -13,11 +12,31 @@ import { ToastProvider } from "../../../context/toasts";
 // Constants
 import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
 // Context
-import { useData } from "../../../context/data";
+import {
+    useAccountData,
+    AccountDataProvider
+} from "../../../context/accountData";
+import { useAdminData, AdminDataProvider } from "../../../context/adminData";
+import { useNodeData, NodeDataProvider } from "../../../context/nodeData";
 
-jest.mock("../../../context/data", () => {
+jest.mock("../../../context/accountData", () => {
     return {
-        useData: jest.fn()
+        useAccountData: jest.fn(),
+        AccountDataProvider: jest.fn()
+    };
+});
+
+jest.mock("../../../context/adminData", () => {
+    return {
+        useAdminData: jest.fn(),
+        AdminDataProvider: jest.fn()
+    };
+});
+
+jest.mock("../../../context/nodeData", () => {
+    return {
+        useNodeData: jest.fn(),
+        NodeDataProvider: jest.fn()
     };
 });
 
@@ -56,7 +75,8 @@ jest.mock("drizzle-react", () => {
                         }
                     }
                 }
-            }))
+            })),
+            useDrizzleState: jest.fn()
         }
     };
 });
@@ -64,88 +84,45 @@ jest.mock("drizzle-react", () => {
 describe("<Dashboard />", () => {
     let wrapper;
 
-    describe("data not ready", () => {
-        beforeAll(() => {
-            useData.mockImplementation(() => ({
-                dataReady: false,
-                admins: [],
-                userAddress: "test",
-                isAdmin: true,
-                account: {
-                    whitelist: [],
-                    isReadOnly: true
-                },
-                node: {
-                    isReadOnly: true,
-                    whitelist: []
-                }
-            }));
-        });
-
-        beforeEach(() => {
-            wrapper = mount(
-                <Dashboard
-                    dataReady={false}
-                    tab={ADMIN_TAB}
-                    setTab={console.log}
-                />
-            );
-        });
-
-        it("has props dataReady=true", () => {
-            expect(wrapper.props().dataReady).toEqual(false);
-        });
-
-        it("renders LoadingPage", () => {
-            expect(wrapper.contains(<LoadingPage />)).toEqual(true);
-        });
-
-        it("renders TabSelector", () => {
-            expect(
-                wrapper.contains(
-                    <TabSelector tab={ADMIN_TAB} setTab={console.log} />
-                )
-            ).toEqual(true);
-        });
-
-        it("matches snapshot", () => {
-            expect(toJson(wrapper)).toMatchSnapshot();
-        });
-    });
-
-    describe("data ready", () => {
+    describe("Dashboard ready", () => {
         beforeAll(() => {
             jest.clearAllMocks();
-            useData.mockImplementation(() => ({
+            useAccountData.mockImplementation(() => ({
+                userAddres: "test",
                 dataReady: true,
-                admins: [],
+                whitelist: [],
+                isReadOnly: true
+            }));
+            AccountDataProvider.mockImplementation(({ children }) => (
+                <div>{children}</div>
+            ));
+
+            useAdminData.mockImplementation(() => ({
+                dataReady: true,
                 userAddress: "test",
                 isAdmin: true,
-                account: {
-                    whitelist: [],
-                    isReadOnly: true
-                },
-                node: {
-                    whitelist: [],
-                    isReadOnly: true
-                }
+                admins: []
             }));
+            AdminDataProvider.mockImplementation(({ children }) => (
+                <div>{children}</div>
+            ));
+
+            useNodeData.mockImplementation(() => ({
+                userAddress: "test",
+                dataReady: true,
+                whitelist: [],
+                isReadOnly: true
+            }));
+            NodeDataProvider.mockImplementation(({ children }) => (
+                <div>{children}</div>
+            ));
         });
         describe("tab=ADMIN_TAB", () => {
             beforeEach(() => {
                 wrapper = mount(
-                    <Dashboard
-                        dataReady={true}
-                        tab={ADMIN_TAB}
-                        setTab={console.log}
-                    />
+                    <Dashboard tab={ADMIN_TAB} setTab={console.log} />
                 );
             });
-
-            it("has props dataReady=true", () => {
-                expect(wrapper.props().dataReady).toEqual(true);
-            });
-
             it("has props tab=ADMIN_TAB", () => {
                 expect(wrapper.props().tab).toEqual(ADMIN_TAB);
             });

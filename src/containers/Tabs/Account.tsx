@@ -4,11 +4,13 @@ import PropTypes from "prop-types";
 import { drizzleReactHooks } from "drizzle-react";
 import { isAddress } from "web3-utils";
 // Context
-import { useData } from "../../context/data";
+import { useAccountData } from "../../context/accountData";
+import { useAdminData } from "../../context/adminData";
 // Utils
 import useTab from "./useTab";
 // Components
 import AccountTab from "../../components/AccountTab/AccountTab";
+import LoadingPage from "../../components/LoadingPage/LoadingPage";
 // Constants
 import {PENDING_ADDITION,
 FAIL_ADDITION,
@@ -23,7 +25,8 @@ type AccountTabContainerProps = {
 }
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
-    const { isAdmin, userAddress, account: {whitelist, isReadOnly} } = useData();
+    const { isAdmin, dataReady: adminDataReady } = useAdminData();
+    const { userAddress, whitelist, isReadOnly, dataReady } = useAccountData();
 
     const {
         list,
@@ -111,22 +114,27 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         }
     }
 
-    return (
-        <AccountTab
-            list={list}
-            userAddress={userAddress}
-            modals={modals}
-            toggleModal={toggleModal}
-            handleAdd={handleAdd}
-            handleRemove={handleRemove}
-            isAdmin={isAdmin}
-            deleteTransaction={deleteTransaction}
-            isValid={isValidAccount}
-            isOpen={isOpen}
-            isReadOnly={isReadOnly}
-            pendingLock={!!transactions.get("lock")}
-        />
-    );
+    const allDataReady: boolean = dataReady && adminDataReady;
+    if (isOpen && allDataReady) {
+        return (<AccountTab
+        list={list}
+        userAddress={userAddress}
+        modals={modals}
+        toggleModal={toggleModal}
+        handleAdd={handleAdd}
+        handleRemove={handleRemove}
+        isAdmin={isAdmin}
+        deleteTransaction={deleteTransaction}
+        isValid={isValidAccount}
+        isOpen={isOpen}
+        isReadOnly={isReadOnly}
+        pendingLock={!!transactions.get("lock")}
+        />);
+    } else if (isOpen && !allDataReady) {
+        return (<LoadingPage />);
+    } else {
+        return (<div/>);
+    }
 };
 
 AccountTabContainer.propTypes = {
