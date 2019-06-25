@@ -114,25 +114,27 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         }
     }
 
-    return isOpen ?
-         !(dataReady && adminDataReady) ? (
-            <LoadingPage />
-            ) : (
-        <AccountTab
-            list={list}
-            userAddress={userAddress}
-            modals={modals}
-            toggleModal={toggleModal}
-            handleAdd={handleAdd}
-            handleRemove={handleRemove}
-            isAdmin={isAdmin}
-            deleteTransaction={deleteTransaction}
-            isValid={isValidAccount}
-            isOpen={isOpen}
-            isReadOnly={isReadOnly}
-            pendingLock={!!transactions.get("lock")}
-        />
-    ) : <div></div>;
+    const allDataReady: boolean = dataReady && adminDataReady;
+    if (isOpen && allDataReady) {
+        return (<AccountTab
+        list={list}
+        userAddress={userAddress}
+        modals={modals}
+        toggleModal={toggleModal}
+        handleAdd={handleAdd}
+        handleRemove={handleRemove}
+        isAdmin={isAdmin}
+        deleteTransaction={deleteTransaction}
+        isValid={isValidAccount}
+        isOpen={isOpen}
+        isReadOnly={isReadOnly}
+        pendingLock={!!transactions.get("lock")}
+        />);
+    } else if (isOpen && !allDataReady) {
+        return (<LoadingPage />);
+    } else {
+        return (<div/>);
+    }
 };
 
 AccountTabContainer.propTypes = {

@@ -167,10 +167,10 @@ const EnodeTabContainer = ({ isOpen }) => {
             });
     };
 
-    return isOpen ? (
-        !(dataReady && adminDataReady) ? (
-            <LoadingPage />
-        ) : (
+    const allDataReady = dataReady && adminDataReady;
+
+    if (isOpen && allDataReady) {
+        return (
             <EnodeTab
                 list={list}
                 userAddress={userAddress}
@@ -186,10 +186,12 @@ const EnodeTabContainer = ({ isOpen }) => {
                 isReadOnly={isReadOnly}
                 isOpen={isOpen}
             />
-        )
-    ) : (
-        <div />
-    );
+        );
+    } else if (isOpen && !allDataReady) {
+        return <LoadingPage />;
+    } else {
+        return <div />;
+    }
 };
 
 EnodeTabContainer.propTypes = {

@@ -17,10 +17,10 @@ type ContextType = {
 const AccountDataContext = createContext<ContextType>({})
 
 /**
- * Provider for the data context that contains the whitelist
- * @param {Object} props Props given to the DataProvider
+ * Provider for the data context that contains the account whitelist
+ * @param {Object} props Props given to the AccountDataProvider
  * @return The provider with the following value:
- *  - nodeWhitelist: list of whiteliist enode from Node Rules contract
+ *  - accountWhitelist: list of whiteliist accounts from Account Rules contract
  *  - setNodeWhitelist: setter for the whitelist state
  */
 export const AccountDataProvider: React.FC = (props: React.Props<{}>) => {
@@ -33,22 +33,19 @@ export const AccountDataProvider: React.FC = (props: React.Props<{}>) => {
 }
 
 /**
- * Fetch the appropriate data on chain and synchronize with it
+ * Fetch the appropriate account data on chain and synchronize with it
  * @return {Object} Contains data of interest:
- *  - admins: list of admin address from Admin contract,
- *  - dataReady: true if isReadOnly, whitelist and admins are correctly fetched,
+  *  - dataReady: true if isReadOnly and account whitelist are correctly fetched,
  *  false otherwise
  *  - userAddress: Address of the user
- *  - isAdmin: true if address of the user is includes in the admin list
- *  - node: Object containing node relevant data
- *    - isReadOnly: Rules contract is lock or unlock,
- *    - whitelist: list of whitelist enode from Rules contract,
+ *  - isReadOnly: Account contract is lock or unlock,
+ *  - whitelist: list of whitelist accounts from Account contract,
  */
 export const useAccountData = () => {
     const context = useContext(AccountDataContext)
 
     if (!context) {
-        throw new Error("useAccountData must be used within a AccountDataProvider.")
+        throw new Error("useAccountData must be used within an AccountDataProvider.")
     }
 
     const { accountWhitelist, setAccountWhitelist } = context

@@ -21,8 +21,8 @@ type ContextType = {
 const DataContext = createContext<ContextType>({});
 
 /**
- * Provider for the data context that contains the whitelist
- * @param {Object} props Props given to the DataProvider
+ * Provider for the data context that contains the node whitelist
+ * @param {Object} props Props given to the NodeDataProvider
  * @return The provider with the following value:
  *  - nodeWhitelist: list of whiteliist enode from Node Rules contract
  *  - setNodeWhitelist: setter for the whitelist state
@@ -37,10 +37,19 @@ export const NodeDataProvider: React.FC = (props: React.Props<{}>) => {
     return <DataContext.Provider value={value} {...props} />;
 };
 
+/**
+ * Fetch the appropriate node data on chain and synchronize with it
+ * @return {Object} Contains data of interest:
+  *  - dataReady: true if isReadOnly and node whitelist are correctly fetched,
+ *  false otherwise
+ *  - userAddress: Address of the user
+ *  - isReadOnly: Node contract is lock or unlock,
+ *  - whitelist: list of whitelist nodes from Node contract,
+ */
 export const useNodeData = () => {
     const context = useContext(DataContext);
     if (!context) {
-        throw new Error("useData must be used within a DataProvider.");
+        throw new Error("useNodeData must be used within a NodeDataProvider.");
     }
 
     const { nodeWhitelist, setNodeWhitelist } = context;

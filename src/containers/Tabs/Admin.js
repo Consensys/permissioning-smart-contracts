@@ -115,26 +115,26 @@ const AdminTabContainer = ({ isOpen }) => {
         };
       };
 
-     return isOpen ? (
-          !dataReady ? (
-              <LoadingPage />
-          ) : (
-        <AdminTab
-            list={list}
-            userAddress={userAddress}
-            modals={modals}
-            toggleModal={toggleModal}
-            handleAdd={handleAdd}
-            handleRemove={handleRemove}
-            isAdmin={isAdmin}
-            deleteTransaction={deleteTransaction}
-            isValid={isValidAdmin}
-            isOpen={isOpen}
+    if (isOpen && dataReady) {
+        return (
+            <AdminTab
+                list={list}
+                userAddress={userAddress}
+                modals={modals}
+                toggleModal={toggleModal}
+                handleAdd={handleAdd}
+                handleRemove={handleRemove}
+                isAdmin={isAdmin}
+                deleteTransaction={deleteTransaction}
+                isValid={isValidAdmin}
+                isOpen={isOpen}
             />
-        )
-    ) : (
-        <div />
-    );
+        );
+    } else if (isOpen && !dataReady) {
+        return <LoadingPage />;
+    } else {
+        return <div />;
+    }
 };
 
 AdminTabContainer.propTypes = {
