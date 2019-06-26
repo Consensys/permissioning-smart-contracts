@@ -84,7 +84,7 @@ jest.mock("drizzle-react", () => {
 });
 
 describe("<Dashboard />", () => {
-    let wrapper: ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
+    let wrapper: ReactWrapper<any, any, any>;
 
     describe("Dashboard ready", () => {
         beforeAll(() => {
