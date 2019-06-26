@@ -8,7 +8,12 @@ import tabs from "../../constants/tabs";
 // Styles
 import styles from "./styles.module.scss";
 
-const TabSelector = ({ tab, setTab }) => (
+type TabSelector = {
+  tab: string,
+  setTab: (tab: string) => void
+}
+
+const TabSelector: React.FC<TabSelector> = ({ tab, setTab }) => (
     <Flex height="33px" className={styles.choicesContainer}>
         {tabs.map(({ id, text }) => (
             <Box

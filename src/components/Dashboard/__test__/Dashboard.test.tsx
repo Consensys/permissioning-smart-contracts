@@ -166,15 +166,10 @@ describe("<Dashboard />", () => {
             beforeEach(() => {
                 wrapper = mount(
                     <Dashboard
-                        dataReady={true}
                         tab={ENODE_TAB}
                         setTab={console.log}
                     />
                 );
-            });
-
-            it("has props dataReady=true", () => {
-                expect(wrapper.props().dataReady).toEqual(true);
             });
 
             it("has props tab=ADMIN_TAB", () => {
