@@ -58,11 +58,12 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function transactionAllowed(
         address sender,
-        address target,
-        uint256 value,
-        uint256 gasPrice,
-        uint256 gasLimit,
-        bytes memory payload) public view returns (bool) {
+        address, // target
+        uint256, // value
+        uint256, // gasPrice
+        uint256, // gasLimit
+        bytes memory // payload
+    ) public view returns (bool) {
         if (
             accountInWhitelist (sender)
         ) {
