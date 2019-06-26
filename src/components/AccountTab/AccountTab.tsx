@@ -15,7 +15,7 @@ type AccountTab = {
   list: any[],
   userAddress?: string,
   modals: {
-    add: boolean | object,
+    add: boolean,
     remove: boolean | string,
     lock: boolean
   },
@@ -79,7 +79,7 @@ AccountTab.propTypes = {
     list: PropTypes.array.isRequired,
     userAddress: PropTypes.string,
     modals: PropTypes.shape({
-      add: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
+      add: PropTypes.bool.isRequired,
       remove: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
       lock: PropTypes.bool.isRequired
     }).isRequired,
