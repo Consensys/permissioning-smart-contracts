@@ -72,7 +72,7 @@ export const useAdminData = () => {
             ? admins
                   .map(address => ({
                       address,
-                      identifier: address,
+                      identifier: address.toLowerCase(),
                       status: "active"
                   }))
                   .reverse()
