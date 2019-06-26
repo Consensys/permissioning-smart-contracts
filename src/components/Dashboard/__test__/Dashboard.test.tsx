@@ -1,7 +1,8 @@
 // Libs
 import React from "react";
+import { mocked } from 'ts-jest/utils';
 import toJson from "enzyme-to-json";
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 // Components
 import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
@@ -11,13 +12,6 @@ import Toasts from "../../../containers/Toasts/Toasts";
 import { ToastProvider } from "../../../context/toasts";
 // Constants
 import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
-// Context
-import {
-    useAccountData,
-    AccountDataProvider
-} from "../../../context/accountData";
-import { useAdminData, AdminDataProvider } from "../../../context/adminData";
-import { useNodeData, NodeDataProvider } from "../../../context/nodeData";
 
 jest.mock("../../../context/accountData", () => {
     return {
@@ -39,6 +33,14 @@ jest.mock("../../../context/nodeData", () => {
         NodeDataProvider: jest.fn()
     };
 });
+// Context
+import {
+    useAccountData,
+    AccountDataProvider
+} from "../../../context/accountData";
+import { useAdminData, AdminDataProvider } from "../../../context/adminData";
+import { useNodeData, NodeDataProvider } from "../../../context/nodeData";
+
 
 jest.mock("../../../containers/Tabs/useTab", () => {
     return jest.fn().mockImplementation(() => ({
@@ -82,38 +84,38 @@ jest.mock("drizzle-react", () => {
 });
 
 describe("<Dashboard />", () => {
-    let wrapper;
+    let wrapper: ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
     describe("Dashboard ready", () => {
         beforeAll(() => {
             jest.clearAllMocks();
-            useAccountData.mockImplementation(() => ({
-                userAddres: "test",
+            mocked(useAccountData).mockImplementation(() => ({
+                userAddress: "test",
                 dataReady: true,
                 whitelist: [],
                 isReadOnly: true
             }));
-            AccountDataProvider.mockImplementation(({ children }) => (
+            mocked(AccountDataProvider).mockImplementation(({ children }: any) => (
                 <div>{children}</div>
             ));
 
-            useAdminData.mockImplementation(() => ({
+            mocked(useAdminData).mockImplementation(() => ({
                 dataReady: true,
                 userAddress: "test",
                 isAdmin: true,
                 admins: []
             }));
-            AdminDataProvider.mockImplementation(({ children }) => (
+            mocked(AdminDataProvider).mockImplementation(({ children }: any) => (
                 <div>{children}</div>
             ));
 
-            useNodeData.mockImplementation(() => ({
+            mocked(useNodeData).mockImplementation(() => ({
                 userAddress: "test",
                 dataReady: true,
                 whitelist: [],
                 isReadOnly: true
             }));
-            NodeDataProvider.mockImplementation(({ children }) => (
+            mocked(NodeDataProvider).mockImplementation(({ children }: any) => (
                 <div>{children}</div>
             ));
         });
