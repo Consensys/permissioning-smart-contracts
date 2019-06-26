@@ -26,7 +26,7 @@ const TableHeader = ({
                 mr={3}
                 icon="AddCircleOutline"
                 mainColor="#25D78F"
-                onClick={openAddModal}
+                onClick={() => openAddModal()}
                 disabled={disabledAdd}
             >
                 Add Whitelisted Node
@@ -40,7 +40,7 @@ const TableHeader = ({
                     <Button.Outline
                         icon="LockOpen"
                         mainColor="black"
-                        onClick={openLockModal}
+                        onClick={() => openLockModal()}
                         disabled={disabledLock}
                         className={styles.lockButton}
                     >
@@ -57,7 +57,7 @@ const TableHeader = ({
                     <Button
                         variant="danger"
                         icon="Lock"
-                        onClick={openLockModal}
+                        onClick={() => openLockModal()}
                         disabled={disabledLock}
                     >
                         Allow Changes

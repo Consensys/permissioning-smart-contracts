@@ -30,7 +30,7 @@ const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd 
             <Button
                 icon="AddCircleOutline"
                 mainColor="#25D78F"
-                onClick={openAddModal}
+                onClick={() => openAddModal()}
                 disabled={disabledAdd}
             >
                 Add Whitelisted Account
