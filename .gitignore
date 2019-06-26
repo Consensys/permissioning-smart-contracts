@@ -26,6 +26,7 @@ test-results/
 node_modules
 build
 src/chain/abis
+src/chain/@types
 src/chain/types
 .DS_Store
 .idea

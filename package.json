@@ -15,7 +15,7 @@
     "coverage:contracts": "solidity-coverage",
     "coverage": "npm run coverage:contracts",
     "build:app": "react-scripts build",
-    "build:contracts": "truffle compile && typechain --target truffle --outDir ./src/chain/types 'src/chain/abis/*.json'",
+    "build:contracts": "truffle compile && typechain --target truffle --outDir ./src/chain/@types 'src/chain/abis/*.json'",
     "build": "npm run build:contracts && npm run build:app",
     "start": "react-scripts start",
     "eject": "react-scripts eject"
