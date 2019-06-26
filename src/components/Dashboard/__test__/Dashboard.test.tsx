@@ -12,6 +12,13 @@ import Toasts from "../../../containers/Toasts/Toasts";
 import { ToastProvider } from "../../../context/toasts";
 // Constants
 import { ADMIN_TAB, ENODE_TAB } from "../../../constants/tabs";
+// Context
+import {
+    useAccountData,
+    AccountDataProvider
+} from "../../../context/accountData";
+import { useAdminData, AdminDataProvider } from "../../../context/adminData";
+import { useNodeData, NodeDataProvider } from "../../../context/nodeData";
 
 jest.mock("../../../context/accountData", () => {
     return {
@@ -33,13 +40,6 @@ jest.mock("../../../context/nodeData", () => {
         NodeDataProvider: jest.fn()
     };
 });
-// Context
-import {
-    useAccountData,
-    AccountDataProvider
-} from "../../../context/accountData";
-import { useAdminData, AdminDataProvider } from "../../../context/adminData";
-import { useNodeData, NodeDataProvider } from "../../../context/nodeData";
 
 
 jest.mock("../../../containers/Tabs/useTab", () => {
