@@ -4,11 +4,12 @@ import PropTypes from "prop-types";
 import { drizzleReactHooks } from "drizzle-react";
 import { isAddress } from "web3-utils";
 // Context
-import { useData } from "../../context/data";
+import { useAdminData } from "../../context/adminData";
 // Utils
 import useTab from "./useTab";
 // Components
 import AdminTab from "../../components/AdminTab/AdminTab";
+import LoadingPage from "../../components/LoadingPage/LoadingPage";
 // Constants
 import {
     PENDING_ADDITION,
@@ -20,8 +21,7 @@ import {
 } from "../../constants/transactions";
 
 const AdminTabContainer = ({ isOpen }) => {
-    const { admins, isAdmin, userAddress } = useData();
-
+    const { admins, isAdmin, userAddress, dataReady } = useAdminData();
     const {
         list,
         modals,
@@ -94,20 +94,47 @@ const AdminTabContainer = ({ isOpen }) => {
             });
     };
 
-    return (
-        <AdminTab
-            list={list}
-            userAddress={userAddress}
-            modals={modals}
-            toggleModal={toggleModal}
-            handleAdd={handleAdd}
-            handleRemove={handleRemove}
-            isAdmin={isAdmin}
-            deleteTransaction={deleteTransaction}
-            isValid={isAddress}
-            isOpen={isOpen}
-        />
-    );
+    const isValidAdmin = address => {
+        let isValidAddress = isAddress(address);
+        if (!isValidAddress) {
+            return {
+                valid: false
+            };
+        }
+
+        let isAdmin = list.filter(item => item.address === address).length > 0;
+        if (isAdmin) {
+            return {
+                valid: false,
+                msg: "Account address is already an admin."
+            };
+        }
+
+        return {
+            valid: true
+        };
+      };
+
+    if (isOpen && dataReady) {
+        return (
+            <AdminTab
+                list={list}
+                userAddress={userAddress}
+                modals={modals}
+                toggleModal={toggleModal}
+                handleAdd={handleAdd}
+                handleRemove={handleRemove}
+                isAdmin={isAdmin}
+                deleteTransaction={deleteTransaction}
+                isValid={isValidAdmin}
+                isOpen={isOpen}
+            />
+        );
+    } else if (isOpen && !dataReady) {
+        return <LoadingPage />;
+    } else {
+        return <div />;
+    }
 };
 
 AdminTabContainer.propTypes = {

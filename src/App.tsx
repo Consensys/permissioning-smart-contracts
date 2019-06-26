@@ -11,7 +11,6 @@ import WrongNetworkFlash from "./components/Flashes/WrongNetwork";
 import theme from "./constants/theme";
 // Context
 import { NetworkProvider } from "./context/network";
-import { DataProvider } from "./context/data";
 
 const App: React.FC = () => (
     <ThemeProvider theme={theme}>
@@ -21,9 +20,7 @@ const App: React.FC = () => (
                     NoProvider={NoProviderFlash}
                     WrongNetwork={WrongNetworkFlash}
                 >
-                    <DataProvider>
-                        <Dashboard />
-                    </DataProvider>
+                    <Dashboard />
                 </Initializer>
             </Layout>
         </NetworkProvider>

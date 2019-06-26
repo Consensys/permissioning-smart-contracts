@@ -64,5 +64,7 @@ export const identifierToEnodeHighAndLow = identifier => {
 export const isValidEnode = str => {
     const params = enodeToParams(str);
     const hasValues = !Object.values(params).some(value => !value);
-    return hasValues;
+    return {
+        valid: hasValues
+    };
 };

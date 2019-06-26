@@ -12,32 +12,32 @@ const AddModalContainer = ({
     display
 }) => {
     const [input, setInput] = useState("");
-    const [validated, setValidated] = useState(false);
+    const [validation, setValidation] = useState({ valid: false });
 
     const modifyInput = ({ target: { value } }) => {
-        const validated = isValid(value);
+        const validation = isValid(value);
         setInput(value);
-        setValidated(validated);
+        setValidation(validation);
     };
 
     const handleSubmit = e => {
         e.preventDefault();
         setInput("");
-        setValidated(false);
+        setValidation({ valid: false });
         handleAdd(input);
     };
 
     const handleClose = e => {
         e.preventDefault();
         setInput("");
-        setValidated(false);
+        setValidation({ valid: false });
         closeModal();
     };
 
     return (
         <AddModal
             input={input}
-            validated={validated}
+            validationResult={validation}
             modifyInput={modifyInput}
             handleSubmit={handleSubmit}
             isOpen={isOpen}

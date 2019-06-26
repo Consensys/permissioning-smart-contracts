@@ -2,7 +2,6 @@
 
 exports[`<Dashboard Container /> matches snapshot 1`] = `
 <Memo(Dashboard)
-  dataReady={true}
   setTab={[Function]}
   tab="accountTab"
 />

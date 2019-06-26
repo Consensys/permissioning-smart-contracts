@@ -15,7 +15,7 @@ type AccountTab = {
   list: any[],
   userAddress?: string,
   modals: {
-    add: boolean,
+    add: boolean | object,
     remove: boolean | string,
     lock: boolean
   },
@@ -24,7 +24,7 @@ type AccountTab = {
   handleRemove: (value: any) => Promise<void>,
   isAdmin: boolean,
   deleteTransaction: () => void,
-  isValid: (address: string) => boolean,
+  isValid: (address: string) => object,
   isOpen: boolean,
   isReadOnly: boolean,
   pendingLock: boolean
@@ -79,7 +79,7 @@ AccountTab.propTypes = {
     list: PropTypes.array.isRequired,
     userAddress: PropTypes.string,
     modals: PropTypes.shape({
-      add: PropTypes.bool.isRequired,
+      add: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
       remove: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
       lock: PropTypes.bool.isRequired
     }).isRequired,
