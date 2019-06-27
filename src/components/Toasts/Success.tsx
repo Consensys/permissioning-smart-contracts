@@ -6,20 +6,26 @@ import { ToastMessage } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const PendingToast = ({ message, closeToast }) => (
-    <ToastMessage.Processing
+type SuccessToast = {
+  message: string
+  closeToast: () => void
+}
+
+
+const SuccessToast: React.FC<SuccessToast> = ({ message, closeToast }) => (
+    <ToastMessage.Success
         minWidth="300px"
         zIndex="2"
         message={message}
         closeElem
         closeFunction={closeToast}
-        className={styles.fadeIn}
+        className={styles.fadeInOut}
     />
 );
 
-PendingToast.propTypes = {
+SuccessToast.propTypes = {
     message: PropTypes.string.isRequired,
     closeToast: PropTypes.func.isRequired
 };
 
-export default memo(PendingToast);
+export default memo(SuccessToast);
