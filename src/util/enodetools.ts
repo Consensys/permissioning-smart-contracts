@@ -1,4 +1,4 @@
-export const enodeToParams = enodeURL => {
+export const enodeToParams = (enodeURL: string) => {
     let enodeHigh = null;
     let enodeLow = null;
     let ip = null;
@@ -26,23 +26,23 @@ export const enodeToParams = enodeURL => {
     };
 };
 
-export const paramsToIdentifier = ({ enodeHigh, enodeLow, ip, port }) => {
+export const paramsToIdentifier = ({ enodeHigh, enodeLow, ip, port }: {enodeHigh: string, enodeLow: string, ip: string, port: string}) => {
     return `${enodeHigh}_${enodeLow}_${ip}_${port}`;
 };
 
-function getHexIpv4(stringIp) {
+function getHexIpv4(stringIp: string) {
     const splitIp = stringIp.split(".");
     return `0x00000000000000000000ffff${toHex(splitIp[0])}${toHex(
         splitIp[1]
     )}${toHex(splitIp[2])}${toHex(splitIp[3])}`;
 }
 
-function toHex(number) {
+function toHex(number: string) {
     const num = Number(number).toString(16);
     return num.length < 2 ? `0${num}` : num;
 }
 
-export const identifierToParams = identifier => {
+export const identifierToParams = (identifier: string) => {
     const [enodeHigh, enodeLow, ip, port] = identifier.split("_");
     return {
         enodeHigh,
@@ -53,7 +53,7 @@ export const identifierToParams = identifier => {
     };
 };
 
-export const identifierToEnodeHighAndLow = identifier => {
+export const identifierToEnodeHighAndLow = (identifier: string) => {
     if (identifier) {
         const [enodeHigh, enodeLow] = identifier.split("_");
         return `${enodeHigh}${enodeLow}`;
@@ -61,7 +61,7 @@ export const identifierToEnodeHighAndLow = identifier => {
     return "";
 };
 
-export const isValidEnode = str => {
+export const isValidEnode = (str: string) => {
     const params = enodeToParams(str);
     const hasValues = !Object.values(params).some(value => !value);
     return {

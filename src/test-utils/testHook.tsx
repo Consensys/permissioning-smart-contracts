@@ -1,12 +1,12 @@
 import React from "react";
 import { mount } from "enzyme";
 
-const TestHook = ({ callback }) => {
+const TestHook = ({ callback }: {callback: () => void}) => {
     callback();
     return null;
 };
 
-export const testHook = (callback, Provider, value) => {
+export const testHook = (callback: () => void, Provider: React.FC<any>, value?: any) => {
     if (Provider) {
         if (value) {
             mount(
