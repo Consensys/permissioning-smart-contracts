@@ -9,7 +9,15 @@ import AdminRow from "./Row";
 // Styles
 import styles from "./styles.module.scss";
 
-const AdminTable = ({
+type AdminTable = {
+  list: {address: string, status: string}[],
+  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean | string) => void,
+  deleteTransaction: () => void,
+  isAdmin: boolean,
+  userAddress?: string
+}
+
+const AdminTable: React.FC<AdminTable> = ({
     list,
     toggleModal,
     deleteTransaction,
@@ -47,11 +55,11 @@ const AdminTable = ({
 );
 
 AdminTable.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    list: PropTypes.array.isRequired,
     toggleModal: PropTypes.func.isRequired,
     deleteTransaction: PropTypes.func.isRequired,
     isAdmin: PropTypes.bool.isRequired,
-    userAddress: PropTypes.string.isRequired
+    userAddress: PropTypes.string
 };
 
 export default AdminTable;

@@ -32756,7 +32756,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                                   <tr>
                                     <td
                                       className="emptyLine"
-                                      colSpan="5"
+                                      colSpan={5}
                                     >
                                       No nodes have been whitelisted.
                                     </td>

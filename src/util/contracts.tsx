@@ -3,10 +3,10 @@
  * @param  {[Object]} contractArray List of contracts
  * @return {[number]}               List of common networks
  */
-export const getAllowedNetworks = contractArray => {
+export const getAllowedNetworks = (contractArray: {networks: {[networkId: number]: any}}[]) => {
     const numberOfContracts = contractArray.length;
 
-    const occurences = {};
+    const occurences: {[networkId: string]: number} = {};
 
     contractArray.forEach(({ networks }) => {
         Object.keys(networks).forEach(networkId => {
@@ -18,7 +18,7 @@ export const getAllowedNetworks = contractArray => {
         });
     });
 
-    const allowedNetworks = [];
+    const allowedNetworks: number[] = [];
 
     Object.entries(occurences).forEach(([networkId, occurence]) => {
         if (occurence === numberOfContracts) {

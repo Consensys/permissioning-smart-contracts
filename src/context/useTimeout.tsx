@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from "react";
  *  - addTimeout: Function that adds a timeoutId to be cleared
  */
 export default () => {
-    const [timeouts, setTimeouts] = useState([]);
+    const [timeouts, setTimeouts] = useState<number[]>([]);
 
     useEffect(
         () => () => {

@@ -5,7 +5,7 @@ import { Flex, Heading } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const AppBar = () => (
+const AppBar: React.FC<{}> = () => (
     <Flex
         position="sticky"
         top="0"

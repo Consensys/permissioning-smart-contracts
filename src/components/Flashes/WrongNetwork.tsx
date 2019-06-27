@@ -6,7 +6,7 @@ import { Flash, Text, Icon, Flex } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const WrongNetwork = ({ networkId }) => (
+const WrongNetwork: React.FC<{networkId: number}> = ({ networkId }) => (
     <Flash variant="danger">
         <Flex alignItems="center">
             <Icon name="Warning" className={styles.icon} />

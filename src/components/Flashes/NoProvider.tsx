@@ -5,7 +5,7 @@ import { Flash, Text, Link, Icon, Flex } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const NoProvider = () => (
+const NoProvider: React.FC<{}> = () => (
     <Flash variant="danger">
         <Flex alignItems="center">
             <Icon name="Warning" className={styles.icon} />

@@ -1,7 +1,7 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { shallow, mount } from "enzyme";
+import { shallow, mount, ReactWrapper, ShallowWrapper } from "enzyme";
 // Components
 import WrongNetwork from "../WrongNetwork";
 
@@ -16,12 +16,12 @@ var errorMessages = [
         "Change your network using MetaMask. You're currently on the Rinkeby Test Network.",
     () =>
         "Change your network using MetaMask. You're currently on the Goerli Test Network.",
-    networkId =>
+    (networkId: number) =>
         `Change your network using MetaMask. You're currently on unknown network of id ${networkId}.`
 ];
 
 describe("<WrongNetwork />", () => {
-    let wrapper;
+    let wrapper: ReactWrapper<any, any, any>;
 
     beforeEach(() => {
         wrapper = mount(<WrongNetwork networkId={0} />);
@@ -37,10 +37,11 @@ describe("<WrongNetwork />", () => {
 
     describe("error message", () => {
         let increment = 1;
-        let errorMessage;
+        let errorMessage: string;
+        let wrongNetworkWrapper: ShallowWrapper;
         beforeEach(() => {
-            wrapper = shallow(<WrongNetwork networkId={increment} />);
-            errorMessage = wrapper.find(".wrongNetworkMessage").text();
+            wrongNetworkWrapper = shallow(<WrongNetwork networkId={increment} />);
+            errorMessage = wrongNetworkWrapper.find(".wrongNetworkMessage").text();
         });
 
         errorMessages.forEach(expectedErrorMessage => {
@@ -51,7 +52,7 @@ describe("<WrongNetwork />", () => {
         });
 
         it("matches snapshot", () => {
-            expect(toJson(wrapper)).toMatchSnapshot();
+            expect(toJson(wrongNetworkWrapper)).toMatchSnapshot();
         });
     });
 });

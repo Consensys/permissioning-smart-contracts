@@ -6,7 +6,7 @@ import { Flex, Box } from "rimble-ui";
 // Containers
 import AppBar from "../AppBar/AppBar";
 
-const Layout = ({ children }) => (
+const Layout: React.FC<{}> = ({ children }) => (
     <Flex
         pl={5}
         pr={5}

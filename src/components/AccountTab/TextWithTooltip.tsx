@@ -11,7 +11,13 @@ import {
 // Styles
 import styles from "./styles.module.scss";
 
-const TextWithTooltip = ({ status, isAdmin, text }) => {
+type TextWithTooltip = {
+  status: string,
+  isAdmin: boolean,
+  text: string
+}
+
+const TextWithTooltip: React.FC<TextWithTooltip> = ({ status, isAdmin, text }) => {
     return status === PENDING_ADDITION ||
         status === PENDING_REMOVAL ||
         !isAdmin ? (

@@ -6,7 +6,17 @@ import { Flex, Box, Heading, Button, Tooltip } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const TableHeader = ({
+type TableHeader = {
+  number: number
+  openAddModal: () => void
+  disabledAdd: boolean
+  openLockModal: () => void
+  disabledLock: boolean
+  pendingLock: boolean
+  isReadOnly: boolean
+}
+
+const TableHeader: React.FC<TableHeader> = ({
     number,
     openAddModal,
     disabledAdd,

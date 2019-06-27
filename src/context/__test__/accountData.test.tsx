@@ -1,24 +1,19 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 // Components
-import Layout from "../Layout";
-import AppBar from "../../AppBar/AppBar";
+import { AccountDataProvider } from "../accountData";
 
-describe("<Layout />", () => {
-    let wrapper;
+describe("<AccountDataProvider />", () => {
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         wrapper = shallow(
-            <Layout>
+            <AccountDataProvider>
                 <div className="test" />
-            </Layout>
+            </AccountDataProvider>
         );
-    });
-
-    it("contains a AppBar element", () => {
-        expect(wrapper.find(AppBar)).toHaveLength(1);
     });
 
     it("renders children when passed in", () => {

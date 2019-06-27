@@ -1,15 +1,15 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 // Components
-import AppBar from "../AppBar";
+import NoProvider from "../NoProvider";
 
-describe("<AppBar />", () => {
-    let wrapper;
+describe("<NoProvider />", () => {
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
-        wrapper = shallow(<AppBar />);
+        wrapper = shallow(<NoProvider />);
     });
 
     it("matches snapshot", () => {

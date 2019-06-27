@@ -9,7 +9,17 @@ import React, {
 // Hooks
 import useTimeout from "./useTimeout";
 
-const ToastContext = createContext();
+type Toast = {
+  identifier: string
+  status: string
+  message: string
+  secondaryMessage?: string
+}
+
+const ToastContext = createContext<{
+  toasts?: Toast[]
+  setToasts?: React.Dispatch<React.SetStateAction<Toast[]>>
+}>({});
 
 /**
  * Provider for the current state of the toasts
@@ -18,8 +28,8 @@ const ToastContext = createContext();
  *  - toasts: Array of opened toasts
  *  - setToasts: setter of toasts
  */
-export const ToastProvider = props => {
-    const [toasts, setToasts] = useState([]);
+export const ToastProvider: React.FC<{}> = props => {
+    const [toasts, setToasts] = useState<Toast[]>([]);
 
     const value = useMemo(() => ({ toasts, setToasts }), [toasts, setToasts]);
 
@@ -42,11 +52,12 @@ export const useToast = () => {
 
     const { addTimeout } = useTimeout();
 
-    const { toasts, setToasts } = context;
+    const { toasts: toastsOpt, setToasts } = context;
+    const toasts = toastsOpt!;
 
     const closeToast = useCallback(
-        targetedIdentifier => () => {
-            setToasts(toasts => {
+        (targetedIdentifier: string) => () => {
+            setToasts!(toasts => {
                 const updatedToasts = [...toasts];
                 const index = updatedToasts.findIndex(
                     ({ identifier }) => identifier === targetedIdentifier
@@ -59,10 +70,10 @@ export const useToast = () => {
     );
 
     const openToast = useCallback(
-        (identifier, status, message, secondaryMessage, timeout = 5000) => {
+        (identifier: string, status: string, message: string, secondaryMessage?: string, timeout: number = 5000) => {
             const timeoutId = setTimeout(closeToast(identifier), timeout);
             closeToast(identifier)();
-            setToasts(toasts => [
+            setToasts!(toasts => [
                 ...toasts,
                 { identifier, status, message, secondaryMessage }
             ]);
@@ -73,13 +84,13 @@ export const useToast = () => {
 
     const updateToast = useCallback(
         (
-            targetedIdentifier,
-            status,
-            message,
-            secondaryMessage,
-            timeout = 5000
+            targetedIdentifier: string,
+            status: string,
+            message: string,
+            secondaryMessage?: string,
+            timeout: number = 5000
         ) => {
-            setToasts(toasts => {
+            setToasts!(toasts => {
                 const updatedToasts = [...toasts];
                 const index = updatedToasts.findIndex(
                     ({ identifier }) => identifier === targetedIdentifier

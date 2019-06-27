@@ -1,18 +1,18 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 // Components
-import { NodeDataProvider } from "../nodeData";
+import { AdminDataProvider } from "../adminData";
 
-describe("<NodeDataProvider />", () => {
-    let wrapper;
+describe("<AdminDataProvider />", () => {
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         wrapper = shallow(
-            <NodeDataProvider>
+            <AdminDataProvider>
                 <div className="test" />
-            </NodeDataProvider>
+            </AdminDataProvider>
         );
     });
 

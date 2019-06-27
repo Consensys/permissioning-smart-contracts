@@ -15,7 +15,16 @@ import TextWithTooltip from "./TextWithTooltip";
 // Styles
 import styles from "./styles.module.scss";
 
-const AdminRow = ({
+type AdminRow = {
+  address: string,
+  status: string,
+  isSelf: boolean,
+  isAdmin: boolean,
+  deleteTransaction: (address: string) => void,
+  openRemoveModal: (address: string) => void
+}
+
+const AdminRow: React.FC<AdminRow> = ({
     address,
     status,
     isSelf,

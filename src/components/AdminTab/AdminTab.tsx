@@ -8,7 +8,24 @@ import RemoveModal from "../../containers/Modals/Remove";
 // Constants
 import { addAdminDisplay, removeAdminDisplay } from "../../constants/modals";
 
-const AdminTab = ({
+type AdminTab = {
+  list: {address: string, status: string}[],
+  userAddress?: string,
+  modals: {
+    add: boolean,
+    remove: boolean | string,
+    lock: boolean
+  },
+  toggleModal: (name: "add"|"remove"|"lock") => (value?: boolean | string) => void,
+  handleAdd: (value: any) => Promise<void>,
+  handleRemove: (value: any) => Promise<void>,
+  isAdmin: boolean,
+  deleteTransaction: () => void,
+  isValid: (address: string) => object,
+  isOpen: boolean
+}
+
+const AdminTab: React.FC<AdminTab> = ({
     list,
     userAddress,
     modals,
@@ -38,7 +55,7 @@ const AdminTab = ({
                     isValid={isValid}
                 />
                 <RemoveModal
-                    isOpen={modals.remove && isAdmin}
+                    isOpen={Boolean(modals.remove) && isAdmin}
                     value={modals.remove}
                     closeModal={toggleModal("remove")}
                     handleRemove={handleRemove}
@@ -50,9 +67,13 @@ const AdminTab = ({
 );
 
 AdminTab.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    list: PropTypes.array.isRequired,
     userAddress: PropTypes.string,
-    modals: PropTypes.object.isRequired,
+    modals: PropTypes.shape({
+      add: PropTypes.bool.isRequired,
+      remove: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
+      lock: PropTypes.bool.isRequired
+    }).isRequired,
     toggleModal: PropTypes.func.isRequired,
     handleAdd: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,

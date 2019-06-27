@@ -11,16 +11,26 @@ import {
 // Styles
 import styles from "./styles.module.scss";
 
-const TextWithTooltip = ({ status, isAdmin, text }) => {
+type TextWithTooltip = {
+  status: string
+  isAdmin: boolean
+  isReadOnly: boolean
+  text: string
+}
+
+const TextWithTooltip: React.FC<TextWithTooltip> = ({ status, isReadOnly, isAdmin, text }) => {
     return status === PENDING_ADDITION ||
         status === PENDING_REMOVAL ||
+        isReadOnly ||
         !isAdmin ? (
         <Tooltip
             placement="center"
             message={
-                isAdmin
-                    ? "This transaction is pending."
-                    : "You must be an admin to perform modifications."
+                isReadOnly
+                    ? "Unlock to make changes."
+                    : !isAdmin
+                    ? "You must be an admin to perform modifications."
+                    : "This transaction is pending."
             }
             variant="dark"
         >

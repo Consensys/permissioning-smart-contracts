@@ -1,7 +1,7 @@
 // Libs
 import React from "react";
 import toJson from "enzyme-to-json";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 // Components
 import ToastsContainer from "../Toasts";
 // Context
@@ -16,7 +16,7 @@ jest.mock("../../../context/toasts", () => {
 });
 
 describe("<Toasts Container />", () => {
-    let wrapper;
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         jest.clearAllMocks();

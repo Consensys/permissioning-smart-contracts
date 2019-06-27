@@ -4,7 +4,13 @@ import PropTypes from "prop-types";
 // Rimble Components
 import { Flex, Box, Heading, Button } from "rimble-ui";
 
-const TableHeader = ({ number, openAddModal, disabledAdd }) => (
+type TableHeader = {
+  number: Number,
+  openAddModal: () => void,
+  disabledAdd: boolean
+}
+
+const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd }) => (
     <Flex alignItems="center" justifyContent="space-between">
         <Box>
             <Heading.h2 fontWeight="700">Admin Accounts ({number})</Heading.h2>

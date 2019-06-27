@@ -9,7 +9,7 @@ export const addAdminDisplay = {
     subHeading: "Admin accounts can..."
 };
 
-export const removeAdminDisplay = (value: string) => ({
+export const removeAdminDisplay = (value: string | boolean) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${value}” as an admin account?`
 });
