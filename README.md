@@ -11,10 +11,10 @@ describes how to use the contracts for onchain permissioning.
 ## Development
 
 ### Linting
-Linting is set up using solium. To run it over your code execute `npm run lint`.
+Linting is set up using solium. To run it over your code execute `yarn run lint`.
 
 ### Testing
-`npm test`
+`yarn test`
 
 ### Permissioning Management Dapp (under development)
 
@@ -33,7 +33,7 @@ This is the easiest way to get started for development with the permissioning Da
 
 #### Start the development server ####
 1. In a new terminal session, navigate to the `app/` directory 
-1. Run `npm install` to install all required dependencies and `npm start` to start the web server that is serving our dapp. You only need to run `npm install` if you are running the app for the first time.
+1. Run `yarn install` to install all required dependencies and `yarn run start` to start the web server that is serving our dapp. You only need to run `yarn install` if you are running the app for the first time.
 1. In your browser, connect Metamask to the Ganache network (the default endpoint is `http://127.0.0.1:9545/`)
 1. When you start Ganache, it gives you a list of accounts and private keys. Import the first one in Metamask to impersonate the first admin of the system.
 1. Navigate to `http://localhost:3000` to access the Permissioning Dapp.
@@ -42,7 +42,6 @@ This is the easiest way to get started for development with the permissioning Da
 #### Build the permissioning Dapp for deployment ####
 
 1. [Compile and migrate the contracts](#compile-and-migrate-the-contracts)
-1. In a new terminal session, navigate to the `app/` directory
-1. Run `npm run build` will assemble index.html and all other files in `build/`
+1. Run `yarn run build` will assemble index.html and all other files in `build/`
 1. You can use your preferred web server technology to serve the contents of `build/` as static files.
 1. You will need to set up MetaMask as for [the development server](#start-the-development-server)

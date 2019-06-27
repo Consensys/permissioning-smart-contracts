@@ -5,20 +5,20 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "lint:contracts": "solium -d contracts",
-    "lint": "npm run lint:contracts",
-    "test:app": "react-scripts test --env=jsdom --watchAll=false",
-    "test:app:watch": "react-scripts test --env=jsdom",
-    "test:app:ci": "react-scripts test --reporters=default --reporters=jest-junit",
-    "test:contracts": "truffle test --network develop",
-    "test": "npm run test:contracts && npm run test:app",
-    "coverage:contracts": "solidity-coverage",
-    "coverage": "npm run coverage:contracts",
-    "build:app": "react-scripts build",
-    "build:contracts": "truffle compile",
-    "build": "npm run build:contracts && npm run build:app",
-    "start": "react-scripts start",
-    "eject": "react-scripts eject"
+    "lint:contracts": "yarn solium -d contracts",
+    "lint": "yarn run lint:contracts",
+    "test:app": "yarn react-scripts test --env=jsdom --watchAll=false",
+    "test:app:watch": "yarn react-scripts test --env=jsdom",
+    "test:app:ci": "yarn react-scripts test --reporters=default --reporters=jest-junit",
+    "test:contracts": "yarn truffle test --network develop",
+    "test": "yarn run test:contracts && yarn run test:app",
+    "coverage:contracts": "yarn solidity-coverage",
+    "coverage": "yarn run coverage:contracts",
+    "build:app": "yarn react-scripts build",
+    "build:contracts": "yarn truffle compile",
+    "build": "yarn run build:contracts && yarn run build:app",
+    "start": "yarn react-scripts start",
+    "eject": "yarn react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -72,7 +72,7 @@
     "prettier": "^1.17.0",
     "solidity-coverage": "github:sc-forks/solidity-coverage#leapdao",
     "solium": "^1.2.4",
-    "truffle": "^5.0.12"
+    "truffle": "5.0.17"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [

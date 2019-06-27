@@ -14,34 +14,34 @@ pipeline {
         }
         stage('Contracts: Build') {
             steps {
-                sh 'npm install'
-                sh 'npm run build:contracts'
+                sh 'yarn install'
+                sh 'yarn run build:contracts'
             }
         }
         stage('Contracts: Lint') {
             steps {
-                sh 'npm run lint:contracts'
+                sh 'yarn run lint:contracts'
             }
         }
         stage('Contracts: Test') {
             steps {
-                sh 'npm run test:contracts'
+                sh 'yarn run test:contracts'
             }
         }
         stage('Contracts: Coverage') {
             steps {
-                sh 'npm run coverage:contracts'
+                sh 'yarn run coverage:contracts'
                 sh './node_modules/.bin/istanbul report cobertura --root .'
             }
         }
         stage('Dapp: Build') {
             steps {
-                sh 'npm run build:app'
+                sh 'yarn run build:app'
             }
         }
         stage('Dapp: Test') {
             steps {
-                sh 'npm run test:app:ci'
+                sh 'yarn run test:app:ci'
             }
         }
     }
