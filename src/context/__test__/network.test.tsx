@@ -1,8 +1,9 @@
 // Libs
 // import React from "../../__mocks__/react";
 import React from "react";
+import { mocked } from 'ts-jest/utils';
 // import { act } from 'react-dom/test-utils';
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 import { useNetwork } from "../network";
 import { testHook } from "../../test-utils/testHook";
 import * as drizzleReact from "drizzle-react";
@@ -17,7 +18,7 @@ jest.mock("drizzle-react", () => ({
 }));
 
 describe("<NetworkProvider />", () => {
-    let wrapper;
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         wrapper = shallow(
@@ -33,11 +34,15 @@ describe("<NetworkProvider />", () => {
 });
 
 describe("useNetwork", () => {
-    let network;
+    let network: {
+      isCorrectNetwork: boolean | undefined;
+      networkId: any;
+      web3Initialized: boolean;
+  };
 
     describe('status=""', () => {
         beforeAll(() => {
-            drizzleReact.drizzleReactHooks.useDrizzleState.mockImplementation(
+            mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(
                 () => ({
                     networkId: undefined,
                     status: ""
@@ -47,7 +52,7 @@ describe("useNetwork", () => {
         });
 
         it("should have a isCorrectNetwork attribute equal to false", () => {
-            expect(network.isCorrectNetwork).toEqual(null);
+            expect(network.isCorrectNetwork).toEqual(undefined);
         });
 
         it("should have a networkId attribute equal to undefined", () => {
@@ -61,7 +66,7 @@ describe("useNetwork", () => {
 
     describe('status="initialized"', () => {
         beforeAll(() => {
-            drizzleReact.drizzleReactHooks.useDrizzleState.mockImplementation(
+            mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(
                 () => ({
                     networkId: undefined,
                     status: "initialized"
@@ -71,7 +76,7 @@ describe("useNetwork", () => {
         });
 
         it("should have a isCorrectNetwork attribute equal to null", () => {
-            expect(network.isCorrectNetwork).toEqual(null);
+            expect(network.isCorrectNetwork).toEqual(undefined);
         });
 
         it("should have a networkId attribute equal to undefined", () => {
@@ -85,7 +90,7 @@ describe("useNetwork", () => {
 
     describe('status="initialized" and networkId=0', () => {
         beforeAll(() => {
-            drizzleReact.drizzleReactHooks.useDrizzleState.mockImplementation(
+            mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(
                 () => ({
                     networkId: 1,
                     status: "initialized"

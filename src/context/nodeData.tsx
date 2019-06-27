@@ -15,7 +15,7 @@ type Enode = {enodeHigh: string, enodeLow: string, identifier: string, ip: strin
 
 type ContextType = {
     nodeWhitelist?: Enode[],
-    setNodeWhitelist?: (enode: Enode[]) => void
+    setNodeWhitelist?: React.Dispatch<React.SetStateAction<Enode[]>>
 }
 
 const DataContext = createContext<ContextType>({});

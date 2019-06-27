@@ -19,7 +19,14 @@ import { getAllowedNetworks } from "../util/contracts";
 const drizzleStore = generateStore(drizzleOptions);
 const drizzle = new Drizzle(drizzleOptions, drizzleStore);
 
-const NetworkContext = createContext();
+const NetworkContext = createContext<{
+  isCorrectNetwork?: boolean
+  setIsCorrectNetwork?: React.Dispatch<React.SetStateAction<boolean | undefined>>
+  web3Initialized: boolean
+  setWeb3Initialized?: React.Dispatch<React.SetStateAction<boolean>>
+}>({
+  web3Initialized: false
+});
 
 /**
  * Provider for the network context that contains informations about the
@@ -33,9 +40,9 @@ const NetworkContext = createContext();
  *  - web3Initialized: true if Drizzle has initialized web3, false otherwise
  *  - setWeb3Initialized: setter for web3Initialized
  */
-export const NetworkProvider = props => {
-    const [isCorrectNetwork, setIsCorrectNetwork] = useState(null);
-    const [web3Initialized, setWeb3Initialized] = useState(false);
+export const NetworkProvider: React.FC<{}> = props => {
+    const [isCorrectNetwork, setIsCorrectNetwork] = useState<boolean | undefined>(undefined);
+    const [web3Initialized, setWeb3Initialized] = useState<boolean>(false);
 
     const value = useMemo(
         () => ({
@@ -82,7 +89,7 @@ export const useNetwork = () => {
     } = context;
 
     const { networkId, status } = drizzleReactHooks.useDrizzleState(
-        drizzleState => ({
+        (drizzleState: any) => ({
             status: drizzleState.web3.status,
             networkId: drizzleState.web3.networkId
         })
@@ -97,9 +104,9 @@ export const useNetwork = () => {
             ]);
             if (networkId) {
                 const isCorrectNetwork = allowedNetworks.includes(networkId);
-                setIsCorrectNetwork(isCorrectNetwork);
+                setIsCorrectNetwork!(isCorrectNetwork);
             }
-            setWeb3Initialized(true);
+            setWeb3Initialized!(true);
         }
     }, [networkId, setIsCorrectNetwork, status, setWeb3Initialized]);
 
