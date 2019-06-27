@@ -72,7 +72,7 @@
     "prettier": "^1.17.0",
     "solidity-coverage": "github:sc-forks/solidity-coverage#leapdao",
     "solium": "^1.2.4",
-    "truffle": "^5.0.12"
+    "truffle": "5.0.17"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
