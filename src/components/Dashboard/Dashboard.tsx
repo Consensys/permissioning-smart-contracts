@@ -15,7 +15,13 @@ import { ToastProvider } from "../../context/toasts";
 // Constants
 import { ACCOUNT_TAB, ADMIN_TAB, ENODE_TAB } from "../../constants/tabs";
 
-const Dashboard: React.FC<any> = ({ tab, setTab }) => (
+type Dashboard = {
+  tab: string,
+  setTab: (tab: string) => void
+}
+
+const Dashboard: React.FC<Dashboard> = ({ tab, setTab }) => (
+
     <Fragment>
         <TabSelector setTab={setTab} tab={tab} />
         {

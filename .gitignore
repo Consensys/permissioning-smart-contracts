@@ -25,8 +25,8 @@ dist
 test-results/
 node_modules
 build
-app/src/contracts
 src/chain/abis
+src/chain/@types
 .DS_Store
 .idea
 

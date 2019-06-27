@@ -1,7 +1,8 @@
 // Libs
 import React from "react";
+import { mocked } from 'ts-jest/utils';
 import toJson from "enzyme-to-json";
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 // Components
 import Dashboard from "../Dashboard";
 import TabSelector from "../TabSelector";
@@ -75,45 +76,44 @@ jest.mock("drizzle-react", () => {
                         }
                     }
                 }
-            })),
-            useDrizzleState: jest.fn()
+            }))
         }
     };
 });
 
 describe("<Dashboard />", () => {
-    let wrapper;
+    let wrapper: ReactWrapper<any, any, any>;
 
     describe("Dashboard ready", () => {
         beforeAll(() => {
             jest.clearAllMocks();
-            useAccountData.mockImplementation(() => ({
-                userAddres: "test",
+            mocked(useAccountData).mockImplementation(() => ({
+                userAddress: "test",
                 dataReady: true,
                 whitelist: [],
                 isReadOnly: true
             }));
-            AccountDataProvider.mockImplementation(({ children }) => (
+            mocked(AccountDataProvider).mockImplementation(({ children }) => (
                 <div>{children}</div>
             ));
 
-            useAdminData.mockImplementation(() => ({
+            mocked(useAdminData).mockImplementation(() => ({
                 dataReady: true,
                 userAddress: "test",
                 isAdmin: true,
                 admins: []
             }));
-            AdminDataProvider.mockImplementation(({ children }) => (
+            mocked(AdminDataProvider).mockImplementation(({ children }) => (
                 <div>{children}</div>
             ));
 
-            useNodeData.mockImplementation(() => ({
+            mocked(useNodeData).mockImplementation(() => ({
                 userAddress: "test",
                 dataReady: true,
                 whitelist: [],
                 isReadOnly: true
             }));
-            NodeDataProvider.mockImplementation(({ children }) => (
+            mocked(NodeDataProvider).mockImplementation(({ children }) => (
                 <div>{children}</div>
             ));
         });
@@ -123,6 +123,7 @@ describe("<Dashboard />", () => {
                     <Dashboard tab={ADMIN_TAB} setTab={console.log} />
                 );
             });
+
             it("has props tab=ADMIN_TAB", () => {
                 expect(wrapper.props().tab).toEqual(ADMIN_TAB);
             });
@@ -164,15 +165,10 @@ describe("<Dashboard />", () => {
             beforeEach(() => {
                 wrapper = mount(
                     <Dashboard
-                        dataReady={true}
                         tab={ENODE_TAB}
                         setTab={console.log}
                     />
                 );
-            });
-
-            it("has props dataReady=true", () => {
-                expect(wrapper.props().dataReady).toEqual(true);
             });
 
             it("has props tab=ADMIN_TAB", () => {

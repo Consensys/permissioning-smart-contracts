@@ -15571,7 +15571,6 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
 
 exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
 <Memo(Dashboard)
-  dataReady={true}
   setTab={[Function]}
   tab="enodeTab"
 >
