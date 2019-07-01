@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { drizzleReactHooks } from "drizzle-react";
 import { isAddress } from "web3-utils";
+import idx from "idx";
 // Context
 import { useAdminData } from "../../context/adminData";
 // Utils
@@ -46,12 +47,31 @@ const AdminTabContainer = ({ isOpen }) => {
                 toggleModal("add")();
                 addTransaction(value, PENDING_ADDITION);
             })
-            .on("receipt", () => {
-                openToast(
-                    value,
-                    SUCCESS,
-                    `New admin account processed: ${value}`
+            .on("receipt", receipt => {
+                // Web3js returns true if true, null if false
+                const event = idx(receipt, _ => _.events.AdminAdded);
+                const added = Boolean(
+                    idx(event, _ => _.returnValues.adminAdded)
                 );
+                if (!event) {
+                    openToast(
+                        value,
+                        FAIL,
+                        `Error while processing Admin account: ${value}`
+                    );
+                } else if (added) {
+                    openToast(
+                        value,
+                        SUCCESS,
+                        `New Admin account processed: ${value}`
+                    );
+                } else {
+                    const message = idx(
+                        receipt,
+                        _ => _.events.AdminAdded.returnValues.message
+                    );
+                    openToast(value, FAIL, message);
+                }
             })
             .on("error", () => {
                 toggleModal("add")();
@@ -113,7 +133,7 @@ const AdminTabContainer = ({ isOpen }) => {
         return {
             valid: true
         };
-      };
+    };
 
     if (isOpen && dataReady) {
         return (

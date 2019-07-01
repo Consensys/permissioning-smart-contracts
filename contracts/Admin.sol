@@ -5,6 +5,12 @@ import "./AdminList.sol";
 
 
 contract Admin is AdminProxy, AdminList {
+    event AdminAdded(
+        address account,
+        bool adminAdded,
+        string message
+    );
+
     modifier onlyAdmin() {
         require(isAuthorized(msg.sender), "Sender not authorized");
         _;
@@ -23,8 +29,16 @@ contract Admin is AdminProxy, AdminList {
         return exists(_address);
     }
 
-    function addAdmin(address _address) public onlyAdmin notSelf(_address) returns (bool) {
-        return add(_address);
+    function addAdmin(address _address) public onlyAdmin returns (bool) {
+        if (msg.sender == _address) {
+            emit AdminAdded(_address, false, "Adding own account as Admin is not permitted");
+            return false;
+        } else {
+            bool result = add(_address);
+            string memory message = result ? "Admin account added successfully" : "Account is already an Admin";
+            emit AdminAdded(_address, result, message);
+            return result;
+        }
     }
 
     function removeAdmin(address _address) public onlyAdmin notSelf(_address) returns (bool) {
