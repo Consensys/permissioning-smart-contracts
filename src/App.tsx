@@ -1,5 +1,6 @@
 // Libs
 import React from "react";
+import ReactDOM from 'react-dom';
 import { ThemeProvider } from "styled-components";
 // Components
 import Layout from "./components/Layout/Layout";
@@ -11,20 +12,29 @@ import WrongNetworkFlash from "./components/Flashes/WrongNetwork";
 import theme from "./constants/theme";
 // Context
 import { NetworkProvider } from "./context/network";
+import { Config, configPromise } from "./util/configLoader";
+import { ConfigDataProvider } from "./context/configData";
 
-const App: React.FC = () => (
+export const initApp = async ({target}: {target: HTMLElement}) => {
+  const config = await configPromise
+  ReactDOM.render(<App config={config} />, target);
+}
+
+const App: React.FC<{config: Config}> = ({config}) => (
+  <ConfigDataProvider config={config}>
     <ThemeProvider theme={theme}>
-        <NetworkProvider>
-            <Layout>
-                <Initializer
-                    NoProvider={NoProviderFlash}
-                    WrongNetwork={WrongNetworkFlash}
-                >
-                    <Dashboard />
-                </Initializer>
-            </Layout>
-        </NetworkProvider>
+      <NetworkProvider>
+        <Layout>
+          <Initializer
+            NoProvider={NoProviderFlash}
+            WrongNetwork={WrongNetworkFlash}
+          >
+            <Dashboard />
+          </Initializer>
+        </Layout>
+      </NetworkProvider>
     </ThemeProvider>
+  </ConfigDataProvider>
 );
 
 export default App;
