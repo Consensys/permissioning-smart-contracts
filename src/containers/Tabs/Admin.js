@@ -49,13 +49,17 @@ const AdminTabContainer = ({ isOpen }) => {
             })
             .on("receipt", receipt => {
                 // Web3js returns true if true, null if false
+                const event = idx(receipt, _ => _.events.AdminAdded);
                 const added = Boolean(
-                    idx(
-                        receipt,
-                        _ => _.events.AdminAdded.returnValues.adminAdded
-                    )
+                    idx(event, _ => _.returnValues.adminAdded)
                 );
-                if (added) {
+                if (!event) {
+                    openToast(
+                        value,
+                        FAIL,
+                        `Error while processing Admin account: ${value}`
+                    );
+                } else if (added) {
                     openToast(
                         value,
                         SUCCESS,
