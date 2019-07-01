@@ -15,7 +15,7 @@ type Enode = {enodeHigh: string, enodeLow: string, identifier: string, ip: strin
 
 type ContextType = {
     nodeWhitelist?: Enode[],
-    setNodeWhitelist?: (enode: Enode[]) => void
+    setNodeWhitelist?: React.Dispatch<React.SetStateAction<Enode[]>>
 }
 
 const DataContext = createContext<ContextType>({});
@@ -27,7 +27,7 @@ const DataContext = createContext<ContextType>({});
  *  - nodeWhitelist: list of whiteliist enode from Node Rules contract
  *  - setNodeWhitelist: setter for the whitelist state
  */
-export const NodeDataProvider: React.FC = (props: React.Props<{}>) => {
+export const NodeDataProvider: React.FC<{}> = props => {
     const [nodeWhitelist, setNodeWhitelist] = useState<Enode[]>([]);
 
     const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist }), [
@@ -53,9 +53,9 @@ export const useNodeData = () => {
     }
 
     const { nodeWhitelist, setNodeWhitelist } = context;
-    const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();    
+    const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
     const nodeWhitelistSize: number = useCacheCall("NodeRules", "getSize");
-    const { getByIndex: getNodeByIndex } = drizzle.contracts.NodeRules.methods;    
+    const { getByIndex: getNodeByIndex } = drizzle.contracts.NodeRules.methods;
     const nodeIsReadOnly: boolean = useCacheCall("NodeRules", "isReadOnly");
     const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
         userAddress: drizzleState.accounts[0]
@@ -83,7 +83,7 @@ export const useNodeData = () => {
             );
             setNodeWhitelist!(updatedNodeWhitelist);
         });
-    }, [nodeWhitelistSize, setNodeWhitelist, getNodeByIndex]);    
+    }, [nodeWhitelistSize, setNodeWhitelist, getNodeByIndex]);
 
     const formattedNodeWhitelist = useMemo(() => {
         return nodeWhitelist
@@ -91,8 +91,8 @@ export const useNodeData = () => {
                   .map(enode => ({ ...enode, status: "active" }))
                   .reverse()
             : undefined;
-    }, [nodeWhitelist]);    
-    
+    }, [nodeWhitelist]);
+
     const dataReady = useMemo(
         () =>
             typeof nodeIsReadOnly === "boolean" &&
