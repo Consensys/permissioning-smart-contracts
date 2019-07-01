@@ -8,9 +8,13 @@ const loadConfig = async (): Promise<Config> => {
     const response = await fetch("config.json")
 
     if (response.ok) {
-      return response.json()
+      return response.json().catch((reason: any) => {
+        console.log("config parsing failed with error:", reason)
+        return {}
+      })
     } else {
-      throw new Error("Failed to load config file")
+      console.log("Failed to load config file")
+      return {}
     }
   // development defaults
   } else {
