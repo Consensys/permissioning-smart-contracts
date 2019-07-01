@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { drizzleReactHooks } from "drizzle-react";
 import { isAddress } from "web3-utils";
+import idx from 'idx';
 // Context
 import { useAccountData } from "../../context/accountData";
 import { useAdminData } from "../../context/adminData";
@@ -53,12 +54,29 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
                 toggleModal("add")();
                 addTransaction(value, PENDING_ADDITION);
             })
-            .on("receipt", () => {
-                openToast(
-                    value,
-                    SUCCESS,
-                    `New whitelisted account processed: ${value}`
-                );
+            .on("receipt", (receipt: any) => {
+                const event = idx(receipt, _ => _.events.AccountAdded);
+                const added = Boolean(idx(event, _ => _.returnValues.accountAdded));
+                if (!event) {
+                    openToast(
+                        value,
+                        FAIL,
+                        `Error while processing account: ${value}`
+                    );
+                }
+                else if(added) {
+                    openToast(
+                        value,
+                        SUCCESS,
+                        `New whitelisted account processed: ${value}`
+                    );
+                } else {
+                    openToast(
+                        value,
+                        FAIL,
+                        `Account "${value}" is already on whitelist`
+                    );
+                }
             })
             .on("error", () => {
                 toggleModal("add")();

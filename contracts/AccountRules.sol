@@ -8,6 +8,11 @@ import "./Admin.sol";
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
 
+    event AccountAdded(
+        address account,
+        bool accountAdded
+    );
+
     // in read-only mode rules can't be added/removed
     bool readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
@@ -83,7 +88,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         address account
     ) public onlyAdmin onlyOnEditMode returns (bool) {
         bool added = add(account);
-
+        emit AccountAdded(account, added);
         return added;
     }
 
