@@ -47,14 +47,14 @@ export const useAdminData = () => {
         userAddress: drizzleState.accounts[0]
     }));
 
-    const { useCacheCall } = drizzleReactHooks.useDrizzle();    
+    const { useCacheCall } = drizzleReactHooks.useDrizzle();
     const adminList: string[] = useCacheCall("Admin", "getAdmins");
 
     useEffect(() => {
         setAdmins!(adminList || [])
         }, [adminList, setAdmins]
     )
-    
+
 
     const dataReady = useMemo(
         () =>
@@ -77,7 +77,7 @@ export const useAdminData = () => {
                   }))
                   .reverse()
             : undefined;
-    }, [admins]);    
+    }, [admins]);
 
     return {
         dataReady,
