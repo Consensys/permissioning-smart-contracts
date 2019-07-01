@@ -1,8 +1,8 @@
-export type Config = {}
+export type Config = {
+  AccountRulesAddress?: string
+}
 
 const loadConfig = async (): Promise<Config> => {
-  console.log("loading config")
-
   // production loader
   if (process.env.NODE_ENV === "production") {
     const response = await fetch("config.json")

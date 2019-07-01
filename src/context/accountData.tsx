@@ -10,11 +10,11 @@ import { drizzleReactHooks } from "drizzle-react";
 type Account = {address: string}
 
 type ContextType = {
-    accountWhitelist?: Account[],
-    setAccountWhitelist?: (account: Account[]) => void
-}
+    accountWhitelist: Account[],
+    setAccountWhitelist: (account: Account[]) => void
+} | undefined
 
-const AccountDataContext = createContext<ContextType>({})
+const AccountDataContext = createContext<ContextType>(undefined)
 
 /**
  * Provider for the data context that contains the account whitelist
@@ -64,7 +64,7 @@ export const useAccountData = () => {
         }
         Promise.all(promises).then(responses => {
             const updatedAccountWhitelist = responses.map((address: string) => ({address}));
-            setAccountWhitelist!(updatedAccountWhitelist);
+            setAccountWhitelist(updatedAccountWhitelist);
         })
     }, [accountWhitelistSize, setAccountWhitelist, getAccountByIndex])
 
@@ -77,10 +77,8 @@ export const useAccountData = () => {
 
     const formattedAccountWhitelist = useMemo(() => {
         return accountWhitelist
-            ? accountWhitelist
                   .map(account => ({ ...account, identifier: account.address.toLowerCase(), status: "active" }))
                   .reverse()
-            : undefined
     }, [accountWhitelist])
 
     return {
