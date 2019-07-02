@@ -2,6 +2,7 @@
 import React from "react";
 import { drizzleReactHooks } from "drizzle-react";
 import PropTypes from "prop-types";
+import idx from "idx";
 // Context
 import { useAdminData } from "../../context/adminData";
 import { useNodeData } from "../../context/nodeData";
@@ -73,12 +74,30 @@ const EnodeTabContainer = ({ isOpen }) => {
                 toggleModal("add")();
                 addTransaction(identifier, PENDING_ADDITION);
             })
-            .on("receipt", () => {
-                openToast(
-                    identifier,
-                    SUCCESS,
-                    `New whitelisted node processed: ${enodeHigh}${enodeLow}`
+            .on("receipt", receipt => {
+                const event = idx(receipt, _ => _.events.NodeAdded);
+                const added = Boolean(
+                    idx(event, _ => _.returnValues.nodeAdded)
                 );
+                if (!event) {
+                    openToast(
+                        value,
+                        FAIL,
+                        `Error while processing node: ${value}`
+                    );
+                } else if (added) {
+                    openToast(
+                        value,
+                        SUCCESS,
+                        `New whitelist node processed: ${value}`
+                    );
+                } else {
+                    openToast(
+                        value,
+                        FAIL,
+                        `Node "${value}" is already on whitelist`
+                    );
+                }
             })
             .on("error", () => {
                 toggleModal("add")();

@@ -8,6 +8,10 @@ import "./Admin.sol";
 
 contract NodeRules is NodeRulesProxy, NodeRulesList {
 
+    event NodeAdded(
+        bool nodeAdded
+    );
+
     // on read-only mode rules can't be added/removed
     bool readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
@@ -104,6 +108,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         if (added) {
             triggerRulesChangeEvent(false);
         }
+        emit NodeAdded(added);
 
         return added;
     }
