@@ -9,6 +9,7 @@ import { useAccountData } from "../../context/accountData";
 import { useAdminData } from "../../context/adminData";
 // Utils
 import useTab from "./useTab";
+import { errorToast } from "../../util/tabTools";
 // Components
 import AccountTab from "../../components/AccountTab/AccountTab";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
@@ -23,6 +24,11 @@ FAIL} from
 
 type AccountTabContainerProps = {
   isOpen: boolean
+}
+
+type W3Error = {
+    message: string,
+    stack: string
 }
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
@@ -78,15 +84,15 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
                     );
                 }
             })
-            .on("error", () => {
+            .on("error", (error: W3Error) => {
                 toggleModal("add")();
                 updateTransaction(value, FAIL_ADDITION);
-                openToast(
+                errorToast(error, value, openToast, () => openToast(
                     value,
                     FAIL,
                     "Could not add whitelisted account",
                     `${value} was unable to be added. Please try again.`
-                );
+                ));
             });
     };
 
@@ -107,15 +113,15 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
                     `Removal of whitelisted account processed: ${value}`
                 );
             })
-            .on("error", () => {
+            .on("error", (error: W3Error) => {
                 toggleModal("remove")();
                 updateTransaction(value, FAIL_REMOVAL);
-                openToast(
+                errorToast(error, value, openToast, () => openToast(
                     value,
                     FAIL,
                     "Could not remove whitelisted account",
                     `${value} was unable to be removed. Please try again.`
-                );
+                ));
             });
     };
 

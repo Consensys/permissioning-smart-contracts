@@ -8,6 +8,7 @@ import idx from "idx";
 import { useAdminData } from "../../context/adminData";
 // Utils
 import useTab from "./useTab";
+import { errorToast } from "../../util/tabTools";
 // Components
 import AdminTab from "../../components/AdminTab/AdminTab";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
@@ -73,14 +74,16 @@ const AdminTabContainer = ({ isOpen }) => {
                     openToast(value, FAIL, message);
                 }
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("add")();
                 updateTransaction(value, FAIL_ADDITION);
-                openToast(
-                    value,
-                    FAIL,
-                    "Could not add account as admin",
-                    `${value} was unable to be added. Please try again.`
+                errorToast(error, value, openToast, () =>
+                    openToast(
+                        value,
+                        FAIL,
+                        "Could not add account as admin",
+                        `${value} was unable to be added. Please try again.`
+                    )
                 );
             });
     };
@@ -102,14 +105,16 @@ const AdminTabContainer = ({ isOpen }) => {
                     `Removal of admin account processed: ${value}`
                 );
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("remove")();
                 updateTransaction(value, FAIL_REMOVAL);
-                openToast(
-                    value,
-                    FAIL,
-                    "Could not remove admin account",
-                    `${value} was unable to be removed. Please try again.`
+                errorToast(error, value, openToast, () =>
+                    openToast(
+                        value,
+                        FAIL,
+                        "Could not remove admin account",
+                        `${value} was unable to be removed. Please try again.`
+                    )
                 );
             });
     };

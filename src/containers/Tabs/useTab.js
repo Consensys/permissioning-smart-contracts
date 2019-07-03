@@ -40,7 +40,10 @@ export default (originalList, identifierToParams) => {
         const derivedList = originalList.map(({ identifier, ...rest }) => {
             if (updatedTransactions.has(identifier)) {
                 const status = updatedTransactions.get(identifier);
-                if (status === PENDING_ADDITION) {
+                if (
+                    status === PENDING_ADDITION ||
+                    (status === FAIL_ADDITION && rest.status === "active")
+                ) {
                     updatedTransactions.delete(identifier);
                 } else {
                     return { ...rest, identifier, status };

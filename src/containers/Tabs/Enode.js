@@ -14,6 +14,7 @@ import {
     enodeToParams,
     isValidEnode
 } from "../../util/enodetools";
+import { errorToast } from "../../util/tabTools";
 // Components
 import EnodeTab from "../../components/EnodeTab/EnodeTab";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
@@ -99,14 +100,16 @@ const EnodeTabContainer = ({ isOpen }) => {
                     );
                 }
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("add")();
                 updateTransaction(identifier, FAIL_ADDITION);
-                openToast(
-                    identifier,
-                    FAIL,
-                    "Could not add node to whitelist",
-                    `${enodeHigh}${enodeLow} was unable to be added. Please try again`
+                errorToast(error, identifier, openToast, () =>
+                    openToast(
+                        identifier,
+                        FAIL,
+                        "Could not add node to whitelist",
+                        `${enodeHigh}${enodeLow} was unable to be added. Please try again`
+                    )
                 );
             });
     };
@@ -132,14 +135,16 @@ const EnodeTabContainer = ({ isOpen }) => {
                     `Removal of whitelisted node processed: ${enodeHigh}${enodeLow}`
                 );
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("remove")();
                 updateTransaction(value, FAIL_REMOVAL);
-                openToast(
-                    value,
-                    FAIL,
-                    "Could not remove node to whitelist",
-                    `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
+                errorToast(error, value, openToast, () =>
+                    openToast(
+                        value,
+                        FAIL,
+                        "Could not remove node to whitelist",
+                        `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
+                    )
                 );
             });
     };
@@ -172,16 +177,18 @@ const EnodeTabContainer = ({ isOpen }) => {
                         : "Changes have been locked!"
                 );
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("lock")();
                 deleteTransaction("lock");
-                updateToast(
-                    "lock",
-                    FAIL,
-                    isReadOnly
-                        ? "Could not unlock values."
-                        : "Could not lock changes.",
-                    "The transaction was unabled to be processed. Please try again."
+                errorToast(error, "lock", openToast, () =>
+                    updateToast(
+                        "lock",
+                        FAIL,
+                        isReadOnly
+                            ? "Could not unlock values."
+                            : "Could not lock changes.",
+                        "The transaction was unabled to be processed. Please try again."
+                    )
                 );
             });
     };
