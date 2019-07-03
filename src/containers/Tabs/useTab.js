@@ -43,7 +43,7 @@ export default (originalList, identifierToParams) => {
                 const status = updatedTransactions.get(identifier);
                 if (
                     status === PENDING_ADDITION ||
-                    (status === FAIL_ADDITION && rest.s0tatus === "active") ||
+                    (status === FAIL_ADDITION && rest.status === "active") ||
                     (status === FAIL_REMOVAL && rest.status === "active")
                 ) {
                     updatedTransactions.delete(identifier);
