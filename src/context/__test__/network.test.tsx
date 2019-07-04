@@ -9,6 +9,7 @@ import { testHook } from "../../test-utils/testHook";
 import * as drizzleReact from "drizzle-react";
 // Components
 import { NetworkProvider } from "../network";
+import { useConfig, ConfigDataProvider } from "../configData"
 
 jest.mock("drizzle-react", () => ({
     drizzleReactHooks: {
@@ -17,14 +18,18 @@ jest.mock("drizzle-react", () => ({
     }
 }));
 
+jest.mock("../configData", () => ({
+  useConfig: jest.fn()
+}))
+
 describe("<NetworkProvider />", () => {
     let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         wrapper = shallow(
-            <NetworkProvider>
-                <div className="test" />
-            </NetworkProvider>
+          <NetworkProvider>
+              <div className="test" />
+          </NetworkProvider>
         );
     });
 
@@ -48,6 +53,9 @@ describe("useNetwork", () => {
                     status: ""
                 })
             );
+            mocked(useConfig).mockImplementation(
+              () => ({})
+            )
             testHook(() => (network = useNetwork()), NetworkProvider);
         });
 
