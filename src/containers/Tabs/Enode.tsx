@@ -3,6 +3,7 @@ import React from "react";
 import { drizzleReactHooks } from "drizzle-react";
 import PropTypes from "prop-types";
 import idx from "idx";
+import { TransactionObject } from "web3/eth/types";
 // Context
 import { useAdminData } from "../../context/adminData";
 import { useNodeData } from "../../context/nodeData";
@@ -30,7 +31,11 @@ import {
     FAIL
 } from "../../constants/transactions";
 
-const EnodeTabContainer = ({ isOpen }) => {
+type EnodeTabContainerProps = {
+    isOpen: boolean
+}
+
+const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     const { isAdmin, dataReady: adminDataReady } = useAdminData();
     const { userAddress, whitelist, isReadOnly, dataReady } = useNodeData();
 
@@ -53,9 +58,14 @@ const EnodeTabContainer = ({ isOpen }) => {
         removeEnode,
         enterReadOnly,
         exitReadOnly
-    } = drizzle.contracts.NodeRules.methods;
+    } = drizzle.contracts.NodeRules.methods  as { 
+        addEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<any>, 
+        removeEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<any>,
+        enterReadOnly: () => TransactionObject<any>, 
+        exitReadOnly: () => TransactionObject<any>
+    };
 
-    const handleAdd = async value => {
+    const handleAdd = async (value: string) => {
         const { enodeHigh, enodeLow, ip, port } = enodeToParams(value);
         const identifier = paramsToIdentifier({
             enodeHigh,
@@ -70,7 +80,7 @@ const EnodeTabContainer = ({ isOpen }) => {
             port
         ).estimateGas({ from: userAddress });
         addEnode(enodeHigh, enodeLow, ip, port)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("add")();
                 addTransaction(identifier, PENDING_ADDITION);
@@ -114,7 +124,7 @@ const EnodeTabContainer = ({ isOpen }) => {
             });
     };
 
-    const handleRemove = async value => {
+    const handleRemove = async (value: string) => {
         const { enodeHigh, enodeLow, ip, port } = identifierToParams(value);
         const gasLimit = await removeEnode(
             enodeHigh,
@@ -123,7 +133,7 @@ const EnodeTabContainer = ({ isOpen }) => {
             port
         ).estimateGas({ from: userAddress });
         removeEnode(enodeHigh, enodeLow, ip, port)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("remove")();
                 addTransaction(value, PENDING_REMOVAL);
@@ -153,7 +163,7 @@ const EnodeTabContainer = ({ isOpen }) => {
         const method = isReadOnly ? exitReadOnly : enterReadOnly;
         const gasLimit = await method().estimateGas({ from: userAddress });
         method()
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("lock")();
                 addTransaction("lock", PENDING_LOCK);

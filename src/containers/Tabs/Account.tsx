@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { drizzleReactHooks } from "drizzle-react";
 import { isAddress } from "web3-utils";
 import idx from 'idx';
+import { TransactionObject } from "web3/eth/types";
 // Context
 import { useAccountData } from "../../context/accountData";
 import { useAdminData } from "../../context/adminData";
@@ -26,11 +27,6 @@ type AccountTabContainerProps = {
   isOpen: boolean
 }
 
-type W3Error = {
-    message: string,
-    stack: string
-}
-
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
     const { isAdmin, dataReady: adminDataReady } = useAdminData();
     const { userAddress, whitelist, isReadOnly, dataReady } = useAccountData();
@@ -48,19 +44,22 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
 
     const { drizzle } = drizzleReactHooks.useDrizzle();
 
-    const { addAccount, removeAccount } = drizzle.contracts.AccountRules.methods;
+    const { addAccount, removeAccount } = drizzle.contracts.AccountRules.methods as { 
+        addAccount: (value: string) => TransactionObject<any>, 
+        removeAccount: (value: string) => TransactionObject<any>
+    };
 
-    const handleAdd = async (value: any) => {
+    const handleAdd = async (value: string) => {
         const gasLimit = await addAccount(value).estimateGas({
             from: userAddress
         });
         addAccount(value)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("add")();
                 addTransaction(value, PENDING_ADDITION);
             })
-            .on("receipt", (receipt: any) => {
+            .on("receipt", receipt => {
                 const event = idx(receipt, _ => _.events.AccountAdded);
                 const added = Boolean(idx(event, _ => _.returnValues.accountAdded));
                 if (!event) {
@@ -84,7 +83,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
                     );
                 }
             })
-            .on("error", (error: W3Error) => {
+            .on("error", error => {
                 toggleModal("add")();
                 updateTransaction(value, FAIL_ADDITION);
                 errorToast(error, value, openToast, () => openToast(
@@ -96,12 +95,12 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
             });
     };
 
-    const handleRemove = async (value: any) => {
+    const handleRemove = async (value: string) => {
         const gasLimit = await removeAccount(value).estimateGas({
             from: userAddress
         });
         removeAccount(value)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("remove")();
                 addTransaction(value, PENDING_REMOVAL);
@@ -113,7 +112,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
                     `Removal of whitelisted account processed: ${value}`
                 );
             })
-            .on("error", (error: W3Error) => {
+            .on("error", error => {
                 toggleModal("remove")();
                 updateTransaction(value, FAIL_REMOVAL);
                 errorToast(error, value, openToast, () => openToast(
