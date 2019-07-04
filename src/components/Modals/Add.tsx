@@ -6,8 +6,17 @@ import classnames from "classnames";
 import { Modal, Card, Button, Flex, Box, Heading, Form, Text } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
+import { ModalDisplay } from "../../constants/modals"
 
-const AddModal = ({
+const AddModal: React.FC<{
+  input: string
+  validationResult: {valid: boolean, msg?: string}
+  modifyInput: (input: {target: {value: string}}) => void
+  handleSubmit: (e: Event) => void
+  isOpen: boolean
+  closeModal: (e: Event) => void
+  display: ModalDisplay
+}> = ({
     input,
     validationResult,
     modifyInput,
@@ -107,12 +116,12 @@ const AddModal = ({
 
 AddModal.propTypes = {
     input: PropTypes.string.isRequired,
-    validationResult: PropTypes.object.isRequired,
+    validationResult: PropTypes.any.isRequired,
     modifyInput: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-    display: PropTypes.object.isRequired
+    display: PropTypes.any.isRequired
 };
 
 export default AddModal;

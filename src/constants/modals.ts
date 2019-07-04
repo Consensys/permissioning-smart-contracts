@@ -1,6 +1,15 @@
 import { identifierToEnodeHighAndLow } from "../util/enodetools";
 
-export const addAdminDisplay = {
+export type ModalDisplay = {
+  heading: string
+  subHeading: string
+  label?: string
+  inputPlaceholder?: string
+  errorMessage?: string
+  submitText?: string
+}
+
+export const addAdminDisplay: ModalDisplay = {
     submitText: "Add Admin Account",
     errorMessage: "Account address is not correct.",
     inputPlaceholder: "Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A",
@@ -9,12 +18,12 @@ export const addAdminDisplay = {
     subHeading: "Admin accounts can..."
 };
 
-export const removeAdminDisplay = (value: string | boolean) => ({
+export const removeAdminDisplay: (value: string | boolean) => ModalDisplay = (value) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${value}” as an admin account?`
 });
 
-export const addAccountDisplay = {
+export const addAccountDisplay: ModalDisplay = {
     submitText: "Add Whitelisted Account",
     errorMessage: "Account address is not correct.",
     inputPlaceholder: "Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A",
@@ -23,12 +32,12 @@ export const addAccountDisplay = {
     subHeading: "Whitelisted accounts may submit transactions on the network."
 };
 
-export const removeAccountDisplay = (value: string | boolean) => ({
+export const removeAccountDisplay: (value: string | boolean) => ModalDisplay = (value) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${value}” as a whitelisted account?`
 });
 
-export const addEnodeDisplay = {
+export const addEnodeDisplay: ModalDisplay = {
     submitText: "Add Whitelisted Node",
     errorMessage: "Enode URL must include Address, IP address and Port.",
     inputPlaceholder:
@@ -39,7 +48,7 @@ export const addEnodeDisplay = {
         "Nodes can connect to each other if they are both whitelisted. See formatting details here."
 };
 
-export const removeEnodeDisplay = (value: string) => ({
+export const removeEnodeDisplay: (value: string) => ModalDisplay = (value) => ({
     heading: "Are you sure?",
     subHeading: `Remove “${identifierToEnodeHighAndLow(
         value
