@@ -3,20 +3,27 @@ import React from "react";
 import PropTypes from "prop-types";
 // Components
 import RemoveModal from "../../components/Modals/Remove";
+import { ModalDisplay } from "../../constants/modals";
 
-const RemoveModalContainer = ({
+const RemoveModalContainer: React.FC<{
+  isOpen: boolean
+  closeModal: () => void
+  handleRemove: (value: string | boolean) => void
+  value: string | boolean
+  display: ModalDisplay
+}> = ({
     isOpen,
     closeModal,
     handleRemove,
     value,
     display
 }) => {
-    const handleSubmit = e => {
+    const handleSubmit = (e: Event) => {
         e.preventDefault();
         handleRemove(value);
     };
 
-    const handleClose = e => {
+    const handleClose = (e: Event) => {
         e.preventDefault();
         closeModal();
     };
@@ -26,7 +33,6 @@ const RemoveModalContainer = ({
             handleSubmit={handleSubmit}
             isOpen={isOpen}
             closeModal={handleClose}
-            value={value}
             display={display}
         />
     );
@@ -37,7 +43,7 @@ RemoveModalContainer.propTypes = {
     closeModal: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired,
-    display: PropTypes.object.isRequired
+    display: PropTypes.any.isRequired
 };
 
 export default RemoveModalContainer;

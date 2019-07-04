@@ -5,8 +5,14 @@ import PropTypes from "prop-types";
 import { Modal, Card, Button, Flex, Box, Heading, Text } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
+import { ModalDisplay } from "../../constants/modals"
 
-const RemoveModal = ({ closeModal, isOpen, handleSubmit, value, display }) => (
+const RemoveModal: React.FC<{
+  closeModal: (e: Event) => void
+  isOpen: boolean
+  handleSubmit: (e: Event) => void
+  display: ModalDisplay
+}> = ({ closeModal, isOpen, handleSubmit, display }) => (
     <Modal isOpen={isOpen}>
         <Card width={"700px"} p={0}>
             <Button.Text
@@ -47,8 +53,7 @@ RemoveModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired,
-    display: PropTypes.object.isRequired
+    display: PropTypes.any.isRequired
 };
 
 export default RemoveModal;
