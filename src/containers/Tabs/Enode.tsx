@@ -59,10 +59,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         enterReadOnly,
         exitReadOnly
     } = drizzle.contracts.NodeRules.methods  as { 
-        addEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<any>, 
-        removeEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<any>,
-        enterReadOnly: () => TransactionObject<any>, 
-        exitReadOnly: () => TransactionObject<any>
+        addEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>, 
+        removeEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>,
+        enterReadOnly: () => TransactionObject<never>, 
+        exitReadOnly: () => TransactionObject<never>
     };
 
     const handleAdd = async (value: string) => {

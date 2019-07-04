@@ -45,8 +45,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     const { drizzle } = drizzleReactHooks.useDrizzle();
 
     const { addAccount, removeAccount } = drizzle.contracts.AccountRules.methods as { 
-        addAccount: (value: string) => TransactionObject<any>, 
-        removeAccount: (value: string) => TransactionObject<any>
+        addAccount: (value: string) => TransactionObject<never>, 
+        removeAccount: (value: string) => TransactionObject<never>
     };
 
     const handleAdd = async (value: string) => {

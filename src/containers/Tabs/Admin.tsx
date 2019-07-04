@@ -48,8 +48,8 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
     const { drizzle } = drizzleReactHooks.useDrizzle();
 
     const { addAdmin, removeAdmin } = drizzle.contracts.Admin.methods as { 
-        addAdmin: (value: string) => TransactionObject<any>, 
-        removeAdmin: (value: string) => TransactionObject<any>};;
+        addAdmin: (value: string) => TransactionObject<never>, 
+        removeAdmin: (value: string) => TransactionObject<never>};;
 
     const handleAdd = async (value: string) => {
         const gasLimit = await addAdmin(value).estimateGas({
