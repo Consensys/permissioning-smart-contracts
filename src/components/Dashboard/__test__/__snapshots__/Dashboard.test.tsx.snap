@@ -15545,7 +15545,6 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                 }
                 handleSubmit={[Function]}
                 isOpen={false}
-                value={false}
               >
                 <Modal
                   isOpen={false}
@@ -32835,7 +32834,6 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                     }
                     handleSubmit={[Function]}
                     isOpen={false}
-                    value={false}
                   >
                     <Modal
                       isOpen={false}
