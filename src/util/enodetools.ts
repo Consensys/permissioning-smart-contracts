@@ -1,3 +1,10 @@
+export type Enode = {
+    enodeHigh: string, 
+    enodeLow: string, 
+    ip: string, 
+    port: string
+};
+
 export const enodeToParams = (enodeURL: string) => {
     let enodeHigh = "";
     let enodeLow = "";
@@ -62,9 +69,14 @@ export const identifierToEnodeHighAndLow = (identifier: string) => {
 };
 
 export const isValidEnode = (str: string) => {
-    const params = enodeToParams(str);
-    const hasValues = !Object.values(params).some(value => !value);
-    return {
-        valid: hasValues
-    };
+    return !Object.values(enodeToParams(str)).some(value => !value);
 };
+
+export const isEqual = (node1: Enode, node2: Enode) => {
+    return (
+        node1.enodeHigh === node2.enodeHigh &&
+        node1.enodeLow === node2.enodeLow &&
+        node1.ip === node2.ip &&
+        node1.port === node2.port
+    )
+}

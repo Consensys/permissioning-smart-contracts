@@ -9,9 +9,7 @@ import React, {
 import { drizzleReactHooks } from "drizzle-react";
 
 // Utils
-import { paramsToIdentifier } from "../util/enodetools";
-
-type Enode = {enodeHigh: string, enodeLow: string, identifier: string, ip: string, port: string};
+import { paramsToIdentifier, Enode } from "../util/enodetools";
 
 type ContextType = {
     nodeWhitelist?: Enode[],
