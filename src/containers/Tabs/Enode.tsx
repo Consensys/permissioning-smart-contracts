@@ -3,6 +3,7 @@ import React from "react";
 import { drizzleReactHooks } from "drizzle-react";
 import PropTypes from "prop-types";
 import idx from "idx";
+import { TransactionObject } from "web3/eth/types";
 // Context
 import { useAdminData } from "../../context/adminData";
 import { useNodeData } from "../../context/nodeData";
@@ -14,6 +15,7 @@ import {
     enodeToParams,
     isValidEnode
 } from "../../util/enodetools";
+import { errorToast } from "../../util/tabTools";
 // Components
 import EnodeTab from "../../components/EnodeTab/EnodeTab";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
@@ -29,7 +31,11 @@ import {
     FAIL
 } from "../../constants/transactions";
 
-const EnodeTabContainer = ({ isOpen }) => {
+type EnodeTabContainerProps = {
+    isOpen: boolean
+}
+
+const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     const { isAdmin, dataReady: adminDataReady } = useAdminData();
     const { userAddress, whitelist, isReadOnly, dataReady } = useNodeData();
 
@@ -52,9 +58,14 @@ const EnodeTabContainer = ({ isOpen }) => {
         removeEnode,
         enterReadOnly,
         exitReadOnly
-    } = drizzle.contracts.NodeRules.methods;
+    } = drizzle.contracts.NodeRules.methods  as { 
+        addEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>, 
+        removeEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>,
+        enterReadOnly: () => TransactionObject<never>, 
+        exitReadOnly: () => TransactionObject<never>
+    };
 
-    const handleAdd = async value => {
+    const handleAdd = async (value: string) => {
         const { enodeHigh, enodeLow, ip, port } = enodeToParams(value);
         const identifier = paramsToIdentifier({
             enodeHigh,
@@ -69,7 +80,7 @@ const EnodeTabContainer = ({ isOpen }) => {
             port
         ).estimateGas({ from: userAddress });
         addEnode(enodeHigh, enodeLow, ip, port)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("add")();
                 addTransaction(identifier, PENDING_ADDITION);
@@ -99,19 +110,21 @@ const EnodeTabContainer = ({ isOpen }) => {
                     );
                 }
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("add")();
                 updateTransaction(identifier, FAIL_ADDITION);
-                openToast(
-                    identifier,
-                    FAIL,
-                    "Could not add node to whitelist",
-                    `${enodeHigh}${enodeLow} was unable to be added. Please try again`
+                errorToast(error, identifier, openToast, () =>
+                    openToast(
+                        identifier,
+                        FAIL,
+                        "Could not add node to whitelist",
+                        `${enodeHigh}${enodeLow} was unable to be added. Please try again`
+                    )
                 );
             });
     };
 
-    const handleRemove = async value => {
+    const handleRemove = async (value: string) => {
         const { enodeHigh, enodeLow, ip, port } = identifierToParams(value);
         const gasLimit = await removeEnode(
             enodeHigh,
@@ -120,7 +133,7 @@ const EnodeTabContainer = ({ isOpen }) => {
             port
         ).estimateGas({ from: userAddress });
         removeEnode(enodeHigh, enodeLow, ip, port)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("remove")();
                 addTransaction(value, PENDING_REMOVAL);
@@ -132,14 +145,16 @@ const EnodeTabContainer = ({ isOpen }) => {
                     `Removal of whitelisted node processed: ${enodeHigh}${enodeLow}`
                 );
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("remove")();
                 updateTransaction(value, FAIL_REMOVAL);
-                openToast(
-                    value,
-                    FAIL,
-                    "Could not remove node to whitelist",
-                    `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
+                errorToast(error, value, openToast, () =>
+                    openToast(
+                        value,
+                        FAIL,
+                        "Could not remove node to whitelist",
+                        `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
+                    )
                 );
             });
     };
@@ -148,7 +163,7 @@ const EnodeTabContainer = ({ isOpen }) => {
         const method = isReadOnly ? exitReadOnly : enterReadOnly;
         const gasLimit = await method().estimateGas({ from: userAddress });
         method()
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("lock")();
                 addTransaction("lock", PENDING_LOCK);
@@ -172,16 +187,18 @@ const EnodeTabContainer = ({ isOpen }) => {
                         : "Changes have been locked!"
                 );
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("lock")();
                 deleteTransaction("lock");
-                updateToast(
-                    "lock",
-                    FAIL,
-                    isReadOnly
-                        ? "Could not unlock values."
-                        : "Could not lock changes.",
-                    "The transaction was unabled to be processed. Please try again."
+                errorToast(error, "lock", openToast, () =>
+                    updateToast(
+                        "lock",
+                        FAIL,
+                        isReadOnly
+                            ? "Could not unlock values."
+                            : "Could not lock changes.",
+                        "The transaction was unabled to be processed. Please try again."
+                    )
                 );
             });
     };
