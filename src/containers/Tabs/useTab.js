@@ -10,7 +10,8 @@ import { arrayInclude, areArrayEqual, areMapEqual } from "../../util/array";
 import {
     PENDING_ADDITION,
     PENDING_REMOVAL,
-    FAIL_ADDITION
+    FAIL_ADDITION,
+    FAIL_REMOVAL
 } from "../../constants/transactions";
 
 export default (originalList, identifierToParams) => {
@@ -40,7 +41,11 @@ export default (originalList, identifierToParams) => {
         const derivedList = originalList.map(({ identifier, ...rest }) => {
             if (updatedTransactions.has(identifier)) {
                 const status = updatedTransactions.get(identifier);
-                if (status === PENDING_ADDITION) {
+                if (
+                    status === PENDING_ADDITION ||
+                    (status === FAIL_ADDITION && rest.status === "active") ||
+                    (status === FAIL_REMOVAL && rest.status === "active")
+                ) {
                     updatedTransactions.delete(identifier);
                 } else {
                     return { ...rest, identifier, status };

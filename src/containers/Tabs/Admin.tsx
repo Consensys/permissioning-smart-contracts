@@ -4,10 +4,12 @@ import PropTypes from "prop-types";
 import { drizzleReactHooks } from "drizzle-react";
 import { isAddress } from "web3-utils";
 import idx from "idx";
+import { TransactionObject } from "web3/eth/types";
 // Context
 import { useAdminData } from "../../context/adminData";
 // Utils
 import useTab from "./useTab";
+import { errorToast } from "../../util/tabTools";
 // Components
 import AdminTab from "../../components/AdminTab/AdminTab";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
@@ -21,7 +23,17 @@ import {
     FAIL
 } from "../../constants/transactions";
 
-const AdminTabContainer = ({ isOpen }) => {
+type AdminTabContainerProps = {
+    isOpen: boolean
+}
+
+type Admin = {
+    address: string,
+    identifier: string,
+    status: string
+}
+
+const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
     const { admins, isAdmin, userAddress, dataReady } = useAdminData();
     const {
         list,
@@ -31,18 +43,20 @@ const AdminTabContainer = ({ isOpen }) => {
         updateTransaction,
         deleteTransaction,
         openToast
-    } = useTab(admins, identifier => ({ address: identifier }));
+    } = useTab(admins, (identifier: string) => ({ address: identifier }));
 
     const { drizzle } = drizzleReactHooks.useDrizzle();
 
-    const { addAdmin, removeAdmin } = drizzle.contracts.Admin.methods;
+    const { addAdmin, removeAdmin } = drizzle.contracts.Admin.methods as { 
+        addAdmin: (value: string) => TransactionObject<never>, 
+        removeAdmin: (value: string) => TransactionObject<never>};;
 
-    const handleAdd = async value => {
+    const handleAdd = async (value: string) => {
         const gasLimit = await addAdmin(value).estimateGas({
             from: userAddress
         });
         addAdmin(value)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("add")();
                 addTransaction(value, PENDING_ADDITION);
@@ -73,24 +87,26 @@ const AdminTabContainer = ({ isOpen }) => {
                     openToast(value, FAIL, message);
                 }
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("add")();
                 updateTransaction(value, FAIL_ADDITION);
-                openToast(
-                    value,
-                    FAIL,
-                    "Could not add account as admin",
-                    `${value} was unable to be added. Please try again.`
+                errorToast(error, value, openToast, () =>
+                    openToast(
+                        value,
+                        FAIL,
+                        "Could not add account as admin",
+                        `${value} was unable to be added. Please try again.`
+                    )
                 );
             });
     };
 
-    const handleRemove = async value => {
+    const handleRemove = async (value: string) => {
         const gasLimit = await removeAdmin(value).estimateGas({
             from: userAddress
         });
         removeAdmin(value)
-            .send({ from: userAddress, gasLimit: gasLimit * 4 })
+            .send({ from: userAddress, gas: gasLimit * 4 })
             .on("transactionHash", () => {
                 toggleModal("remove")();
                 addTransaction(value, PENDING_REMOVAL);
@@ -102,19 +118,21 @@ const AdminTabContainer = ({ isOpen }) => {
                     `Removal of admin account processed: ${value}`
                 );
             })
-            .on("error", () => {
+            .on("error", error => {
                 toggleModal("remove")();
                 updateTransaction(value, FAIL_REMOVAL);
-                openToast(
-                    value,
-                    FAIL,
-                    "Could not remove admin account",
-                    `${value} was unable to be removed. Please try again.`
+                errorToast(error, value, openToast, () =>
+                    openToast(
+                        value,
+                        FAIL,
+                        "Could not remove admin account",
+                        `${value} was unable to be removed. Please try again.`
+                    )
                 );
             });
     };
 
-    const isValidAdmin = address => {
+    const isValidAdmin = (address: string) => {
         let isValidAddress = isAddress(address);
         if (!isValidAddress) {
             return {
@@ -122,7 +140,7 @@ const AdminTabContainer = ({ isOpen }) => {
             };
         }
 
-        let isAdmin = list.filter(item => item.address === address).length > 0;
+        let isAdmin = list.filter((item: Admin) => item.address === address).length > 0;
         if (isAdmin) {
             return {
                 valid: false,
