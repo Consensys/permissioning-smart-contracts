@@ -13,6 +13,8 @@ import {
     identifierToParams,
     paramsToIdentifier,
     enodeToParams,
+    Enode, 
+    isEqual, 
     isValidEnode
 } from "../../util/enodetools";
 import { errorToast } from "../../util/tabTools";
@@ -203,8 +205,28 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
             });
     };
 
-    const allDataReady = dataReady && adminDataReady;
+    const isDuplicateEnode = (enode: string) => {
+        return list.filter((item: Enode) => isEqual(item, enodeToParams(enode))).length > 0;
+    }
+    
+    const isValid = (enode: string) => {
+        if (!isValidEnode(enode)) {
+            return {
+                valid: false
+            }
+        } else if (isDuplicateEnode(enode)) {
+            return {
+                valid: false,
+                msg: "Specified enode is already on whitelist."
+            }
+        } else {
+            return {
+                valid: true
+            }
+        }
+    }
 
+    const allDataReady = dataReady && adminDataReady;
     if (isOpen && allDataReady) {
         return (
             <EnodeTab
@@ -217,7 +239,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
                 handleLock={handleLock}
                 isAdmin={isAdmin}
                 deleteTransaction={deleteTransaction}
-                isValid={isValidEnode}
+                isValid={isValid}
                 pendingLock={!!transactions.get("lock")}
                 isReadOnly={isReadOnly}
                 isOpen={isOpen}
