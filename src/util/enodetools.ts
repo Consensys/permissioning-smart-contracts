@@ -1,8 +1,8 @@
 export const enodeToParams = (enodeURL: string) => {
-    let enodeHigh = null;
-    let enodeLow = null;
-    let ip = null;
-    let port = null;
+    let enodeHigh = "";
+    let enodeLow = "";
+    let ip = "";
+    let port = "";
 
     const splitURL = enodeURL.split("//")[1];
     if (splitURL) {
@@ -21,7 +21,7 @@ export const enodeToParams = (enodeURL: string) => {
     return {
         enodeHigh,
         enodeLow,
-        ip: ip ? getHexIpv4(ip) : null,
+        ip: ip ? getHexIpv4(ip) : "",
         port
     };
 };
