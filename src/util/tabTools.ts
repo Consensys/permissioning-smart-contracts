@@ -1,7 +1,14 @@
 // Constants
 import { FAIL } from "../constants/transactions";
 
-export const errorToast = (error: Error, value: string, openToast: (identifier: string, status: string, message: string) => void, defaultToast: () => void) => {
+export const errorToast = (
+    error: Error,
+    value: string,
+    openToast: (
+        identifier: string,
+        status: string,
+        message: string) => void, defaultToast: () => void
+) => {
     if (error.message.includes("MetaMask Tx Signature: User denied transaction signature.")) {
         openToast(
             value,
@@ -11,4 +18,4 @@ export const errorToast = (error: Error, value: string, openToast: (identifier: 
     } else {
         defaultToast();
     }
-}    
+}
