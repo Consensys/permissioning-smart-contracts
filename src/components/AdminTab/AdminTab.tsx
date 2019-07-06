@@ -21,7 +21,7 @@ type AdminTab = {
   handleRemove: (value: any) => Promise<void>,
   isAdmin: boolean,
   deleteTransaction: () => void,
-  isValid: (address: string) => object,
+  isValid: (address: string) => {valid: boolean, msg?: string},
   isOpen: boolean
 }
 

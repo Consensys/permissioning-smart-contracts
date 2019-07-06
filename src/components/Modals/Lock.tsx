@@ -6,7 +6,12 @@ import { Modal, Card, Button, Flex, Box, Heading, Text } from "rimble-ui";
 // Styles
 import styles from "./styles.module.scss";
 
-const LockModal = ({ closeModal, isOpen, handleLock, isReadOnly }) => (
+const LockModal: React.FC<{
+  closeModal: (e: Event) => void
+  isOpen: boolean
+  handleLock: (e: Event) => void
+  isReadOnly: boolean
+}> = ({ closeModal, isOpen, handleLock, isReadOnly }) => (
     <Modal isOpen={isOpen}>
         <Card width={"700px"} p={0}>
             <Button.Text
@@ -17,7 +22,7 @@ const LockModal = ({ closeModal, isOpen, handleLock, isReadOnly }) => (
                 right={0}
                 mt={3}
                 mr={3}
-                onClick={() => closeModal()}
+                onClick={closeModal}
                 className={styles.closeIcon}
             />
             <Box p={4} mb={3}>
@@ -38,10 +43,10 @@ const LockModal = ({ closeModal, isOpen, handleLock, isReadOnly }) => (
                 borderColor={"#E8E8E8"}
                 justifyContent={"flex-end"}
             >
-                <Button.Outline mainColor="black" onClick={() => closeModal()}>
+                <Button.Outline mainColor="black" onClick={closeModal}>
                     Cancel
                 </Button.Outline>
-                <Button ml={3} onClick={() => handleLock()}>
+                <Button ml={3} onClick={handleLock}>
                     {isReadOnly ? "Yes, Unlock" : "Yes, Lock"}
                 </Button>
             </Flex>

@@ -3,8 +3,15 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 // Components
 import AddModal from "../../components/Modals/Add";
+import { ModalDisplay } from "../../constants/modals";
 
-const AddModalContainer = ({
+const AddModalContainer: React.FC<{
+  isOpen: boolean
+  closeModal: () => void
+  handleAdd: (input: string) => void
+  isValid: (value: string) => {valid: boolean, msg?: string}
+  display: ModalDisplay
+}> = ({
     isOpen,
     closeModal,
     handleAdd,
@@ -14,20 +21,20 @@ const AddModalContainer = ({
     const [input, setInput] = useState("");
     const [validation, setValidation] = useState({ valid: false });
 
-    const modifyInput = ({ target: { value } }) => {
+    const modifyInput = ({ target: { value } }: {target: {value: string}}) => {
         const validation = isValid(value);
         setInput(value);
         setValidation(validation);
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e: Event) => {
         e.preventDefault();
         setInput("");
         setValidation({ valid: false });
         handleAdd(input);
     };
 
-    const handleClose = e => {
+    const handleClose = (e: Event) => {
         e.preventDefault();
         setInput("");
         setValidation({ valid: false });
@@ -52,7 +59,7 @@ AddModalContainer.propTypes = {
     closeModal: PropTypes.func.isRequired,
     handleAdd: PropTypes.func.isRequired,
     isValid: PropTypes.func.isRequired,
-    display: PropTypes.object.isRequired
+    display: PropTypes.any.isRequired
 };
 
 export default AddModalContainer;
