@@ -1,5 +1,6 @@
 export type Config = {
-  AccountRulesAddress?: string;
+  accountIngressAddress?: string;
+  nodeIngressAddress?: string;
 };
 
 const loadConfig = async (): Promise<Config> => {
