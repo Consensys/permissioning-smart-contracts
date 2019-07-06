@@ -1,8 +1,10 @@
 import AccountRules from "./chain/abis/AccountRules.json";
 import NodeRules from "./chain/abis/NodeRules.json";
 import Admin from "./chain/abis/Admin.json";
+import { Config } from "./util/configLoader"
 
-const options = {
+const options = (config: Config) => {
+  return {
     web3: {
         block: false,
         fallback: {}
@@ -12,6 +14,7 @@ const options = {
     polls: {
         accounts: 1500
     }
+  }
 };
 
 export default options;

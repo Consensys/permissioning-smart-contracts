@@ -47,8 +47,11 @@ export const useAdminData = () => {
         userAddress: drizzleState.accounts[0]
     }));
 
-    const { useCacheCall } = drizzleReactHooks.useDrizzle();
-    const adminList: string[] = useCacheCall("Admin", "getAdmins");
+    const drizzle = drizzleReactHooks.useDrizzle();
+
+    const adminList: string[] = drizzle.useCacheCall("Admin", "getAdmins");
+
+    //console.log("admin list is ", adminList)
 
     useEffect(() => {
         setAdmins!(adminList || [])
