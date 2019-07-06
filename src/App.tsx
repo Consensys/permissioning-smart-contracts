@@ -1,34 +1,31 @@
 // Libs
-import React from "react";
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider } from 'styled-components';
 // Components
-import Layout from "./components/Layout/Layout";
-import Initializer from "./containers/Layout/Initializer";
-import Dashboard from "./containers/Dashboard/Dashboard";
-import NoProviderFlash from "./components/Flashes/NoProvider";
-import WrongNetworkFlash from "./components/Flashes/WrongNetwork";
+import Layout from './components/Layout/Layout';
+import Initializer from './containers/Layout/Initializer';
+import Dashboard from './containers/Dashboard/Dashboard';
+import NoProviderFlash from './components/Flashes/NoProvider';
+import WrongNetworkFlash from './components/Flashes/WrongNetwork';
 // Theme
-import theme from "./constants/theme";
+import theme from './constants/theme';
 // Context
-import { NetworkProvider } from "./context/network";
-import { Config, configPromise } from "./util/configLoader";
-import { ConfigDataProvider } from "./context/configData";
+import { NetworkProvider } from './context/network';
+import { Config, configPromise } from './util/configLoader';
+import { ConfigDataProvider } from './context/configData';
 
-export const initApp = async ({target}: {target: HTMLElement}) => {
-  const config = await configPromise
+export const initApp = async ({ target }: { target: HTMLElement }) => {
+  const config = await configPromise;
   ReactDOM.render(<App config={config} />, target);
-}
+};
 
-const App: React.FC<{config: Config}> = ({config}) => (
+const App: React.FC<{ config: Config }> = ({ config }) => (
   <ConfigDataProvider config={config}>
     <ThemeProvider theme={theme}>
       <NetworkProvider>
         <Layout>
-          <Initializer
-            NoProvider={NoProviderFlash}
-            WrongNetwork={WrongNetworkFlash}
-          >
+          <Initializer NoProvider={NoProviderFlash} WrongNetwork={WrongNetworkFlash}>
             <Dashboard />
           </Initializer>
         </Layout>

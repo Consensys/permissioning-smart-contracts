@@ -1,13 +1,13 @@
 // Libs
-import React, { createContext, useContext, useMemo, useState, useEffect } from "react";
-import { drizzleReactHooks } from "drizzle-react";
+import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import { drizzleReactHooks } from 'drizzle-react';
 
 type ContextType = {
-    admins?: string[],
-    setAdmins?: (admins: string[]) => void
-}
+  admins?: string[];
+  setAdmins?: (admins: string[]) => void;
+};
 
-const AdminDataContext = createContext<ContextType>({})
+const AdminDataContext = createContext<ContextType>({});
 
 /**
  * Provider for the data context that contains the Admin whitelist
@@ -17,75 +17,67 @@ const AdminDataContext = createContext<ContextType>({})
  *  - setAdmins: setter for the Admin list state
  */
 export const AdminDataProvider: React.FC = (props: React.Props<{}>) => {
-    const [admins, setAdmins] = useState<string[]>([])
-    const value = useMemo(() => ({ admins, setAdmins }), [
-        admins,
-        setAdmins
-    ])
-    return <AdminDataContext.Provider value={value} {...props} />
-}
+  const [admins, setAdmins] = useState<string[]>([]);
+  const value = useMemo(() => ({ admins, setAdmins }), [admins, setAdmins]);
+  return <AdminDataContext.Provider value={value} {...props} />;
+};
 
 /**
  * Fetch the appropriate Admin data on chain and synchronize with it
  * @return {Object} Contains data of interest:
-  *  - dataReady: true if Admin whitelist has been correctly fetched,
+ *  - dataReady: true if Admin whitelist has been correctly fetched,
  *  false otherwise
  *  - userAddress: Address of the user
  *  - isAdmin: user in an Admin,
  *  - whitelist: list of whitelist nodes from Node contract,
  */
 export const useAdminData = () => {
-    const context = useContext(AdminDataContext)
+  const context = useContext(AdminDataContext);
 
-    if (!context) {
-        throw new Error("useAdminData must be used within an AdminDataProvider.")
-    }
+  if (!context) {
+    throw new Error('useAdminData must be used within an AdminDataProvider.');
+  }
 
-    const { admins, setAdmins } = context
+  const { admins, setAdmins } = context;
 
-    const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
-        userAddress: drizzleState.accounts[0]
-    }));
+  const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
+    userAddress: drizzleState.accounts[0]
+  }));
 
-    const drizzle = drizzleReactHooks.useDrizzle();
+  const drizzle = drizzleReactHooks.useDrizzle();
 
-    const adminList: string[] = drizzle.useCacheCall("Admin", "getAdmins");
+  const adminList: string[] = drizzle.useCacheCall('Admin', 'getAdmins');
 
-    //console.log("admin list is ", adminList)
+  //console.log("admin list is ", adminList)
 
-    useEffect(() => {
-        setAdmins!(adminList || [])
-        }, [adminList, setAdmins]
-    )
+  useEffect(() => {
+    setAdmins!(adminList || []);
+  }, [adminList, setAdmins]);
 
+  const dataReady = useMemo(() => Array.isArray(admins), [admins]);
 
-    const dataReady = useMemo(
-        () =>
-            Array.isArray(admins),
-            [admins]
-    );
+  const isAdmin = useMemo(() => (dataReady && admins ? admins.includes(userAddress) : false), [
+    dataReady,
+    admins,
+    userAddress
+  ]);
 
-    const isAdmin = useMemo(
-        () => (dataReady && admins ? admins.includes(userAddress) : false),
-        [dataReady, admins, userAddress]
-    );
+  const formattedAdmins = useMemo(() => {
+    return admins
+      ? admins
+          .map(address => ({
+            address,
+            identifier: address.toLowerCase(),
+            status: 'active'
+          }))
+          .reverse()
+      : undefined;
+  }, [admins]);
 
-    const formattedAdmins = useMemo(() => {
-        return admins
-            ? admins
-                  .map(address => ({
-                      address,
-                      identifier: address.toLowerCase(),
-                      status: "active"
-                  }))
-                  .reverse()
-            : undefined;
-    }, [admins]);
-
-    return {
-        dataReady,
-        userAddress,
-        isAdmin,
-        admins: formattedAdmins
-    }
-}
+  return {
+    dataReady,
+    userAddress,
+    isAdmin,
+    admins: formattedAdmins
+  };
+};

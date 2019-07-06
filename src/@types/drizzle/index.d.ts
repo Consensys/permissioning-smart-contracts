@@ -11,7 +11,6 @@ declare module 'drizzle' {
     findContractByAddress(address: any): any;
 
     generateStore(options: any): any;
-
   }
 
   export const EventActions: {
@@ -37,31 +36,21 @@ declare module 'drizzle' {
       function generateStore(options: any): any;
 
       namespace addContract {
-        const prototype: {
-        };
-
+        const prototype: {};
       }
 
       namespace deleteContract {
-        const prototype: {
-        };
-
+        const prototype: {};
       }
 
       namespace findContractByAddress {
-        const prototype: {
-        };
-
+        const prototype: {};
       }
 
       namespace generateStore {
-        const prototype: {
-        };
-
+        const prototype: {};
       }
-
     }
-
   }
 
   export namespace drizzleReducers {
@@ -82,65 +71,43 @@ declare module 'drizzle' {
     function web3(...args: any[]): any;
 
     namespace accountBalances {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
 
     namespace accounts {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
 
     namespace contracts {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
 
     namespace currentBlock {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
 
     namespace drizzleStatus {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
 
     namespace transactionStack {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
 
     namespace transactions {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
 
     namespace web3 {
-      const prototype: {
-      };
-
+      const prototype: {};
     }
-
   }
 
   export namespace generateContractsInitialState {
-    const prototype: {
-    };
-
+    const prototype: {};
   }
 
   export namespace generateStore {
-    const prototype: {
-    };
-
+    const prototype: {};
   }
-
 }

@@ -4,7 +4,7 @@ table thead tr th.headerCell {
 
 tr td.emptyLine {
   text-align: center;
-  color: #8F8F8F;
+  color: #8f8f8f;
   font-size: 16px;
   font-weight: 600;
 }
@@ -26,8 +26,7 @@ tr td.emptyLine {
 
 .removeIcon {
   opacity: 0;
-  transition: color .2s ease-in-out,
-    opacity .5s ease-in-out;
+  transition: color 0.2s ease-in-out, opacity 0.5s ease-in-out;
   &:hover {
     color: #222;
   }
@@ -59,11 +58,10 @@ tr td.emptyLine {
 }
 
 .lockButton {
-  transition: border-color .3s ease-in-out,
-    color .3s ease-in-out;
+  transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out;
   &:hover {
-    border-color: #DC2C10;
-    color: #DC2C10;
+    border-color: #dc2c10;
+    color: #dc2c10;
   }
 }
 

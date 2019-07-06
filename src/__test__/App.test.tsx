@@ -1,18 +1,18 @@
 // Libs
-import React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import toJson from "enzyme-to-json";
+import React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
+import toJson from 'enzyme-to-json';
 // Components
-import App from "../App";
+import App from '../App';
 
-describe("<App />", () => {
-    let wrapper: ShallowWrapper;
+describe('<App />', () => {
+  let wrapper: ShallowWrapper;
 
-    beforeEach(() => {
-        wrapper = shallow(<App />);
-    });
+  beforeEach(() => {
+    wrapper = shallow(<App />);
+  });
 
-    it("matches snapshot", () => {
-        expect(toJson(wrapper)).toMatchSnapshot();
-    });
+  it('matches snapshot', () => {
+    expect(toJson(wrapper)).toMatchSnapshot();
+  });
 });

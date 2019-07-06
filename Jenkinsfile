@@ -34,14 +34,19 @@ pipeline {
                 sh './node_modules/.bin/istanbul report cobertura --root .'
             }
         }
-        stage('Dapp: Build') {
-            steps {
-                sh 'yarn run build:app'
-            }
-        }
+	stage('Dapp: Lint') {
+	    steps {
+	        sh 'yarn run lint:app'
+	    }
+	}
         stage('Dapp: Test') {
             steps {
                 sh 'yarn run test:app:ci'
+            }
+        }
+        stage('Dapp: Build') {
+            steps {
+                sh 'yarn run build:app'
             }
         }
     }
