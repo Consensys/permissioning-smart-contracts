@@ -16,7 +16,7 @@ export const useConfig = () => {
   const context = useContext(ConfigDataContext)
 
   if (!context) {
-    throw new Error ("useConfigData must be used within a ConfigDataProvider")
+    throw new Error ("useConfig must be used within a ConfigDataProvider")
   }
 
   return context.config

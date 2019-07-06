@@ -15,18 +15,17 @@ import AccountRules from "../chain/abis/AccountRules.json";
 import Admin from "../chain/abis/Admin.json";
 // Utils
 import { getAllowedNetworks } from "../util/contracts";
+import { useConfig } from "../context/configData";
 
-const drizzleStore = generateStore(drizzleOptions);
-const drizzle = new Drizzle(drizzleOptions, drizzleStore);
-
-const NetworkContext = createContext<{
+type ContextType = {
   isCorrectNetwork?: boolean
-  setIsCorrectNetwork?: React.Dispatch<React.SetStateAction<boolean | undefined>>
+  setIsCorrectNetwork: React.Dispatch<React.SetStateAction<boolean | undefined>>
   web3Initialized: boolean
-  setWeb3Initialized?: React.Dispatch<React.SetStateAction<boolean>>
-}>({
-  web3Initialized: false
-});
+  setWeb3Initialized: React.Dispatch<React.SetStateAction<boolean>>
+} | undefined
+
+const NetworkContext = createContext<ContextType>(undefined);
+
 
 /**
  * Provider for the network context that contains informations about the
@@ -43,6 +42,14 @@ const NetworkContext = createContext<{
 export const NetworkProvider: React.FC<{}> = props => {
     const [isCorrectNetwork, setIsCorrectNetwork] = useState<boolean | undefined>(undefined);
     const [web3Initialized, setWeb3Initialized] = useState<boolean>(false);
+
+    const config = useConfig();
+    const [drizzle] = useState<Drizzle>(() => {
+        const options = drizzleOptions(config);
+
+        const drizzleStore = generateStore(options);
+        return new Drizzle(options, drizzleStore);
+    })
 
     const value = useMemo(
         () => ({
@@ -104,9 +111,9 @@ export const useNetwork = () => {
             ]);
             if (networkId) {
                 const isCorrectNetwork = allowedNetworks.includes(networkId);
-                setIsCorrectNetwork!(isCorrectNetwork);
+                setIsCorrectNetwork(isCorrectNetwork);
             }
-            setWeb3Initialized!(true);
+            setWeb3Initialized(true);
         }
     }, [networkId, setIsCorrectNetwork, status, setWeb3Initialized]);
 
