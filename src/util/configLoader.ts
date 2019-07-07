@@ -1,26 +1,25 @@
 export type Config = {
-  AccountRulesAddress?: string
-}
+  AccountRulesAddress?: string;
+};
 
 const loadConfig = async (): Promise<Config> => {
   // production loader
-  if (process.env.NODE_ENV === "production") {
-    const response = await fetch("config.json")
+  if (process.env.NODE_ENV === 'production') {
+    const response = await fetch('config.json');
 
     if (response.ok) {
       return response.json().catch((reason: any) => {
-        console.log("config parsing failed with error:", reason)
-        return {}
-      })
+        console.log('config parsing failed with error:', reason);
+        return {};
+      });
     } else {
-      console.log("Failed to load config file")
-      return {}
+      console.log('Failed to load config file');
+      return {};
     }
-  // development defaults
+    // development defaults
   } else {
-    return {
-    }
+    return {};
   }
-}
+};
 
-export const configPromise = loadConfig()
+export const configPromise = loadConfig();

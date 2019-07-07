@@ -6,7 +6,9 @@
   "private": true,
   "scripts": {
     "lint:contracts": "yarn solium -d contracts",
-    "lint": "yarn run lint:contracts",
+    "lint:app": "yarn prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
+    "lint:app:write": "yarn prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
+    "lint": "yarn run lint:contracts && yarn run lint:app",
     "test:app": "yarn react-scripts test --env=jsdom --watchAll=false",
     "test:app:watch": "yarn react-scripts test --env=jsdom",
     "test:app:ci": "yarn react-scripts test --reporters=default --reporters=jest-junit",
@@ -21,7 +23,7 @@
     "eject": "yarn react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": ["react-app", "plugin:prettier/recommended"]
   },
   "browserslist": {
     "production": [
@@ -66,12 +68,14 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.1",
     "enzyme-to-json": "^3.3.5",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "husky": "^2.2.0",
     "istanbul": "^0.4.5",
     "lint-staged": "^8.1.6",
     "mocha-junit-reporter": "^1.21.0",
     "mocha-multi-reporters": "^1.1.7",
-    "prettier": "^1.17.0",
+    "prettier": "1.18.2",
     "solidity-coverage": "github:sc-forks/solidity-coverage#leapdao",
     "solium": "^1.2.4",
     "truffle": "5.0.17",
@@ -80,14 +84,16 @@
     "typechain": "^0.3.17"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,css}": [
+    "src/**/*.{js,jsx,ts,tsx,json,css}": [
       "prettier --write",
       "git add"
     ]
   },
   "prettier": {
     "useTabs": false,
-    "tabWidth": 4
+    "tabWidth": 2,
+    "singleQuote": true,
+    "printWidth": 120
   },
   "husky": {
     "hooks": {
@@ -96,9 +102,9 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
-      "!**/src/index.js",
-      "!**/src/serviceWorker.js"
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!**/src/index.tsx",
+      "!**/src/serviceWorker.ts"
     ]
   }
 }

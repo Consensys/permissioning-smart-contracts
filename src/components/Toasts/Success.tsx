@@ -1,31 +1,30 @@
 // Libs
-import React, { memo } from "react";
-import PropTypes from "prop-types";
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 // Rimble Components
-import { ToastMessage } from "rimble-ui";
+import { ToastMessage } from 'rimble-ui';
 // Styles
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 type SuccessToast = {
-  message: string
-  closeToast: () => void
-}
-
+  message: string;
+  closeToast: () => void;
+};
 
 const SuccessToast: React.FC<SuccessToast> = ({ message, closeToast }) => (
-    <ToastMessage.Success
-        minWidth="300px"
-        zIndex="2"
-        message={message}
-        closeElem
-        closeFunction={closeToast}
-        className={styles.fadeInOut}
-    />
+  <ToastMessage.Success
+    minWidth="300px"
+    zIndex="2"
+    message={message}
+    closeElem
+    closeFunction={closeToast}
+    className={styles.fadeInOut}
+  />
 );
 
 SuccessToast.propTypes = {
-    message: PropTypes.string.isRequired,
-    closeToast: PropTypes.func.isRequired
+  message: PropTypes.string.isRequired,
+  closeToast: PropTypes.func.isRequired
 };
 
 export default memo(SuccessToast);

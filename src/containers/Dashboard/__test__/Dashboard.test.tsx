@@ -1,19 +1,19 @@
 // Libs
-import React from "react";
-import toJson from "enzyme-to-json";
-import { shallow, ShallowWrapper } from "enzyme";
+import React from 'react';
+import toJson from 'enzyme-to-json';
+import { shallow, ShallowWrapper } from 'enzyme';
 // Components
-import DashboardContainer from "../Dashboard";
+import DashboardContainer from '../Dashboard';
 
-describe("<Dashboard Container />", () => {
-    let wrapper: ShallowWrapper;
+describe('<Dashboard Container />', () => {
+  let wrapper: ShallowWrapper;
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-        wrapper = shallow(<DashboardContainer />);
-    });
+  beforeEach(() => {
+    jest.clearAllMocks();
+    wrapper = shallow(<DashboardContainer />);
+  });
 
-    it("matches snapshot", () => {
-        expect(toJson(wrapper)).toMatchSnapshot();
-    });
+  it('matches snapshot', () => {
+    expect(toJson(wrapper)).toMatchSnapshot();
+  });
 });

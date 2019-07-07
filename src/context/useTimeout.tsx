@@ -1,5 +1,5 @@
 // Libs
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
 /**
  * Allows to clear timeouts when component unmounts
@@ -7,19 +7,16 @@ import { useState, useEffect, useCallback } from "react";
  *  - addTimeout: Function that adds a timeoutId to be cleared
  */
 export default () => {
-    const [timeouts, setTimeouts] = useState<number[]>([]);
+  const [timeouts, setTimeouts] = useState<number[]>([]);
 
-    useEffect(
-        () => () => {
-            timeouts.forEach(timeoutId => clearTimeout(timeoutId));
-        },
-        [timeouts]
-    );
+  useEffect(
+    () => () => {
+      timeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    },
+    [timeouts]
+  );
 
-    const addTimeout = useCallback(
-        timeoutId => setTimeouts(timeouts => [...timeouts, timeoutId]),
-        [setTimeouts]
-    );
+  const addTimeout = useCallback(timeoutId => setTimeouts(timeouts => [...timeouts, timeoutId]), [setTimeouts]);
 
-    return { addTimeout };
+  return { addTimeout };
 };

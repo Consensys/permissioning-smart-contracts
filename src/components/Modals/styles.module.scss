@@ -4,13 +4,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   &:focus {
-    border-color: #CCC;
+    border-color: #ccc;
   }
 }
 
 .errorMessage {
   opacity: 0;
-  transition: opacity .3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 
   &.show {
     opacity: 1;
@@ -20,11 +20,11 @@
 .validField {
   div input {
     border-style: solid;
-    border-color: #28C081;
+    border-color: #28c081;
 
     &:focus {
       border-style: solid;
-      border-color: #28C081;
+      border-color: #28c081;
     }
   }
 
@@ -39,20 +39,19 @@
   position: absolute;
 }
 
-
 .invalidField {
   div input {
     border-style: solid;
-    border-color: #EC9081;
+    border-color: #ec9081;
 
     &:focus {
       border-style: solid;
-      border-color: #EC9081;
+      border-color: #ec9081;
     }
   }
   div svg {
     &:last-child {
-        visibility: visible;
+      visibility: visible;
     }
   }
 }
