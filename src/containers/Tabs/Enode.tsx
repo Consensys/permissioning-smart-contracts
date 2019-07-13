@@ -27,7 +27,6 @@ import {
   PENDING_REMOVAL,
   FAIL_ADDITION,
   FAIL_REMOVAL,
-  PENDING,
   SUCCESS,
   FAIL
 } from '../../constants/transactions';
@@ -40,21 +39,14 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
   const { userAddress, whitelist, isReadOnly, dataReady } = useNodeData();
 
-  const {
-    list,
-    modals,
-    toggleModal,
-    transactions,
-    addTransaction,
-    updateTransaction,
-    deleteTransaction,
-    openToast,
-    updateToast
-  } = useTab(whitelist, identifierToParams);
+  const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
+    whitelist,
+    identifierToParams
+  );
 
   const { drizzle } = drizzleReactHooks.useDrizzle();
 
-  const { addEnode, removeEnode, enterReadOnly, exitReadOnly } = drizzle.contracts.NodeRules.methods as {
+  const { addEnode, removeEnode } = drizzle.contracts.NodeRules.methods as {
     addEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>;
     removeEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>;
     enterReadOnly: () => TransactionObject<never>;

@@ -2,9 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
-import { Flex, Box, Heading, Button, Tooltip } from 'rimble-ui';
-// Styles
-import styles from './styles.module.scss';
+import { Flex, Box, Heading, Button } from 'rimble-ui';
 
 type TableHeader = {
   number: number;
