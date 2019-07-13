@@ -10,15 +10,12 @@ import EmptyRow from './EmptyRow';
 // Styles
 import styles from './styles.module.scss';
 
-const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, userAddress, isReadOnly, pendingLock }) => (
+const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, userAddress, isReadOnly }) => (
   <Box mt={5}>
     <EnodeTableHeader
       number={list.length}
       openAddModal={toggleModal('add')}
-      disabledAdd={!isAdmin || isReadOnly || (!isReadOnly && pendingLock)}
-      openLockModal={toggleModal('lock')}
-      disabledLock={!isAdmin || pendingLock}
-      pendingLock={pendingLock}
+      disabledAdd={!isAdmin || isReadOnly || !isReadOnly}
       isReadOnly={isReadOnly}
     />
     <Table mt={4}>
@@ -40,7 +37,6 @@ const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, userAddress
             deleteTransaction={deleteTransaction}
             openRemoveModal={toggleModal('remove')}
             isReadOnly={isReadOnly}
-            pendingLock={pendingLock}
             {...enode}
           />
         ))}
@@ -56,8 +52,7 @@ EnodeTable.propTypes = {
   deleteTransaction: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   userAddress: PropTypes.string.isRequired,
-  isReadOnly: PropTypes.bool.isRequired,
-  pendingLock: PropTypes.bool.isRequired
+  isReadOnly: PropTypes.bool.isRequired
 };
 
 export default EnodeTable;

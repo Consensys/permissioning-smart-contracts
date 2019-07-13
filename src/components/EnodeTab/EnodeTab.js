@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'; // Components
 import EnodeTable from './Table';
 import AddModal from '../../containers/Modals/Add';
 import RemoveModal from '../../containers/Modals/Remove';
-import LockModal from '../Modals/Lock';
 // Constants
 import { addEnodeDisplay, removeEnodeDisplay } from '../../constants/modals';
 
@@ -15,12 +14,10 @@ const EnodeTab = ({
   toggleModal,
   handleAdd,
   handleRemove,
-  handleLock,
   isAdmin,
   isReadOnly,
   deleteTransaction,
   isValid,
-  pendingLock,
   isOpen
 }) => (
   <Fragment>
@@ -32,7 +29,6 @@ const EnodeTab = ({
           toggleModal={toggleModal}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
-          pendingLock={pendingLock}
           isReadOnly={isReadOnly}
         />
         <AddModal
@@ -49,12 +45,6 @@ const EnodeTab = ({
           handleRemove={handleRemove}
           display={removeEnodeDisplay(modals.remove)}
         />
-        <LockModal
-          isOpen={modals.lock && isAdmin}
-          closeModal={toggleModal('lock')}
-          handleLock={handleLock}
-          isReadOnly={isReadOnly}
-        />
       </Fragment>
     )}
   </Fragment>
@@ -67,12 +57,10 @@ EnodeTab.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   handleAdd: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
-  handleLock: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isReadOnly: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
   isValid: PropTypes.func.isRequired,
-  pendingLock: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired
 };
 

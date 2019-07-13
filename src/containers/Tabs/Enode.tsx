@@ -27,8 +27,6 @@ import {
   PENDING_REMOVAL,
   FAIL_ADDITION,
   FAIL_REMOVAL,
-  PENDING_LOCK,
-  PENDING,
   SUCCESS,
   FAIL
 } from '../../constants/transactions';
@@ -41,21 +39,14 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
   const { userAddress, whitelist, isReadOnly, dataReady } = useNodeData();
 
-  const {
-    list,
-    modals,
-    toggleModal,
-    transactions,
-    addTransaction,
-    updateTransaction,
-    deleteTransaction,
-    openToast,
-    updateToast
-  } = useTab(whitelist, identifierToParams);
+  const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
+    whitelist,
+    identifierToParams
+  );
 
   const { drizzle } = drizzleReactHooks.useDrizzle();
 
-  const { addEnode, removeEnode, enterReadOnly, exitReadOnly } = drizzle.contracts.NodeRules.methods as {
+  const { addEnode, removeEnode } = drizzle.contracts.NodeRules.methods as {
     addEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>;
     removeEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>;
     enterReadOnly: () => TransactionObject<never>;
@@ -128,42 +119,6 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
       });
   };
 
-  const handleLock = async () => {
-    const method = isReadOnly ? exitReadOnly : enterReadOnly;
-    const gasLimit = await method().estimateGas({ from: userAddress });
-    method()
-      .send({ from: userAddress, gas: gasLimit * 4 })
-      .on('transactionHash', () => {
-        toggleModal('lock')();
-        addTransaction('lock', PENDING_LOCK);
-        openToast(
-          'lock',
-          PENDING,
-          isReadOnly
-            ? 'Please wait while we unlock the values.'
-            : 'Please wait while we lock the whitelisted nodes. Once completed no changes can be made until you unlock the values.',
-          '',
-          15000
-        );
-      })
-      .on('receipt', () => {
-        deleteTransaction('lock');
-        updateToast('lock', SUCCESS, isReadOnly ? 'Values have been unlocked!' : 'Changes have been locked!');
-      })
-      .on('error', error => {
-        toggleModal('lock')();
-        deleteTransaction('lock');
-        errorToast(error, 'lock', openToast, () =>
-          updateToast(
-            'lock',
-            FAIL,
-            isReadOnly ? 'Could not unlock values.' : 'Could not lock changes.',
-            'The transaction was unabled to be processed. Please try again.'
-          )
-        );
-      });
-  };
-
   const isDuplicateEnode = (enode: string) => {
     return list.filter((item: Enode) => isEqual(item, enodeToParams(enode))).length > 0;
   };
@@ -195,11 +150,9 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         toggleModal={toggleModal}
         handleAdd={handleAdd}
         handleRemove={handleRemove}
-        handleLock={handleLock}
         isAdmin={isAdmin}
         deleteTransaction={deleteTransaction}
         isValid={isValid}
-        pendingLock={!!transactions.get('lock')}
         isReadOnly={isReadOnly}
         isOpen={isOpen}
       />
