@@ -11,7 +11,7 @@ const web3Factory = async () => {
   return web3;
 };
 
-const providerFactory = async () => {
+export const providerFactory = async () => {
   if (provider) return provider;
 
   const web3 = await web3Factory();
@@ -19,5 +19,3 @@ const providerFactory = async () => {
 
   return provider;
 };
-
-export default providerFactory;

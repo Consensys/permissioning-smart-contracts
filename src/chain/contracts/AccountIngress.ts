@@ -6,9 +6,9 @@ import { Config } from '../../util/configLoader';
 
 let instance: AccountIngress | null = null;
 
-export default async (config: Config, provider: Provider) => {
+export const accountIngressFactory = async (config: Config, provider: Provider) => {
   if (instance) return instance;
 
-  instance = new Contract(config.accountIngressAddress!, AccountIngressAbi.abi, provider) as AccountIngress;
+  instance = new Contract(config.accountIngressAddress, AccountIngressAbi.abi, provider) as AccountIngress;
   return instance;
 };
