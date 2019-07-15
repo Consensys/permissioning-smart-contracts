@@ -1,12 +1,19 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { drizzleReactHooks } from 'drizzle-react';
+import { AccountRules } from '../chain/@types/AccountRules';
+import { accountRulesFactory } from '../chain/contracts/AccountRules';
+import { useNetwork } from './network';
 
 type Account = { address: string };
 
 type ContextType =
   | {
       accountWhitelist: Account[];
-      setAccountWhitelist: (account: Account[]) => void;
+      setAccountWhitelist: React.Dispatch<React.SetStateAction<Account[]>>;
+      accountReadOnly?: boolean;
+      setAccountReadOnly: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+      accountRulesContract?: AccountRules;
+      setAccountRulesContract: React.Dispatch<React.SetStateAction<AccountRules | undefined>>;
     }
   | undefined;
 
@@ -21,7 +28,38 @@ const AccountDataContext = createContext<ContextType>(undefined);
  */
 export const AccountDataProvider: React.FC = (props: React.Props<{}>) => {
   const [accountWhitelist, setAccountWhitelist] = useState<Account[]>([]);
-  const value = useMemo(() => ({ accountWhitelist, setAccountWhitelist }), [accountWhitelist, setAccountWhitelist]);
+  const [accountReadOnly, setAccountReadOnly] = useState<boolean | undefined>(undefined);
+  const [accountRulesContract, setAccountRulesContract] = useState<AccountRules | undefined>(undefined);
+
+  const value = useMemo(
+    () => ({
+      accountWhitelist,
+      setAccountWhitelist,
+      accountReadOnly,
+      setAccountReadOnly,
+      accountRulesContract,
+      setAccountRulesContract
+    }),
+    [
+      accountWhitelist,
+      setAccountWhitelist,
+      accountReadOnly,
+      setAccountReadOnly,
+      accountRulesContract,
+      setAccountRulesContract
+    ]
+  );
+
+  const { accountIngressContract } = useNetwork();
+
+  useEffect(() => {
+    if (accountIngressContract === undefined) {
+      setAccountRulesContract(undefined);
+    } else {
+      accountRulesFactory(accountIngressContract).then(contract => setAccountRulesContract(contract));
+    }
+  }, [accountIngressContract]);
+
   return <AccountDataContext.Provider value={value} {...props} />;
 };
 
@@ -41,30 +79,28 @@ export const useAccountData = () => {
     throw new Error('useAccountData must be used within an AccountDataProvider.');
   }
 
-  const { accountWhitelist, setAccountWhitelist } = context;
-  const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
-  const accountIsReadOnly: boolean = useCacheCall('AccountRules', 'isReadOnly');
-  const accountWhitelistSize: number = useCacheCall('AccountRules', 'getSize');
-  const { getByIndex: getAccountByIndex } = drizzle.contracts.AccountRules.methods;
+  const { accountWhitelist, setAccountWhitelist, accountReadOnly, setAccountReadOnly, accountRulesContract } = context;
   const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
     userAddress: drizzleState.accounts[0]
   }));
 
   useEffect(() => {
-    const promises = [];
-    for (let index = 0; index < accountWhitelistSize; index++) {
-      promises.push(getAccountByIndex(index).call());
+    if (accountRulesContract === undefined) {
+      setAccountWhitelist([]);
+      setAccountReadOnly(undefined);
+    } else {
+      accountRulesContract.functions.isReadOnly().then(isReadOnly => setAccountReadOnly(isReadOnly));
+      accountRulesContract.functions.getSize().then(whitelistSize => {
+        const whitelistElementsPromises = [];
+        for (let i = 0; whitelistSize.gt(i); i++) {
+          whitelistElementsPromises.push(accountRulesContract.functions.getByIndex(i));
+        }
+        Promise.all(whitelistElementsPromises).then(responses => {
+          setAccountWhitelist(responses.map(address => ({ address })));
+        });
+      });
     }
-    Promise.all(promises).then(responses => {
-      const updatedAccountWhitelist = responses.map((address: string) => ({ address }));
-      setAccountWhitelist(updatedAccountWhitelist);
-    });
-  }, [accountWhitelistSize, setAccountWhitelist, getAccountByIndex]);
-
-  const dataReady = useMemo(() => typeof accountIsReadOnly === 'boolean' && Array.isArray(accountWhitelist), [
-    accountIsReadOnly,
-    accountWhitelist
-  ]);
+  }, [accountRulesContract, setAccountWhitelist, setAccountReadOnly]);
 
   const formattedAccountWhitelist = useMemo(() => {
     return accountWhitelist
@@ -76,10 +112,14 @@ export const useAccountData = () => {
       .reverse();
   }, [accountWhitelist]);
 
+  const dataReady = useMemo(() => {
+    return accountRulesContract !== undefined && accountReadOnly !== undefined && accountWhitelist !== undefined;
+  }, [accountRulesContract, accountReadOnly, accountWhitelist]);
+
   return {
     userAddress,
     dataReady,
     whitelist: formattedAccountWhitelist,
-    isReadOnly: accountIsReadOnly
+    isReadOnly: accountReadOnly
   };
 };
