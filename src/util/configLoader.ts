@@ -32,7 +32,7 @@ const loadConfig = async (): Promise<Config> => {
     if (nodeIngressNetworks.length === 0) {
       throw new Error("Node Ingress Contract abi doesn't contain any networks, probably not deployed");
     }
-    const nodeIngressAddress = nodeIngressNetworks[0].address;
+    const nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
 
     return { accountIngressAddress, nodeIngressAddress };
   }
