@@ -22,17 +22,17 @@ const loadConfig = async (): Promise<Config> => {
     }
     // development defaults
   } else {
-    const accountIngressNetwork = Object.values(AccountIngress.networks);
-    if (accountIngressNetwork.length === 0) {
+    const accountIngressNetworks = Object.values(AccountIngress.networks);
+    if (accountIngressNetworks.length === 0) {
       throw new Error("Account Ingress Contract abi doesn't contain any networks, probably not deployed");
     }
-    const accountIngressAddress = accountIngressNetwork[0].address;
+    const accountIngressAddress = accountIngressNetworks[0].address;
 
-    const nodeIngressNetwork = Object.values(NodeIngress.networks);
-    if (nodeIngressNetwork.length === 0) {
+    const nodeIngressNetworks = Object.values(NodeIngress.networks);
+    if (nodeIngressNetworks.length === 0) {
       throw new Error("Node Ingress Contract abi doesn't contain any networks, probably not deployed");
     }
-    const nodeIngressAddress = nodeIngressNetwork[0].address;
+    const nodeIngressAddress = nodeIngressNetworks[0].address;
 
     return { accountIngressAddress, nodeIngressAddress };
   }

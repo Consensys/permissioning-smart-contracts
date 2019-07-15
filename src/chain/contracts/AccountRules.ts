@@ -5,10 +5,11 @@ import { AccountRules } from '../@types/AccountRules';
 
 let instance: AccountRules | null = null;
 
-export default async (ingressInstance: AccountIngress) => {
+export const accountRulesFactory = async (ingressInstance: AccountIngress) => {
   if (instance) return instance;
 
-  const accountRulesAddress = await ingressInstance.functions.getContractAddress('RULES');
+  const ruleContractName = await ingressInstance.functions.RULES_CONTRACT();
+  const accountRulesAddress = await ingressInstance.functions.getContractAddress(ruleContractName);
 
   instance = new Contract(accountRulesAddress, AccountRulesAbi.abi, ingressInstance.provider) as AccountRules;
   return instance;

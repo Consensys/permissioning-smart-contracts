@@ -60,7 +60,7 @@ export const NetworkProvider: React.FC<{}> = props => {
     return new Drizzle(options, drizzleStore);
   });
 
-  useMemo(() => {
+  useEffect(() => {
     providerFactory().then(provider => {
       accountIngressFactory(config, provider).then(accountIngress => setAccountIngressContract(accountIngress));
       nodeIngressFactory(config, provider).then(nodeIngress => setNodeIngressContract(nodeIngress));
@@ -111,10 +111,10 @@ export const NetworkProvider: React.FC<{}> = props => {
 export const useNetwork = () => {
   const context = useContext(NetworkContext);
   if (!context) {
-    throw new Error('useData must be used within a DataProvider.');
+    throw new Error('useNetwork must be used within a DataProvider.');
   }
 
-  const { isCorrectNetwork, setIsCorrectNetwork, web3Initialized, setWeb3Initialized } = context;
+  const { isCorrectNetwork, setIsCorrectNetwork, web3Initialized, setWeb3Initialized, contracts } = context;
 
   const { networkId, status } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
     status: drizzleState.web3.status,
@@ -135,6 +135,8 @@ export const useNetwork = () => {
   return {
     isCorrectNetwork,
     networkId,
-    web3Initialized
+    web3Initialized,
+    accountIngressContract: contracts.accountIngressContract,
+    nodeIngressContract: contracts.nodeIngressContract
   };
 };

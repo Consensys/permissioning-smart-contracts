@@ -19,8 +19,4 @@ describe('<AdminDataProvider />', () => {
   it('renders children when passed in', () => {
     expect(wrapper.contains(<div className="test" />)).toEqual(true);
   });
-
-  it('matches snapshot', () => {
-    expect(toJson(wrapper)).toMatchSnapshot();
-  });
 });

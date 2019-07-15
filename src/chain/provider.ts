@@ -2,8 +2,8 @@ import { Provider } from 'ethers/providers';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
 
-let provider: Provider | null = null;
-let web3: Web3 | null = null;
+let provider: Provider | undefined = undefined;
+let web3: Web3 | undefined = undefined;
 
 const web3Factory = async () => {
   if (web3) return web3;

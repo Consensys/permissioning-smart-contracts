@@ -8,7 +8,8 @@ let instance: NodeRules | null = null;
 export default async (ingressInstance: NodeIngress) => {
   if (instance) return instance;
 
-  const nodeRulesAddress = await ingressInstance.functions.getContractAddress('RULES');
+  const ruleContractName = await ingressInstance.functions.RULES_CONTRACT();
+  const nodeRulesAddress = await ingressInstance.functions.getContractAddress(ruleContractName);
 
   instance = new Contract(nodeRulesAddress, NodeRulesAbi.abi, ingressInstance.provider) as NodeRules;
   return instance;

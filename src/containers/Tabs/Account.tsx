@@ -153,7 +153,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         deleteTransaction={deleteTransaction}
         isValid={isValidAccount}
         isOpen={isOpen}
-        isReadOnly={isReadOnly}
+        isReadOnly={isReadOnly!}
         pendingLock={!!transactions.get('lock')}
       />
     );

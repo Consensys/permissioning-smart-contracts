@@ -51,7 +51,7 @@ describe('useNetwork', () => {
         networkId: undefined,
         status: ''
       }));
-      mocked(useConfig).mockImplementation(() => ({}));
+      mocked(useConfig).mockImplementation((): any => ({}));
       testHook(() => (network = useNetwork()), NetworkProvider);
     });
 
