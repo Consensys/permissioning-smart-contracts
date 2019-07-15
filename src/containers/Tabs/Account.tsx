@@ -28,6 +28,12 @@ type AccountTabContainerProps = {
   isOpen: boolean;
 };
 
+type Account = {
+  address: string;
+  identifier: string;
+  status: string;
+};
+
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
   const { userAddress, whitelist, isReadOnly, dataReady } = useAccountData();
@@ -117,6 +123,14 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     if (!isValidAddress) {
       return {
         valid: false
+      };
+    }
+
+    let isDuplicateAccount = list.filter((item: Account) => address === item.address).length > 0;
+    if (isDuplicateAccount) {
+      return {
+        valid: false,
+        msg: 'Account address is already on whitelist.'
       };
     }
 
