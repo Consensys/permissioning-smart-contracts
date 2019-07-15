@@ -26,7 +26,7 @@ const loadConfig = async (): Promise<Config> => {
     if (accountIngressNetworks.length === 0) {
       throw new Error("Account Ingress Contract abi doesn't contain any networks, probably not deployed");
     }
-    const accountIngressAddress = accountIngressNetworks[0].address;
+    const accountIngressAddress = (accountIngressNetworks[0] as { address: string }).address;
 
     const nodeIngressNetworks = Object.values(NodeIngress.networks);
     if (nodeIngressNetworks.length === 0) {
