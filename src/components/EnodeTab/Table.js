@@ -15,7 +15,7 @@ const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, userAddress
     <EnodeTableHeader
       number={list.length}
       openAddModal={toggleModal('add')}
-      disabledAdd={!isAdmin || isReadOnly || !isReadOnly}
+      disabledAdd={!isAdmin}
       isReadOnly={isReadOnly}
     />
     <Table mt={4}>
