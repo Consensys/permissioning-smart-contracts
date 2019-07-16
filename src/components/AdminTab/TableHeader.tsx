@@ -13,11 +13,11 @@ type TableHeader = {
 const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd }) => (
   <Flex alignItems="center" justifyContent="space-between">
     <Box>
-      <Heading.h2 fontWeight="700">Admin Accounts ({number})</Heading.h2>
+      <Heading.h2 fontWeight="700">Admins ({number})</Heading.h2>
     </Box>
     <Flex alignItems="center">
       <Button icon="AddCircleOutline" mainColor="#25D78F" onClick={() => openAddModal()} disabled={disabledAdd}>
-        Add Admin Account
+        Add Admin
       </Button>
     </Flex>
   </Flex>
