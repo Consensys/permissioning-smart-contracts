@@ -24294,7 +24294,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                         className="sc-bdVaJa jwTMkl"
                       >
                         <TableHeader
-                          disabledAdd={true}
+                          disabledAdd={false}
                           isReadOnly={true}
                           number={0}
                           openAddModal={[Function]}
@@ -28717,7 +28717,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                                         boxShadow={1}
                                         color="white"
                                         contrastColor="white"
-                                        disabled={true}
+                                        disabled={false}
                                         fontFamily="sansSerif"
                                         fontSize="inherit"
                                         fontWeight={3}
@@ -28975,7 +28975,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                                           boxShadow={1}
                                           color="white"
                                           contrastColor="white"
-                                          disabled={true}
+                                          disabled={false}
                                           fontFamily="sansSerif"
                                           fontSize="inherit"
                                           fontWeight={3}
@@ -29233,7 +29233,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                                             boxShadow={1}
                                             color="white"
                                             contrastColor="white"
-                                            disabled={true}
+                                            disabled={false}
                                             fontFamily="sansSerif"
                                             fontSize="inherit"
                                             fontWeight={3}
@@ -30003,7 +30003,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                                             <button
                                               className="sc-bdVaJa sc-eiqfgm sc-kDkoGq bSTANS"
                                               color="white"
-                                              disabled={true}
+                                              disabled={false}
                                               fontFamily="sansSerif"
                                               fontSize="inherit"
                                               fontWeight={3}
