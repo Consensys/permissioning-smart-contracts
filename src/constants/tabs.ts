@@ -3,6 +3,6 @@ export const ENODE_TAB = 'enodeTab';
 export const ACCOUNT_TAB = 'accountTab';
 export default [
   { id: ACCOUNT_TAB, text: 'Whitelisted Accounts' },
-  { id: ADMIN_TAB, text: 'Admin Accounts' },
-  { id: ENODE_TAB, text: 'Whitelisted Nodes' }
+  { id: ENODE_TAB, text: 'Whitelisted Nodes' },
+  { id: ADMIN_TAB, text: 'Admins' }
 ];
