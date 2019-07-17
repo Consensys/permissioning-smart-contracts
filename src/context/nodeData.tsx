@@ -1,16 +1,24 @@
 // Libs
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
+import { NodeRules } from '../chain/@types/NodeRules';
+import { nodeRulesFactory } from '../chain/contracts/NodeRules';
+import { useNetwork } from './network';
 
 // Utils
 import { paramsToIdentifier, Enode } from '../util/enodetools';
 
-type ContextType = {
-  nodeWhitelist?: Enode[];
-  setNodeWhitelist?: React.Dispatch<React.SetStateAction<Enode[]>>;
-};
+type ContextType =
+  | {
+      nodeWhitelist: Enode[];
+      setNodeWhitelist: React.Dispatch<React.SetStateAction<Enode[]>>;
+      nodeReadOnly?: boolean;
+      setNodeReadOnly: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+      nodeRulesContract?: NodeRules;
+      setNodeRulesContract: React.Dispatch<React.SetStateAction<NodeRules | undefined>>;
+    }
+  | undefined;
 
-const DataContext = createContext<ContextType>({});
+const DataContext = createContext<ContextType>(undefined);
 
 /**
  * Provider for the data context that contains the node whitelist
@@ -21,8 +29,24 @@ const DataContext = createContext<ContextType>({});
  */
 export const NodeDataProvider: React.FC<{}> = props => {
   const [nodeWhitelist, setNodeWhitelist] = useState<Enode[]>([]);
+  const [nodeReadOnly, setNodeReadOnly] = useState<boolean | undefined>(undefined);
+  const [nodeRulesContract, setNodeRulesContract] = useState<NodeRules | undefined>(undefined);
 
-  const value = useMemo(() => ({ nodeWhitelist, setNodeWhitelist }), [nodeWhitelist, setNodeWhitelist]);
+  const value = useMemo(
+    () => ({ nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract }),
+    [nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract]
+  );
+
+  const { nodeIngressContract } = useNetwork();
+
+  useEffect(() => {
+    if (nodeIngressContract === undefined) {
+      setNodeRulesContract(undefined);
+    } else {
+      nodeRulesFactory(nodeIngressContract).then(contract => setNodeRulesContract(contract));
+    }
+  }, [nodeIngressContract]);
+
   return <DataContext.Provider value={value} {...props} />;
 };
 
@@ -41,50 +65,45 @@ export const useNodeData = () => {
     throw new Error('useNodeData must be used within a NodeDataProvider.');
   }
 
-  const { nodeWhitelist, setNodeWhitelist } = context;
-  const { drizzle, useCacheCall } = drizzleReactHooks.useDrizzle();
-  const nodeWhitelistSize: number = useCacheCall('NodeRules', 'getSize');
-  const { getByIndex: getNodeByIndex } = drizzle.contracts.NodeRules.methods;
-  const nodeIsReadOnly: boolean = useCacheCall('NodeRules', 'isReadOnly');
-  const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
-    userAddress: drizzleState.accounts[0]
-  }));
+  const { nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract } = context;
 
   useEffect(() => {
-    const promises = [];
-    for (let index = 0; index < nodeWhitelistSize; index++) {
-      promises.push(getNodeByIndex(index).call());
+    if (nodeRulesContract === undefined) {
+      setNodeWhitelist([]);
+      setNodeReadOnly(undefined);
+    } else {
+      nodeRulesContract.functions.isReadOnly().then(isReadOnly => setNodeReadOnly(isReadOnly));
+      nodeRulesContract.functions.getSize().then(whitelistSize => {
+        const whitelistElementPromises = [];
+        for (let i = 0; whitelistSize.gt(i); i++) {
+          whitelistElementPromises.push(nodeRulesContract.functions.getByIndex(i));
+        }
+        Promise.all(whitelistElementPromises).then(responses => {
+          const updatedNodeWhitelist = responses.map(r => {
+            const withStringyPort = { ...r, port: r.port.toString() };
+            return {
+              ...withStringyPort,
+              identifier: paramsToIdentifier(withStringyPort)
+            };
+          });
+          setNodeWhitelist(updatedNodeWhitelist);
+        });
+      });
     }
-    Promise.all(promises).then(responses => {
-      const updatedNodeWhitelist = responses.map(({ enodeHigh, enodeLow, ip, port }) => ({
-        enodeHigh,
-        enodeLow,
-        ip,
-        port,
-        identifier: paramsToIdentifier({
-          enodeHigh,
-          enodeLow,
-          ip,
-          port
-        })
-      }));
-      setNodeWhitelist!(updatedNodeWhitelist);
-    });
-  }, [nodeWhitelistSize, setNodeWhitelist, getNodeByIndex]);
+  }, [nodeRulesContract, setNodeWhitelist, setNodeReadOnly]);
 
   const formattedNodeWhitelist = useMemo(() => {
     return nodeWhitelist ? nodeWhitelist.map(enode => ({ ...enode, status: 'active' })).reverse() : undefined;
   }, [nodeWhitelist]);
 
-  const dataReady = useMemo(() => typeof nodeIsReadOnly === 'boolean' && Array.isArray(nodeWhitelist), [
-    nodeIsReadOnly,
-    nodeWhitelist
-  ]);
+  const dataReady = useMemo(() => {
+    return nodeRulesContract !== undefined && nodeReadOnly !== undefined && nodeWhitelist !== undefined;
+  }, [nodeRulesContract, nodeReadOnly, nodeWhitelist]);
 
   return {
-    userAddress,
     dataReady,
     whitelist: formattedNodeWhitelist,
-    isReadOnly: nodeIsReadOnly
+    isReadOnly: nodeReadOnly,
+    nodeRulesContract
   };
 };

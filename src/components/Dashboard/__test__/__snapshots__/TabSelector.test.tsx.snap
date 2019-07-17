@@ -23417,7 +23417,6 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                   }
                 }
                 toggleModal={[Function]}
-                userAddress="test"
               >
                 <EnodeTable
                   deleteTransaction={[Function]}
@@ -23425,7 +23424,6 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                   isReadOnly={true}
                   list={Array []}
                   toggleModal={[Function]}
-                  userAddress="test"
                 >
                   <Box
                     mt={5}

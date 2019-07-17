@@ -9,7 +9,6 @@ import { addEnodeDisplay, removeEnodeDisplay } from '../../constants/modals';
 
 const EnodeTab = ({
   list,
-  userAddress,
   modals,
   toggleModal,
   handleAdd,
@@ -25,7 +24,6 @@ const EnodeTab = ({
       <Fragment>
         <EnodeTable
           list={list}
-          userAddress={userAddress}
           toggleModal={toggleModal}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
@@ -52,7 +50,6 @@ const EnodeTab = ({
 
 EnodeTab.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
-  userAddress: PropTypes.string,
   modals: PropTypes.object.isRequired,
   toggleModal: PropTypes.func.isRequired,
   handleAdd: PropTypes.func.isRequired,
