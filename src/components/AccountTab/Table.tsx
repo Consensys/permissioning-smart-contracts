@@ -15,7 +15,6 @@ type AccountTable = {
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
   deleteTransaction: () => void;
   isAdmin: boolean;
-  userAddress: string;
   isReadOnly: boolean;
   pendingLock: boolean;
 };
@@ -25,7 +24,6 @@ const AccountTable: React.FC<AccountTable> = ({
   toggleModal,
   deleteTransaction,
   isAdmin,
-  userAddress,
   isReadOnly,
   pendingLock
 }) => (
@@ -60,7 +58,6 @@ AccountTable.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  userAddress: PropTypes.string.isRequired,
   isReadOnly: PropTypes.bool.isRequired,
   pendingLock: PropTypes.bool.isRequired
 };

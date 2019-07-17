@@ -1,10 +1,8 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { drizzleReactHooks } from 'drizzle-react';
 import { isAddress } from 'web3-utils';
 import idx from 'idx';
-import { TransactionObject } from 'web3/eth/types';
 // Context
 import { useAccountData } from '../../context/accountData';
 import { useAdminData } from '../../context/adminData';
@@ -36,7 +34,7 @@ type Account = {
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { userAddress, whitelist, isReadOnly, dataReady } = useAccountData();
+  const { whitelist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
 
   const {
     list,
@@ -49,73 +47,59 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     openToast
   } = useTab(whitelist, (identifier: string) => ({ address: identifier }));
 
-  const { drizzle } = drizzleReactHooks.useDrizzle();
-
-  const { addAccount, removeAccount } = drizzle.contracts.AccountRules.methods as {
-    addAccount: (value: string) => TransactionObject<never>;
-    removeAccount: (value: string) => TransactionObject<never>;
-  };
-
   const handleAdd = async (value: string) => {
-    const gasLimit = await addAccount(value).estimateGas({
-      from: userAddress
-    });
-    addAccount(value)
-      .send({ from: userAddress, gas: gasLimit * 4 })
-      .on('transactionHash', () => {
-        toggleModal('add')();
-        addTransaction(value, PENDING_ADDITION);
-      })
-      .on('receipt', receipt => {
-        const event = idx(receipt, _ => _.events.AccountAdded);
-        const added = Boolean(idx(event, _ => _.returnValues.accountAdded));
-        if (!event) {
+    // const gas = await accountRulesContract!.estimate.addAccount(value)
+    try {
+      const tx = await accountRulesContract!.functions.addAccount(value);
+      toggleModal('add')();
+      addTransaction(value, PENDING_ADDITION);
+      const receipt = await tx.wait(1); // wait on receipt confirmations
+      const addEvent = receipt.events!.filter(e => e.event && e.event === 'AccountAdded').pop();
+      if (!addEvent) {
+        openToast(value, FAIL, `Error while processing account: ${value}`);
+      } else {
+        const addSuccessResult = idx(addEvent, _ => _.args[1]);
+        if (addSuccessResult === undefined) {
           openToast(value, FAIL, `Error while processing account: ${value}`);
-        } else if (added) {
+        } else if (Boolean(addSuccessResult)) {
           openToast(value, SUCCESS, `New whitelisted account processed: ${value}`);
         } else {
           openToast(value, FAIL, `Account "${value}" is already on whitelist`);
         }
-      })
-      .on('error', error => {
-        toggleModal('add')();
-        updateTransaction(value, FAIL_ADDITION);
-        errorToast(error, value, openToast, () =>
-          openToast(
-            value,
-            FAIL,
-            'Could not add whitelisted account',
-            `${value} was unable to be added. Please try again.`
-          )
-        );
-      });
+      }
+    } catch (e) {
+      toggleModal('add')(false);
+      updateTransaction(value, FAIL_ADDITION);
+      errorToast(e, value, openToast, () =>
+        openToast(
+          value,
+          FAIL,
+          'Could not add whitelisted account',
+          `${value} was unable to be added. Please try again.`
+        )
+      );
+    }
   };
 
   const handleRemove = async (value: string) => {
-    const gasLimit = await removeAccount(value).estimateGas({
-      from: userAddress
-    });
-    removeAccount(value)
-      .send({ from: userAddress, gas: gasLimit * 4 })
-      .on('transactionHash', () => {
-        toggleModal('remove')();
-        addTransaction(value, PENDING_REMOVAL);
-      })
-      .on('receipt', () => {
-        openToast(value, SUCCESS, `Removal of whitelisted account processed: ${value}`);
-      })
-      .on('error', error => {
-        toggleModal('remove')();
-        updateTransaction(value, FAIL_REMOVAL);
-        errorToast(error, value, openToast, () =>
-          openToast(
-            value,
-            FAIL,
-            'Could not remove whitelisted account',
-            `${value} was unable to be removed. Please try again.`
-          )
-        );
-      });
+    try {
+      const tx = await accountRulesContract!.functions.removeAccount(value);
+      toggleModal('remove')();
+      addTransaction(value, PENDING_REMOVAL);
+      await tx.wait(1); // wait on receipt confirmations
+      openToast(value, SUCCESS, `Removal of whitelisted account processed: ${value}`);
+    } catch (e) {
+      toggleModal('remove')();
+      updateTransaction(value, FAIL_REMOVAL);
+      errorToast(e, value, openToast, () =>
+        openToast(
+          value,
+          FAIL,
+          'Could not remove whitelisted account',
+          `${value} was unable to be removed. Please try again.`
+        )
+      );
+    }
   };
 
   const isValidAccount = (address: string) => {
@@ -144,7 +128,6 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     return (
       <AccountTab
         list={list}
-        userAddress={userAddress}
         modals={modals}
         toggleModal={toggleModal}
         handleAdd={handleAdd}

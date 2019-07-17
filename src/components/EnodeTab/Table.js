@@ -10,7 +10,7 @@ import EmptyRow from './EmptyRow';
 // Styles
 import styles from './styles.module.scss';
 
-const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, userAddress, isReadOnly }) => (
+const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, isReadOnly }) => (
   <Box mt={5}>
     <EnodeTableHeader
       number={list.length}
@@ -51,7 +51,6 @@ EnodeTable.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  userAddress: PropTypes.string.isRequired,
   isReadOnly: PropTypes.bool.isRequired
 };
 

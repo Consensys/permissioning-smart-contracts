@@ -114,7 +114,6 @@ EnodeRow.propTypes = {
   status: PropTypes.string.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isReadOnly: PropTypes.bool.isRequired,
-  pendingLock: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired
 };
 

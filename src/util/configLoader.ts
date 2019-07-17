@@ -22,6 +22,8 @@ const loadConfig = async (): Promise<Config> => {
     }
     // development defaults
   } else {
+    // We're cheating here by knowing what truffle will write when it's running a ganache server.
+    // We're forcing the types because we know what the network entry in the json file will look like so long as it's there.
     const accountIngressNetworks = Object.values(AccountIngress.networks);
     if (accountIngressNetworks.length === 0) {
       throw new Error("Account Ingress Contract abi doesn't contain any networks, probably not deployed");
