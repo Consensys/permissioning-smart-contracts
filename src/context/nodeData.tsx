@@ -1,6 +1,5 @@
 // Libs
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
 import { NodeRules } from '../chain/@types/NodeRules';
 import { nodeRulesFactory } from '../chain/contracts/NodeRules';
 import { useNetwork } from './network';
@@ -67,9 +66,6 @@ export const useNodeData = () => {
   }
 
   const { nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract } = context;
-  const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
-    userAddress: drizzleState.accounts[0]
-  }));
 
   useEffect(() => {
     if (nodeRulesContract === undefined) {
@@ -105,7 +101,6 @@ export const useNodeData = () => {
   }, [nodeRulesContract, nodeReadOnly, nodeWhitelist]);
 
   return {
-    userAddress,
     dataReady,
     whitelist: formattedNodeWhitelist,
     isReadOnly: nodeReadOnly,

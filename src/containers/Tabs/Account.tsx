@@ -53,7 +53,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       const tx = await accountRulesContract!.functions.addAccount(value);
       toggleModal('add')();
       addTransaction(value, PENDING_ADDITION);
-      const receipt = await tx.wait(1);
+      const receipt = await tx.wait(1); // wait on receipt confirmations
       const addEvent = receipt.events!.filter(e => e.event && e.event === 'AccountAdded').pop();
       if (!addEvent) {
         openToast(value, FAIL, `Error while processing account: ${value}`);
