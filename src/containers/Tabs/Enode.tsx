@@ -153,7 +153,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         isAdmin={isAdmin}
         deleteTransaction={deleteTransaction}
         isValid={isValid}
-        isReadOnly={isReadOnly}
+        isReadOnly={isReadOnly!}
         isOpen={isOpen}
       />
     );

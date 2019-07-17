@@ -42,7 +42,7 @@ export const paramsToIdentifier = ({
   enodeHigh: string;
   enodeLow: string;
   ip: string;
-  port: string;
+  port: string | number;
 }) => {
   return `${enodeHigh}_${enodeLow}_${ip}_${port}`;
 };

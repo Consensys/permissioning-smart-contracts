@@ -5,7 +5,7 @@ import { NodeRules } from '../@types/NodeRules';
 
 let instance: NodeRules | null = null;
 
-export default async (ingressInstance: NodeIngress) => {
+export const nodeRulesFactory = async (ingressInstance: NodeIngress) => {
   if (instance) return instance;
 
   const ruleContractName = await ingressInstance.functions.RULES_CONTRACT();
