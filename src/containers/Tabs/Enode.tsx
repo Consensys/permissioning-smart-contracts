@@ -4,6 +4,7 @@ import { drizzleReactHooks } from 'drizzle-react';
 import PropTypes from 'prop-types';
 import idx from 'idx';
 import { TransactionObject } from 'web3/eth/types';
+import { utils } from 'ethers';
 // Context
 import { useAdminData } from '../../context/adminData';
 import { useNodeData } from '../../context/nodeData';
@@ -37,7 +38,7 @@ type EnodeTabContainerProps = {
 
 const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { userAddress, whitelist, isReadOnly, dataReady } = useNodeData();
+  const { userAddress, whitelist, isReadOnly, dataReady, nodeRulesContract } = useNodeData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
     whitelist,
@@ -46,11 +47,8 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
 
   const { drizzle } = drizzleReactHooks.useDrizzle();
 
-  const { addEnode, removeEnode } = drizzle.contracts.NodeRules.methods as {
-    addEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>;
+  const { removeEnode } = drizzle.contracts.NodeRules.methods as {
     removeEnode: (enodeHigh: string, enodeLow: string, ip: string, port: string) => TransactionObject<never>;
-    enterReadOnly: () => TransactionObject<never>;
-    exitReadOnly: () => TransactionObject<never>;
   };
 
   const handleAdd = async (value: string) => {
@@ -61,36 +59,42 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
       ip,
       port
     });
-    const gasLimit = await addEnode(enodeHigh, enodeLow, ip, port).estimateGas({ from: userAddress });
-    addEnode(enodeHigh, enodeLow, ip, port)
-      .send({ from: userAddress, gas: gasLimit * 4 })
-      .on('transactionHash', () => {
-        toggleModal('add')();
-        addTransaction(identifier, PENDING_ADDITION);
-      })
-      .on('receipt', receipt => {
-        const event = idx(receipt, _ => _.events.NodeAdded);
-        const added = Boolean(idx(event, _ => _.returnValues.nodeAdded));
-        if (!event) {
+
+    try {
+      const tx = await nodeRulesContract!.functions.addEnode(
+        utils.hexlify(enodeHigh),
+        utils.hexlify(enodeLow),
+        utils.hexlify(ip),
+        utils.bigNumberify(port)
+      );
+      toggleModal('add')();
+      addTransaction(identifier, PENDING_ADDITION);
+      const receipt = await tx.wait(1);
+      const addEvent = receipt.events!.filter(e => e.event && e.event === 'NodeAdded').pop();
+      if (!addEvent) {
+        openToast(value, FAIL, `Error while processing node: ${value}`);
+      } else {
+        const addSuccessResult = idx(addEvent, _ => _.args[0]);
+        if (addSuccessResult === undefined) {
           openToast(value, FAIL, `Error while processing node: ${value}`);
-        } else if (added) {
+        } else if (Boolean(addSuccessResult)) {
           openToast(value, SUCCESS, `New whitelist node processed: ${value}`);
         } else {
           openToast(value, FAIL, `Node "${value}" is already on whitelist`);
         }
-      })
-      .on('error', error => {
-        toggleModal('add')();
-        updateTransaction(identifier, FAIL_ADDITION);
-        errorToast(error, identifier, openToast, () =>
-          openToast(
-            identifier,
-            FAIL,
-            'Could not add node to whitelist',
-            `${enodeHigh}${enodeLow} was unable to be added. Please try again`
-          )
-        );
-      });
+      }
+    } catch (e) {
+      toggleModal('add')();
+      updateTransaction(identifier, FAIL_ADDITION);
+      errorToast(e, identifier, openToast, () =>
+        openToast(
+          identifier,
+          FAIL,
+          'Could not add node to whitelist',
+          `${enodeHigh}${enodeLow} was unable to be added. Please try again`
+        )
+      );
+    }
   };
 
   const handleRemove = async (value: string) => {

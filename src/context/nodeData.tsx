@@ -108,6 +108,7 @@ export const useNodeData = () => {
     userAddress,
     dataReady,
     whitelist: formattedNodeWhitelist,
-    isReadOnly: nodeReadOnly
+    isReadOnly: nodeReadOnly,
+    nodeRulesContract
   };
 };
