@@ -11,6 +11,6 @@ export const accountRulesFactory = async (ingressInstance: AccountIngress) => {
   const ruleContractName = await ingressInstance.functions.RULES_CONTRACT();
   const accountRulesAddress = await ingressInstance.functions.getContractAddress(ruleContractName);
 
-  instance = new Contract(accountRulesAddress, AccountRulesAbi.abi, ingressInstance.provider) as AccountRules;
+  instance = new Contract(accountRulesAddress, AccountRulesAbi.abi, ingressInstance.signer) as AccountRules;
   return instance;
 };

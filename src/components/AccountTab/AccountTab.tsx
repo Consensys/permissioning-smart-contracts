@@ -10,7 +10,6 @@ import { addAccountDisplay, removeAccountDisplay } from '../../constants/modals'
 
 type AccountTab = {
   list: any[];
-  userAddress?: string;
   modals: {
     add: boolean;
     remove: boolean | string;
@@ -29,7 +28,6 @@ type AccountTab = {
 
 const AccountTab: React.FC<AccountTab> = ({
   list,
-  userAddress,
   modals,
   toggleModal,
   handleAdd,
@@ -46,7 +44,6 @@ const AccountTab: React.FC<AccountTab> = ({
       <Fragment>
         <AccountTable
           list={list}
-          userAddress={userAddress!}
           toggleModal={toggleModal}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
@@ -74,7 +71,6 @@ const AccountTab: React.FC<AccountTab> = ({
 
 AccountTab.propTypes = {
   list: PropTypes.array.isRequired,
-  userAddress: PropTypes.string,
   modals: PropTypes.shape({
     add: PropTypes.bool.isRequired,
     remove: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
