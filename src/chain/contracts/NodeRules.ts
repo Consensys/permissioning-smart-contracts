@@ -11,6 +11,6 @@ export const nodeRulesFactory = async (ingressInstance: NodeIngress) => {
   const ruleContractName = await ingressInstance.functions.RULES_CONTRACT();
   const nodeRulesAddress = await ingressInstance.functions.getContractAddress(ruleContractName);
 
-  instance = new Contract(nodeRulesAddress, NodeRulesAbi.abi, ingressInstance.provider) as NodeRules;
+  instance = new Contract(nodeRulesAddress, NodeRulesAbi.abi, ingressInstance.signer) as NodeRules;
   return instance;
 };

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
 import { AccountRules } from '../chain/@types/AccountRules';
 import { accountRulesFactory } from '../chain/contracts/AccountRules';
 import { useNetwork } from './network';
@@ -80,9 +79,6 @@ export const useAccountData = () => {
   }
 
   const { accountWhitelist, setAccountWhitelist, accountReadOnly, setAccountReadOnly, accountRulesContract } = context;
-  const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
-    userAddress: drizzleState.accounts[0]
-  }));
 
   useEffect(() => {
     if (accountRulesContract === undefined) {
@@ -117,9 +113,9 @@ export const useAccountData = () => {
   }, [accountRulesContract, accountReadOnly, accountWhitelist]);
 
   return {
-    userAddress,
     dataReady,
     whitelist: formattedAccountWhitelist,
-    isReadOnly: accountReadOnly
+    isReadOnly: accountReadOnly,
+    accountRulesContract
   };
 };

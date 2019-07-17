@@ -85,10 +85,10 @@ describe('<Dashboard />', () => {
     beforeAll(() => {
       jest.clearAllMocks();
       mocked(useAccountData).mockImplementation(() => ({
-        userAddress: 'test',
         dataReady: true,
         whitelist: [],
-        isReadOnly: true
+        isReadOnly: true,
+        accountRulesContract: undefined
       }));
       mocked(AccountDataProvider).mockImplementation(({ children }) => <div>{children}</div>);
 

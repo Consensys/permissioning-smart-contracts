@@ -11,6 +11,6 @@ export default async (ingressInstance: AccountIngress | NodeIngress) => {
 
   const adminAddress = await ingressInstance.functions.getContractAddress('ADMIN');
 
-  instance = new Contract(adminAddress, AdminAbi.abi, ingressInstance.provider) as Admin;
+  instance = new Contract(adminAddress, AdminAbi.abi, ingressInstance.signer) as Admin;
   return instance;
 };
