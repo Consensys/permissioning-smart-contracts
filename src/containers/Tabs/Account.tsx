@@ -58,7 +58,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       if (!addEvent) {
         openToast(value, FAIL, `Error while processing account: ${value}`);
       } else {
-        const addSuccessResult = idx(addEvent, _ => _.args[1]);
+        const addSuccessResult = idx(addEvent, _ => _.args[0]);
         if (addSuccessResult === undefined) {
           openToast(value, FAIL, `Error while processing account: ${value}`);
         } else if (Boolean(addSuccessResult)) {

@@ -14,13 +14,13 @@ contract("Account Rules (Events)", (accounts) => {
     let ingressContract;
     let rulesContract;
     let adminContract;
-  
+
     before(async () => {
       ingressContract = await IngressContract.new();
-  
+
       adminContract = await AdminContract.new();
       await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
-  
+
       rulesContract = await RulesContract.new(ingressContract.address);
       await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
       let size = await rulesContract.getSize();
@@ -35,15 +35,36 @@ contract("Account Rules (Events)", (accounts) => {
         await rulesContract.addAccount(address1);
 
         // Attempt to add a duplicate entry
-        await rulesContract.addAccount(address1);        
-        
+        await rulesContract.addAccount(address1);
+
         // Get the events
         let result = await rulesContract.getPastEvents("AccountAdded", {fromBlock: 0, toBlock: "latest" });
-        
+
         // Verify the successful AccountAdded event is 'true'
         assert.equal(result[0].returnValues.accountAdded, true, "accountAdded SHOULD be true");
-    
-        // Verify the unsuccessful dupliate AccountAdded event is 'false'
-        assert.equal(result[1].returnValues.accountAdded, false, "accountAdded SHOULD be false");
+        assert.equal(result[0].returnValues.accountAddress.toLowerCase(), address1, "account address SHOULD be " + address1);
+
+        // Verify the unsuccessful duplicate AccountAdded event is 'false'
+        assert.equal(result[1].returnValues.accountAdded, false, "duplicate accountAdded SHOULD be false");
+        assert.equal(result[1].returnValues.accountAddress.toLowerCase(), address1, "duplicate account address SHOULD be " + address1);
+    });
+
+    it("Should emit an event when an account is removed", async () => {
+        // Add an account
+        await rulesContract.addAccount(address1);
+
+        await rulesContract.removeAccount(address1);
+        await rulesContract.removeAccount(address1);
+
+        // Get the events
+        let result = await rulesContract.getPastEvents("AccountRemoved", {fromBlock: 0, toBlock: "latest" });
+
+        // Verify the successful AccountRemoved event is 'true'
+        assert.equal(result[1].returnValues.accountRemoved, true, "accountRemoved SHOULD be true");
+        assert.equal(result[1].returnValues.accountAddress.toLowerCase(), address1, "account address SHOULD be " + address1);
+
+        // Verify the unsuccessful duplicate AccountRemoved event is 'false'
+        assert.equal(result[2].returnValues.accountRemoved, false, "duplicate accountRemoved SHOULD be false");
+        assert.equal(result[2].returnValues.accountAddress.toLowerCase(), address1, "duplicate account address SHOULD be " + address1);
     });
 });

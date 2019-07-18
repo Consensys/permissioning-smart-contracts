@@ -97,10 +97,10 @@ contract("Admin (admin management)", async accounts => {
 
     // Attempt to add self
     await adminContract.addAdmin(ownAddress);
-    
+
     // Get the events
     let result = await adminContract.getPastEvents("AdminAdded", {fromBlock: 0, toBlock: "latest" });
-    
+
     // Verify the first AccountAdded event is 'true'
     assert.equal(result[0].returnValues.adminAdded, true, "adminAdded SHOULD be true");
 
@@ -116,4 +116,24 @@ contract("Admin (admin management)", async accounts => {
     // Verify the adding own account AccountAdded event has correct message
     assert.equal(result[2].returnValues.message, "Adding own account as Admin is not permitted", "adding self Admin error message SHOULD be correct");
   });
+
+  it("Should emit events when an Admin is removed", async () => {
+    const address = accounts[1];
+
+    // Add a new account
+    await adminContract.addAdmin(address);
+
+    await adminContract.removeAdmin(address);
+    await adminContract.removeAdmin(address);
+
+    let result = await adminContract.getPastEvents("AdminRemoved", {fromBlock: 0, toBlock: "latest" });
+
+    // Verify the first AccountRemoved event is 'true'
+    assert.equal(result[0].returnValues.adminRemoved, true, "adminRemoved SHOULD be true");
+    // Verify the second AccountRemoved event is 'false'
+    assert.equal(result[1].returnValues.adminRemoved, false, "adminRemoved SHOULD be false");
+
+
+  });
+
 });
