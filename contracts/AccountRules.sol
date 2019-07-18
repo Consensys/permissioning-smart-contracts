@@ -2,15 +2,20 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "./AccountRulesProxy.sol";
 import "./AccountRulesList.sol";
-import "./Ingress.sol";
+import "./AccountIngress.sol";
 import "./Admin.sol";
 
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     event AccountAdded(
-        address account,
-        bool accountAdded
+        bool accountAdded,
+        address accountAddress
+    );
+
+    event AccountRemoved(
+        bool accountRemoved,
+        address accountAddress
     );
 
     // in read-only mode rules can't be added/removed
@@ -26,7 +31,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     modifier onlyAdmin() {
-        Ingress ingressContract = Ingress(ingressContractAddress);
+        AccountIngress ingressContract = AccountIngress(ingressContractAddress);
         address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
@@ -88,7 +93,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         address account
     ) public onlyAdmin onlyOnEditMode returns (bool) {
         bool added = add(account);
-        emit AccountAdded(account, added);
+        emit AccountAdded(added, account);
         return added;
     }
 
@@ -96,7 +101,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         address account
     ) public onlyAdmin onlyOnEditMode returns (bool) {
         bool removed = remove(account);
-
+        emit AccountRemoved(removed, account);
         return removed;
     }
 
