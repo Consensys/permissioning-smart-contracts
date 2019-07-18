@@ -6,9 +6,14 @@ import "./AdminList.sol";
 
 contract Admin is AdminProxy, AdminList {
     event AdminAdded(
-        address account,
         bool adminAdded,
+        address account,
         string message
+    );
+
+    event AdminRemoved(
+        bool adminRemoved,
+        address account
     );
 
     modifier onlyAdmin() {
@@ -31,18 +36,20 @@ contract Admin is AdminProxy, AdminList {
 
     function addAdmin(address _address) public onlyAdmin returns (bool) {
         if (msg.sender == _address) {
-            emit AdminAdded(_address, false, "Adding own account as Admin is not permitted");
+            emit AdminAdded(false, _address, "Adding own account as Admin is not permitted");
             return false;
         } else {
             bool result = add(_address);
             string memory message = result ? "Admin account added successfully" : "Account is already an Admin";
-            emit AdminAdded(_address, result, message);
+            emit AdminAdded(result, _address, message);
             return result;
         }
     }
 
     function removeAdmin(address _address) public onlyAdmin notSelf(_address) returns (bool) {
-        return remove(_address);
+        bool removed = remove(_address);
+        emit AdminRemoved(removed, _address);
+        return removed;
     }
 
     function getAdmins() public view returns (address[] memory){
