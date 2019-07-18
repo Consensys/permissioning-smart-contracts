@@ -38,11 +38,26 @@ contract("NodeRules (Events)", () => {
 
     // Get the events
     let result = await nodeRulesContract.getPastEvents("NodeAdded", {fromBlock: 0, toBlock: "latest" });
-    
+
     // Verify the successful NodeAdded event is 'true'
     assert.equal(result[0].returnValues.nodeAdded, true, "nodeAdded SHOULD be true");
 
     // Verify the unsuccessful dupliate NodeAdded event is 'false'
     assert.equal(result[1].returnValues.nodeAdded, false, "nodeAdded SHOULD be false");
+  });
+
+  it('should emit events when node removed', async () => {
+    await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
+    await nodeRulesContract.removeEnode(node1High, node1Low, node1Host, node1Port);
+    await nodeRulesContract.removeEnode(node1High, node1Low, node1Host, node1Port);
+
+    // Get the events
+    let result = await nodeRulesContract.getPastEvents("NodeRemoved", {fromBlock: 0, toBlock: "latest" });
+
+    // Verify the successful NodeRemoved event is 'true'
+    assert.equal(result[0].returnValues.nodeRemoved, true, "nodeRemoved SHOULD be true");
+
+    // Verify the unsuccessful duplicate NodeRemoved event is 'false'
+    assert.equal(result[1].returnValues.nodeRemoved, false, "nodeRemoved SHOULD be false");
   });
 });
