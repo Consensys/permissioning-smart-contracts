@@ -9,7 +9,19 @@ import "./Admin.sol";
 contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     event NodeAdded(
-        bool nodeAdded
+        bool nodeAdded,
+        bytes32 enodeHigh,
+        bytes32 enodeLow,
+        bytes16 enodeIp,
+        uint16 enodePort
+    );
+
+    event NodeRemoved(
+        bool nodeRemoved,
+        bytes32 enodeHigh,
+        bytes32 enodeLow,
+        bytes16 enodeIp,
+        uint16 enodePort
     );
 
     // on read-only mode rules can't be added/removed
@@ -108,7 +120,13 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         if (added) {
             triggerRulesChangeEvent(false);
         }
-        emit NodeAdded(added);
+        emit NodeAdded(
+            added,
+            enodeHigh,
+            enodeLow,
+            ip,
+            port
+        );
 
         return added;
     }
@@ -124,6 +142,13 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         if (removed) {
             triggerRulesChangeEvent(true);
         }
+        emit NodeRemoved(
+            removed,
+            enodeHigh,
+            enodeLow,
+            ip,
+            port
+        );
 
         return removed;
     }
