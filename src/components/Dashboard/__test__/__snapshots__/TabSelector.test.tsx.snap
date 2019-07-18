@@ -15484,7 +15484,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               closeModal={[Function]}
               display={
                 Object {
-                  "errorMessage": "Account address is not correct.",
+                  "errorMessage": "Account address is not valid.",
                   "heading": "Add Admin Account",
                   "inputPlaceholder": "Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A",
                   "label": "Account Address",
@@ -15500,7 +15500,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                 closeModal={[Function]}
                 display={
                   Object {
-                    "errorMessage": "Account address is not correct.",
+                    "errorMessage": "Account address is not valid.",
                     "heading": "Add Admin Account",
                     "inputPlaceholder": "Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A",
                     "label": "Account Address",

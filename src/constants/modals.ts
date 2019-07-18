@@ -11,7 +11,7 @@ export type ModalDisplay = {
 
 export const addAdminDisplay: ModalDisplay = {
   submitText: 'Add Admin Account',
-  errorMessage: 'Account address is not correct.',
+  errorMessage: 'Account address is not valid.',
   inputPlaceholder: 'Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A',
   label: 'Account Address',
   heading: 'Add Admin Account',
@@ -25,7 +25,7 @@ export const removeAdminDisplay: (value: string | boolean) => ModalDisplay = val
 
 export const addAccountDisplay: ModalDisplay = {
   submitText: 'Add Whitelisted Account',
-  errorMessage: 'Account address is not correct.',
+  errorMessage: 'Account address is not valid.',
   inputPlaceholder: 'Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A',
   label: 'Account Address',
   heading: 'Add Whitelisted Account',
