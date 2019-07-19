@@ -20,6 +20,35 @@ type ContextType =
 
 const DataContext = createContext<ContextType>(undefined);
 
+const loadNodeData = (
+  nodeRulesContract: NodeRules | undefined,
+  setNodeWhitelist: (account: Enode[]) => void,
+  setNodeReadOnly: (readOnly?: boolean) => void
+) => {
+  if (nodeRulesContract === undefined) {
+    setNodeWhitelist([]);
+    setNodeReadOnly(undefined);
+  } else {
+    nodeRulesContract.functions.isReadOnly().then(isReadOnly => setNodeReadOnly(isReadOnly));
+    nodeRulesContract.functions.getSize().then(whitelistSize => {
+      const whitelistElementPromises = [];
+      for (let i = 0; whitelistSize.gt(i); i++) {
+        whitelistElementPromises.push(nodeRulesContract.functions.getByIndex(i));
+      }
+      Promise.all(whitelistElementPromises).then(responses => {
+        const updatedNodeWhitelist = responses.map(r => {
+          const withStringyPort = { ...r, port: r.port.toString() };
+          return {
+            ...withStringyPort,
+            identifier: paramsToIdentifier(withStringyPort)
+          };
+        });
+        setNodeWhitelist(updatedNodeWhitelist);
+      });
+    });
+  }
+};
+
 /**
  * Provider for the data context that contains the node whitelist
  * @param {Object} props Props given to the NodeDataProvider
@@ -43,7 +72,17 @@ export const NodeDataProvider: React.FC<{}> = props => {
     if (nodeIngressContract === undefined) {
       setNodeRulesContract(undefined);
     } else {
-      nodeRulesFactory(nodeIngressContract).then(contract => setNodeRulesContract(contract));
+      nodeRulesFactory(nodeIngressContract).then(contract => {
+        setNodeRulesContract(contract);
+        contract.removeAllListeners('NodeAdded');
+        contract.removeAllListeners('NodeRemoved');
+        contract.on('NodeAdded', () => {
+          loadNodeData(contract, setNodeWhitelist, setNodeReadOnly);
+        });
+        contract.on('NodeRemoved', () => {
+          loadNodeData(contract, setNodeWhitelist, setNodeReadOnly);
+        });
+      });
     }
   }, [nodeIngressContract]);
 
@@ -68,28 +107,7 @@ export const useNodeData = () => {
   const { nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract } = context;
 
   useEffect(() => {
-    if (nodeRulesContract === undefined) {
-      setNodeWhitelist([]);
-      setNodeReadOnly(undefined);
-    } else {
-      nodeRulesContract.functions.isReadOnly().then(isReadOnly => setNodeReadOnly(isReadOnly));
-      nodeRulesContract.functions.getSize().then(whitelistSize => {
-        const whitelistElementPromises = [];
-        for (let i = 0; whitelistSize.gt(i); i++) {
-          whitelistElementPromises.push(nodeRulesContract.functions.getByIndex(i));
-        }
-        Promise.all(whitelistElementPromises).then(responses => {
-          const updatedNodeWhitelist = responses.map(r => {
-            const withStringyPort = { ...r, port: r.port.toString() };
-            return {
-              ...withStringyPort,
-              identifier: paramsToIdentifier(withStringyPort)
-            };
-          });
-          setNodeWhitelist(updatedNodeWhitelist);
-        });
-      });
-    }
+    loadNodeData(nodeRulesContract, setNodeWhitelist, setNodeReadOnly);
   }, [nodeRulesContract, setNodeWhitelist, setNodeReadOnly]);
 
   const formattedNodeWhitelist = useMemo(() => {
