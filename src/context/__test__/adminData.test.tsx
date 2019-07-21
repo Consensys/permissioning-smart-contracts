@@ -15,8 +15,4 @@ describe('<AdminDataProvider />', () => {
       </AdminDataProvider>
     );
   });
-
-  it('renders children when passed in', () => {
-    expect(wrapper.contains(<div className="test" />)).toEqual(true);
-  });
 });
