@@ -1,5 +1,6 @@
 // Libs
 import React from 'react';
+import { mocked } from 'ts-jest/utils';
 import toJson from 'enzyme-to-json';
 import { mount, ReactWrapper } from 'enzyme';
 // Components
@@ -14,14 +15,13 @@ jest.mock('../../../context/network', () => {
 });
 
 const NoProvider = () => <div className="noProvider" />;
-const WrongNetwork = ({ networkId }) => <div className="wrongNetwork" />;
+const WrongNetwork = (p: { networkId: number }) => <div className="wrongNetwork" />;
 
 describe('<Initializer />', () => {
   let wrapper: ReactWrapper<any, any, any>;
 
   beforeAll(() => {
-    useNetwork.mockImplementation(() => ({
-      web3Initialized: false,
+    mocked(useNetwork).mockImplementation(() => ({
       networkId: undefined,
       isCorrectNetwork: null
     }));
@@ -53,34 +53,11 @@ describe('<Initializer />', () => {
     expect(wrapper.props().children).toEqual(<div className="test" />);
   });
 
-  describe('web3Initialized=false', () => {
+  describe('isCorrectNetwork=true, networkId=undefined', () => {
     beforeAll(() => {
-      useNetwork.mockImplementation(() => ({
-        web3Initialized: false,
+      mocked(useNetwork).mockImplementation(() => ({
         networkId: undefined,
-        isCorrectNetwork: null
-      }));
-    });
-
-    it('does not render children when passed in', () => {
-      expect(wrapper.contains(<div className="test" />)).toEqual(false);
-    });
-
-    it('contains no children', () => {
-      expect(wrapper.children()).toHaveLength(0);
-    });
-
-    it('matches snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
-  });
-
-  describe('web3Initialized=true, networkId=undefined', () => {
-    beforeAll(() => {
-      useNetwork.mockImplementation(() => ({
-        web3Initialized: true,
-        networkId: undefined,
-        isCorrectNetwork: null
+        isCorrectNetwork: undefined
       }));
     });
 
@@ -101,10 +78,9 @@ describe('<Initializer />', () => {
     });
   });
 
-  describe('web3Initialized=true, networkId=0, isCorrectNetwork=false', () => {
+  describe('networkId=0, isCorrectNetwork=false', () => {
     beforeAll(() => {
-      useNetwork.mockImplementation(() => ({
-        web3Initialized: true,
+      mocked(useNetwork).mockImplementation(() => ({
         networkId: 0,
         isCorrectNetwork: false
       }));
@@ -127,10 +103,9 @@ describe('<Initializer />', () => {
     });
   });
 
-  describe('web3Initialized=true, networkId=0, isCorrectNetwork=true', () => {
+  describe('networkId=0, isCorrectNetwork=true', () => {
     beforeAll(() => {
-      useNetwork.mockImplementation(() => ({
-        web3Initialized: true,
+      mocked(useNetwork).mockImplementation(() => ({
         networkId: 0,
         isCorrectNetwork: true
       }));

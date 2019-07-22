@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Initializer /> web3Initialized=false matches snapshot 1`] = `
+exports[`<Initializer /> isCorrectNetwork=true, networkId=undefined matches snapshot 1`] = `
 <Initializer
   NoProvider={[Function]}
   WrongNetwork={[Function]}
 >
-  <WrongNetwork>
+  <NoProvider>
     <div
-      className="wrongNetwork"
+      className="noProvider"
     />
-  </WrongNetwork>
+  </NoProvider>
 </Initializer>
 `;
 
-exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=false matches snapshot 1`] = `
+exports[`<Initializer /> networkId=0, isCorrectNetwork=false matches snapshot 1`] = `
 <Initializer
   NoProvider={[Function]}
   WrongNetwork={[Function]}
@@ -28,7 +28,7 @@ exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=fal
 </Initializer>
 `;
 
-exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=true matches snapshot 1`] = `
+exports[`<Initializer /> networkId=0, isCorrectNetwork=true matches snapshot 1`] = `
 <Initializer
   NoProvider={[Function]}
   WrongNetwork={[Function]}
@@ -38,18 +38,5 @@ exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=tru
       className="test"
     />
   </div>
-</Initializer>
-`;
-
-exports[`<Initializer /> web3Initialized=true, networkId=undefined matches snapshot 1`] = `
-<Initializer
-  NoProvider={[Function]}
-  WrongNetwork={[Function]}
->
-  <WrongNetwork>
-    <div
-      className="wrongNetwork"
-    />
-  </WrongNetwork>
 </Initializer>
 `;
