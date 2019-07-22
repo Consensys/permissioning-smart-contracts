@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Initializer /> isCorrectNetwork=true, networkId=undefined matches snapshot 1`] = `
+<Initializer
+  NoProvider={[Function]}
+  WrongNetwork={[Function]}
+>
+  <NoProvider>
+    <div
+      className="noProvider"
+    />
+  </NoProvider>
+</Initializer>
+`;
+
+exports[`<Initializer /> networkId=0, isCorrectNetwork=false matches snapshot 1`] = `
+<Initializer
+  NoProvider={[Function]}
+  WrongNetwork={[Function]}
+>
+  <WrongNetwork
+    networkId={0}
+  >
+    <div
+      className="wrongNetwork"
+    />
+  </WrongNetwork>
+</Initializer>
+`;
+
+exports[`<Initializer /> networkId=0, isCorrectNetwork=true matches snapshot 1`] = `
+<Initializer
+  NoProvider={[Function]}
+  WrongNetwork={[Function]}
+>
+  <div>
+    <div
+      className="test"
+    />
+  </div>
+</Initializer>
+`;

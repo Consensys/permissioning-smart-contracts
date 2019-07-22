@@ -50,34 +50,6 @@ jest.mock('../../../containers/Tabs/useTab', () => {
   }));
 });
 
-jest.mock('drizzle-react', () => {
-  return {
-    drizzleReactHooks: {
-      useDrizzle: jest.fn().mockImplementation(() => ({
-        drizzle: {
-          contracts: {
-            Admin: {
-              methods: {
-                addAdmin: () => {},
-                removeAdmin: () => {}
-              }
-            },
-            NodeRules: {
-              methods: {
-                enterReadOnly: () => {},
-                exitReadOnly: () => {}
-              }
-            },
-            AccountRules: {
-              methods: {}
-            }
-          }
-        }
-      }))
-    }
-  };
-});
-
 describe('<Dashboard />', () => {
   let wrapper: ReactWrapper<any, any, any>;
 
