@@ -4,6 +4,7 @@ import NodeIngress from '../chain/abis/NodeIngress.json';
 export type Config = {
   accountIngressAddress: string;
   nodeIngressAddress: string;
+  networkId: string;
 };
 
 const loadConfig = async (): Promise<Config> => {
@@ -36,7 +37,9 @@ const loadConfig = async (): Promise<Config> => {
     }
     const nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
 
-    return { accountIngressAddress, nodeIngressAddress };
+    const nodeIngressNetworkId = Object.keys(NodeIngress.networks)[0] as string;
+
+    return { accountIngressAddress, nodeIngressAddress, networkId: nodeIngressNetworkId };
   }
 };
 

@@ -1,14 +1,5 @@
 // Libs
 import React, { useContext, useEffect, useState, createContext, useMemo } from 'react';
-import { Drizzle, generateStore } from 'drizzle';
-import { drizzleReactHooks } from 'drizzle-react';
-// Constants
-import drizzleOptions from '../drizzleOptions';
-import NodeRules from '../chain/abis/NodeRules.json';
-import AccountRules from '../chain/abis/AccountRules.json';
-import Admin from '../chain/abis/Admin.json';
-// Utils
-import { getAllowedNetworks } from '../util/contracts';
 import { useConfig } from '../context/configData';
 
 import { providerFactory } from '../chain/provider';
@@ -19,10 +10,8 @@ import { nodeIngressFactory } from '../chain/contracts/NodeIngress';
 
 type ContextType =
   | {
-      isCorrectNetwork?: boolean;
-      setIsCorrectNetwork: React.Dispatch<React.SetStateAction<boolean | undefined>>;
-      web3Initialized: boolean;
-      setWeb3Initialized: React.Dispatch<React.SetStateAction<boolean>>;
+      networkId?: number;
+      setNetworkId: React.Dispatch<React.SetStateAction<number | undefined>>;
       contracts: {
         accountIngressContract?: AccountIngress;
         setAccountIngressContract: React.Dispatch<React.SetStateAction<AccountIngress | undefined>>;
@@ -37,28 +26,13 @@ const NetworkContext = createContext<ContextType>(undefined);
 /**
  * Provider for the network context that contains informations about the
  * blockchain provider
- * @param {Object} props Props given to the NetworkProvider
- * @return The provider with the following value:
- *  - isCorrectNetwork: true if the detected network is one of the allowed
- *  networks by the contracts, false if it is not, null if there is no detected
- *  network
- *  - setIsCorrectNetwork: setter of isCorrectNetwork
- *  - web3Initialized: true if Drizzle has initialized web3, false otherwise
- *  - setWeb3Initialized: setter for web3Initialized
  */
 export const NetworkProvider: React.FC<{}> = props => {
-  const [isCorrectNetwork, setIsCorrectNetwork] = useState<boolean | undefined>(undefined);
-  const [web3Initialized, setWeb3Initialized] = useState<boolean>(false);
   const [accountIngressContract, setAccountIngressContract] = useState<AccountIngress | undefined>(undefined);
   const [nodeIngressContract, setNodeIngressContract] = useState<NodeIngress | undefined>(undefined);
+  const [networkId, setNetworkId] = useState<number | undefined>(undefined);
 
   const config = useConfig();
-  const [drizzle] = useState<Drizzle>(() => {
-    const options = drizzleOptions(config);
-
-    const drizzleStore = generateStore(options);
-    return new Drizzle(options, drizzleStore);
-  });
 
   useEffect(() => {
     providerFactory().then(provider => {
@@ -69,10 +43,8 @@ export const NetworkProvider: React.FC<{}> = props => {
 
   const value = useMemo(
     () => ({
-      isCorrectNetwork,
-      setIsCorrectNetwork,
-      web3Initialized,
-      setWeb3Initialized,
+      networkId,
+      setNetworkId,
       contracts: {
         accountIngressContract,
         setAccountIngressContract,
@@ -81,22 +53,16 @@ export const NetworkProvider: React.FC<{}> = props => {
       }
     }),
     [
-      isCorrectNetwork,
-      setIsCorrectNetwork,
-      web3Initialized,
-      setWeb3Initialized,
       accountIngressContract,
       setAccountIngressContract,
       nodeIngressContract,
-      setNodeIngressContract
+      setNodeIngressContract,
+      networkId,
+      setNetworkId
     ]
   );
 
-  return (
-    <drizzleReactHooks.DrizzleProvider drizzle={drizzle}>
-      <NetworkContext.Provider value={value} {...props} />
-    </drizzleReactHooks.DrizzleProvider>
-  );
+  return <NetworkContext.Provider value={value} {...props} />;
 };
 
 /**
@@ -106,7 +72,6 @@ export const NetworkProvider: React.FC<{}> = props => {
  *  networks by the contracts, false if it is not, null if there is no detected
  *  network,
  *  - networkId: The id of the network,
- *  - web3Initialized: true if Drizzle has initialized web3, false otherwise
  */
 export const useNetwork = () => {
   const context = useContext(NetworkContext);
@@ -114,28 +79,30 @@ export const useNetwork = () => {
     throw new Error('useNetwork must be used within a DataProvider.');
   }
 
-  const { isCorrectNetwork, setIsCorrectNetwork, web3Initialized, setWeb3Initialized, contracts } = context;
+  const config = useConfig();
 
-  const { networkId, status } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
-    status: drizzleState.web3.status,
-    networkId: drizzleState.web3.networkId
-  }));
+  const { contracts, networkId, setNetworkId } = context;
 
   useEffect(() => {
-    if (status === 'initialized') {
-      const allowedNetworks = getAllowedNetworks([AccountRules, NodeRules, Admin]);
-      if (networkId) {
-        const isCorrectNetwork = allowedNetworks.includes(networkId);
-        setIsCorrectNetwork(isCorrectNetwork);
-      }
-      setWeb3Initialized(true);
+    const ingress = contracts.accountIngressContract || contracts.nodeIngressContract;
+    if (ingress === undefined) {
+      setNetworkId(undefined);
+    } else {
+      ingress.provider.getNetwork().then(network => setNetworkId(network.chainId));
     }
-  }, [networkId, setIsCorrectNetwork, status, setWeb3Initialized]);
+  }, [contracts.accountIngressContract, contracts.nodeIngressContract, setNetworkId]);
+
+  const isCorrectNetwork = useMemo(() => {
+    if (networkId === undefined) {
+      return undefined;
+    } else {
+      return networkId.toString() === config.networkId;
+    }
+  }, [networkId, config.networkId]);
 
   return {
     isCorrectNetwork,
     networkId,
-    web3Initialized,
     accountIngressContract: contracts.accountIngressContract,
     nodeIngressContract: contracts.nodeIngressContract
   };

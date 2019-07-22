@@ -4,7 +4,13 @@ exports[`<Initializer /> web3Initialized=false matches snapshot 1`] = `
 <Initializer
   NoProvider={[Function]}
   WrongNetwork={[Function]}
-/>
+>
+  <WrongNetwork>
+    <div
+      className="wrongNetwork"
+    />
+  </WrongNetwork>
+</Initializer>
 `;
 
 exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=false matches snapshot 1`] = `
@@ -27,9 +33,11 @@ exports[`<Initializer /> web3Initialized=true, networkId=0, isCorrectNetwork=tru
   NoProvider={[Function]}
   WrongNetwork={[Function]}
 >
-  <div
-    className="test"
-  />
+  <div>
+    <div
+      className="test"
+    />
+  </div>
 </Initializer>
 `;
 
@@ -38,10 +46,10 @@ exports[`<Initializer /> web3Initialized=true, networkId=undefined matches snaps
   NoProvider={[Function]}
   WrongNetwork={[Function]}
 >
-  <NoProvider>
+  <WrongNetwork>
     <div
-      className="noProvider"
+      className="wrongNetwork"
     />
-  </NoProvider>
+  </WrongNetwork>
 </Initializer>
 `;

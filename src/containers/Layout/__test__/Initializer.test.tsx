@@ -1,7 +1,7 @@
 // Libs
 import React from 'react';
 import toJson from 'enzyme-to-json';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 // Components
 import Initializer from '../Initializer';
 
@@ -17,7 +17,7 @@ const NoProvider = () => <div className="noProvider" />;
 const WrongNetwork = ({ networkId }) => <div className="wrongNetwork" />;
 
 describe('<Initializer />', () => {
-  let wrapper;
+  let wrapper: ReactWrapper<any, any, any>;
 
   beforeAll(() => {
     useNetwork.mockImplementation(() => ({

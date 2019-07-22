@@ -6,17 +6,9 @@ import { mocked } from 'ts-jest/utils';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { useNetwork } from '../network';
 import { testHook } from '../../test-utils/testHook';
-import * as drizzleReact from 'drizzle-react';
 // Components
 import { NetworkProvider } from '../network';
 import { useConfig, ConfigDataProvider } from '../configData';
-
-jest.mock('drizzle-react', () => ({
-  drizzleReactHooks: {
-    ...jest.requireActual('drizzle-react').drizzleReactHooks,
-    useDrizzleState: jest.fn()
-  }
-}));
 
 jest.mock('../configData', () => ({
   useConfig: jest.fn()
@@ -47,10 +39,10 @@ describe('useNetwork', () => {
 
   describe('status=""', () => {
     beforeAll(() => {
-      mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(() => ({
-        networkId: undefined,
-        status: ''
-      }));
+      // mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(() => ({
+      //   networkId: undefined,
+      //   status: ''
+      // }));
       mocked(useConfig).mockImplementation((): any => ({}));
       testHook(() => (network = useNetwork()), NetworkProvider);
     });
@@ -62,18 +54,14 @@ describe('useNetwork', () => {
     it('should have a networkId attribute equal to undefined', () => {
       expect(network.networkId).toEqual(undefined);
     });
-
-    it('should have a web3Initialized attribute equal to false', () => {
-      expect(network.web3Initialized).toEqual(false);
-    });
   });
 
   describe('status="initialized"', () => {
     beforeAll(() => {
-      mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(() => ({
-        networkId: undefined,
-        status: 'initialized'
-      }));
+      // mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(() => ({
+      //   networkId: undefined,
+      //   status: 'initialized'
+      // }));
       testHook(() => (network = useNetwork()), NetworkProvider);
     });
 
@@ -84,18 +72,14 @@ describe('useNetwork', () => {
     it('should have a networkId attribute equal to undefined', () => {
       expect(network.networkId).toEqual(undefined);
     });
-
-    it('should have a web3Initialized attribute equal to true', () => {
-      expect(network.web3Initialized).toEqual(true);
-    });
   });
 
   describe('status="initialized" and networkId=0', () => {
     beforeAll(() => {
-      mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(() => ({
-        networkId: 1,
-        status: 'initialized'
-      }));
+      // mocked(drizzleReact.drizzleReactHooks.useDrizzleState).mockImplementation(() => ({
+      //   networkId: 1,
+      //   status: 'initialized'
+      // }));
       testHook(() => (network = useNetwork()), NetworkProvider);
     });
 
@@ -105,10 +89,6 @@ describe('useNetwork', () => {
 
     it('should have a networkId attribute equal to 1', () => {
       expect(network.networkId).toEqual(1);
-    });
-
-    it('should have a web3Initialized attribute equal to true', () => {
-      expect(network.web3Initialized).toEqual(true);
     });
   });
 });
