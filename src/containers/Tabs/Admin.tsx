@@ -1,10 +1,8 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { drizzleReactHooks } from 'drizzle-react';
 import { isAddress } from 'web3-utils';
 import idx from 'idx';
-import { TransactionObject } from 'web3/eth/types';
 // Context
 import { useAdminData } from '../../context/adminData';
 // Utils
@@ -34,76 +32,55 @@ type Admin = {
 };
 
 const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
-  const { admins, isAdmin, userAddress, dataReady } = useAdminData();
+  const { admins, isAdmin, userAddress, dataReady, adminContract } = useAdminData();
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
-    admins,
+    admins || [],
     (identifier: string) => ({ address: identifier })
   );
 
-  const { drizzle } = drizzleReactHooks.useDrizzle();
-
-  const { addAdmin, removeAdmin } = drizzle.contracts.Admin.methods as {
-    addAdmin: (value: string) => TransactionObject<never>;
-    removeAdmin: (value: string) => TransactionObject<never>;
-  };
-
   const handleAdd = async (value: string) => {
-    const gasLimit = await addAdmin(value).estimateGas({
-      from: userAddress
-    });
-    addAdmin(value)
-      .send({ from: userAddress, gas: gasLimit * 4 })
-      .on('transactionHash', () => {
-        toggleModal('add')();
-        addTransaction(value, PENDING_ADDITION);
-      })
-      .on('receipt', receipt => {
-        // Web3js returns true if true, null if false
-        const event = idx(receipt, _ => _.events.AdminAdded);
-        const added = Boolean(idx(event, _ => _.returnValues.adminAdded));
-        if (!event) {
+    try {
+      const tx = await adminContract!.functions.addAdmin(value);
+      toggleModal('add')();
+      addTransaction(value, PENDING_ADDITION);
+      const receipt = await tx.wait(1); // wait on receipt confirmations
+      const addEvent = receipt.events!.filter(e => e.event && e.event === 'AdminAdded').pop();
+      if (!addEvent) {
+        openToast(value, FAIL, `Error while processing Admin account: ${value}`);
+      } else {
+        const addSuccessResult = idx(addEvent, _ => _.args[0]);
+        if (addSuccessResult === undefined) {
           openToast(value, FAIL, `Error while processing Admin account: ${value}`);
-        } else if (added) {
+        } else if (Boolean(addSuccessResult)) {
           openToast(value, SUCCESS, `New Admin account processed: ${value}`);
         } else {
-          const message = idx(receipt, _ => _.events.AdminAdded.returnValues.message);
+          const message = idx(addEvent, _ => _.args[2]);
           openToast(value, FAIL, message);
         }
-      })
-      .on('error', error => {
-        toggleModal('add')();
-        updateTransaction(value, FAIL_ADDITION);
-        errorToast(error, value, openToast, () =>
-          openToast(value, FAIL, 'Could not add account as admin', `${value} was unable to be added. Please try again.`)
-        );
-      });
+      }
+    } catch (e) {
+      toggleModal('add')(false);
+      updateTransaction(value, FAIL_ADDITION);
+      errorToast(e, value, openToast, () =>
+        openToast(value, FAIL, 'Could not add account as admin', `${value} was unable to be added. Please try again.`)
+      );
+    }
   };
 
   const handleRemove = async (value: string) => {
-    const gasLimit = await removeAdmin(value).estimateGas({
-      from: userAddress
-    });
-    removeAdmin(value)
-      .send({ from: userAddress, gas: gasLimit * 4 })
-      .on('transactionHash', () => {
-        toggleModal('remove')();
-        addTransaction(value, PENDING_REMOVAL);
-      })
-      .on('receipt', () => {
-        openToast(value, SUCCESS, `Removal of admin account processed: ${value}`);
-      })
-      .on('error', error => {
-        toggleModal('remove')();
-        updateTransaction(value, FAIL_REMOVAL);
-        errorToast(error, value, openToast, () =>
-          openToast(
-            value,
-            FAIL,
-            'Could not remove admin account',
-            `${value} was unable to be removed. Please try again.`
-          )
-        );
-      });
+    try {
+      const tx = await adminContract!.functions.removeAdmin(value);
+      toggleModal('remove')();
+      addTransaction(value, PENDING_REMOVAL);
+      await tx.wait(1); // wait on receipt confirmations
+      openToast(value, SUCCESS, `Removal of admin account processed: ${value}`);
+    } catch (e) {
+      toggleModal('remove')();
+      updateTransaction(value, FAIL_REMOVAL);
+      errorToast(e, value, openToast, () =>
+        openToast(value, FAIL, 'Could not remove admin account', `${value} was unable to be removed. Please try again.`)
+      );
+    }
   };
 
   const isValidAdmin = (address: string) => {

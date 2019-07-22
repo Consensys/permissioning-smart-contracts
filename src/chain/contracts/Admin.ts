@@ -6,10 +6,11 @@ import { Admin } from '../@types/Admin';
 
 let instance: Admin | null = null;
 
-export default async (ingressInstance: AccountIngress | NodeIngress) => {
+export const adminFactory = async (ingressInstance: AccountIngress | NodeIngress) => {
   if (instance) return instance;
 
-  const adminAddress = await ingressInstance.functions.getContractAddress('ADMIN');
+  const adminContractName = await ingressInstance.functions.ADMIN_CONTRACT();
+  const adminAddress = await ingressInstance.functions.getContractAddress(adminContractName);
 
   instance = new Contract(adminAddress, AdminAbi.abi, ingressInstance.signer) as Admin;
   return instance;

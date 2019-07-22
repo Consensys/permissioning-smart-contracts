@@ -1,13 +1,31 @@
 // Libs
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
+import { Admin } from '../chain/@types/Admin';
+import { adminFactory } from '../chain/contracts/Admin';
+import { useNetwork } from './network';
 
-type ContextType = {
-  admins?: string[];
-  setAdmins?: (admins: string[]) => void;
+type ContextType =
+  | {
+      admins?: string[];
+      setAdmins: (admins: string[] | undefined) => void;
+      adminContract?: Admin;
+      setAdminContract: React.Dispatch<React.SetStateAction<Admin | undefined>>;
+      userAddress?: string;
+      setUserAddress: React.Dispatch<React.SetStateAction<string | undefined>>;
+    }
+  | undefined;
+
+const AdminDataContext = createContext<ContextType>(undefined);
+
+const loadAdminData = (adminContract: Admin | undefined, setAdmins: (admins: string[] | undefined) => void) => {
+  if (adminContract === undefined) {
+    setAdmins(undefined);
+  } else {
+    adminContract.functions.getAdmins().then(admins => {
+      setAdmins(admins);
+    });
+  }
 };
-
-const AdminDataContext = createContext<ContextType>({});
 
 /**
  * Provider for the data context that contains the Admin whitelist
@@ -17,8 +35,42 @@ const AdminDataContext = createContext<ContextType>({});
  *  - setAdmins: setter for the Admin list state
  */
 export const AdminDataProvider: React.FC = (props: React.Props<{}>) => {
-  const [admins, setAdmins] = useState<string[]>([]);
-  const value = useMemo(() => ({ admins, setAdmins }), [admins, setAdmins]);
+  const [admins, setAdmins] = useState<string[] | undefined>(undefined);
+  const [adminContract, setAdminContract] = useState<Admin | undefined>(undefined);
+  const [userAddress, setUserAddress] = useState<string | undefined>(undefined);
+
+  const value = useMemo(() => ({ admins, setAdmins, adminContract, setAdminContract, userAddress, setUserAddress }), [
+    admins,
+    setAdmins,
+    adminContract,
+    setAdminContract,
+    userAddress,
+    setUserAddress
+  ]);
+
+  const { accountIngressContract, nodeIngressContract } = useNetwork();
+
+  useEffect(() => {
+    const ingressContract = accountIngressContract || nodeIngressContract;
+    if (ingressContract === undefined) {
+      setAdminContract(undefined);
+      setUserAddress(undefined);
+    } else {
+      adminFactory(ingressContract).then(contract => {
+        setAdminContract(contract);
+        contract.removeAllListeners('AdminAdded');
+        contract.removeAllListeners('AdminRemoved');
+        contract.on('AdminAdded', (success, account, message, event) => {
+          if (success) loadAdminData(contract, setAdmins);
+        });
+        contract.on('AdminRemoved', (success, account, event) => {
+          if (success) loadAdminData(contract, setAdmins);
+        });
+      });
+      ingressContract.signer.getAddress().then(setUserAddress);
+    }
+  }, [accountIngressContract, nodeIngressContract, setAdmins, setUserAddress]);
+
   return <AdminDataContext.Provider value={value} {...props} />;
 };
 
@@ -38,29 +90,11 @@ export const useAdminData = () => {
     throw new Error('useAdminData must be used within an AdminDataProvider.');
   }
 
-  const { admins, setAdmins } = context;
-
-  const { userAddress } = drizzleReactHooks.useDrizzleState((drizzleState: any) => ({
-    userAddress: drizzleState.accounts[0]
-  }));
-
-  const drizzle = drizzleReactHooks.useDrizzle();
-
-  const adminList: string[] = drizzle.useCacheCall('Admin', 'getAdmins');
-
-  //console.log("admin list is ", adminList)
+  const { admins, setAdmins, adminContract, userAddress } = context;
 
   useEffect(() => {
-    setAdmins!(adminList || []);
-  }, [adminList, setAdmins]);
-
-  const dataReady = useMemo(() => Array.isArray(admins), [admins]);
-
-  const isAdmin = useMemo(() => (dataReady && admins ? admins.includes(userAddress) : false), [
-    dataReady,
-    admins,
-    userAddress
-  ]);
+    loadAdminData(adminContract, setAdmins);
+  }, [adminContract, setAdmins]);
 
   const formattedAdmins = useMemo(() => {
     return admins
@@ -74,10 +108,23 @@ export const useAdminData = () => {
       : undefined;
   }, [admins]);
 
+  const dataReady = useMemo(() => adminContract !== undefined && admins !== undefined && userAddress !== undefined, [
+    adminContract,
+    admins,
+    userAddress
+  ]);
+
+  const isAdmin = useMemo(() => (dataReady && admins ? admins.includes(userAddress!) : false), [
+    dataReady,
+    admins,
+    userAddress
+  ]);
+
   return {
     dataReady,
     userAddress,
     isAdmin,
-    admins: formattedAdmins
+    admins: formattedAdmins,
+    adminContract
   };
 };
