@@ -124,6 +124,7 @@ export const useAdminData = () => {
     dataReady,
     userAddress,
     isAdmin,
-    admins: formattedAdmins
+    admins: formattedAdmins,
+    adminContract
   };
 };
