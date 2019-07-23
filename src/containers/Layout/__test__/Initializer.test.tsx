@@ -21,10 +21,13 @@ describe('<Initializer />', () => {
   let wrapper: ReactWrapper<any, any, any>;
 
   beforeAll(() => {
-    mocked(useNetwork).mockImplementation(() => ({
-      networkId: undefined,
-      isCorrectNetwork: null
-    }));
+    mocked(useNetwork).mockImplementation(
+      () =>
+        ({
+          networkId: undefined,
+          isCorrectNetwork: null
+        } as any)
+    );
   });
 
   beforeEach(() => {
@@ -55,10 +58,13 @@ describe('<Initializer />', () => {
 
   describe('isCorrectNetwork=true, networkId=undefined', () => {
     beforeAll(() => {
-      mocked(useNetwork).mockImplementation(() => ({
-        networkId: undefined,
-        isCorrectNetwork: undefined
-      }));
+      mocked(useNetwork).mockImplementation(
+        () =>
+          ({
+            networkId: undefined,
+            isCorrectNetwork: undefined
+          } as any)
+      );
     });
 
     it('does not render children when passed in', () => {
@@ -80,10 +86,13 @@ describe('<Initializer />', () => {
 
   describe('networkId=0, isCorrectNetwork=false', () => {
     beforeAll(() => {
-      mocked(useNetwork).mockImplementation(() => ({
-        networkId: 0,
-        isCorrectNetwork: false
-      }));
+      mocked(useNetwork).mockImplementation(
+        () =>
+          ({
+            networkId: 0,
+            isCorrectNetwork: false
+          } as any)
+      );
     });
 
     it('does not render children when passed in', () => {
@@ -105,10 +114,13 @@ describe('<Initializer />', () => {
 
   describe('networkId=0, isCorrectNetwork=true', () => {
     beforeAll(() => {
-      mocked(useNetwork).mockImplementation(() => ({
-        networkId: 0,
-        isCorrectNetwork: true
-      }));
+      mocked(useNetwork).mockImplementation(
+        () =>
+          ({
+            networkId: 0,
+            isCorrectNetwork: true
+          } as any)
+      );
     });
 
     it('render children when passed in', () => {
