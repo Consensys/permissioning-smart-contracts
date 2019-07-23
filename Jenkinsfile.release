@@ -21,6 +21,7 @@ pipeline {
         }
         stage('Test') {
             steps {
+                sh 'yarn build:contracts'
                 sh 'yarn test:contracts'
                 sh 'yarn test:app:ci'
             }
@@ -28,7 +29,7 @@ pipeline {
         stage('Bump Version') {
             steps {
                 sshagent(
-                    credentials: ['pegasys-admin-github-ssh-private-key']
+                    credentials: ['b2ca10f6-37ff-48e1-a699-842f027f5cab']//'pegasys-admin-github-ssh-private-key']
                 ) {
                     withEnv([
                         'GIT_COMMITTER_NAME="PegaSys Admin"',
@@ -55,7 +56,7 @@ pipeline {
         stage('Create Release') {
             steps {
                 sshagent(
-                    credentials: ['pegasys-admin-github-ssh-private-key']
+                    credentials: ['b2ca10f6-37ff-48e1-a699-842f027f5cab']//'pegasys-admin-github-ssh-private-key']
                 ) {
                     withEnv([
                         'GIT_COMMITTER_NAME="PegaSys Admin"',
