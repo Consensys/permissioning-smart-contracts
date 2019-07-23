@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'apk add git python make g++ bash wget openssh libc6-compat'
+                sh 'apk add git python make g++ bash wget openssh libc6-compat zip'
                 sh 'wget -O /tmp/hub.tgz https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz'
                 sh 'tar x -z -C /tmp -f /tmp/hub.tgz'
                 sh '/tmp/hub*/install'
@@ -49,7 +49,7 @@ pipeline {
         }
         stage('Prep bundles') {
             steps {
-                sh "tar -czvf permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz build/*"
+                sh "cd build && tar -czvf ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz * && cd .."
                 sh "cd build && zip -r ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip * && cd .."
             }
         }
