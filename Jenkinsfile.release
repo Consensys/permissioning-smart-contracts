@@ -29,7 +29,7 @@ pipeline {
         stage('Bump Version') {
             steps {
                 sshagent(
-                    credentials: ['b2ca10f6-37ff-48e1-a699-842f027f5cab']//'pegasys-admin-github-ssh-private-key']
+                    credentials: ['errorific-github-ssh-key']//'pegasys-admin-github-ssh-private-key']
                 ) {
                     withEnv([
                         'GIT_COMMITTER_NAME="PegaSys Admin"',
@@ -56,7 +56,7 @@ pipeline {
         stage('Create Release') {
             steps {
                 sshagent(
-                    credentials: ['b2ca10f6-37ff-48e1-a699-842f027f5cab']//'pegasys-admin-github-ssh-private-key']
+                    credentials: ['errorific-github-ssh-key']//'pegasys-admin-github-ssh-private-key']
                 ) {
                     withEnv([
                         'GIT_COMMITTER_NAME="PegaSys Admin"',
@@ -64,8 +64,8 @@ pipeline {
                         'GIT_AUTHOR_NAME="PegaSys Admin"',
                         'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
                     ]) {
-                        sh 'git push origin ${env.BRANCH_NAME}'
-                        sh 'hub release create --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip --draft v${params.RELEASE_VERSION}'
+                        sh "git push origin ${env.BRANCH_NAME}"
+                        sh "hub release create --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip --draft v${params.RELEASE_VERSION}"
                     }
                 }
             }
