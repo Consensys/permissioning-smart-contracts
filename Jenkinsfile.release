@@ -64,7 +64,7 @@ pipeline {
                         'GIT_AUTHOR_NAME="PegaSys Admin"',
                         'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
                     ]) {
-                        sh "git push origin ${env.BRANCH_NAME}"
+                        sh "git push"
                         sh "hub release create --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip --draft v${params.RELEASE_VERSION}"
                     }
                 }
