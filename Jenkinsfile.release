@@ -21,7 +21,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'apk add git python make g++ libc6-compat zip' //bash wget openssh'
+                sh 'apk add git python make g++ libc6-compat zip openssh' //bash wget'
                 // sh 'wget -O /tmp/hub.tgz https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz'
                 // sh 'tar x -z -C /tmp -f /tmp/hub.tgz'
                 // sh '/tmp/hub*/install'
@@ -46,7 +46,7 @@ pipeline {
                         'GIT_AUTHOR_NAME="PegaSys Admin"',
                         'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
                     ]) {
-                        sh "yarn version --new-version ${params.RELEASE_VERSION}  --no-git-tag-version"
+                        sh "yarn version --new-version ${params.RELEASE_VERSION}"
                     }
                 }
             }
@@ -63,9 +63,9 @@ pipeline {
             }
         }
         stage('Create Release') {
-            environment {
-                GITHUB_CREDS = credentials('errorific-github-temp-repo')
-            }
+            // environment {
+            //     GITHUB_CREDS = credentials('errorific-github-temp-repo')
+            // }
             steps {
                 sshagent(
                     credentials: ['errorific-github-ssh-key']//'pegasys-admin-github-ssh-private-key']
@@ -74,7 +74,9 @@ pipeline {
                         'GIT_COMMITTER_NAME="PegaSys Admin"',
                         'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
                         'GIT_AUTHOR_NAME="PegaSys Admin"',
-                        'GIT_AUTHOR_EMAIL="admin@pegasys.tech"',
+                        'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'//,
+                        // 'GITHUB_USER=$GITHUB_CREDS_USR',
+                        // 'GITHUB_TOKEN=$GITHUB_CREDS_PSW'
                     ]) {
                         tryAddKnownHost('github.com')
                         sh "git push --set-upstream origin feature/OP-62.release_job"
