@@ -96,7 +96,7 @@ export const useNetwork = () => {
     if (networkId === undefined) {
       return undefined;
     } else {
-      return networkId.toString() === config.networkId;
+      return config.networkId === 'any' || networkId.toString() === config.networkId;
     }
   }, [networkId, config.networkId]);
 
