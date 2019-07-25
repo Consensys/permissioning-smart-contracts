@@ -28,10 +28,9 @@ module.exports = async(deployer, network) => {
         console.error("   > Predeployed NodeIngress contract is not responding like an NodeIngress contract at address = " + nodeIngress);
     }
 
-    await deployer.deploy(Admin);
-    console.log("   > Admin contract deployed");
-    await nodeIngressInstance.setContractAddress(adminContractName, Admin.address);
-    console.log("   > Updated NodeIngress with Admin  address = " + Admin.address);
+    const admin = await Admin.deployed()
+    await nodeIngressInstance.setContractAddress(adminContractName, admin.address);
+    console.log("   > Updated NodeIngress with Admin  address = " + admin.address);
 
     await deployer.deploy(NodeRules, nodeIngress);
     console.log("   > NodeRules deployed with NodeIngress.address = " + nodeIngress);
