@@ -1,3 +1,12 @@
+void tryAddKnownHost(String hostUrl){
+// ssh-keygen -F ${hostUrl} will fail (in bash that means status code != 0) if ${hostUrl} is not yet a known host
+    def statusCode = sh script:"ssh-keygen -F ${hostUrl}", returnStatus:true
+    if(statusCode != 0){
+        sh "mkdir -p ~/.ssh"
+        sh "ssh-keyscan ${hostUrl} >> ~/.ssh/known_hosts"
+    }
+}
+
 pipeline {
     agent {
         docker { image 'node:10-alpine' }
@@ -64,6 +73,7 @@ pipeline {
                         'GIT_AUTHOR_NAME="PegaSys Admin"',
                         'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
                     ]) {
+                        tryAddKnownHost('github.com')
                         sh "git push --set-upstream origin feature/OP-62.release_job"
                         sh "hub release create --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip --draft v${params.RELEASE_VERSION}"
                     }
