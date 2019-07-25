@@ -72,8 +72,8 @@ pipeline {
                         'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
                         'GIT_AUTHOR_NAME="PegaSys Admin"',
                         'GIT_AUTHOR_EMAIL="admin@pegasys.tech"',
-                        'GITHUB_USER="' + credentials('errorific-github-temp-repo_USR') + '"',
-                        'GITHUB_PASSWORD="' + credentials('errorific-github-temp-repo_PSW') + '"'
+                        // 'GITHUB_USER="' + credentials('errorific-github-temp-repo_USR') + '"',
+                        'GITHUB_TOKEN="' + credentials('errorific-github-temp-repo_PSW') + '"'
                     ]) {
                         tryAddKnownHost('github.com')
                         sh "git push --set-upstream origin feature/OP-62.release_job"
