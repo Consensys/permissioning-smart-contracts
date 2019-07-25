@@ -1,0 +1,88 @@
+void tryAddKnownHost(String hostUrl){
+// ssh-keygen -F ${hostUrl} will fail (in bash that means status code != 0) if ${hostUrl} is not yet a known host
+    def statusCode = sh script:"ssh-keygen -F ${hostUrl}", returnStatus:true
+    if(statusCode != 0){
+        sh "mkdir -p ~/.ssh"
+        sh "ssh-keyscan ${hostUrl} >> ~/.ssh/known_hosts"
+    }
+}
+
+pipeline {
+    agent {
+        docker { image 'node:10-alpine' }
+    }
+    environment {
+        CI = 'true'
+    }
+    parameters {
+        string(name: 'RELEASE_VERSION', description: '[MANDATORY] The version you are deploying e.g. 1.0.0')
+    }
+
+    stages {
+        stage('Setup') {
+            steps {
+                sh 'apk add git python make g++ libc6-compat zip openssh'
+                sh 'yarn install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'yarn build:contracts'
+                sh 'yarn test:contracts'
+                sh 'yarn test:app:ci'
+            }
+        }
+        stage('Bump Version') {
+            steps {
+                sshagent(
+                    credentials: ['pegasys-admin-github-ssh-private-key']
+                ) {
+                    withEnv([
+                        'GIT_COMMITTER_NAME="PegaSys Admin"',
+                        'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
+                        'GIT_AUTHOR_NAME="PegaSys Admin"',
+                        'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
+                    ]) {
+                        sh "yarn version --new-version ${params.RELEASE_VERSION}"
+                    }
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'yarn run build'
+            }
+        }
+        stage('Prep bundles') {
+            steps {
+                sh "cd build && tar -czvf ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz * && cd .."
+                sh "cd build && zip -r ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip * && cd .."
+            }
+        }
+        stage('Create Release') {
+            steps {
+                sshagent(
+                    credentials: ['pegasys-admin-github-ssh-private-key']
+                ) {
+                    withEnv([
+                        'GIT_COMMITTER_NAME="PegaSys Admin"',
+                        'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
+                        'GIT_AUTHOR_NAME="PegaSys Admin"',
+                        'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
+                    ]) {
+                        tryAddKnownHost('github.com')
+                        sh "git push --set-upstream origin master"
+                        sh "git push --tags"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            junit 'test-results/**/*.xml'
+            junit 'junit.xml'
+            archiveArtifacts 'permissioning-smart-contracts-v*'
+        }
+    }
+}

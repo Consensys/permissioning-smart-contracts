@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        stage('Contracts: Setup') {
+        stage('Setup') {
             steps {
                 sh 'apk add git python make g++'
             }
@@ -34,11 +34,11 @@ pipeline {
                 sh './node_modules/.bin/istanbul report cobertura --root .'
             }
         }
-	stage('Dapp: Lint') {
-	    steps {
-	        sh 'yarn run lint:app'
-	    }
-	}
+        stage('Dapp: Lint') {
+            steps {
+                sh 'yarn run lint:app'
+            }
+        }
         stage('Dapp: Test') {
             steps {
                 sh 'yarn run test:app:ci'
