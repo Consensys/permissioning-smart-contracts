@@ -55,7 +55,7 @@ This is the easiest way to get started for development with the permissioning Da
   - `NODE_INGRESS_CONTRACT_ADDRESS`: The address of the node ingress contract from the genesis accounts
   - `ACCOUNT_INGRESS_CONTRACT_ADDRESS`: The address of the account ingress contract from the genesis accounts
   - `PANTHEON_NODE_PERM_ACCOUNT`: The address of the account that will be used to deploy the contracts
-  - `PANTHEON_NODE_PERM_KEY`: The private key associated with the deploying accounts address
+  - `PANTHEON_NODE_PERM_KEY`: The private key associated with the deploying account's address
   - `PANTHEON_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Pantheon node
 1. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
