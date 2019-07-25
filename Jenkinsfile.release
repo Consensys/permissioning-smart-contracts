@@ -77,6 +77,8 @@ pipeline {
                     ]) {
                         tryAddKnownHost('github.com')
                         sh "git push --set-upstream origin feature/OP-62.release_job"
+                        sh "echo $GITHUB_USER"
+                        sh "echo $GITHUB_TOKEN"
                         sh "hub release create --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz --attach permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip --draft -m 'v${params.RELEASE_VERSION}' v${params.RELEASE_VERSION}"
                     }
                 }
