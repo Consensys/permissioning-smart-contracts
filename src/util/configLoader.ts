@@ -25,19 +25,32 @@ const loadConfig = async (): Promise<Config> => {
   } else {
     // We're cheating here by knowing what truffle will write when it's running a ganache server.
     // We're forcing the types because we know what the network entry in the json file will look like so long as it's there.
-    const accountIngressNetworks = Object.values(AccountIngress.networks);
-    if (accountIngressNetworks.length === 0) {
-      throw new Error("Account Ingress Contract abi doesn't contain any networks, probably not deployed");
+    let accountIngressAddress;
+    if (process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS) {
+      accountIngressAddress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
+    } else {
+      const accountIngressNetworks = Object.values(AccountIngress.networks);
+      if (accountIngressNetworks.length === 0) {
+        throw new Error("Account Ingress Contract abi doesn't contain any networks, probably not deployed");
+      }
+      accountIngressAddress = (accountIngressNetworks[0] as { address: string }).address;
     }
-    const accountIngressAddress = (accountIngressNetworks[0] as { address: string }).address;
 
-    const nodeIngressNetworks = Object.values(NodeIngress.networks);
-    if (nodeIngressNetworks.length === 0) {
-      throw new Error("Node Ingress Contract abi doesn't contain any networks, probably not deployed");
+    let nodeIngressAddress;
+    if (process.env.NODE_INGRESS_CONTRACT_ADDRESS) {
+      nodeIngressAddress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
+    } else {
+      const nodeIngressNetworks = Object.values(NodeIngress.networks);
+      if (nodeIngressNetworks.length === 0) {
+        throw new Error("Node Ingress Contract abi doesn't contain any networks, probably not deployed");
+      }
+      nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
     }
-    const nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
 
-    const nodeIngressNetworkId = Object.keys(NodeIngress.networks)[0] as string;
+    // if we haven't errored by this point then we're being driven by end and until we do it better we should accept any network
+    const nodeIngressNetworkId = Object.keys(NodeIngress.networks)[0]
+      ? (Object.keys(NodeIngress.networks)[0] as string)
+      : 'any';
 
     return { accountIngressAddress, nodeIngressAddress, networkId: nodeIngressNetworkId };
   }
