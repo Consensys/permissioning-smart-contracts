@@ -21,7 +21,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'apk add git python make g++' //bash wget openssh libc6-compat zip'
+                sh 'apk add git python make g++ libc6-compat zip' //bash wget openssh'
                 // sh 'wget -O /tmp/hub.tgz https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz'
                 // sh 'tar x -z -C /tmp -f /tmp/hub.tgz'
                 // sh '/tmp/hub*/install'
