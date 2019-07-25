@@ -50,7 +50,7 @@ This is the easiest way to get started for development with the permissioning Da
 ## Deployment
 
 ### Deploying the contracts
-1. Have a Pantheon node running a chain that has the Node Ingress and Account Ingress contracts in it's genesis accounts as shown in the alloc block of the [example genesis file](https://github.com/PegaSysEng/permissioning-smart-contracts/blob/master/genesis.json)
+1. Have a Pantheon node running a chain that has the Node Ingress and Account Ingress contracts in its genesis accounts as shown in the alloc block of the [example genesis file](https://github.com/PegaSysEng/permissioning-smart-contracts/blob/master/genesis.json)
 1. Configure environment variables or provide a .env file in the root of this project that configures the following variables
   - `NODE_INGRESS_CONTRACT_ADDRESS`: The address of the node ingress contract from the genesis accounts
   - `ACCOUNT_INGRESS_CONTRACT_ADDRESS`: The address of the account ingress contract from the genesis accounts
