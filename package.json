@@ -16,10 +16,10 @@
     "test": "yarn run test:contracts && yarn run test:app",
     "coverage:contracts": "yarn solidity-coverage",
     "coverage": "yarn run coverage:contracts",
-    "build:app": "yarn react-scripts build",
+    "build:app": "sh scripts/wrap_env.sh 'yarn react-scripts build'",
     "build:contracts": "yarn truffle compile && yarn typechain --target ethers --outDir ./src/chain/@types 'src/chain/abis/*.json'",
     "build": "yarn run build:contracts && yarn run build:app",
-    "start": "yarn react-scripts start",
+    "start": "sh scripts/wrap_env.sh 'yarn react-scripts start'",
     "eject": "yarn react-scripts eject"
   },
   "eslintConfig": {
