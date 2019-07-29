@@ -26,8 +26,8 @@ const loadConfig = async (): Promise<Config> => {
     // We're cheating here by knowing what truffle will write when it's running a ganache server.
     // We're forcing the types because we know what the network entry in the json file will look like so long as it's there.
     let accountIngressAddress;
-    if (process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS) {
-      accountIngressAddress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
+    if (process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS) {
+      accountIngressAddress = process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS;
     } else {
       const accountIngressNetworks = Object.values(AccountIngress.networks);
       if (accountIngressNetworks.length === 0) {
@@ -37,8 +37,8 @@ const loadConfig = async (): Promise<Config> => {
     }
 
     let nodeIngressAddress;
-    if (process.env.NODE_INGRESS_CONTRACT_ADDRESS) {
-      nodeIngressAddress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
+    if (process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS) {
+      nodeIngressAddress = process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS;
     } else {
       const nodeIngressNetworks = Object.values(NodeIngress.networks);
       if (nodeIngressNetworks.length === 0) {
@@ -47,7 +47,7 @@ const loadConfig = async (): Promise<Config> => {
       nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
     }
 
-    // if we haven't errored by this point then we're being driven by end and until we do it better we should accept any network
+    // if we haven't errored by this point then we're being driven by env and until we do it better we should accept any network
     const nodeIngressNetworkId = Object.keys(NodeIngress.networks)[0]
       ? (Object.keys(NodeIngress.networks)[0] as string)
       : 'any';
