@@ -4,9 +4,15 @@ import Web3 from 'web3';
 
 let provider: Provider | Signer | undefined = undefined;
 let web3: Web3 | undefined = undefined;
+declare let window: any;
 
 const web3Factory = async () => {
   if (web3) return web3;
+
+  if (window.ethereum) {
+    await window.ethereum.enable();
+  }
+
   web3 = new Web3(Web3.givenProvider);
   return web3;
 };
