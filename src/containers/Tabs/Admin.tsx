@@ -11,6 +11,7 @@ import { errorToast } from '../../util/tabTools';
 // Components
 import AdminTab from '../../components/AdminTab/AdminTab';
 import LoadingPage from '../../components/LoadingPage/LoadingPage';
+import NoContract from '../../components/Flashes/NoContract';
 // Constants
 import {
   PENDING_ADDITION,
@@ -38,6 +39,7 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
     (identifier: string) => ({ address: identifier })
   );
 
+  if (!!adminContract) {
   const handleAdd = async (value: string) => {
     try {
       const tx = await adminContract!.functions.addAdmin(value);
@@ -86,44 +88,49 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
     }
   };
 
-  const isValidAdmin = (address: string) => {
-    let isValidAddress = isAddress(address);
-    if (!isValidAddress) {
-      return {
-        valid: false
-      };
-    }
+    const isValidAdmin = (address: string) => {
+      let isValidAddress = isAddress(address);
+      if (!isValidAddress) {
+        return {
+          valid: false
+        };
+      }
 
-    let isAdmin = list.filter((item: Admin) => item.address === address).length > 0;
-    if (isAdmin) {
-      return {
-        valid: false,
-        msg: 'Account address is already an admin.'
-      };
-    }
+      let isAdmin = list.filter((item: Admin) => item.address === address).length > 0;
+      if (isAdmin) {
+        return {
+          valid: false,
+          msg: 'Account address is already an admin.'
+        };
+      }
 
-    return {
-      valid: true
+      return {
+        valid: true
+      };
     };
-  };
 
-  if (isOpen && dataReady) {
-    return (
-      <AdminTab
-        list={list}
-        userAddress={userAddress}
-        modals={modals}
-        toggleModal={toggleModal}
-        handleAdd={handleAdd}
-        handleRemove={handleRemove}
-        isAdmin={isAdmin}
-        deleteTransaction={deleteTransaction}
-        isValid={isValidAdmin}
-        isOpen={isOpen}
-      />
-    );
-  } else if (isOpen && !dataReady) {
-    return <LoadingPage />;
+    if (isOpen && dataReady) {
+      return (
+        <AdminTab
+          list={list}
+          userAddress={userAddress}
+          modals={modals}
+          toggleModal={toggleModal}
+          handleAdd={handleAdd}
+          handleRemove={handleRemove}
+          isAdmin={isAdmin}
+          deleteTransaction={deleteTransaction}
+          isValid={isValidAdmin}
+          isOpen={isOpen}
+        />
+      );
+    } else if (isOpen && !dataReady) {
+      return <LoadingPage />;
+    } else {
+      return <div />;
+    }
+  } else if (isOpen && !adminContract) {
+    return <NoContract tabName="Admin" />;
   } else {
     return <div />;
   }

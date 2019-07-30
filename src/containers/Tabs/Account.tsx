@@ -12,6 +12,7 @@ import { errorToast } from '../../util/tabTools';
 // Components
 import AccountTab from '../../components/AccountTab/AccountTab';
 import LoadingPage from '../../components/LoadingPage/LoadingPage';
+import NoContract from '../../components/Flashes/NoContract';
 // Constants
 import {
   PENDING_ADDITION,
@@ -47,6 +48,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     openToast
   } = useTab(whitelist, (identifier: string) => ({ address: identifier }));
 
+  if (!!accountRulesContract) {
   const handleAdd = async (value: string) => {
     // const gas = await accountRulesContract!.estimate.addAccount(value)
     try {
@@ -106,46 +108,51 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     }
   };
 
-  const isValidAccount = (address: string) => {
-    let isValidAddress = isAddress(address);
-    if (!isValidAddress) {
-      return {
-        valid: false
-      };
-    }
+    const isValidAccount = (address: string) => {
+      let isValidAddress = isAddress(address);
+      if (!isValidAddress) {
+        return {
+          valid: false
+        };
+      }
 
-    let isDuplicateAccount = list.filter((item: Account) => address === item.address).length > 0;
-    if (isDuplicateAccount) {
-      return {
-        valid: false,
-        msg: 'Account address is already on whitelist.'
-      };
-    }
+      let isDuplicateAccount = list.filter((item: Account) => address === item.address).length > 0;
+      if (isDuplicateAccount) {
+        return {
+          valid: false,
+          msg: 'Account address is already on whitelist.'
+        };
+      }
 
-    return {
-      valid: true
+      return {
+        valid: true
+      };
     };
-  };
 
-  const allDataReady: boolean = dataReady && adminDataReady;
-  if (isOpen && allDataReady) {
-    return (
-      <AccountTab
-        list={list}
-        modals={modals}
-        toggleModal={toggleModal}
-        handleAdd={handleAdd}
-        handleRemove={handleRemove}
-        isAdmin={isAdmin}
-        deleteTransaction={deleteTransaction}
-        isValid={isValidAccount}
-        isOpen={isOpen}
-        isReadOnly={isReadOnly!}
-        pendingLock={!!transactions.get('lock')}
-      />
-    );
-  } else if (isOpen && !allDataReady) {
-    return <LoadingPage />;
+    const allDataReady: boolean = dataReady && adminDataReady;
+    if (isOpen && allDataReady) {
+      return (
+        <AccountTab
+          list={list}
+          modals={modals}
+          toggleModal={toggleModal}
+          handleAdd={handleAdd}
+          handleRemove={handleRemove}
+          isAdmin={isAdmin}
+          deleteTransaction={deleteTransaction}
+          isValid={isValidAccount}
+          isOpen={isOpen}
+          isReadOnly={isReadOnly!}
+          pendingLock={!!transactions.get('lock')}
+        />
+      );
+    } else if (isOpen && !allDataReady) {
+      return <LoadingPage />;
+    } else {
+      return <div />;
+    }
+  } else if (isOpen && !accountRulesContract) {
+    return <NoContract tabName="Account Rules" />;
   } else {
     return <div />;
   }
