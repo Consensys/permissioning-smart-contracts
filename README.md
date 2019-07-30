@@ -10,6 +10,10 @@ describes how to use the contracts for onchain permissioning.
 
 ## Development
 
+### Initialise dependencies ###
+Run `yarn install` to initialise project dependencies. This step is only required when setting up project 
+for the first time. 
+
 ### Linting
 Linting is set up using solium. To run it over your code execute `yarn run lint`.
 
@@ -32,7 +36,6 @@ This is the easiest way to get started for development with the permissioning Da
 1. In the truffle console, run all migrations from scratch with `migrate --reset`. Keep this terminal session open to maintain your Ganache node running.
 
 #### Start the development server ####
-1. Run `yarn install` to install all required dependencies. (You only need to run `yarn install` if you are running the Dapp for the first time.)
 1. Run `yarn run build` to build the Dapp.
 1. Run `yarn run start` to start the web server that is serving our Dapp.
 1. In your browser, connect Metamask to the Ganache network (the default endpoint is `http://127.0.0.1:9545/`)
