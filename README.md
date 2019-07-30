@@ -20,13 +20,9 @@ Linting is set up using solium. To run it over your code execute `yarn run lint`
 ### Testing
 `yarn test`
 
-### Permissioning Management Dapp (under development)
-
-The Permissisioning Management Dapp is still in BETA. It is under active development and shouldn't be used in any production system.
+### Permissioning Management Dapp
 
 The Dapp will facilitate managing permissioning rules and maintaining the list of admin accounts that can edit rules.
-
-At the moment, these instructions won't say anything about linking the Dapp with your Pantheon node. This integration will be documented in the future. The instructions here are targeted to developers working on the Dapp development, not users.
 
 This is the easiest way to get started for development with the permissioning Dapp:
 
