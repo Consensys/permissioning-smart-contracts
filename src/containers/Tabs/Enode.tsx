@@ -92,11 +92,20 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   const handleRemove = async (value: string) => {
     const { enodeHigh, enodeLow, ip, port } = identifierToParams(value);
     try {
-      const tx = await nodeRulesContract!.functions.removeEnode(
+      const est = await nodeRulesContract!.estimate.removeEnode(
         utils.hexlify(enodeHigh),
         utils.hexlify(enodeLow),
         utils.hexlify(ip),
         utils.bigNumberify(port)
+      );
+      const tx = await nodeRulesContract!.functions.removeEnode(
+        utils.hexlify(enodeHigh),
+        utils.hexlify(enodeLow),
+        utils.hexlify(ip),
+        utils.bigNumberify(port),
+        {
+          gasLimit: est.toNumber() * 2
+        }
       );
       toggleModal('remove')();
       addTransaction(value, PENDING_REMOVAL);
