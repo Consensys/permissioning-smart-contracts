@@ -9,6 +9,7 @@ The [Pantheon documentation](https://docs.pantheon.pegasys.tech/en/stable/Permis
 describes how to use the contracts for onchain permissioning.
 
 ## Development
+_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest) if on Windows._
 
 ### Initialise dependencies ###
 Run `yarn install` to initialise project dependencies. This step is only required when setting up project 
@@ -47,21 +48,30 @@ This is the easiest way to get started for development with the permissioning Da
 1. You will need to set up MetaMask as for [the development server](#start-the-development-server)
 
 ## Deployment
+The deployment process covers 3 steps:
+1. Starting a Pantheon node with the required configurations.
+2. Migrating the contracts provided in this repository to the running chain.
+3. Running the Dapp on a webserver.
+
+### Starting a Pantheon node
+1. Have a Pantheon node running a chain that has the Node Ingress and Account Ingress contracts in its genesis accounts as shown in the alloc block of the [example genesis file](https://github.com/PegaSysEng/permissioning-smart-contracts/blob/master/genesis.json)
 
 ### Deploying the contracts
-1. Have a Pantheon node running a chain that has the Node Ingress and Account Ingress contracts in its genesis accounts as shown in the alloc block of the [example genesis file](https://github.com/PegaSysEng/permissioning-smart-contracts/blob/master/genesis.json)
 1. Configure environment variables or provide a .env file in the root of this project that configures the following variables
   - `NODE_INGRESS_CONTRACT_ADDRESS`: The address of the node ingress contract from the genesis accounts
   - `ACCOUNT_INGRESS_CONTRACT_ADDRESS`: The address of the account ingress contract from the genesis accounts
   - `PANTHEON_NODE_PERM_ACCOUNT`: The address of the account that will be used to deploy the contracts
   - `PANTHEON_NODE_PERM_KEY`: The private key associated with the deploying account's address
   - `PANTHEON_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Pantheon node
-1. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
+2. If this is the first time setting up the project, run `yarn install` to initialise project dependencies, otherwise skip this step. 
+3. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
 1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest)
-1. Unpack the distribution into a folder that will be available to your webserver
-1. Add to the root of that folder a file `config.json` with the following contents
+2. Unpack the distribution into a folder that will be available to your webserver
+3. Add to the root of that folder a file `config.json` with the following contents
+
+_Note: The `networkID` is defined as the `chainID` in the genesis file._
 ```
 {
         "accountIngressAddress":  "<Address of the account ingress contract>",
@@ -69,4 +79,4 @@ This is the easiest way to get started for development with the permissioning Da
         "networkId": "<ID of your ethereum network>"
 }
 ```
-1. Use a webserver of your choice to host the contents of the folder as static files directing root requests to `index.html`
+4. Use a webserver of your choice to host the contents of the folder as static files directing root requests to `index.html`
