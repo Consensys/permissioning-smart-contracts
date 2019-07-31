@@ -40,53 +40,58 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
   );
 
   if (!!adminContract) {
-  const handleAdd = async (value: string) => {
-    try {
-      const tx = await adminContract!.functions.addAdmin(value);
-      toggleModal('add')();
-      addTransaction(value, PENDING_ADDITION);
-      const receipt = await tx.wait(1); // wait on receipt confirmations
-      const addEvent = receipt.events!.filter(e => e.event && e.event === 'AdminAdded').pop();
-      if (!addEvent) {
-        openToast(value, FAIL, `Error while processing Admin account: ${value}`);
-      } else {
-        const addSuccessResult = idx(addEvent, _ => _.args[0]);
-        if (addSuccessResult === undefined) {
+    const handleAdd = async (value: string) => {
+      try {
+        const tx = await adminContract!.functions.addAdmin(value);
+        toggleModal('add')();
+        addTransaction(value, PENDING_ADDITION);
+        const receipt = await tx.wait(1); // wait on receipt confirmations
+        const addEvent = receipt.events!.filter(e => e.event && e.event === 'AdminAdded').pop();
+        if (!addEvent) {
           openToast(value, FAIL, `Error while processing Admin account: ${value}`);
-        } else if (Boolean(addSuccessResult)) {
-          openToast(value, SUCCESS, `New Admin account processed: ${value}`);
         } else {
-          const message = idx(addEvent, _ => _.args[2]);
-          openToast(value, FAIL, message);
+          const addSuccessResult = idx(addEvent, _ => _.args[0]);
+          if (addSuccessResult === undefined) {
+            openToast(value, FAIL, `Error while processing Admin account: ${value}`);
+          } else if (Boolean(addSuccessResult)) {
+            openToast(value, SUCCESS, `New Admin account processed: ${value}`);
+          } else {
+            const message = idx(addEvent, _ => _.args[2]);
+            openToast(value, FAIL, message);
+          }
         }
+        deleteTransaction(value);
+      } catch (e) {
+        toggleModal('add')(false);
+        updateTransaction(value, FAIL_ADDITION);
+        errorToast(e, value, openToast, () =>
+          openToast(value, FAIL, 'Could not add account as admin', `${value} was unable to be added. Please try again.`)
+        );
       }
-      deleteTransaction(value);
-    } catch (e) {
-      toggleModal('add')(false);
-      updateTransaction(value, FAIL_ADDITION);
-      errorToast(e, value, openToast, () =>
-        openToast(value, FAIL, 'Could not add account as admin', `${value} was unable to be added. Please try again.`)
-      );
-    }
-  };
+    };
 
-  const handleRemove = async (value: string) => {
-    try {
-      const est = await adminContract!.estimate.removeAdmin(value);
-      const tx = await adminContract!.functions.removeAdmin(value, { gasLimit: est.toNumber() * 2 });
-      toggleModal('remove')();
-      addTransaction(value, PENDING_REMOVAL);
-      await tx.wait(1); // wait on receipt confirmations
-      openToast(value, SUCCESS, `Removal of admin account processed: ${value}`);
-      deleteTransaction(value);
-    } catch (e) {
-      toggleModal('remove')();
-      updateTransaction(value, FAIL_REMOVAL);
-      errorToast(e, value, openToast, () =>
-        openToast(value, FAIL, 'Could not remove admin account', `${value} was unable to be removed. Please try again.`)
-      );
-    }
-  };
+    const handleRemove = async (value: string) => {
+      try {
+        const est = await adminContract!.estimate.removeAdmin(value);
+        const tx = await adminContract!.functions.removeAdmin(value, { gasLimit: est.toNumber() * 2 });
+        toggleModal('remove')();
+        addTransaction(value, PENDING_REMOVAL);
+        await tx.wait(1); // wait on receipt confirmations
+        openToast(value, SUCCESS, `Removal of admin account processed: ${value}`);
+        deleteTransaction(value);
+      } catch (e) {
+        toggleModal('remove')();
+        updateTransaction(value, FAIL_REMOVAL);
+        errorToast(e, value, openToast, () =>
+          openToast(
+            value,
+            FAIL,
+            'Could not remove admin account',
+            `${value} was unable to be removed. Please try again.`
+          )
+        );
+      }
+    };
 
     const isValidAdmin = (address: string) => {
       let isValidAddress = isAddress(address);

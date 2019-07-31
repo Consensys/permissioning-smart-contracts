@@ -54,80 +54,80 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         port
       });
 
-    try {
-      const tx = await nodeRulesContract!.functions.addEnode(
-        utils.hexlify(enodeHigh),
-        utils.hexlify(enodeLow),
-        utils.hexlify(ip),
-        utils.bigNumberify(port)
-      );
-      toggleModal('add')();
-      addTransaction(identifier, PENDING_ADDITION);
-      const receipt = await tx.wait(1); // wait on receipt confirmations
-      const addEvent = receipt.events!.filter(e => e.event && e.event === 'NodeAdded').pop();
-      if (!addEvent) {
-        openToast(value, FAIL, `Error while processing node: ${value}`);
-      } else {
-        const addSuccessResult = idx(addEvent, _ => _.args[0]);
-        if (addSuccessResult === undefined) {
+      try {
+        const tx = await nodeRulesContract!.functions.addEnode(
+          utils.hexlify(enodeHigh),
+          utils.hexlify(enodeLow),
+          utils.hexlify(ip),
+          utils.bigNumberify(port)
+        );
+        toggleModal('add')();
+        addTransaction(identifier, PENDING_ADDITION);
+        const receipt = await tx.wait(1); // wait on receipt confirmations
+        const addEvent = receipt.events!.filter(e => e.event && e.event === 'NodeAdded').pop();
+        if (!addEvent) {
           openToast(value, FAIL, `Error while processing node: ${value}`);
-        } else if (Boolean(addSuccessResult)) {
-          openToast(value, SUCCESS, `New whitelist node processed: ${value}`);
         } else {
-          openToast(value, FAIL, `Node "${value}" is already on whitelist`);
+          const addSuccessResult = idx(addEvent, _ => _.args[0]);
+          if (addSuccessResult === undefined) {
+            openToast(value, FAIL, `Error while processing node: ${value}`);
+          } else if (Boolean(addSuccessResult)) {
+            openToast(value, SUCCESS, `New whitelist node processed: ${value}`);
+          } else {
+            openToast(value, FAIL, `Node "${value}" is already on whitelist`);
+          }
         }
+        deleteTransaction(value);
+      } catch (e) {
+        toggleModal('add')();
+        updateTransaction(identifier, FAIL_ADDITION);
+        errorToast(e, identifier, openToast, () =>
+          openToast(
+            identifier,
+            FAIL,
+            'Could not add node to whitelist',
+            `${enodeHigh}${enodeLow} was unable to be added. Please try again`
+          )
+        );
       }
-      deleteTransaction(value);
-    } catch (e) {
-      toggleModal('add')();
-      updateTransaction(identifier, FAIL_ADDITION);
-      errorToast(e, identifier, openToast, () =>
-        openToast(
-          identifier,
-          FAIL,
-          'Could not add node to whitelist',
-          `${enodeHigh}${enodeLow} was unable to be added. Please try again`
-        )
-      );
-    }
-  };
+    };
 
-  const handleRemove = async (value: string) => {
-    const { enodeHigh, enodeLow, ip, port } = identifierToParams(value);
-    try {
-      const est = await nodeRulesContract!.estimate.removeEnode(
-        utils.hexlify(enodeHigh),
-        utils.hexlify(enodeLow),
-        utils.hexlify(ip),
-        utils.bigNumberify(port)
-      );
-      const tx = await nodeRulesContract!.functions.removeEnode(
-        utils.hexlify(enodeHigh),
-        utils.hexlify(enodeLow),
-        utils.hexlify(ip),
-        utils.bigNumberify(port),
-        {
-          gasLimit: est.toNumber() * 2
-        }
-      );
-      toggleModal('remove')();
-      addTransaction(value, PENDING_REMOVAL);
-      await tx.wait(1); // wait on receipt confirmations
-      openToast(value, SUCCESS, `Removal of whitelisted node processed: ${enodeHigh}${enodeLow}`);
-      deleteTransaction(value);
-    } catch (e) {
-      toggleModal('remove')();
-      updateTransaction(value, FAIL_REMOVAL);
-      errorToast(e, value, openToast, () =>
-        openToast(
-          value,
-          FAIL,
-          'Could not remove node to whitelist',
-          `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
-        )
-      );
-    }
-  };
+    const handleRemove = async (value: string) => {
+      const { enodeHigh, enodeLow, ip, port } = identifierToParams(value);
+      try {
+        const est = await nodeRulesContract!.estimate.removeEnode(
+          utils.hexlify(enodeHigh),
+          utils.hexlify(enodeLow),
+          utils.hexlify(ip),
+          utils.bigNumberify(port)
+        );
+        const tx = await nodeRulesContract!.functions.removeEnode(
+          utils.hexlify(enodeHigh),
+          utils.hexlify(enodeLow),
+          utils.hexlify(ip),
+          utils.bigNumberify(port),
+          {
+            gasLimit: est.toNumber() * 2
+          }
+        );
+        toggleModal('remove')();
+        addTransaction(value, PENDING_REMOVAL);
+        await tx.wait(1); // wait on receipt confirmations
+        openToast(value, SUCCESS, `Removal of whitelisted node processed: ${enodeHigh}${enodeLow}`);
+        deleteTransaction(value);
+      } catch (e) {
+        toggleModal('remove')();
+        updateTransaction(value, FAIL_REMOVAL);
+        errorToast(e, value, openToast, () =>
+          openToast(
+            value,
+            FAIL,
+            'Could not remove node to whitelist',
+            `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
+          )
+        );
+      }
+    };
 
     const isDuplicateEnode = (enode: string) => {
       return list.filter((item: Enode) => isEqual(item, enodeToParams(enode))).length > 0;
