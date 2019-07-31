@@ -69,7 +69,8 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
 
   const handleRemove = async (value: string) => {
     try {
-      const tx = await adminContract!.functions.removeAdmin(value);
+      const est = await adminContract!.estimate.removeAdmin(value);
+      const tx = await adminContract!.functions.removeAdmin(value, { gasLimit: est.toNumber() * 2 });
       toggleModal('remove')();
       addTransaction(value, PENDING_REMOVAL);
       await tx.wait(1); // wait on receipt confirmations

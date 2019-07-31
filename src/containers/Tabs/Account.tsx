@@ -83,12 +83,14 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
 
   const handleRemove = async (value: string) => {
     try {
-      const tx = await accountRulesContract!.functions.removeAccount(value);
+      const est = await accountRulesContract!.estimate.removeAccount(value);
+      const tx = await accountRulesContract!.functions.removeAccount(value, { gasLimit: est.toNumber() * 2 });
       toggleModal('remove')();
       addTransaction(value, PENDING_REMOVAL);
       await tx.wait(1); // wait on receipt confirmations
       openToast(value, SUCCESS, `Removal of whitelisted account processed: ${value}`);
     } catch (e) {
+      console.log('error', e);
       toggleModal('remove')();
       updateTransaction(value, FAIL_REMOVAL);
       errorToast(e, value, openToast, () =>
