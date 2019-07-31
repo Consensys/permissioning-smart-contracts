@@ -67,6 +67,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
           openToast(value, FAIL, `Account "${value}" is already on whitelist`);
         }
       }
+      deleteTransaction(value);
     } catch (e) {
       toggleModal('add')(false);
       updateTransaction(value, FAIL_ADDITION);
@@ -89,6 +90,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       addTransaction(value, PENDING_REMOVAL);
       await tx.wait(1); // wait on receipt confirmations
       openToast(value, SUCCESS, `Removal of whitelisted account processed: ${value}`);
+      deleteTransaction(value);
     } catch (e) {
       console.log('error', e);
       toggleModal('remove')();
