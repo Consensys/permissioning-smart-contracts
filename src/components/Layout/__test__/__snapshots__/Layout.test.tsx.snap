@@ -497,5 +497,6 @@ exports[`<Layout /> matches snapshot 1`] = `
       className="test"
     />
   </Box>
+  <Footer />
 </Flex>
 `;
