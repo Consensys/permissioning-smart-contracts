@@ -50,7 +50,6 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
 
   if (!!accountRulesContract) {
   const handleAdd = async (value: string) => {
-    // const gas = await accountRulesContract!.estimate.addAccount(value)
     try {
       const tx = await accountRulesContract!.functions.addAccount(value);
       toggleModal('add')();
