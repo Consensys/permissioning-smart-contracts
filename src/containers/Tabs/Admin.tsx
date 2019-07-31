@@ -58,6 +58,7 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
           openToast(value, FAIL, message);
         }
       }
+      deleteTransaction(value);
     } catch (e) {
       toggleModal('add')(false);
       updateTransaction(value, FAIL_ADDITION);
@@ -75,6 +76,7 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
       addTransaction(value, PENDING_REMOVAL);
       await tx.wait(1); // wait on receipt confirmations
       openToast(value, SUCCESS, `Removal of admin account processed: ${value}`);
+      deleteTransaction(value);
     } catch (e) {
       toggleModal('remove')();
       updateTransaction(value, FAIL_REMOVAL);

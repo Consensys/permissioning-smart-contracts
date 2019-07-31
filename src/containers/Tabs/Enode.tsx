@@ -75,6 +75,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
           openToast(value, FAIL, `Node "${value}" is already on whitelist`);
         }
       }
+      deleteTransaction(value);
     } catch (e) {
       toggleModal('add')();
       updateTransaction(identifier, FAIL_ADDITION);
@@ -111,6 +112,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
       addTransaction(value, PENDING_REMOVAL);
       await tx.wait(1); // wait on receipt confirmations
       openToast(value, SUCCESS, `Removal of whitelisted node processed: ${enodeHigh}${enodeLow}`);
+      deleteTransaction(value);
     } catch (e) {
       toggleModal('remove')();
       updateTransaction(value, FAIL_REMOVAL);
