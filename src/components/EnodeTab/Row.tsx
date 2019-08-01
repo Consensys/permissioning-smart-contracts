@@ -12,48 +12,43 @@ import TextWithTooltip from './TextWithTooltip';
 // Styles
 import styles from './styles.module.scss';
 
-const EnodeRow = ({
+type EnodeRow = {
+  isAdmin: boolean;
+  deleteTransaction: (address: string) => void;
+  openRemoveModal: (address: string) => void;
+  enodeHigh: string;
+  enodeLow: string;
+  ip: string;
+  port: string;
+  status: string;
+  identifier: string;
+};
+
+const EnodeRow: React.FC<EnodeRow> = ({
   isAdmin,
   deleteTransaction,
   openRemoveModal,
-  isReadOnly,
   enodeHigh,
   enodeLow,
   ip,
   port,
   status,
-  identifier,
-  pendingLock
+  identifier
 }) => (
   <tr className={styles.row}>
-    <td colSpan="2">
+    <td colSpan={2}>
       <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip
-          isReadOnly={isReadOnly || (!isReadOnly && pendingLock)}
-          isAdmin={isAdmin}
-          status={status}
-          text={`${enodeHigh}${enodeLow}`}
-        />
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={`${enodeHigh}${enodeLow}`} />
       </Flex>
     </td>
     <td>
       <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip
-          isReadOnly={isReadOnly || (!isReadOnly && pendingLock)}
-          isAdmin={isAdmin}
-          status={status}
-          text={hexToIp(ip)}
-        />
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={hexToIp(ip)} />
       </Flex>
     </td>
     <td>
       <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip
-          isReadOnly={isReadOnly || (!isReadOnly && pendingLock)}
-          isAdmin={isAdmin}
-          status={status}
-          text={port}
-        />
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={port} />
       </Flex>
     </td>
     <td>
@@ -91,7 +86,7 @@ const EnodeRow = ({
         ) : (
           <div />
         )}
-        {isAdmin && !isReadOnly && !pendingLock && status === 'active' && (
+        {isAdmin && status === 'active' && (
           <Button.Text
             mainColor="#CCC"
             icon="Delete"
@@ -113,7 +108,6 @@ EnodeRow.propTypes = {
   identifier: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  isReadOnly: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired
 };
 
