@@ -12,6 +12,7 @@ import { errorToast } from '../../util/tabTools';
 // Components
 import AccountTab from '../../components/AccountTab/AccountTab';
 import LoadingPage from '../../components/LoadingPage/LoadingPage';
+import NoContract from '../../components/Flashes/NoContract';
 // Constants
 import {
   PENDING_ADDITION,
@@ -47,105 +48,110 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     openToast
   } = useTab(whitelist, (identifier: string) => ({ address: identifier }));
 
-  const handleAdd = async (value: string) => {
-    // const gas = await accountRulesContract!.estimate.addAccount(value)
-    try {
-      const tx = await accountRulesContract!.functions.addAccount(value);
-      toggleModal('add')();
-      addTransaction(value, PENDING_ADDITION);
-      const receipt = await tx.wait(1); // wait on receipt confirmations
-      const addEvent = receipt.events!.filter(e => e.event && e.event === 'AccountAdded').pop();
-      if (!addEvent) {
-        openToast(value, FAIL, `Error while processing account: ${value}`);
-      } else {
-        const addSuccessResult = idx(addEvent, _ => _.args[0]);
-        if (addSuccessResult === undefined) {
+  if (!!accountRulesContract) {
+    const handleAdd = async (value: string) => {
+      try {
+        const tx = await accountRulesContract!.functions.addAccount(value);
+        toggleModal('add')();
+        addTransaction(value, PENDING_ADDITION);
+        const receipt = await tx.wait(1); // wait on receipt confirmations
+        const addEvent = receipt.events!.filter(e => e.event && e.event === 'AccountAdded').pop();
+        if (!addEvent) {
           openToast(value, FAIL, `Error while processing account: ${value}`);
-        } else if (Boolean(addSuccessResult)) {
-          openToast(value, SUCCESS, `New whitelisted account processed: ${value}`);
         } else {
-          openToast(value, FAIL, `Account "${value}" is already on whitelist`);
+          const addSuccessResult = idx(addEvent, _ => _.args[0]);
+          if (addSuccessResult === undefined) {
+            openToast(value, FAIL, `Error while processing account: ${value}`);
+          } else if (Boolean(addSuccessResult)) {
+            openToast(value, SUCCESS, `New whitelisted account processed: ${value}`);
+          } else {
+            openToast(value, FAIL, `Account "${value}" is already on whitelist`);
+          }
         }
+        deleteTransaction(value);
+      } catch (e) {
+        toggleModal('add')(false);
+        updateTransaction(value, FAIL_ADDITION);
+        errorToast(e, value, openToast, () =>
+          openToast(
+            value,
+            FAIL,
+            'Could not add whitelisted account',
+            `${value} was unable to be added. Please try again.`
+          )
+        );
       }
-      deleteTransaction(value);
-    } catch (e) {
-      toggleModal('add')(false);
-      updateTransaction(value, FAIL_ADDITION);
-      errorToast(e, value, openToast, () =>
-        openToast(
-          value,
-          FAIL,
-          'Could not add whitelisted account',
-          `${value} was unable to be added. Please try again.`
-        )
-      );
-    }
-  };
-
-  const handleRemove = async (value: string) => {
-    try {
-      const est = await accountRulesContract!.estimate.removeAccount(value);
-      const tx = await accountRulesContract!.functions.removeAccount(value, { gasLimit: est.toNumber() * 2 });
-      toggleModal('remove')();
-      addTransaction(value, PENDING_REMOVAL);
-      await tx.wait(1); // wait on receipt confirmations
-      openToast(value, SUCCESS, `Removal of whitelisted account processed: ${value}`);
-      deleteTransaction(value);
-    } catch (e) {
-      console.log('error', e);
-      toggleModal('remove')();
-      updateTransaction(value, FAIL_REMOVAL);
-      errorToast(e, value, openToast, () =>
-        openToast(
-          value,
-          FAIL,
-          'Could not remove whitelisted account',
-          `${value} was unable to be removed. Please try again.`
-        )
-      );
-    }
-  };
-
-  const isValidAccount = (address: string) => {
-    let isValidAddress = isAddress(address);
-    if (!isValidAddress) {
-      return {
-        valid: false
-      };
-    }
-
-    let isDuplicateAccount = list.filter((item: Account) => address === item.address).length > 0;
-    if (isDuplicateAccount) {
-      return {
-        valid: false,
-        msg: 'Account address is already on whitelist.'
-      };
-    }
-
-    return {
-      valid: true
     };
-  };
 
-  const allDataReady: boolean = dataReady && adminDataReady;
-  if (isOpen && allDataReady) {
-    return (
-      <AccountTab
-        list={list}
-        modals={modals}
-        toggleModal={toggleModal}
-        handleAdd={handleAdd}
-        handleRemove={handleRemove}
-        isAdmin={isAdmin}
-        deleteTransaction={deleteTransaction}
-        isValid={isValidAccount}
-        isOpen={isOpen}
-        isReadOnly={isReadOnly!}
-        pendingLock={!!transactions.get('lock')}
-      />
-    );
-  } else if (isOpen && !allDataReady) {
-    return <LoadingPage />;
+    const handleRemove = async (value: string) => {
+      try {
+        const est = await accountRulesContract!.estimate.removeAccount(value);
+        const tx = await accountRulesContract!.functions.removeAccount(value, { gasLimit: est.toNumber() * 2 });
+        toggleModal('remove')();
+        addTransaction(value, PENDING_REMOVAL);
+        await tx.wait(1); // wait on receipt confirmations
+        openToast(value, SUCCESS, `Removal of whitelisted account processed: ${value}`);
+        deleteTransaction(value);
+      } catch (e) {
+        console.log('error', e);
+        toggleModal('remove')();
+        updateTransaction(value, FAIL_REMOVAL);
+        errorToast(e, value, openToast, () =>
+          openToast(
+            value,
+            FAIL,
+            'Could not remove whitelisted account',
+            `${value} was unable to be removed. Please try again.`
+          )
+        );
+      }
+    };
+
+    const isValidAccount = (address: string) => {
+      let isValidAddress = isAddress(address);
+      if (!isValidAddress) {
+        return {
+          valid: false
+        };
+      }
+
+      let isDuplicateAccount = list.filter((item: Account) => address === item.address).length > 0;
+      if (isDuplicateAccount) {
+        return {
+          valid: false,
+          msg: 'Account address is already on whitelist.'
+        };
+      }
+
+      return {
+        valid: true
+      };
+    };
+
+    const allDataReady: boolean = dataReady && adminDataReady;
+    if (isOpen && allDataReady) {
+      return (
+        <AccountTab
+          list={list}
+          modals={modals}
+          toggleModal={toggleModal}
+          handleAdd={handleAdd}
+          handleRemove={handleRemove}
+          isAdmin={isAdmin}
+          deleteTransaction={deleteTransaction}
+          isValid={isValidAccount}
+          isOpen={isOpen}
+          isReadOnly={isReadOnly!}
+          pendingLock={!!transactions.get('lock')}
+        />
+      );
+    } else if (isOpen && !allDataReady) {
+      return <LoadingPage />;
+    } else {
+      return <div />;
+    }
+  } else if (isOpen && !accountRulesContract) {
+    return <NoContract tabName="Account Rules" />;
   } else {
     return <div />;
   }
