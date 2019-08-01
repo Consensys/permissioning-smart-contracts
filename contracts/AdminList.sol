@@ -6,6 +6,17 @@ import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 contract AdminList {
     using StructuredLinkedList for StructuredLinkedList.List;
 
+    event AdminAdded(
+        bool adminAdded,
+        address account,
+        string message
+    );
+
+    event AdminRemoved(
+        bool adminRemoved,
+        address account
+    );
+
     StructuredLinkedList.List private list;
 
     function size() internal view returns (uint256) {
@@ -17,14 +28,26 @@ contract AdminList {
     }
 
     function add(address _address) internal returns (bool) {
+        if (exists(_address)) {
+            return false;
+        }
         return list.push(uint(_address), false);
     }
 
     function addAll(address[] memory accounts) internal returns (bool) {
         bool allAdded = true;
         for (uint i = 0; i<accounts.length; i++) {
-            if (!exists(accounts[i])) {
-                allAdded = allAdded && add(accounts[i]);
+            if (msg.sender == accounts[i]) {
+                emit AdminAdded(false, accounts[i], "Adding own account as Admin is not permitted");
+                allAdded = allAdded && false;
+            } else if (exists(accounts[i])) {
+                emit AdminAdded(false, accounts[i], "Account is already an Admin");
+                allAdded = allAdded && false;
+            }  else {
+                bool result = add(accounts[i]);
+                string memory message = result ? "Admin account added successfully" : "Account is already an Admin";
+                emit AdminAdded(result, accounts[i], message);
+                allAdded = allAdded && result;
             }
         }
 

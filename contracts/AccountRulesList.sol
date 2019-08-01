@@ -5,6 +5,15 @@ import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 
 contract AccountRulesList {
     using StructuredLinkedList for StructuredLinkedList.List;
+    event AccountAdded(
+        bool accountAdded,
+        address accountAddress
+    );
+
+    event AccountRemoved(
+        bool accountRemoved,
+        address accountAddress
+    );
 
     StructuredLinkedList.List private list;
     mapping (uint256 => address) private accountMapping;
@@ -36,7 +45,12 @@ contract AccountRulesList {
         bool allAdded = true;
         for (uint i = 0; i<accounts.length; i++) {
             if (!exists(accounts[i])) {
-                allAdded = allAdded && add(accounts[i]);
+                bool added = add(accounts[i]);
+                emit AccountAdded(added, accounts[i]);
+                allAdded = allAdded && added;
+            } else {
+                allAdded = allAdded && false;
+                emit AccountAdded(false, accounts[i]);
             }
         }
 
