@@ -9,14 +9,19 @@ import { arrayInclude, areArrayEqual, areMapEqual } from '../../util/array';
 // Constants
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 
-export default (originalList, identifierToParams) => {
+type IdentAndStatus = {
+  identifier: string;
+  status: string;
+};
+
+export default <T>(originalList: (T & IdentAndStatus)[], identifierToParams: (identifier: string) => T) => {
   const [list, setList] = useState(originalList);
   const { modals, toggleModal } = useModal();
   const { transactions, addTransaction, updateTransaction, deleteTransaction, setTransactions } = useTransaction();
   const { openToast, updateToast, closeToast } = useToast();
 
   useEffect(() => {
-    const updatedTransactions = new Map([...transactions]);
+    const updatedTransactions = new Map(transactions);
     // Delete old pending removals
     transactions.forEach((status, identifier) => {
       if (status === PENDING_REMOVAL && !arrayInclude(originalList, { identifier })) {
@@ -24,23 +29,23 @@ export default (originalList, identifierToParams) => {
       }
     });
     // Derive list and delete old pending additions
-    const derivedList = originalList.map(({ identifier, ...rest }) => {
-      if (updatedTransactions.has(identifier)) {
-        const status = updatedTransactions.get(identifier);
+    const derivedList = originalList.map(i => {
+      if (updatedTransactions.has(i.identifier)) {
+        const status = updatedTransactions.get(i.identifier)!;
         if (
           status === PENDING_ADDITION ||
-          (status === FAIL_ADDITION && rest.status === 'active') ||
-          (status === FAIL_REMOVAL && rest.status === 'active')
+          (status === FAIL_ADDITION && i.status === 'active') ||
+          (status === FAIL_REMOVAL && i.status === 'active')
         ) {
-          updatedTransactions.delete(identifier);
+          updatedTransactions.delete(i.identifier);
         } else {
-          return { ...rest, identifier, status };
+          return { ...i, status };
         }
       }
-      return { ...rest, identifier };
+      return i;
     });
     // Gather the pending and failed additions from updatedTransactions
-    const pending = [];
+    const pending: (T & IdentAndStatus)[] = [];
     updatedTransactions.forEach((status, identifier) => {
       if (status === PENDING_ADDITION || status === FAIL_ADDITION) {
         pending.push({

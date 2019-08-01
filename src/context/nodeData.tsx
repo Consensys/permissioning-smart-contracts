@@ -5,7 +5,9 @@ import { nodeRulesFactory } from '../chain/contracts/NodeRules';
 import { useNetwork } from './network';
 
 // Utils
-import { paramsToIdentifier, Enode } from '../util/enodetools';
+import { paramsToIdentifier, Enode as RawEnode } from '../util/enodetools';
+
+type Enode = RawEnode & { identifier: string };
 
 type ContextType =
   | {
@@ -111,7 +113,7 @@ export const useNodeData = () => {
   }, [nodeRulesContract, setNodeWhitelist, setNodeReadOnly]);
 
   const formattedNodeWhitelist = useMemo(() => {
-    return nodeWhitelist ? nodeWhitelist.map(enode => ({ ...enode, status: 'active' })).reverse() : undefined;
+    return nodeWhitelist.map(enode => ({ ...enode, status: 'active' })).reverse();
   }, [nodeWhitelist]);
 
   const dataReady = useMemo(() => {
