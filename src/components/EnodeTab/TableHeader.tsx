@@ -8,7 +8,6 @@ type TableHeader = {
   number: number;
   openAddModal: () => void;
   disabledAdd: boolean;
-  isReadOnly: boolean;
 };
 
 const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd }) => (
