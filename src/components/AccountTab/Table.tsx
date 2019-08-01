@@ -13,7 +13,7 @@ import styles from './styles.module.scss';
 type AccountTable = {
   list: { address: string; status: string }[];
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
-  deleteTransaction: () => void;
+  deleteTransaction: (identifier: string) => void;
   isAdmin: boolean;
   isReadOnly: boolean;
   pendingLock: boolean;

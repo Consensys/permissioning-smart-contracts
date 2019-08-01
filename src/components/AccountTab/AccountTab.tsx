@@ -19,7 +19,7 @@ type AccountTab = {
   handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
   isAdmin: boolean;
-  deleteTransaction: () => void;
+  deleteTransaction: (identifier: string) => void;
   isValid: (address: string) => { valid: boolean };
   isOpen: boolean;
   isReadOnly: boolean;
