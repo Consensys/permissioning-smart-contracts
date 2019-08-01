@@ -5,17 +5,6 @@ import "./AdminList.sol";
 
 
 contract Admin is AdminProxy, AdminList {
-    event AdminAdded(
-        bool adminAdded,
-        address account,
-        string message
-    );
-
-    event AdminRemoved(
-        bool adminRemoved,
-        address account
-    );
-
     modifier onlyAdmin() {
         require(isAuthorized(msg.sender), "Sender not authorized");
         _;

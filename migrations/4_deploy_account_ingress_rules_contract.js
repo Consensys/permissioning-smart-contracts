@@ -11,7 +11,7 @@ const rulesContractName = Web3Utils.utf8ToHex("rules");
 let accountIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
 
 /* Optional initial Whitelisted Accounts */
-let initialWhitelistedAccounts = process.env.INITIAL_WHITELIST_ACCOUNTS;
+let initialWhitelistedAccounts = process.env.INITIAL_WHITELISTED_ACCOUNTS;
 
 
 module.exports = async(deployer, network) => {
@@ -52,14 +52,10 @@ module.exports = async(deployer, network) => {
             });
 
         if (initialWhitelistedAccountsPrefixed && initialWhitelistedAccountsPrefixed.length > 0) {
-            initialWhitelistedAccountsPrefixed.forEach( item => console.log("   > AccountRules Contract - Adding Account: " + item));
             let accountsAddedResult = await accountRulesContract.addAccounts(initialWhitelistedAccountsPrefixed);
-            console.log ("   > Account Rules Contract - Added accounts : " + JSON.stringify(accountsAddedResult, null, 2));
+            console.log ("   > Account Rules Contract -  Accounts added: " + initialWhitelistedAccountsPrefixed.toString());
         }    
-    } else {
-        console.log ("   > Account Rules Contract - No initial accounts to whitelist.");
-    }     
-
+    } 
 
     await accountIngressInstance.setContractAddress(rulesContractName, Rules.address);
     console.log("   > Updated AccountIngress contract with Rules address = " + Rules.address);

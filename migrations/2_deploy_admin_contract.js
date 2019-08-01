@@ -24,11 +24,8 @@ module.exports = async(deployer, network) => {
             }
         );
         if (initialAdminAccountsPrefixed && initialAdminAccountsPrefixed.length > 0) {
-            initialAdminAccountsPrefixed.forEach( item => console.log("   > Admin Contract - Adding Admin Account: " + item));
             let adminAddedResult = await instance.addAdmins(initialAdminAccountsPrefixed);
-            console.log ("   > Admin Contract - Added initial admin accounts : " + JSON.stringify(adminAddedResult, null, 2));
+            console.log ("   > Admin Contract - Added initial admin accounts : " + initialAdminAccountsPrefixed.toString());
         }    
-    } else {
-        console.log ("   > Admin Contract - No initial extra admin accounts created.");
-    }     
+    }   
 }
