@@ -115,4 +115,12 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
             return (_account);
         }
     }
+
+    function getAccounts() public view returns (address[] memory){
+        return getAll();
+    }
+
+    function addAccounts(address[] memory accounts) public onlyAdmin returns (bool) {
+        return addAll(accounts);
+    }
 }
