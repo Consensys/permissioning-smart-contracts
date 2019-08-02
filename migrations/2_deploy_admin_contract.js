@@ -20,7 +20,7 @@ module.exports = async(deployer, network) => {
                 if (!trimmedAcc.startsWith("0x")) {
                     trimmedAcc = "0x" + trimmedAcc;
                 }
-                return trimmedAcc;
+                return trimmedAcc.toLowerCase();
             }
         );
         if (initialAdminAccountsPrefixed && initialAdminAccountsPrefixed.length > 0) {
