@@ -117,6 +117,33 @@ contract("Admin (admin management)", async accounts => {
     assert.equal(result[2].returnValues.message, "Adding own account as Admin is not permitted", "adding self Admin error message SHOULD be correct");
   });
 
+  it("Should emit events when multiple Admins are added", async () => {
+    const ownAddress = accounts[0]
+    const address = accounts[1];
+ 
+    //add same account twice and attempt to add self
+    await adminContract.addAdmins([address, address, ownAddress])
+
+ 
+    // Get the events
+    let result = await adminContract.getPastEvents("AdminAdded", {fromBlock: 0, toBlock: "latest" });
+
+    // Verify the first AccountAdded event is 'true'
+    assert.equal(result[0].returnValues.adminAdded, true, "adminAdded SHOULD be true");
+
+    // Verify the unsuccessful duplicate AccountAdded event is 'false'
+    assert.equal(result[1].returnValues.adminAdded, false, "adminAdded with duplicate account SHOULD be false");
+
+    // Verify the unsuccessful duplicate AccountAdded event has correct message
+    assert.equal(result[1].returnValues.message, "Account is already an Admin", "duplicate Admin error message SHOULD be correct");
+
+    // Verify the adding own account AccountAdded event is 'false'
+    assert.equal(result[2].returnValues.adminAdded, false, "adminAdded with own account SHOULD be false");
+
+    // Verify the adding own account AccountAdded event has correct message
+    assert.equal(result[2].returnValues.message, "Adding own account as Admin is not permitted", "adding self Admin error message SHOULD be correct");
+  });
+
   it("Should emit events when an Admin is removed", async () => {
     const address = accounts[1];
 

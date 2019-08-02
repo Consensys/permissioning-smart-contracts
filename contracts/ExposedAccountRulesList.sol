@@ -32,4 +32,8 @@ contract ExposedAccountRulesList is AccountRulesList {
     function _get(uint _index) public view returns (bool _found, address _account) {
         return get(_index);
     }
+
+    function _getAll() public view returns (address[] memory) {
+        return getAll();
+    }
 }

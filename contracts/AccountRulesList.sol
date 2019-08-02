@@ -118,7 +118,7 @@ contract AccountRulesList {
             (bool nodeExists, uint256 prev, uint256 next) = list.getNode(pointer);
             if (nodeExists) {
                 if (pointer > 0) {
-                    allAddresses[counter++] = address(pointer);
+                    allAddresses[counter++] = accountMapping[pointer];
                 }
 
                 if (next != 0) {
