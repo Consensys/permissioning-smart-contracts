@@ -35,11 +35,6 @@ contract("Account Rules (Events & Management)", (accounts) => {
         assert.isNotNull(result);
     });
 
-    it("Should return contract version", async () => {
-        let result = await rulesContract.getContractVersion.call();
-        assert.isNotNull(result);
-    });
-
     it("getAccounts return empty array when account list is empty", async () => {
         let returnedAddresses = await rulesContract.getAccounts();
         assert.isEmpty(returnedAddresses);
