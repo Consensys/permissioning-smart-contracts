@@ -67,7 +67,7 @@ The deployment process covers 3 steps:
 2. Following environment variables are optional and can be used to whitelist account and nodes during initial contract deployment 
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
   - `INITIAL_WHITELISTED_ACCOUNTS`: The whitelisted account addresses. Comma separated multiple addresses can be specified
-  - `INITIAL_WHITELISTED_NODES`: The enode URL of whitelisted nodes. Comma separated multiple nodes can be specified
+  - `INITIAL_WHITELISTED_NODES`: The enode URLs of whitelisted nodes. Comma separated multiple nodes can be specified
 3. If this is the first time setting up the project, run `yarn install` to initialise project dependencies, otherwise skip this step. 
 4. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
