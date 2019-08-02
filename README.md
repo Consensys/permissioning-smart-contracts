@@ -64,7 +64,7 @@ The deployment process covers 3 steps:
   - `PANTHEON_NODE_PERM_KEY`: The private key associated with the deploying account's address
   - `PANTHEON_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Pantheon node
 
-2. Following environment variables are optional and can be used to whitelist account and nodes during initial contract deployment 
+2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment. 
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
   - `INITIAL_WHITELISTED_ACCOUNTS`: The whitelisted account addresses. Comma separated multiple addresses can be specified
   - `INITIAL_WHITELISTED_NODES`: The enode URLs of whitelisted nodes. Comma separated multiple nodes can be specified
