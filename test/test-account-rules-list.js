@@ -79,6 +79,21 @@ contract("AccountRulesList (list manipulation)", async () => {
     assert.equal(size, 1);
   });
 
+  it("add multiple addresses to list should add to the list and increase list size", async () => {
+    let exists = await rulesListContract._exists(address3);
+    assert.notOk(exists);
+    let size = await rulesListContract._size();
+    assert.equal(size, 0);
+
+    let addresses = [address1, address2, address3];
+    await rulesListContract._addAll(addresses);
+
+    exists = await rulesListContract._exists(address3);
+    assert.ok(exists);
+    size = await rulesListContract._size();
+    assert.equal(size, 3);
+  });
+
   it("add existing address should do nothing on second insert", async () => {
     await rulesListContract._add(address3);
     await rulesListContract._add(address3);
