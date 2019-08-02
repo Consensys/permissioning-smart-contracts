@@ -87,7 +87,7 @@ module.exports = async(deployer, network) => {
             for (i=0; i < initialWhitelistedNodesList.length; i++) {
                 let enode = initialWhitelistedNodesList[i];
                 if (!isValidEnode(enode)) {
-                    console.log("   > NodeRules Contract - Bypassing invalid ENode URL: " + enode);
+                    console.log("   > NodeRules Contract - Skipping invalid eNode URL: " + enode);
                     continue;
                 }
                 const { enodeHigh, enodeLow, ip, port } = enodeToParams(enode);
