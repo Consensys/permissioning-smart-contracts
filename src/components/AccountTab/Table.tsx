@@ -13,22 +13,14 @@ import styles from './styles.module.scss';
 type AccountTable = {
   list: { address: string; status: string }[];
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
-  deleteTransaction: () => void;
+  deleteTransaction: (identifier: string) => void;
   isAdmin: boolean;
   isReadOnly: boolean;
-  pendingLock: boolean;
 };
 
-const AccountTable: React.FC<AccountTable> = ({
-  list,
-  toggleModal,
-  deleteTransaction,
-  isAdmin,
-  isReadOnly,
-  pendingLock
-}) => (
+const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransaction, isAdmin, isReadOnly }) => (
   <Box mt={5}>
-    <AccountTableHeader number={list.length} openAddModal={toggleModal('add')} disabledAdd={!isAdmin} />
+    <AccountTableHeader number={list.length} openAddModal={toggleModal('add')} disabledAdd={!isAdmin || isReadOnly} />
     <Table mt={4}>
       <thead>
         <tr>
@@ -58,8 +50,7 @@ AccountTable.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  isReadOnly: PropTypes.bool.isRequired,
-  pendingLock: PropTypes.bool.isRequired
+  isReadOnly: PropTypes.bool.isRequired
 };
 
 export default AccountTable;

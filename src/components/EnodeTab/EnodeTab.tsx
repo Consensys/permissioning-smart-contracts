@@ -6,8 +6,26 @@ import AddModal from '../../containers/Modals/Add';
 import RemoveModal from '../../containers/Modals/Remove';
 // Constants
 import { addEnodeDisplay, removeEnodeDisplay } from '../../constants/modals';
+import { Enode } from '../../util/enodetools';
 
-const EnodeTab = ({
+type EnodeTab = {
+  list: (Enode & { identifier: string; status: string })[];
+  modals: {
+    add: boolean;
+    remove: string;
+    lock: boolean;
+  };
+  toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
+  handleAdd: (value: any) => Promise<void>;
+  handleRemove: (value: any) => Promise<void>;
+  isAdmin: boolean;
+  deleteTransaction: (identifier: string) => void;
+  isValid: (address: string) => { valid: boolean };
+  isOpen: boolean;
+  isReadOnly: boolean;
+};
+
+const EnodeTab: React.FC<EnodeTab> = ({
   list,
   modals,
   toggleModal,
@@ -37,7 +55,7 @@ const EnodeTab = ({
           isValid={isValid}
         />
         <RemoveModal
-          isOpen={modals.remove && isAdmin && !isReadOnly}
+          isOpen={Boolean(modals.remove) && isAdmin && !isReadOnly}
           value={modals.remove}
           closeModal={toggleModal('remove')}
           handleRemove={handleRemove}
@@ -49,8 +67,12 @@ const EnodeTab = ({
 );
 
 EnodeTab.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.object).isRequired,
-  modals: PropTypes.object.isRequired,
+  list: PropTypes.array.isRequired,
+  modals: PropTypes.shape({
+    add: PropTypes.bool.isRequired,
+    remove: PropTypes.oneOfType([PropTypes.string]).isRequired,
+    lock: PropTypes.bool.isRequired
+  }).isRequired,
   toggleModal: PropTypes.func.isRequired,
   handleAdd: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,

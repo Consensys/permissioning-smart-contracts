@@ -9,19 +9,23 @@ import EnodeRow from './Row';
 import EmptyRow from './EmptyRow';
 // Styles
 import styles from './styles.module.scss';
+import { Enode } from '../../util/enodetools';
 
-const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, isReadOnly }) => (
+type EnodeTable = {
+  list: (Enode & { identifier: string; status: string })[];
+  toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
+  deleteTransaction: (identifier: string) => void;
+  isAdmin: boolean;
+  isReadOnly: boolean;
+};
+
+const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction, isAdmin }) => (
   <Box mt={5}>
-    <EnodeTableHeader
-      number={list.length}
-      openAddModal={toggleModal('add')}
-      disabledAdd={!isAdmin}
-      isReadOnly={isReadOnly}
-    />
+    <EnodeTableHeader number={list.length} openAddModal={toggleModal('add')} disabledAdd={!isAdmin} />
     <Table mt={4}>
       <thead>
         <tr>
-          <th colSpan="2" className={styles.headerCell}>
+          <th colSpan={2} className={styles.headerCell}>
             Node ID
           </th>
           <th className={styles.headerCell}>IP Address</th>
@@ -36,7 +40,6 @@ const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, isReadOnly 
             isAdmin={isAdmin}
             deleteTransaction={deleteTransaction}
             openRemoveModal={toggleModal('remove')}
-            isReadOnly={isReadOnly}
             {...enode}
           />
         ))}
@@ -47,11 +50,10 @@ const EnodeTable = ({ list, toggleModal, deleteTransaction, isAdmin, isReadOnly 
 );
 
 EnodeTable.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  list: PropTypes.array.isRequired,
   toggleModal: PropTypes.func.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
-  isReadOnly: PropTypes.bool.isRequired
+  isAdmin: PropTypes.bool.isRequired
 };
 
 export default EnodeTable;

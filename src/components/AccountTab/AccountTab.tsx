@@ -19,11 +19,10 @@ type AccountTab = {
   handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
   isAdmin: boolean;
-  deleteTransaction: () => void;
+  deleteTransaction: (identifier: string) => void;
   isValid: (address: string) => { valid: boolean };
   isOpen: boolean;
   isReadOnly: boolean;
-  pendingLock: boolean;
 };
 
 const AccountTab: React.FC<AccountTab> = ({
@@ -36,8 +35,7 @@ const AccountTab: React.FC<AccountTab> = ({
   deleteTransaction,
   isValid,
   isOpen,
-  isReadOnly,
-  pendingLock
+  isReadOnly
 }) => (
   <Fragment>
     {isOpen && (
@@ -47,7 +45,6 @@ const AccountTab: React.FC<AccountTab> = ({
           toggleModal={toggleModal}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
-          pendingLock={pendingLock}
           isReadOnly={isReadOnly}
         />
         <AddModal
@@ -82,7 +79,6 @@ AccountTab.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
   isValid: PropTypes.func.isRequired,
-  pendingLock: PropTypes.bool.isRequired,
   isReadOnly: PropTypes.bool.isRequired
 };
 
