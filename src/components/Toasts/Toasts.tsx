@@ -9,23 +9,27 @@ import SuccessToast from './Success';
 import { PENDING, SUCCESS, FAIL } from '../../constants/transactions';
 // Rimble Components
 import { Flex } from 'rimble-ui';
+import { Toast } from '../../context/toasts';
 
-const Toasts = ({ toasts, closeToast }) => (
+type Toasts = {
+  toasts: Toast[];
+  closeToast: (identifier: string) => () => void;
+};
+
+const Toasts: React.FC<Toasts> = ({ toasts, closeToast }) => (
   <Flex position="absolute" bottom="50px" right="50px" flexDirection="column">
     {toasts.map(({ status, identifier, ...messages }, index) => (
       <Fragment key={index}>
         {status === PENDING && <PendingToast {...messages} closeToast={closeToast(identifier)} />}
         {status === FAIL && <ErrorToast {...messages} closeToast={closeToast(identifier)} />}
-        {status === SUCCESS && (
-          <SuccessToast position="absolute" bottom="0" {...messages} closeToast={closeToast(identifier)} />
-        )}
+        {status === SUCCESS && <SuccessToast {...messages} closeToast={closeToast(identifier)} />}
       </Fragment>
     ))}
   </Flex>
 );
 
 Toasts.propTypes = {
-  toasts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  toasts: PropTypes.array.isRequired,
   closeToast: PropTypes.func.isRequired
 };
 

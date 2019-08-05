@@ -13,6 +13,8 @@ type SuccessToast = {
 
 const SuccessToast: React.FC<SuccessToast> = ({ message, closeToast }) => (
   <ToastMessage.Success
+    bottom="0"
+    postition="absolute"
     minWidth="300px"
     zIndex="2"
     message={message}

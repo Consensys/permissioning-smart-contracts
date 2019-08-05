@@ -4,11 +4,11 @@ import { useState, useCallback } from 'react';
 export default () => {
   const [modals, setModals] = useState<{
     add: boolean;
-    remove: string | boolean;
+    remove: string;
     lock: boolean;
   }>({
     add: false,
-    remove: false,
+    remove: '',
     lock: false
   });
 

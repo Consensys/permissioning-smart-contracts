@@ -3,7 +3,7 @@ import React, { useContext, useState, createContext, useMemo, useCallback } from
 // Hooks
 import useTimeout from './useTimeout';
 
-type Toast = {
+export type Toast = {
   identifier: string;
   status: string;
   message: string;
