@@ -8,9 +8,7 @@ void tryAddKnownHost(String hostUrl){
 }
 
 pipeline {
-    agent {
-        docker { image 'node:10-alpine' }
-    }
+    agent none
     environment {
         CI = 'true'
     }
@@ -20,12 +18,18 @@ pipeline {
 
     stages {
         stage('Setup') {
+            agent {
+                docker { image 'node:10-alpine' }
+            }
             steps {
                 sh 'apk add git python make g++ libc6-compat zip openssh'
                 sh 'yarn install'
             }
         }
         stage('Test') {
+            agent {
+                docker { image 'node:10-alpine' }
+            }
             steps {
                 sh 'yarn build:contracts'
                 sh 'yarn test:contracts'
@@ -33,6 +37,9 @@ pipeline {
             }
         }
         stage('Bump Version') {
+            agent {
+                docker { image 'node:10-alpine' }
+            }
             steps {
                 sshagent(
                     credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
@@ -49,11 +56,17 @@ pipeline {
             }
         }
         stage('Build') {
+            agent {
+                docker { image 'node:10-alpine' }
+            }
             steps {
                 sh 'GENERATE_SOURCEMAP=false yarn run build'
             }
         }
         stage('Prep bundles') {
+            agent {
+                docker { image 'node:10-alpine' }
+            }
             steps {
                 sh "cd build && tar -czvf ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz * && cd .."
                 sh "cd build && zip -r ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip * && cd .."
@@ -61,6 +74,9 @@ pipeline {
             }
         }
         stage('Create Release') {
+            agent {
+                docker { image 'node:10-alpine' }
+            }
             steps {
                 sshagent(
                     credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
