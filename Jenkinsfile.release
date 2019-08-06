@@ -102,7 +102,7 @@ pipeline {
                             sh "ls -alh"
                             sh "ls -alh docker"
                             // sh "docker build -t pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION} docker"
-                            image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "-f docker/dockerfile .")
+                            image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "-f docker/Dockerfile .")
                             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
                                 image.push()
                                 // sh "docker push pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}"
