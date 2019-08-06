@@ -49,7 +49,7 @@ const AdminTab: React.FC<AdminTab> = ({
         />
         <AddModal
           isOpen={modals.add && isAdmin}
-          closeModal={toggleModal('add')}
+          closeModal={() => toggleModal('add')(false)}
           handleAdd={handleAdd}
           display={addAdminDisplay}
           isValid={isValid}
@@ -57,7 +57,7 @@ const AdminTab: React.FC<AdminTab> = ({
         <RemoveModal
           isOpen={Boolean(modals.remove) && isAdmin}
           value={modals.remove}
-          closeModal={toggleModal('remove')}
+          closeModal={() => toggleModal('remove')(false)}
           handleRemove={handleRemove}
           display={removeAdminDisplay(modals.remove)}
         />

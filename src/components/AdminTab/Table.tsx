@@ -19,7 +19,7 @@ type AdminTable = {
 
 const AdminTable: React.FC<AdminTable> = ({ list, toggleModal, deleteTransaction, isAdmin, userAddress }) => (
   <Box mt={5}>
-    <AdminTableHeader number={list.length} openAddModal={toggleModal('add')} disabledAdd={!isAdmin} />
+    <AdminTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
     <Table mt={4}>
       <thead>
         <tr>

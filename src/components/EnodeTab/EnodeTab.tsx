@@ -49,7 +49,7 @@ const EnodeTab: React.FC<EnodeTab> = ({
         />
         <AddModal
           isOpen={modals.add && isAdmin && !isReadOnly}
-          closeModal={toggleModal('add')}
+          closeModal={() => toggleModal('add')(false)}
           handleAdd={handleAdd}
           display={addEnodeDisplay}
           isValid={isValid}
@@ -57,7 +57,7 @@ const EnodeTab: React.FC<EnodeTab> = ({
         <RemoveModal
           isOpen={Boolean(modals.remove) && isAdmin && !isReadOnly}
           value={modals.remove}
-          closeModal={toggleModal('remove')}
+          closeModal={() => toggleModal('remove')(false)}
           handleRemove={handleRemove}
           display={removeEnodeDisplay(modals.remove)}
         />

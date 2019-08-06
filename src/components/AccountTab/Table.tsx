@@ -20,7 +20,11 @@ type AccountTable = {
 
 const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransaction, isAdmin, isReadOnly }) => (
   <Box mt={5}>
-    <AccountTableHeader number={list.length} openAddModal={toggleModal('add')} disabledAdd={!isAdmin || isReadOnly} />
+    <AccountTableHeader
+      number={list.length}
+      openAddModal={() => toggleModal('add')(true)}
+      disabledAdd={!isAdmin || isReadOnly}
+    />
     <Table mt={4}>
       <thead>
         <tr>
