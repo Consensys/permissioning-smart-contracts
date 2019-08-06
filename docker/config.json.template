@@ -1,0 +1,5 @@
+{
+        "accountIngressAddress":  "${ACCOUNT_INGRESS_CONTRACT_ADDRESS}",
+        "nodeIngressAddress": "${NODE_INGRESS_CONTRACT_ADDRESS}",
+        "networkId": "${NETWORK_ID}"
+}

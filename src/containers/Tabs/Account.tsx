@@ -37,16 +37,10 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
   const { whitelist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
 
-  const {
-    list,
-    modals,
-    toggleModal,
-    transactions,
-    addTransaction,
-    updateTransaction,
-    deleteTransaction,
-    openToast
-  } = useTab(whitelist, (identifier: string) => ({ address: identifier }));
+  const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
+    whitelist,
+    (identifier: string) => ({ address: identifier })
+  );
 
   if (!!accountRulesContract) {
     const handleAdd = async (value: string) => {
@@ -142,7 +136,6 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
           isValid={isValidAccount}
           isOpen={isOpen}
           isReadOnly={isReadOnly!}
-          pendingLock={!!transactions.get('lock')}
         />
       );
     } else if (isOpen && !allDataReady) {

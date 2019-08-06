@@ -25,3 +25,15 @@ export const providerFactory = async () => {
 
   return provider;
 };
+
+export const listenForAccountChange = async (callback: (address: string) => void) => {
+  const web3 = await web3Factory();
+  let account = (await web3.eth.getAccounts())[0];
+  setInterval(async function() {
+    const newAccount = (await web3.eth.getAccounts())[0];
+    if (newAccount !== account) {
+      account = newAccount;
+      callback(account);
+    }
+  }, 100);
+};

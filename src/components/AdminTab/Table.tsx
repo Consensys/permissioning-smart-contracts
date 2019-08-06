@@ -12,7 +12,7 @@ import styles from './styles.module.scss';
 type AdminTable = {
   list: { address: string; status: string }[];
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
-  deleteTransaction: () => void;
+  deleteTransaction: (identifer: string) => void;
   isAdmin: boolean;
   userAddress?: string;
 };
