@@ -38,6 +38,7 @@ module.exports = async(deployer, network) => {
     let accountRulesContract = await Rules.deployed();
 
     if (WhitelistUtils.isInitialWhitelistedAccountsAvailable()) {
+        console.log("   > Adding Initial Whitelisted Accounts ...");
         let whitelistedAccounts = WhitelistUtils.getInitialWhitelistedAccounts();
         if (whitelistedAccounts.length > 0) {
             let accountsAddedResult = await accountRulesContract.addAccounts(whitelistedAccounts);

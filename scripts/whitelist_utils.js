@@ -76,14 +76,18 @@ function getInitialWhitelistedNodes() {
             for (i=0; i < initialWhitelistedNodesList.length; i++) {
                 let enode = initialWhitelistedNodesList[i];
                 if (isValidEnode(enode)) {
-                    validENodes.add(enode);
+                    if(validENodes.has(enode)) {
+                        console.log("     > Warning: Duplicate eNode Address: " + enode);
+                    } else {
+                        validENodes.add(enode);
+                    }
                 } else {
                     invalidENodes.add(enode);
                 }
             }
 
             if (invalidENodes.size > 0) {
-                throw "Invalid eNode URLs: " + [...invalidENodes];
+                throw "" + [...invalidENodes];
             }
         }  
     } 
@@ -93,6 +97,7 @@ function getInitialWhitelistedNodes() {
 function getAccounts(accounts) {
     if (accounts) {
         let invalidAccounts = new Set();
+        let validAccounts = new Set();
         let accountsArray = accounts.split(/,/).map(
             function(acc) {
                 let trimmedAcc = acc.trim();
@@ -108,11 +113,19 @@ function getAccounts(accounts) {
         );
 
         if(invalidAccounts.size > 0) {
-            throw "Invalid Addresses: " + [...invalidAccounts];
+            throw "" + [...invalidAccounts];
         }
 
-        if (accountsArray && accountsArray.length > 0) {
-            return [...new Set(accountsArray)]; //avoid duplicates
+        for (i=0; i < accountsArray.length; i++) {
+            if (validAccounts.has(accountsArray[i])) {
+                console.log("     > Warning: Duplicate address: " + accountsArray[i]);
+            } else {
+                validAccounts.add(accountsArray[i]);
+            }
+        }
+
+        if (validAccounts.size > 0) {
+            return [...validAccounts];
         }    
     }
     

@@ -9,6 +9,7 @@ module.exports = async(deployer, network) => {
     let instance = await Admin.deployed();
 
     if(WhitelistUtils.isInitialAdminAccountsAvailable()) {
+        console.log("   > Adding Initial Admin Accounts ...");
         let initialAdminAccounts = WhitelistUtils.getInitialAdminAccounts();
         if (initialAdminAccounts.length > 0) {
             let adminAddedResult = await instance.addAdmins(initialAdminAccounts);

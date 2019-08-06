@@ -43,6 +43,7 @@ module.exports = async(deployer, network) => {
     console.log("   > Updated NodeIngress contract with NodeRules address = " + NodeRules.address);
 
     if(WhitelistUtils.isInitialWhitelistedNodesAvailable()) {
+        console.log("   > Adding Initial Whitelisted eNodes ...");
         let whitelistedNodes = WhitelistUtils.getInitialWhitelistedNodes();
         for (i = 0; i < whitelistedNodes.length; i++) {
             let enode = whitelistedNodes[i];
@@ -54,7 +55,7 @@ module.exports = async(deployer, network) => {
                 Web3Utils.hexToBytes(ip),    
                 Web3Utils.toBN(port)
             );
-            console.log("   > Initial Whitelisted Node added: " + enode );
+            console.log("     > eNode added: " + enode );
         }
     }
 }
