@@ -84,8 +84,8 @@ pipeline {
             }
         }
         stage('Build docker image') {
-            node {
-                steps {
+            steps {
+                node {
                     script {
                         checkout scm
                         docker.image('docker:18.06.0-ce-dind').withRun('--privileged') { d ->
