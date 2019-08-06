@@ -35,7 +35,7 @@ pipeline {
         stage('Bump Version') {
             steps {
                 sshagent(
-                    credentials: ['pegasys-admin-github-ssh-private-key']
+                    credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
                 ) {
                     withEnv([
                         'GIT_COMMITTER_NAME="PegaSys Admin"',
@@ -57,12 +57,13 @@ pipeline {
             steps {
                 sh "cd build && tar -czvf ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz * && cd .."
                 sh "cd build && zip -r ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip * && cd .."
+                stash name: 'built', includes: 'build/**'
             }
         }
         stage('Create Release') {
             steps {
                 sshagent(
-                    credentials: ['pegasys-admin-github-ssh-private-key']
+                    credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
                 ) {
                     withEnv([
                         'GIT_COMMITTER_NAME="PegaSys Admin"',
@@ -71,8 +72,29 @@ pipeline {
                         'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
                     ]) {
                         tryAddKnownHost('github.com')
-                        sh "git push --set-upstream origin master"
+                        sh "git push --set-upstream origin feature/OP-65.deployment_docker_image" //master"
                         sh "git push --tags"
+                    }
+                }
+            }
+        }
+        stage('Build docker image') {
+            steps {
+                script {
+                    node {
+                        checkout scm
+                        docker.image('docker:18.06.0-ce-dind').withRun('--privileged') { d ->
+                            docker.image('docker:18.06.0-ce').inside("--link ${d.id}:docker") {
+                                unstash 'built'
+                                image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "--build-arg docker")
+                                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
+                                    image.push()
+                                    additional_tags.split(',').each {
+                                        image.push(it)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
