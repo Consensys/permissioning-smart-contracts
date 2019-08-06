@@ -101,14 +101,15 @@ pipeline {
                             sh "pwd"
                             sh "ls -alh"
                             sh "ls -alh docker"
-                            sh "docker build -t pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION} docker"
-                            // image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "docker")
+                            // sh "docker build -t pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION} docker"
+                            image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "-f docker/dockerfile .")
                             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
-                                // image.push()
-                                sh "docker push pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}"
+                                image.push()
+                                // sh "docker push pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}"
                                 additional_tags.split(',').each {
-                                    sh "docker tag pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION} pegasyseng/permissioning-smart-contracts-dapp:${it}"
-                                    sh "docker push pegasyseng/permissioning-smart-contracts-dapp:${it}"
+                                    image.push(it)
+                                    // sh "docker tag pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION} pegasyseng/permissioning-smart-contracts-dapp:${it}"
+                                    // sh "docker push pegasyseng/permissioning-smart-contracts-dapp:${it}"
                                 }
                             }
                         }
