@@ -84,9 +84,7 @@ pipeline {
             }
         }
         stage('Build docker image') {
-            agent {
-                any
-            }
+            agent any
             steps {
                 script {
                     checkout scm
