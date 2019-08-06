@@ -101,8 +101,10 @@ pipeline {
                             image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "-f docker/Dockerfile .")
                             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
                                 image.push()
-                                additional_tags.split(',').each {
-                                    image.push(it)
+                                if (additional_tags != "") {
+                                    additional_tags.split(',').each {
+                                        image.push(it)
+                                    }
                                 }
                             }
                         }
