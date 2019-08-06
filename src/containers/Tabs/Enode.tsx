@@ -61,7 +61,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
           utils.hexlify(ip),
           utils.bigNumberify(port)
         );
-        toggleModal('add')();
+        toggleModal('add')(false);
         addTransaction(identifier, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
         const addEvent = receipt.events!.filter(e => e.event && e.event === 'NodeAdded').pop();
@@ -79,7 +79,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         }
         deleteTransaction(value);
       } catch (e) {
-        toggleModal('add')();
+        toggleModal('add')(false);
         updateTransaction(identifier, FAIL_ADDITION);
         errorToast(e, identifier, openToast, () =>
           openToast(
@@ -110,13 +110,13 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
             gasLimit: est.toNumber() * 2
           }
         );
-        toggleModal('remove')();
+        toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
         openToast(value, SUCCESS, `Removal of whitelisted node processed: ${enodeHigh}${enodeLow}`);
         deleteTransaction(value);
       } catch (e) {
-        toggleModal('remove')();
+        toggleModal('remove')(false);
         updateTransaction(value, FAIL_REMOVAL);
         errorToast(e, value, openToast, () =>
           openToast(

@@ -43,7 +43,7 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
     const handleAdd = async (value: string) => {
       try {
         const tx = await adminContract!.functions.addAdmin(value);
-        toggleModal('add')();
+        toggleModal('add')(false);
         addTransaction(value, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
         const addEvent = receipt.events!.filter(e => e.event && e.event === 'AdminAdded').pop();
@@ -74,13 +74,13 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
       try {
         const est = await adminContract!.estimate.removeAdmin(value);
         const tx = await adminContract!.functions.removeAdmin(value, { gasLimit: est.toNumber() * 2 });
-        toggleModal('remove')();
+        toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
         openToast(value, SUCCESS, `Removal of admin account processed: ${value}`);
         deleteTransaction(value);
       } catch (e) {
-        toggleModal('remove')();
+        toggleModal('remove')(false);
         updateTransaction(value, FAIL_REMOVAL);
         errorToast(e, value, openToast, () =>
           openToast(
