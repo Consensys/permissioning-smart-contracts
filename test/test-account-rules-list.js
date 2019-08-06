@@ -79,6 +79,21 @@ contract("AccountRulesList (list manipulation)", async () => {
     assert.equal(size, 1);
   });
 
+  it("add multiple addresses to list should add to the list and increase list size", async () => {
+    let exists = await rulesListContract._exists(address3);
+    assert.notOk(exists);
+    let size = await rulesListContract._size();
+    assert.equal(size, 0);
+
+    let addresses = [address1, address2, address3];
+    await rulesListContract._addAll(addresses);
+
+    exists = await rulesListContract._exists(address3);
+    assert.ok(exists);
+    size = await rulesListContract._size();
+    assert.equal(size, 3);
+  });
+
   it("add existing address should do nothing on second insert", async () => {
     await rulesListContract._add(address3);
     await rulesListContract._add(address3);
@@ -146,5 +161,23 @@ contract("AccountRulesList (list manipulation)", async () => {
 
     result = await rulesListContract._get(2);
     assert.equal(result[1].toLowerCase(), address3.toLowerCase());
+  });
+
+  it("getAll return empty array when account list is empty", async () => {
+    let returnedAddresses = await rulesListContract._getAll();
+    assert.isEmpty(returnedAddresses);
+  });
+
+  it("getAll return all accounts in expected order", async () => {
+    let addresses = [ address1, address2, address3 ];
+
+    await rulesListContract._add(addresses[0]);
+    await rulesListContract._add(addresses[1]);
+    await rulesListContract._add(addresses[2]);
+
+    let returnedAddresses = await rulesListContract._getAll();
+    assert.equal(returnedAddresses[0].toLowerCase(), address1);
+    assert.equal(returnedAddresses[1].toLowerCase(), address2);
+    assert.equal(returnedAddresses[2].toLowerCase(), address3);
   });
 });

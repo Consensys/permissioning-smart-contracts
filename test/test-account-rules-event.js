@@ -10,7 +10,7 @@ var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
 
 const newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
-contract("Account Rules (Events)", (accounts) => {
+contract("Account Rules (Events & Management)", (accounts) => {
     let ingressContract;
     let rulesContract;
     let adminContract;
@@ -30,12 +30,38 @@ contract("Account Rules (Events)", (accounts) => {
       await rulesContract.removeAccount(initialAccount);
     });
 
-    it("Should emit an event when an account is added", async () => {
+    it("Should return contract version", async () => {
+        let result = await rulesContract.getContractVersion.call();
+        assert.isNotNull(result);
+    });
+
+    it("getAccounts return empty array when account list is empty", async () => {
+        let returnedAddresses = await rulesContract.getAccounts();
+        assert.isEmpty(returnedAddresses);
+    });
+
+    it("Should emit an event when an account is added", async () => {   
         // Add an account
         await rulesContract.addAccount(address1);
 
         // Attempt to add a duplicate entry
         await rulesContract.addAccount(address1);
+
+        // Get the events
+        let result = await rulesContract.getPastEvents("AccountAdded", {fromBlock: 0, toBlock: "latest" });
+
+        // Verify the successful AccountAdded event is 'true'
+        assert.equal(result[0].returnValues.accountAdded, true, "accountAdded SHOULD be true");
+        assert.equal(result[0].returnValues.accountAddress.toLowerCase(), address1, "account address SHOULD be " + address1);
+
+        // Verify the unsuccessful duplicate AccountAdded event is 'false'
+        assert.equal(result[1].returnValues.accountAdded, false, "duplicate accountAdded SHOULD be false");
+        assert.equal(result[1].returnValues.accountAddress.toLowerCase(), address1, "duplicate account address SHOULD be " + address1);
+    });
+
+    it("Should emit events when multiple accounts are added", async () => {
+        // Add an account (and duplicate of it)
+        await rulesContract.addAccounts([address1,address1]);
 
         // Get the events
         let result = await rulesContract.getPastEvents("AccountAdded", {fromBlock: 0, toBlock: "latest" });

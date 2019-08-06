@@ -63,8 +63,13 @@ The deployment process covers 3 steps:
   - `PANTHEON_NODE_PERM_ACCOUNT`: The address of the account that will be used to deploy the contracts
   - `PANTHEON_NODE_PERM_KEY`: The private key associated with the deploying account's address
   - `PANTHEON_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Pantheon node
-2. If this is the first time setting up the project, run `yarn install` to initialise project dependencies, otherwise skip this step. 
-3. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
+
+2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment. 
+  - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
+  - `INITIAL_WHITELISTED_ACCOUNTS`: The whitelisted account addresses. Comma separated multiple addresses can be specified
+  - `INITIAL_WHITELISTED_NODES`: The enode URLs of whitelisted nodes. Comma separated multiple nodes can be specified
+3. If this is the first time setting up the project, run `yarn install` to initialise project dependencies, otherwise skip this step. 
+4. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
 1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest)

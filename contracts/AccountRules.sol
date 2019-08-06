@@ -8,16 +8,6 @@ import "./Admin.sol";
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
 
-    event AccountAdded(
-        bool accountAdded,
-        address accountAddress
-    );
-
-    event AccountRemoved(
-        bool accountRemoved,
-        address accountAddress
-    );
-
     // in read-only mode rules can't be added/removed
     bool readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
@@ -114,5 +104,13 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         if (_exists) {
             return (_account);
         }
+    }
+
+    function getAccounts() public view returns (address[] memory){
+        return getAll();
+    }
+
+    function addAccounts(address[] memory accounts) public onlyAdmin returns (bool) {
+        return addAll(accounts);
     }
 }

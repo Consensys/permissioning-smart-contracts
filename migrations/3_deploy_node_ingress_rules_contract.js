@@ -1,4 +1,5 @@
 const Web3Utils = require("web3-utils");
+const WhitelistUtils = require('../scripts/whitelist_utils');
 
 const NodeRules = artifacts.require("./NodeRules.sol");
 const NodeIngress = artifacts.require("./NodeIngress.sol");
@@ -34,6 +35,27 @@ module.exports = async(deployer, network) => {
 
     await deployer.deploy(NodeRules, nodeIngress);
     console.log("   > NodeRules deployed with NodeIngress.address = " + nodeIngress);
+    let nodeRulesContract = await NodeRules.deployed();
+
+    
+
     await nodeIngressInstance.setContractAddress(rulesContractName, NodeRules.address);
     console.log("   > Updated NodeIngress contract with NodeRules address = " + NodeRules.address);
+
+    if(WhitelistUtils.isInitialWhitelistedNodesAvailable()) {
+        console.log("   > Adding Initial Whitelisted eNodes ...");
+        let whitelistedNodes = WhitelistUtils.getInitialWhitelistedNodes();
+        for (i = 0; i < whitelistedNodes.length; i++) {
+            let enode = whitelistedNodes[i];
+            const { enodeHigh, enodeLow, ip, port } = WhitelistUtils.enodeToParams(enode);
+            
+            let result = await nodeRulesContract.addEnode(
+                Web3Utils.hexToBytes(enodeHigh),
+                Web3Utils.hexToBytes(enodeLow),
+                Web3Utils.hexToBytes(ip),    
+                Web3Utils.toBN(port)
+            );
+            console.log("     > eNode added: " + enode );
+        }
+    }
 }

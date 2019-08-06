@@ -21,11 +21,19 @@ contract ExposedAccountRulesList is AccountRulesList {
         return add(_account);
     }
 
+    function _addAll(address[] memory accounts) public returns (bool) {
+        return addAll(accounts);
+    }
+
     function _remove(address _account) public returns (bool) {
         return remove(_account);
     }
 
     function _get(uint _index) public view returns (bool _found, address _account) {
         return get(_index);
+    }
+
+    function _getAll() public view returns (address[] memory) {
+        return getAll();
     }
 }
