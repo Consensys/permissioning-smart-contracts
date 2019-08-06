@@ -49,7 +49,7 @@ const AccountTab: React.FC<AccountTab> = ({
         />
         <AddModal
           isOpen={Boolean(modals.add) && isAdmin}
-          closeModal={toggleModal('add')}
+          closeModal={() => toggleModal('add')(false)}
           handleAdd={handleAdd}
           display={addAccountDisplay}
           isValid={isValid}
@@ -57,7 +57,7 @@ const AccountTab: React.FC<AccountTab> = ({
         <RemoveModal
           isOpen={Boolean(modals.remove) && isAdmin}
           value={modals.remove}
-          closeModal={toggleModal('remove')}
+          closeModal={() => toggleModal('remove')(false)}
           handleRemove={handleRemove}
           display={removeAccountDisplay(modals.remove)}
         />
