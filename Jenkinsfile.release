@@ -50,7 +50,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'yarn run build'
+                sh 'GENERATE_SOURCEMAP=false yarn run build'
             }
         }
         stage('Prep bundles') {
