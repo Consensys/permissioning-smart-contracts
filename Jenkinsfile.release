@@ -81,17 +81,14 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    node {
-                        checkout scm
-                        docker.image('docker:18.06.0-ce-dind').withRun('--privileged') { d ->
-                            docker.image('docker:18.06.0-ce').inside("--link ${d.id}:docker") {
-                                unstash 'built'
-                                image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "--build-arg docker")
-                                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
-                                    image.push()
-                                    additional_tags.split(',').each {
-                                        image.push(it)
-                                    }
+                    docker.image('docker:18.06.0-ce-dind').withRun('--privileged') { d ->
+                        docker.image('docker:18.06.0-ce').inside("--link ${d.id}:docker") {
+                            unstash 'built'
+                            image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "--build-arg docker")
+                            docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
+                                image.push()
+                                additional_tags.split(',').each {
+                                    image.push(it)
                                 }
                             }
                         }
