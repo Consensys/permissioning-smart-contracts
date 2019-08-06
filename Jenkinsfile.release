@@ -98,18 +98,11 @@ pipeline {
                     docker.image('docker:18.06.0-ce-dind').withRun('--privileged') { d ->
                         docker.image('docker:18.06.0-ce').inside("--link ${d.id}:docker") {
                             unstash 'built'
-                            sh "pwd"
-                            sh "ls -alh"
-                            sh "ls -alh docker"
-                            // sh "docker build -t pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION} docker"
                             image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "-f docker/Dockerfile .")
                             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
                                 image.push()
-                                // sh "docker push pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}"
                                 additional_tags.split(',').each {
                                     image.push(it)
-                                    // sh "docker tag pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION} pegasyseng/permissioning-smart-contracts-dapp:${it}"
-                                    // sh "docker push pegasyseng/permissioning-smart-contracts-dapp:${it}"
                                 }
                             }
                         }
