@@ -3,6 +3,7 @@ import React, { createContext, useContext, useMemo, useState, useEffect } from '
 import { Admin } from '../chain/@types/Admin';
 import { adminFactory } from '../chain/contracts/Admin';
 import { useNetwork } from './network';
+import { listenForAccountChange } from '../chain/provider';
 
 type ContextType =
   | {
@@ -70,6 +71,10 @@ export const AdminDataProvider: React.FC = (props: React.Props<{}>) => {
       ingressContract.signer.getAddress().then(setUserAddress);
     }
   }, [accountIngressContract, nodeIngressContract, setAdmins, setUserAddress]);
+
+  useEffect(() => {
+    listenForAccountChange(setUserAddress);
+  }, [setUserAddress]);
 
   return <AdminDataContext.Provider value={value} {...props} />;
 };
