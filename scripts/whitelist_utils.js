@@ -1,8 +1,5 @@
 const Web3Utils = require("web3-utils");
 
-/* Optional initial Whitelisted Nodes */
-let envInitialWhitelistedNodes = process.env.INITIAL_WHITELISTED_NODES;
-
 const enodeToParams = enodeURL => {
     let enodeHigh = "";
     let enodeLow = "";
@@ -36,36 +33,27 @@ const isValidEnode = str => {
 };
 
 function isInitialAdminAccountsAvailable() {
-    if (process.env.INITIAL_ADMIN_ACCOUNTS) {
-        return true;
-    }
-    return false;
+    return process.env.INITIAL_ADMIN_ACCOUNTS;
 }
 
 function isInitialWhitelistedAccountsAvailable() {
-    if (process.env.INITIAL_WHITELISTED_ACCOUNTS) {
-        return true;
-    }
-    return false;
+    return process.env.INITIAL_WHITELISTED_ACCOUNTS;
 }
 
 function isInitialWhitelistedNodesAvailable() {
-    if (process.env.INITIAL_WHITELISTED_NODES) {
-        return true;
-    }
-
-    return false;
+    return process.env.INITIAL_WHITELISTED_NODES;
 }
 
 function getInitialAdminAccounts() {
-    return getAccounts(process.env.INITIAL_ADMIN_ACCOUNTS);
+    return getAccounts(isInitialAdminAccountsAvailable());
 }
 
 function getInitialWhitelistedAccounts() {
-    return getAccounts(process.env.INITIAL_WHITELISTED_ACCOUNTS);
+    return getAccounts(isInitialWhitelistedAccountsAvailable());
 }
 
 function getInitialWhitelistedNodes() {
+    let envInitialWhitelistedNodes = isInitialWhitelistedNodesAvailable();
     let validENodes = new Set();
     if (envInitialWhitelistedNodes) {
         let invalidENodes = new Set();
