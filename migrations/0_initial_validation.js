@@ -1,28 +1,28 @@
-const whitelist_utils = require('../scripts/whitelist_utils');
+const WhitelistUtils = require('../scripts/whitelist_utils');
 
 module.exports = function(deployer) {
     console.log("   > Initial validations ...");
-    if (whitelist_utils.isInitialAdminAccountsAvailable()) {
+    if (WhitelistUtils.isInitialAdminAccountsAvailable()) {
         try {
-            whitelist_utils.getInitialAdminAccounts();
+            WhitelistUtils.getInitialAdminAccounts();
         } catch (e) {
             console.log("   > Invalid Initial Admin Accounts: " + e);
             throw e;
         }
     }
 
-    if (whitelist_utils.isInitialWhitelistedAccountsAvailable()) {
+    if (WhitelistUtils.isInitialWhitelistedAccountsAvailable()) {
         try {
-            whitelist_utils.getInitialWhitelistedAccounts();
+            WhitelistUtils.getInitialWhitelistedAccounts();
         } catch (e) {
             console.log("   > Invalid Initial Whitelisted Accounts: " + e);
             throw e;
         }
     }
 
-    if (whitelist_utils.isInitialWhitelistedNodesAvailable()) {
+    if (WhitelistUtils.isInitialWhitelistedNodesAvailable()) {
         try {
-            whitelist_utils.getInitialWhitelistedNodes();
+            WhitelistUtils.getInitialWhitelistedNodes();
         } catch (e) {
             console.log("   > Invalid Initial Whitelisted Nodes: " + e);
             throw e;

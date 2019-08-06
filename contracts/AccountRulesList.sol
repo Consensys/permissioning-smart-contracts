@@ -43,15 +43,10 @@ contract AccountRulesList {
 
     function addAll(address[] memory accounts) internal returns (bool) {
         bool allAdded = true;
-        for (uint i = 0; i<accounts.length; i++) {
-            if (!exists(accounts[i])) {
-                bool added = add(accounts[i]);
-                emit AccountAdded(added, accounts[i]);
-                allAdded = allAdded && added;
-            } else {
-                allAdded = allAdded && false;
-                emit AccountAdded(false, accounts[i]);
-            }
+        for (uint i = 0; i < accounts.length; i++) {
+            bool added = add(accounts[i]);
+            emit AccountAdded(added, accounts[i]);
+            allAdded = allAdded && added;
         }
 
         return allAdded;
