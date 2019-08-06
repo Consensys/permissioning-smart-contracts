@@ -17,79 +17,68 @@ pipeline {
     }
 
     stages {
-        stage('Setup') {
+        stage('JS Stages') {
             agent {
                 docker { image 'node:10-alpine' }
             }
-            steps {
-                sh 'apk add git python make g++ libc6-compat zip openssh'
-                sh 'yarn install'
-            }
-        }
-        stage('Test') {
-            agent {
-                docker { image 'node:10-alpine' }
-            }
-            steps {
-                sh 'yarn build:contracts'
-                sh 'yarn test:contracts'
-                sh 'yarn test:app:ci'
-            }
-        }
-        stage('Bump Version') {
-            agent {
-                docker { image 'node:10-alpine' }
-            }
-            steps {
-                sshagent(
-                    credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
-                ) {
-                    withEnv([
-                        'GIT_COMMITTER_NAME="PegaSys Admin"',
-                        'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
-                        'GIT_AUTHOR_NAME="PegaSys Admin"',
-                        'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
-                    ]) {
-                        sh "yarn version --new-version ${params.RELEASE_VERSION}"
+            stages {
+                stage('Setup') {
+                    steps {
+                        sh 'apk add git python make g++ libc6-compat zip openssh'
+                        sh 'yarn install'
                     }
                 }
-            }
-        }
-        stage('Build') {
-            agent {
-                docker { image 'node:10-alpine' }
-            }
-            steps {
-                sh 'GENERATE_SOURCEMAP=false yarn run build'
-            }
-        }
-        stage('Prep bundles') {
-            agent {
-                docker { image 'node:10-alpine' }
-            }
-            steps {
-                sh "cd build && tar -czvf ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz * && cd .."
-                sh "cd build && zip -r ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip * && cd .."
-                stash name: 'built', includes: 'build/**'
-            }
-        }
-        stage('Create Release') {
-            agent {
-                docker { image 'node:10-alpine' }
-            }
-            steps {
-                sshagent(
-                    credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
-                ) {
-                    withEnv([
-                        'GIT_COMMITTER_NAME="PegaSys Admin"',
-                        'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
-                        'GIT_AUTHOR_NAME="PegaSys Admin"',
-                        'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
-                    ]) {
-                        tryAddKnownHost('github.com')
-                        sh "git push --set-upstream origin feature/OP-65.deployment_docker_image" //master"
-                        sh "git push --tags"
+                stage('Test') {
+                    steps {
+                        sh 'yarn build:contracts'
+                        sh 'yarn test:contracts'
+                        sh 'yarn test:app:ci'
+                    }
+                }
+                stage('Bump Version') {
+                    steps {
+                        sshagent(
+                            credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
+                        ) {
+                            withEnv([
+                                'GIT_COMMITTER_NAME="PegaSys Admin"',
+                                'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
+                                'GIT_AUTHOR_NAME="PegaSys Admin"',
+                                'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
+                            ]) {
+                                sh "yarn version --new-version ${params.RELEASE_VERSION}"
+                            }
+                        }
+                    }
+                }
+                stage('Build') {
+                    steps {
+                        sh 'GENERATE_SOURCEMAP=false yarn run build'
+                    }
+                }
+                stage('Prep bundles') {
+                    steps {
+                        sh "cd build && tar -czvf ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.tar.gz * && cd .."
+                        sh "cd build && zip -r ../permissioning-smart-contracts-v${params.RELEASE_VERSION}.zip * && cd .."
+                        stash name: 'built', includes: 'build/**'
+                    }
+                }
+                stage('Create Release') {
+                    steps {
+                        sshagent(
+                            credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
+                        ) {
+                            withEnv([
+                                'GIT_COMMITTER_NAME="PegaSys Admin"',
+                                'GIT_COMMITTER_EMAIL="admin@pegasys.tech"',
+                                'GIT_AUTHOR_NAME="PegaSys Admin"',
+                                'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
+                            ]) {
+                                tryAddKnownHost('github.com')
+                                sh "git push --set-upstream origin feature/OP-65.deployment_docker_image" //master"
+                                sh "git push --tags"
+                            }
+                        }
                     }
                 }
             }
