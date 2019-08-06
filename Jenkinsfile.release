@@ -98,7 +98,9 @@ pipeline {
                     docker.image('docker:18.06.0-ce-dind').withRun('--privileged') { d ->
                         docker.image('docker:18.06.0-ce').inside("--link ${d.id}:docker") {
                             unstash 'built'
+                            sh "pwd"
                             sh "ls -alh"
+                            sh "ls -alh docker"
                             image = docker.build("pegasyseng/permissioning-smart-contracts-dapp:${params.RELEASE_VERSION}", "docker")
                             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-pegasysengci') {
                                 image.push()
