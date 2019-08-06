@@ -38,7 +38,7 @@ pipeline {
                 stage('Bump Version') {
                     steps {
                         sshagent(
-                            credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
+                            credentials: ['pegasys-admin-github-ssh-private-key']
                         ) {
                             withEnv([
                                 'GIT_COMMITTER_NAME="PegaSys Admin"',
@@ -66,7 +66,7 @@ pipeline {
                 stage('Create Release') {
                     steps {
                         sshagent(
-                            credentials: ['errorific-github-ssh-key'] //pegasys-admin-github-ssh-private-key']
+                            credentials: ['pegasys-admin-github-ssh-private-key']
                         ) {
                             withEnv([
                                 'GIT_COMMITTER_NAME="PegaSys Admin"',
@@ -75,7 +75,7 @@ pipeline {
                                 'GIT_AUTHOR_EMAIL="admin@pegasys.tech"'
                             ]) {
                                 tryAddKnownHost('github.com')
-                                sh "git push --set-upstream origin feature/OP-65.deployment_docker_image" //master"
+                                sh "git push --set-upstream origin master"
                                 sh "git push --tags"
                             }
                         }
