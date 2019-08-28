@@ -24,8 +24,4 @@ contract ExposedNodeRulesList is NodeRulesList {
     function _remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public returns (bool) {
         return remove(_enodeHigh, _enodeLow, _ip, _port);
     }
-
-    function _get(uint _index) public view returns (bool _found, bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) {
-        return get(_index);
-    }
 }
