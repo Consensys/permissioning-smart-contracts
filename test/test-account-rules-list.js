@@ -13,20 +13,6 @@ contract("AccountRulesList (list manipulation)", async () => {
     rulesListContract = await RulesList.new();
   });
 
-  it("should calculate same key for same account", async () => {
-    let key1 = new BN(await rulesListContract._calculateKey(address1));
-    let key2 = new BN(await rulesListContract._calculateKey(address1));
-
-    assert.ok(key1.eq(key2))
-  });
-
-  it("should calculate different key for different account", async () => {
-    let key1 = new BN(await rulesListContract._calculateKey(address1));
-    let key2 = new BN(await rulesListContract._calculateKey(address2));
-
-    assert.notOk(key1.eq(key2))
-  });
-
   it("should start with an empty list of rules", async () => {
     let size = await rulesListContract._size();
 
@@ -126,58 +112,9 @@ contract("AccountRulesList (list manipulation)", async () => {
     assert.notOk(exists);
   });
 
-  it("remove address in the middle of list should maintain list order", async () => {
-    await rulesListContract._add(address1);
-    await rulesListContract._add(address2);
-    await rulesListContract._add(address3);
+  it("get by index on empty list should return undefined", async () => {
+    let a = await rulesListContract.whitelist[0];
 
-    a = await rulesListContract._get(1);
-    assert.ok(a._found);
-    assert.equal(a[1].toLowerCase(), address2.toLowerCase());
-
-    await rulesListContract._remove(address2);
-
-    a = await rulesListContract._get(1);
-    assert.ok(a._found);
-    assert.equal(a[1].toLowerCase(), address3.toLowerCase());
-  });
-
-  it("get by index on empty list should return false", async () => {
-    let a = await rulesListContract._get(0);
-
-    assert.notOk(a._found);
-  });
-
-  it("get by index returns expected order", async () => {
-    await rulesListContract._add(address1);
-    await rulesListContract._add(address2);
-    await rulesListContract._add(address3);
-
-    let result = await rulesListContract._get(0);
-    assert.equal(result[1].toLowerCase(), address1.toLowerCase());
-
-    result = await rulesListContract._get(1);
-    assert.equal(result[1].toLowerCase(), address2.toLowerCase());
-
-    result = await rulesListContract._get(2);
-    assert.equal(result[1].toLowerCase(), address3.toLowerCase());
-  });
-
-  it("getAll return empty array when account list is empty", async () => {
-    let returnedAddresses = await rulesListContract._getAll();
-    assert.isEmpty(returnedAddresses);
-  });
-
-  it("getAll return all accounts in expected order", async () => {
-    let addresses = [ address1, address2, address3 ];
-
-    await rulesListContract._add(addresses[0]);
-    await rulesListContract._add(addresses[1]);
-    await rulesListContract._add(addresses[2]);
-
-    let returnedAddresses = await rulesListContract._getAll();
-    assert.equal(returnedAddresses[0].toLowerCase(), address1);
-    assert.equal(returnedAddresses[1].toLowerCase(), address2);
-    assert.equal(returnedAddresses[2].toLowerCase(), address3);
+    assert.isUndefined(a);
   });
 });

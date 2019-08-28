@@ -1,6 +1,5 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 
 
 contract NodeRulesList {
@@ -34,6 +33,7 @@ contract NodeRulesList {
             indexOf[key] = whitelist.push(enode(_enodeHigh, _enodeLow, _ip, _port));
             return true;
         }
+        return false;
     }
 
     function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal returns (bool) {
