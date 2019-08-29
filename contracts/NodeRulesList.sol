@@ -1,10 +1,8 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 
 
 contract NodeRulesList {
-    using StructuredLinkedList for StructuredLinkedList.List;
 
     // struct size = 82 bytes
     struct enode {
@@ -14,80 +12,48 @@ contract NodeRulesList {
         uint16 port;
     }
 
-    StructuredLinkedList.List private list;
-    mapping (uint256 => enode) private enodeMapping;
+    enode[] public whitelist;
+    mapping (uint256 => uint256) private indexOf; //1-based indexing. 0 means non-existent
 
     function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal pure returns(uint256) {
         return uint256(keccak256(abi.encodePacked(_enodeHigh, _enodeLow, _ip, _port)));
     }
 
     function size() internal view returns (uint256) {
-        return list.sizeOf();
+        return whitelist.length;
     }
 
     function exists(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal view returns (bool) {
-        return list.nodeExists(calculateKey(_enodeHigh, _enodeLow, _ip, _port));
+        return indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)] != 0;
     }
 
     function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal returns (bool) {
-        uint key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
-        if (!list.nodeExists(key)) {
-            enode memory newEnode = enode(
-                _enodeHigh,
-                _enodeLow,
-                _ip,
-                _port
-            );
-            enodeMapping[key] = newEnode;
-
-            return list.push(calculateKey(_enodeHigh, _enodeLow, _ip, _port), false);
-        } else {
-            return false;
+        uint256 key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
+        if (indexOf[key] == 0) {
+            indexOf[key] = whitelist.push(enode(_enodeHigh, _enodeLow, _ip, _port));
+            return true;
         }
+        return false;
     }
 
     function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal returns (bool) {
-        uint key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
-        if (list.nodeExists(key)) {
-            delete enodeMapping[key];
-            return list.remove(key) != 0 ? true : false;
-        } else {
-            return false;
-        }
-    }
+        uint256 key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
+        uint256 index = indexOf[key];
 
-    function get(uint _index) internal view returns (bool _exists, bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) {
-        uint listSize = list.sizeOf();
-        if (_index >= listSize) {
-            return (false, bytes32(0), bytes32(0), bytes16(0), uint16(0));
-        }
-
-        uint counter = 0;
-        uint pointer = 0;
-        bool hasFound = false;
-
-        while(counter <= listSize) {
-            (bool nodeExists, uint256 prev, uint256 next) = list.getNode(pointer);
-            if (nodeExists) {
-                if (counter == _index + 1) {
-                    hasFound = true;
-                    break;
-                } else {
-                    counter++;
-                    pointer = next;
-                }
-            } else {
-                break;
+        if (index > 0 && index <= whitelist.length) { //1 based indexing
+            //move last item into index being vacated (unless we are dealing with last index)
+            if (index != whitelist.length) {
+                enode memory lastEnode = whitelist[whitelist.length - 1];
+                whitelist[index - 1] = lastEnode;
+                indexOf[calculateKey(lastEnode.enodeHigh, lastEnode.enodeLow, lastEnode.ip, lastEnode.port)] = index;
             }
-            //Getting rid of unused variable warning
-            prev;
+
+            //shrink whitelist array
+            whitelist.length -= 1;
+            indexOf[key] = 0;
+            return true;
         }
 
-        if (hasFound) {
-            enode memory e = enodeMapping[pointer];
-            return (true, e.enodeHigh, e.enodeLow, e.ip, e.port);
-        } else {
-            return (false, bytes32(0), bytes32(0), bytes16(0), uint16(0));
-        }
+        return false;
     }
 }

@@ -158,9 +158,9 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function getByIndex(uint index) public view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port) {
-        (bool _exists, bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) = get(index);
-        if (_exists) {
-            return (_enodeHigh, _enodeLow, _ip, _port);
+        if (index >= 0 && index < size()) {
+            enode memory item = whitelist[index];
+            return (item.enodeHigh, item.enodeLow, item.ip, item.port);
         }
     }
 

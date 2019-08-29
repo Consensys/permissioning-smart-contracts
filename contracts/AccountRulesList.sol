@@ -1,10 +1,7 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
-
 
 contract AccountRulesList {
-    using StructuredLinkedList for StructuredLinkedList.List;
     event AccountAdded(
         bool accountAdded,
         address accountAddress
@@ -15,30 +12,23 @@ contract AccountRulesList {
         address accountAddress
     );
 
-    StructuredLinkedList.List private list;
-    mapping (uint256 => address) private accountMapping;
-
-    function calculateKey(address _account) internal pure returns(uint256) {
-        return uint256(keccak256(abi.encodePacked(_account)));
-    }
+    address[] public whitelist;
+    mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
 
     function size() internal view returns (uint256) {
-        return list.sizeOf();
+        return whitelist.length;
     }
 
     function exists(address _account) internal view returns (bool) {
-        return list.nodeExists(calculateKey(_account));
+        return indexOf[_account] != 0;
     }
 
     function add(address _account) internal returns (bool) {
-        uint256 key = calculateKey(_account);
-        if (!list.nodeExists(key)) {
-            accountMapping[key] = _account;
-
-            return list.push(key, false);
-        } else {
-            return false;
+        if (indexOf[_account] == 0) {
+            indexOf[_account] = whitelist.push(_account);
+            return true;
         }
+        return false;
     }
 
     function addAll(address[] memory accounts) internal returns (bool) {
@@ -53,79 +43,20 @@ contract AccountRulesList {
     }
 
     function remove(address _account) internal returns (bool) {
-        uint256 key = calculateKey(_account);
-        if (list.nodeExists(key)) {
-            delete accountMapping[key];
-            return list.remove(key) != 0 ? true : false;
-        } else {
-            return false;
-        }
-    }
-
-    function get(uint _index) internal view returns (bool _exists, address _account) {
-        uint listSize = list.sizeOf();
-        if (_index >= listSize) {
-            return (false, address(0));
-        }
-
-        uint counter = 0;
-        uint pointer = 0;
-        bool hasFound = false;
-
-        while(counter <= listSize) {
-            (bool nodeExists, uint256 prev, uint256 next) = list.getNode(pointer);
-            if (nodeExists) {
-                if (counter == _index + 1) {
-                    hasFound = true;
-                    break;
-                } else {
-                    counter++;
-                    pointer = next;
-                }
-            } else {
-                break;
+        uint256 index = indexOf[_account];
+        if (index > 0 && index <= whitelist.length) { //1-based indexing
+            //move last address into index being vacated (unless we are dealing with last index)
+            if (index != whitelist.length) {
+                address lastAccount = whitelist[whitelist.length - 1];
+                whitelist[index - 1] = lastAccount;
+                indexOf[lastAccount] = index;
             }
-            //Getting rid of unused variable warning
-            prev;
+
+            //shrink whitelist array
+            whitelist.length -= 1;
+            indexOf[_account] = 0;
+            return true;
         }
-
-        if (hasFound) {
-            address a = accountMapping[pointer];
-            return (true, a);
-        } else {
-            return (false, address(0));
-        }
-    }
-
-    function getAll() internal view returns (address[] memory) {
-        uint listSize = list.sizeOf();
-        if (listSize == 0) {
-            return new address[](0);
-        }
-
-        address[] memory allAddresses = new address[](listSize);
-
-        bool hasNext = true;
-        uint counter = 0;
-        uint pointer = 0;
-
-        while(hasNext) {
-            (bool nodeExists, uint256 prev, uint256 next) = list.getNode(pointer);
-            if (nodeExists) {
-                if (pointer > 0) {
-                    allAddresses[counter++] = accountMapping[pointer];
-                }
-
-                if (next != 0) {
-                    pointer = next;
-                } else {
-                    hasNext = false;
-                }
-            }
-            //Getting rid of unused variable warning
-            prev;
-        }
-
-        return allAddresses;
+        return false;
     }
 }
