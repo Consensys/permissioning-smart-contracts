@@ -23,29 +23,40 @@ const loadConfig = async (): Promise<Config> => {
     }
     // development defaults
   } else {
-    // We're cheating here by knowing what truffle will write when it's running a ganache server.
-    // We're forcing the types because we know what the network entry in the json file will look like so long as it's there.
-    let accountIngressAddress;
-    if (process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS) {
-      accountIngressAddress = process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS;
-    } else {
-      const accountIngressNetworks = Object.values(AccountIngress.networks);
-      if (accountIngressNetworks.length === 0) {
-        throw new Error("Account Ingress Contract abi doesn't contain any networks, probably not deployed");
+    // ganache vs pantheon
+    // if env variables exists, then we will assume we are connecting to pantheon, otherwise we will assume ganache
+    let accountIngressAddress = process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS;
+    let nodeIngressAddress = process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS;
+    let networkId = process.env.REACT_APP_NETWORK_ID;
+
+    if (accountIngressAddress) {
+      console.log('Using environment variables for contract addresses and network id');
+      //make sure other two are also defined
+      if (!nodeIngressAddress) {
+        throw new Error('Node Ingress Address environment variable is missing');
       }
-      accountIngressAddress = (accountIngressNetworks[0] as { address: string }).address;
+
+      if (!networkId) {
+        throw new Error('Network Id environment variable is missing');
+      }
+
+      return { accountIngressAddress, nodeIngressAddress, networkId };
     }
 
-    let nodeIngressAddress;
-    if (process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS) {
-      nodeIngressAddress = process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS;
-    } else {
-      const nodeIngressNetworks = Object.values(NodeIngress.networks);
-      if (nodeIngressNetworks.length === 0) {
-        throw new Error("Node Ingress Contract abi doesn't contain any networks, probably not deployed");
-      }
-      nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
+    console.log('Using truffle (develop) defaults');
+    // We're cheating here by knowing what truffle will write when it's running a ganache server.
+    // We're forcing the types because we know what the network entry in the json file will look like so long as it's there.
+    const accountIngressNetworks = Object.values(AccountIngress.networks);
+    if (accountIngressNetworks.length === 0) {
+      throw new Error("Account Ingress Contract abi doesn't contain any networks, probably not deployed");
     }
+    accountIngressAddress = (accountIngressNetworks[0] as { address: string }).address;
+
+    const nodeIngressNetworks = Object.values(NodeIngress.networks);
+    if (nodeIngressNetworks.length === 0) {
+      throw new Error("Node Ingress Contract abi doesn't contain any networks, probably not deployed");
+    }
+    nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
 
     // if we haven't errored by this point then we're being driven by env and until we do it better we should accept any network
     const nodeIngressNetworkId = Object.keys(NodeIngress.networks)[0]
