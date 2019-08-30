@@ -120,40 +120,9 @@ contract("NodeRulesList (list manipulation)", async () => {
     assert.notOk(exists);
   });
 
-  it("remove address in the middle of list should maintain list order", async () => {
-    await rulesListContract._add(node1High, node1Low, node1Host, node1Port);
-    await rulesListContract._add(node2High, node2Low, node2Host, node2Port);
-    await rulesListContract._add(node3High, node3Low, node3Host, node3Port);
+  it("get by index on empty list should return undefined", async () => {
+    let node = await rulesListContract.whitelist[0];
 
-    node = await rulesListContract._get(1);
-    assert.ok(node._found);
-    assert.equal(node[1], node2High);
-
-    await rulesListContract._remove(node2High, node2Low, node2Host, node2Port);
-
-    node = await rulesListContract._get(1);
-    assert.ok(node._found);
-    assert.equal(node[1], node3High);
-  });
-
-  it("get by index on empty list should return false", async () => {
-    let node = await rulesListContract._get(0);
-
-    assert.notOk(node._found);
-  });
-
-  it("get by index returns expected order", async () => {
-    await rulesListContract._add(node1High, node1Low, node1Host, node1Port);
-    await rulesListContract._add(node2High, node2Low, node2Host, node2Port);
-    await rulesListContract._add(node3High, node3Low, node3Host, node3Port);
-
-    let enode = await rulesListContract._get(0);
-    assert.equal(enode._enodeHigh, node1High);
-
-    enode = await rulesListContract._get(1);
-    assert.equal(enode._enodeHigh, node2High);
-
-    enode = await rulesListContract._get(2);
-    assert.equal(enode._enodeHigh, node3High);
+    assert.isUndefined(node);
   });
 });

@@ -1,11 +1,8 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 
 
 contract AdminList {
-    using StructuredLinkedList for StructuredLinkedList.List;
-
     event AdminAdded(
         bool adminAdded,
         address account,
@@ -17,21 +14,23 @@ contract AdminList {
         address account
     );
 
-    StructuredLinkedList.List private list;
+    address[] public whitelist;
+    mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
 
     function size() internal view returns (uint256) {
-        return list.sizeOf();
+        return whitelist.length;
     }
 
-    function exists(address _address) internal view returns (bool) {
-        return list.nodeExists(uint256(_address));
+    function exists(address _account) internal view returns (bool) {
+        return indexOf[_account] != 0;
     }
 
-    function add(address _address) internal returns (bool) {
-        if (exists(_address)) {
-            return false;
+    function add(address _account) internal returns (bool) {
+        if (indexOf[_account] == 0) {
+            indexOf[_account] = whitelist.push(_account);
+            return true;
         }
-        return list.push(uint(_address), false);
+        return false;
     }
 
     function addAll(address[] memory accounts) internal returns (bool) {
@@ -54,74 +53,21 @@ contract AdminList {
         return allAdded;
     }
 
-    function remove(address _address) internal returns (bool) {
-        uint node = uint(_address);
-        return list.remove(node) != 0 ? true : false;
-    }
-
-    function get(uint index) internal view returns (bool _exists, address _address) {
-        uint listSize = list.sizeOf();
-        if (index >= listSize) {
-            return (false, address(0));
-        }
-
-        uint counter = 0;
-        uint pointer = 0;
-        bool hasFound = false;
-
-        while(counter <= listSize) {
-            (bool nodeExists, uint256 prev, uint256 next) = list.getNode(pointer);
-            if (nodeExists) {
-                if (counter == index + 1) {
-                    hasFound = true;
-                    break;
-                } else {
-                    counter++;
-                    pointer = next;
-                }
-            } else {
-                break;
+    function remove(address _account) internal returns (bool) {
+        uint256 index = indexOf[_account];
+        if (index > 0 && index <= whitelist.length) { //1-based indexing
+            //move last address into index being vacated (unless we are dealing with last index)
+            if (index != whitelist.length) {
+                address lastAccount = whitelist[whitelist.length - 1];
+                whitelist[index - 1] = lastAccount;
+                indexOf[lastAccount] = index;
             }
-            //Getting rid of unused variable warning
-            prev;
+
+            //shrink whitelist array
+            whitelist.length -= 1;
+            indexOf[_account] = 0;
+            return true;
         }
-
-        if (hasFound) {
-            return (true, address(pointer));
-        } else {
-            return (false, address(0));
-        }
-    }
-
-    function getAll() internal view returns (address[] memory) {
-        uint listSize = list.sizeOf();
-        if (listSize == 0) {
-            return new address[](0);
-        }
-
-        address[] memory allAddresses = new address[](listSize);
-
-        bool hasNext = true;
-        uint counter = 0;
-        uint pointer = 0;
-
-        while(hasNext) {
-            (bool nodeExists, uint256 prev, uint256 next) = list.getNode(pointer);
-            if (nodeExists) {
-                if (pointer > 0) {
-                    allAddresses[counter++] = address(pointer);
-                }
-
-                if (next != 0) {
-                    pointer = next;
-                } else {
-                    hasNext = false;
-                }
-            }
-            //Getting rid of unused variable warning
-            prev;
-        }
-
-        return allAddresses;
+        return false;
     }
 }

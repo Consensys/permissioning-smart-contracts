@@ -31,7 +31,7 @@ module.exports = async(deployer, network) => {
 
     const admin = await Admin.deployed();
     await accountIngressInstance.setContractAddress(adminContractName, admin.address);
-    console.log("   > Updated AccountIngress with Admin  address = " + admin.address);
+    console.log("   > Updated AccountIngress with Admin address = " + admin.address);
 
     await deployer.deploy(Rules, accountIngress);
     console.log("   > Rules deployed with AccountIngress.address = " + accountIngress);

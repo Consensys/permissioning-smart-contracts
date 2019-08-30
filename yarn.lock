@@ -11431,11 +11431,6 @@ solc@0.5.0:
     web3 "^1.0.0-beta.50"
     web3-eth-abi "1.0.0-beta.50"
 
-solidity-linked-list@^2.0.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/solidity-linked-list/-/solidity-linked-list-2.1.2.tgz#32d13179a93cb36b4c4f620afa64be77136cb62b"
-  integrity sha512-3udHlfza3e2kbB0t7Du8Qkgj9q8x8iFjOVFilb5St3qxNvcmOqNqHSWqsLUr4uYqbPb9osedFlHQkPJABUtNIg==
-
 solidity-parser-antlr@^0.4.1:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/solidity-parser-antlr/-/solidity-parser-antlr-0.4.5.tgz#4de1867f1a12df4553886209225bc80328aeb0c1"

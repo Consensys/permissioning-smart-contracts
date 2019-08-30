@@ -60,7 +60,6 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
     "rimble-ui": "^0.8.0",
-    "solidity-linked-list": "^2.0.2",
     "styled-components": "^4.2.0",
     "truffle-hdwallet-provider": "^1.0.6",
     "typescript": "^3.5.1",

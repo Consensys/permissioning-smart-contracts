@@ -22,14 +22,6 @@ contract ExposedAdminList is AdminList {
         return remove(_address);
     }
 
-    function _get(uint _index) public view returns (bool __exists, address __address) {
-        return get(_index);
-    }
-
-    function _getAll() public view returns (address[] memory) {
-        return getAll();
-    }
-
     function _addBatch(address[] memory _addresses) public returns (bool) {
         return addAll(_addresses);
     }

@@ -100,14 +100,11 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     function getByIndex(uint index) public view returns (address account) {
-        (bool _exists, address _account) = get(index);
-        if (_exists) {
-            return (_account);
-        }
+        return whitelist[index];
     }
 
     function getAccounts() public view returns (address[] memory){
-        return getAll();
+        return whitelist;
     }
 
     function addAccounts(address[] memory accounts) public onlyAdmin returns (bool) {
