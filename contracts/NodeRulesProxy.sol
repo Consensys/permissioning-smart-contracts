@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <0.6.0;
+pragma solidity 0.5.9;
 
 interface NodeRulesProxy {
     function connectionAllowed(
