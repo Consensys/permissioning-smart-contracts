@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <0.6.0;
+pragma solidity 0.5.9;
 
 interface AdminProxy {
     function isAuthorized(address source) external view returns (bool);
