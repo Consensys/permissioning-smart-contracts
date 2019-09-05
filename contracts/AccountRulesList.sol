@@ -1,5 +1,6 @@
 pragma solidity 0.5.9;
 
+
 contract AccountRulesList {
     event AccountAdded(
         bool accountAdded,
