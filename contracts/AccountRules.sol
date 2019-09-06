@@ -9,6 +9,7 @@ import "./Admin.sol";
 contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     // in read-only mode rules can't be added/removed
+    // this will be used to protect data when upgrading contracts
     bool readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
