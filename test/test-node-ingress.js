@@ -53,7 +53,7 @@ contract ("Node Ingress (no contracts registered)", (accounts) => {
             await nodeIngressContract.setContractAddress(RULES, "0x0000000000000000000000000000000000000000");
             assert.fail("Should not allow address(0) Contract in registry");
         } catch (err) {
-            expect(err.reason).to.contain("Contract address must not be empty");
+            expect(err.reason).to.contain("Contract address must not be zero");
         }
     });
 
