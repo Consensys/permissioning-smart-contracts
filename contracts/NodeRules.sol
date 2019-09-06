@@ -24,7 +24,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         uint16 enodePort
     );
 
-    // on read-only mode rules can't be added/removed
+    // in read-only mode rules can't be added/removed
+    // this will be used to protect data when upgrading contracts
     bool readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
