@@ -30,7 +30,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
 
-    address private nodeIngressContractAddress;
+    NodeIngress private nodeIngressContract;
 
     modifier onlyOnEditMode() {
         require(!readOnlyMode, "In read only mode: rules cannot be modified");
@@ -38,7 +38,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     modifier onlyAdmin() {
-        NodeIngress nodeIngressContract = NodeIngress(nodeIngressContractAddress);
         address adminContractAddress = nodeIngressContract.getContractAddress(nodeIngressContract.ADMIN_CONTRACT());
 
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
@@ -47,7 +46,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     constructor (address nodeIngressAddress) public {
-        nodeIngressContractAddress = nodeIngressAddress;
+        nodeIngressContract = NodeIngress(nodeIngressAddress);
     }
 
     // VERSION
@@ -166,6 +165,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function triggerRulesChangeEvent(bool addsRestrictions) public {
-        NodeIngress(nodeIngressContractAddress).emitRulesChangeEvent(addsRestrictions);
+        nodeIngressContract.emitRulesChangeEvent(addsRestrictions);
     }
 }
