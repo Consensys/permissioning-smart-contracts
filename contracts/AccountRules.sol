@@ -14,7 +14,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint version = 1000000;
 
-    address private ingressContractAddress;
+    AccountIngress private ingressContract;
 
     modifier onlyOnEditMode() {
         require(!readOnlyMode, "In read only mode: rules cannot be modified");
@@ -22,7 +22,6 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     modifier onlyAdmin() {
-        AccountIngress ingressContract = AccountIngress(ingressContractAddress);
         address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
@@ -31,7 +30,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     constructor (address ingressAddress) public {
-        ingressContractAddress = ingressAddress;
+        ingressContract = AccountIngress(ingressAddress);
         add(msg.sender);
     }
 
