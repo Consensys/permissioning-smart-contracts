@@ -45,8 +45,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         _;
     }
 
-    constructor (address nodeIngressAddress) public {
-        nodeIngressContract = NodeIngress(nodeIngressAddress);
+    constructor (NodeIngress _nodeIngressAddress) public {
+        nodeIngressContract = _nodeIngressAddress;
     }
 
     // VERSION
