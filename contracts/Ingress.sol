@@ -13,6 +13,7 @@ contract Ingress {
 
     struct ContractDetails {
         address contractAddress;
+        address owner;
     }
 
     mapping(bytes32 => ContractDetails) registry;
@@ -44,6 +45,7 @@ contract Ingress {
         // create info if it doesn't exist in the registry
         if (info.contractAddress == address(0)) {
             info = ContractDetails({
+                owner: msg.sender,
                 contractAddress: addr
             });
 
