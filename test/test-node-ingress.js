@@ -46,17 +46,6 @@ contract ("Node Ingress (no contracts registered)", (accounts) => {
         assert.equal(result, "0x0000000000000000000000000000000000000000", "Admin contract should NOT already be registered");
     });
 
-    it("Should not register zero address contract", async () => {
-
-        // Attempt to register zero address contract
-        try {
-            await nodeIngressContract.setContractAddress(RULES, "0x0000000000000000000000000000000000000000");
-            assert.fail("Should not allow address(0) Contract in registry");
-        } catch (err) {
-            expect(err.reason).to.contain("Contract address must not be zero");
-        }
-    });
-
     it("Should register contract successfully", async () => {
         // Verify that the NodeRules contract has not yet been registered
         let result = await nodeIngressContract.getContractAddress(RULES);

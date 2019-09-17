@@ -1,4 +1,4 @@
-pragma solidity 0.5.9;
+pragma solidity >=0.4.22 <0.6.0;
 
 import "./AdminProxy.sol";
 
@@ -38,7 +38,6 @@ contract Ingress {
 
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
-        require(addr != address(0), "Contract address must not be zero.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
 
         ContractDetails memory info = registry[name];
