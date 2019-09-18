@@ -11,12 +11,7 @@ contract Ingress {
     // Registry mapping indexing
     bytes32[] contractKeys;
 
-    struct ContractDetails {
-        address contractAddress;
-        address owner;
-    }
-
-    mapping(bytes32 => ContractDetails) registry;
+    mapping(bytes32 => address) registry;
 
     event RegistryUpdated(
         address contractAddress,
@@ -25,14 +20,14 @@ contract Ingress {
 
     function getContractAddress(bytes32 name) public view returns(address) {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
-        return (registry[name].contractAddress);
+        return (registry[name]);
     }
 
     function isAuthorized(address account) public view returns(bool) {
         if(getContractAddress(ADMIN_CONTRACT) == address(0)) {
             return true;
         } else {
-            return AdminProxy(registry[ADMIN_CONTRACT].contractAddress).isAuthorized(account);
+            return AdminProxy(registry[ADMIN_CONTRACT]).isAuthorized(account);
         }
     }
 
@@ -40,18 +35,15 @@ contract Ingress {
         require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
 
-        ContractDetails memory info = registry[name];
+        address info = registry[name];
         // create info if it doesn't exist in the registry
-        if (info.contractAddress == address(0)) {
-            info = ContractDetails({
-                owner: msg.sender,
-                contractAddress: addr
-            });
+        if (info == address(0)) {
+            info = addr;
 
             // Update registry indexing
             contractKeys.push(name);
        } else {
-            info.contractAddress = addr;
+            info = addr;
        }
         // update record in the registry
         registry[name] = info;
