@@ -24,16 +24,9 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
   beforeEach(async () => {
     nodeIngressContract = await NodeIngress.new();
     adminContract = await Admin.new();
-    let s = await nodeIngressContract.getSize();
-    assert.equal(s, 0, "expected size 0");
     
     await nodeIngressContract.setContractAddress(ADMIN, adminContract.address);
     nodeRulesContract = await NodeRules.new(nodeIngressContract.address);
-    s = await nodeIngressContract.getSize();
-    assert.equal(s, 1, "expected size 1");
-
-    s = await nodeIngressContract.getIndexOf(ADMIN);
-    assert.equal(s, 1, "expected index ");
 
     result = await nodeIngressContract.getContractAddress(ADMIN);
     assert.equal(result, adminContract.address, 'Admin contract should be reg');
@@ -43,11 +36,7 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
     let result;
     let result2;
 
-    let s = await nodeIngressContract.getSize();
-    assert.equal(s, 1, "expected size ");
     await nodeIngressContract.setContractAddress(RULES, nodeRulesContract.address);
-    s = await nodeIngressContract.getSize();
-    assert.equal(s, 2, "expected size ");
 
     result = await nodeIngressContract.getContractAddress(ADMIN);
     assert.equal(result, adminContract.address, 'Admin contract should be reg');

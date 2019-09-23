@@ -95,16 +95,4 @@ contract Ingress {
     function getAllContractKeys() public view returns(bytes32[] memory) {
         return contractKeys;
     }
-
-    function getAllContractValues() public view returns(address[] memory) {
-        return registry;
-    }
-
-    function getIndexOf(bytes32 name) public view returns(uint256) {
-        return indexOf[name];
-    }
-
-    function getRegistry(uint256 i) public view returns(address) {
-        return registry[i];
-    }
 }
