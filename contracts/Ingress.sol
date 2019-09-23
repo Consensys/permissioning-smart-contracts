@@ -85,7 +85,6 @@ contract Ingress {
             registry.length -= 1;
             contractKeys.length -= 1;
             indexOf[_name] = 0;
-            
             emit RegistryUpdated(address(0), _name);
             return true;
         }
