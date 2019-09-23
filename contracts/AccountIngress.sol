@@ -17,7 +17,7 @@ contract AccountIngress is Ingress {
     }
 
     function emitRulesChangeEvent(bool addsRestrictions) public {
-        require(registry[RULES_CONTRACT] == msg.sender, "Only Rules contract can trigger Rules change events");
+        require(registry[indexOf[RULES_CONTRACT]] == msg.sender, "Only Rules contract can trigger Rules change events");
         emit AccountPermissionsUpdated(addsRestrictions);
     }
 
@@ -33,7 +33,7 @@ contract AccountIngress is Ingress {
             return true;
         }
 
-        return AccountRulesProxy(registry[RULES_CONTRACT]).transactionAllowed(
+        return AccountRulesProxy(registry[indexOf[RULES_CONTRACT]-1]).transactionAllowed(
             sender, target, value, gasPrice, gasLimit, payload
         );
     }
