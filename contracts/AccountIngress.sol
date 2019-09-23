@@ -8,17 +8,8 @@ contract AccountIngress is Ingress {
     // version of this contract: semver eg 1.2.14 represented like 001002014
     uint version = 1000000;
 
-    event AccountPermissionsUpdated(
-        bool addsRestrictions
-    );
-
     function getContractVersion() public view returns(uint) {
         return version;
-    }
-
-    function emitRulesChangeEvent(bool addsRestrictions) public {
-        require(registry[indexOf[RULES_CONTRACT]] == msg.sender, "Only Rules contract can trigger Rules change events");
-        emit AccountPermissionsUpdated(addsRestrictions);
     }
 
     function transactionAllowed(
