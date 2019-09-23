@@ -205,6 +205,9 @@ contract("Ingress contract", (accounts) => {
         let result = await nodeIngressContract.isAuthorized(accounts[0]);
         assert.equal(result, true, "Sender account SHOULD be authorized");
 
+        // try to remove non existent contract. should have no effect
+        await nodeIngressContract.removeContract(CONTRACT_NAME);
+
         // Register the NodeRules contract
         await nodeIngressContract.setContractAddress(CONTRACT_NAME, CONTRACT_ADDR);
 
