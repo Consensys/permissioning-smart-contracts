@@ -229,6 +229,8 @@ contract("Ingress contract", (accounts) => {
         // Verify correct number of Contracts
         result = await nodeIngressContract.getAllContractKeys();
         assert.equal(result.length, 2, "2 keys SHOULD be registered");
+        result = await nodeIngressContract.getSize();
+        assert.equal(result, 2, "2 keys SHOULD be registered");
 
         // Remove the new contract
         await nodeIngressContract.removeContract(CONTRACT_NAME);
