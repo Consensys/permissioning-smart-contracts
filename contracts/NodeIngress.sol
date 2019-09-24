@@ -6,7 +6,7 @@ import "./Ingress.sol";
 
 contract NodeIngress is Ingress {
     // version of this contract: semver eg 1.2.14 represented like 001002014
-    uint version = 1000000;
+    uint private version = 1000000;
 
     event NodePermissionsUpdated(
         bool addsRestrictions
