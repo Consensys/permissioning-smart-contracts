@@ -219,16 +219,27 @@ contract("Ingress contract", (accounts) => {
         result = await nodeIngressContract.getAllContractKeys();
         assert.equal(result.length, 3, "3 keys SHOULD be registered");
 
-        // Remove the NodeRules contract
-        await nodeIngressContract.removeContract(CONTRACT_NAME);
+        // Remove the NodeRules contract ie not the last one
+        await nodeIngressContract.removeContract(RULES);
 
         // Verify that the NodeRules contract has been removed
-        result = await nodeIngressContract.getContractAddress(CONTRACT_NAME);
+        result = await nodeIngressContract.getContractAddress(RULES);
         assert.equal(result, "0x0000000000000000000000000000000000000000", "Contract should NOT be registered");
 
         // Verify correct number of Contracts
         result = await nodeIngressContract.getAllContractKeys();
         assert.equal(result.length, 2, "2 keys SHOULD be registered");
+
+        // Remove the new contract
+        await nodeIngressContract.removeContract(CONTRACT_NAME);
+
+        // Verify that the new contract has been removed
+        result = await nodeIngressContract.getContractAddress(CONTRACT_NAME);
+        assert.equal(result, "0x0000000000000000000000000000000000000000", "Contract should NOT be registered");
+
+        // Verify correct number of Contracts
+        result = await nodeIngressContract.getAllContractKeys();
+        assert.equal(result.length, 1, "1 keys SHOULD be registered");
     });
 
     it("Should emit an event when the NodeRules are updated", async () => {
