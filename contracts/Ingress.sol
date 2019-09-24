@@ -19,7 +19,7 @@ contract Ingress {
     );
 
     function getContractAddress(bytes32 name) public view returns(address) {
-        require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
+        require(name > 0, "Contract name must not be empty.");
         return (registry[name]);
     }
 
@@ -32,7 +32,7 @@ contract Ingress {
     }
 
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
-        require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
+        require(name > 0, "Contract name must not be empty.");
         require(addr != address(0), "Contract address must not be zero.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
 
@@ -55,7 +55,7 @@ contract Ingress {
     }
 
     function removeContract(bytes32 name) public returns(bool) {
-        require(name > 0x0000000000000000000000000000000000000000000000000000000000000000, "Contract name must not be empty.");
+        require(name > 0, "Contract name must not be empty.");
         require(contractKeys.length > 0, "Must have at least one registered contract to execute delete operation.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
         for (uint i = 0; i < contractKeys.length; i++) {
