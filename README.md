@@ -1,7 +1,7 @@
 # Permissioning Smart Contracts
 
-**Note:** The contracts in this repository are currently in the process of going through a third party audit. [Please
-contact us](https://pegasys.tech/contact/) before using in a production environment.
+**Note:** The contracts herein have been third party audited. [Please
+contact us](https://pegasys.tech/contact/) if you would like more information, or if you are considering using this Dapp in a production environment.
 
 ## Using
 
