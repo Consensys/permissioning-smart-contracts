@@ -6,7 +6,7 @@ import "./Ingress.sol";
 
 contract NodeIngress is Ingress {
     // version of this contract: semver eg 1.2.14 represented like 001002014
-    uint version = 1000000;
+    uint private version = 1000000;
 
     event NodePermissionsUpdated(
         bool addsRestrictions
@@ -17,7 +17,7 @@ contract NodeIngress is Ingress {
     }
 
     function emitRulesChangeEvent(bool addsRestrictions) public {
-        require(registry[RULES_CONTRACT] == msg.sender, "Only Rules contract can trigger Rules change events");
+        require(registry[indexOf[RULES_CONTRACT]-1] == msg.sender, "Only Rules contract can trigger Rules change events");
         emit NodePermissionsUpdated(addsRestrictions);
     }
 
@@ -35,7 +35,7 @@ contract NodeIngress is Ingress {
             return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         }
 
-        return NodeRulesProxy(registry[RULES_CONTRACT]).connectionAllowed(
+        return NodeRulesProxy(registry[indexOf[RULES_CONTRACT]-1]).connectionAllowed(
             sourceEnodeHigh,
             sourceEnodeLow,
             sourceEnodeIp,

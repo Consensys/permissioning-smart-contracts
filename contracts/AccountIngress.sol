@@ -6,19 +6,10 @@ import "./Ingress.sol";
 
 contract AccountIngress is Ingress {
     // version of this contract: semver eg 1.2.14 represented like 001002014
-    uint version = 1000000;
-
-    event AccountPermissionsUpdated(
-        bool addsRestrictions
-    );
+    uint private version = 1000000;
 
     function getContractVersion() public view returns(uint) {
         return version;
-    }
-
-    function emitRulesChangeEvent(bool addsRestrictions) public {
-        require(registry[RULES_CONTRACT] == msg.sender, "Only Rules contract can trigger Rules change events");
-        emit AccountPermissionsUpdated(addsRestrictions);
     }
 
     function transactionAllowed(
@@ -33,7 +24,7 @@ contract AccountIngress is Ingress {
             return true;
         }
 
-        return AccountRulesProxy(registry[RULES_CONTRACT]).transactionAllowed(
+        return AccountRulesProxy(registry[indexOf[RULES_CONTRACT]-1]).transactionAllowed(
             sender, target, value, gasPrice, gasLimit, payload
         );
     }
