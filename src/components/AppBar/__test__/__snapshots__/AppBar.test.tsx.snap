@@ -501,7 +501,7 @@ exports[`<AppBar /> matches snapshot 1`] = `
       }
     }
   >
-    Pantheon Permissioning
+    Besu Permissioning
   </Styled(Styled(Text))>
 </Flex>
 `;
