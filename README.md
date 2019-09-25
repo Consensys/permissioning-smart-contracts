@@ -5,11 +5,11 @@ contact us](https://pegasys.tech/contact/) before using in a production environm
 
 ## Using
 
-The [Pantheon documentation](https://docs.pantheon.pegasys.tech/en/stable/Permissions/Onchain-Permissioning/)
+The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
 describes how to use the contracts for onchain permissioning.
 
 ## Development
-_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest) if on Windows._
+_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at [projects release page](https://github.com/hyperledger/besu-permissioning-smart-contracts/releases/latest) if on Windows._
 
 ### Initialise dependencies ###
 Run `yarn install` to initialise project dependencies. This step is only required when setting up project 
@@ -50,20 +50,20 @@ This is the easiest way to get started for development with the permissioning Da
 
 ## Deployment
 The deployment process covers 3 steps:
-1. Starting a Pantheon node with the required configurations.
+1. Starting a Besu node with the required configurations.
 2. Migrating the contracts provided in this repository to the running chain.
 3. Running the Dapp on a webserver.
 
-### Starting a Pantheon node
-1. Have a Pantheon node running a chain that has the Node Ingress and Account Ingress contracts in its genesis accounts as shown in the alloc block of the [example genesis file](https://github.com/PegaSysEng/permissioning-smart-contracts/blob/master/genesis.json)
+### Starting a Besu node
+1. Have a Besu node running a chain that has the Node Ingress and Account Ingress contracts in its genesis accounts as shown in the alloc block of the [example genesis file](https://github.com/PegaSysEng/permissioning-smart-contracts/blob/master/genesis.json)
 
 ### Deploying the contracts
 1. Configure environment variables or provide a .env file in the root of this project that configures the following variables
   - `NODE_INGRESS_CONTRACT_ADDRESS`: The address of the node ingress contract from the genesis accounts
   - `ACCOUNT_INGRESS_CONTRACT_ADDRESS`: The address of the account ingress contract from the genesis accounts
-  - `PANTHEON_NODE_PERM_ACCOUNT`: The address of the account that will be used to deploy the contracts
-  - `PANTHEON_NODE_PERM_KEY`: The private key associated with the deploying account's address
-  - `PANTHEON_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Pantheon node
+  - `BESU_NODE_PERM_ACCOUNT`: The address of the account that will be used to deploy the contracts
+  - `BESU_NODE_PERM_KEY`: The private key associated with the deploying account's address
+  - `BESU_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Besu node
 
 2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment. 
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified

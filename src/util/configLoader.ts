@@ -23,8 +23,8 @@ const loadConfig = async (): Promise<Config> => {
     }
     // development defaults
   } else {
-    // ganache vs pantheon
-    // if env variables exists, then we will assume we are connecting to pantheon, otherwise we will assume ganache
+    // ganache vs besu
+    // if env variables exists, then we will assume we are connecting to besu, otherwise we will assume ganache
     let accountIngressAddress = process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS;
     let nodeIngressAddress = process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS;
     let networkId = process.env.REACT_APP_NETWORK_ID;
