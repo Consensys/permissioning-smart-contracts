@@ -29,11 +29,11 @@ contract Ingress {
     }
 
     function isAuthorized(address account) public view returns(bool) {
-         if (registry[ADMIN_CONTRACT] == address(0)) {
-                return true;
-         } else {
-                return AdminProxy(registry[ADMIN_CONTRACT]).isAuthorized(account);
-         }
+        if (registry[ADMIN_CONTRACT] == address(0)) {
+            return true;
+        } else {
+            return AdminProxy(registry[ADMIN_CONTRACT]).isAuthorized(account);
+        }
     }
 
     function setContractAddress(bytes32 name, address addr) public returns (bool) {
@@ -42,7 +42,7 @@ contract Ingress {
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
 
         if (indexOf[name] == 0) {
-           indexOf[name] = contractKeys.push(name);
+            indexOf[name] = contractKeys.push(name);
         }
 
         registry[name] = addr;
