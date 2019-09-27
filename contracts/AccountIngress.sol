@@ -24,7 +24,7 @@ contract AccountIngress is Ingress {
             return true;
         }
 
-        return AccountRulesProxy(registry[indexOf[RULES_CONTRACT]-1]).transactionAllowed(
+        return AccountRulesProxy(registry[RULES_CONTRACT]).transactionAllowed(
             sender, target, value, gasPrice, gasLimit, payload
         );
     }

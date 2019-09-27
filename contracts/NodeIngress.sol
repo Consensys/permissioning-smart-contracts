@@ -17,7 +17,7 @@ contract NodeIngress is Ingress {
     }
 
     function emitRulesChangeEvent(bool addsRestrictions) public {
-        require(registry[indexOf[RULES_CONTRACT]-1] == msg.sender, "Only Rules contract can trigger Rules change events");
+        require(registry[RULES_CONTRACT] == msg.sender, "Only Rules contract can trigger Rules change events");
         emit NodePermissionsUpdated(addsRestrictions);
     }
 
@@ -32,10 +32,11 @@ contract NodeIngress is Ingress {
         uint16 destinationEnodePort
     ) public view returns (bytes32) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {
+            //reject connection
             return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         }
 
-        return NodeRulesProxy(registry[indexOf[RULES_CONTRACT]-1]).connectionAllowed(
+        return NodeRulesProxy(registry[RULES_CONTRACT]).connectionAllowed(
             sourceEnodeHigh,
             sourceEnodeLow,
             sourceEnodeIp,
