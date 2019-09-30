@@ -9,11 +9,11 @@ The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permis
 describes how to use the contracts for onchain permissioning.
 
 ## Development
-_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at [projects release page](https://github.com/hyperledger/besu-permissioning-smart-contracts/releases/latest) if on Windows._
+_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest) if on Windows._
 
 ### Initialise dependencies ###
-Run `yarn install` to initialise project dependencies. This step is only required when setting up project 
-for the first time. 
+Run `yarn install` to initialise project dependencies. This step is only required when setting up project
+for the first time.
 
 ### Linting
 Linting is set up using solium. To run it over your code execute `yarn run lint`.
@@ -28,7 +28,7 @@ The Dapp will facilitate managing permissioning rules and maintaining the list o
 This is the easiest way to get started for development with the permissioning Dapp:
 
 #### Compile and migrate the contracts (Development mode) ####
-1. Get rid of your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS` AND 
+1. Get rid of your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS` AND
 `NETWORK_ID` - you might need to restart your terminal session after removing it to have your changes applied. If you are using a `.env` file, you can comment out the variables.
 1. Start a terminal session and start a truffle Ganache node running `truffle develop`. This will start a Ganache node and create a truffle console session.
 1. In the truffle console, run all migrations from scratch with `migrate --reset`. Keep this terminal session open to maintain your Ganache node running.
@@ -65,11 +65,11 @@ The deployment process covers 3 steps:
   - `BESU_NODE_PERM_KEY`: The private key associated with the deploying account's address
   - `BESU_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Besu node
 
-2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment. 
+2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment.
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
   - `INITIAL_WHITELISTED_ACCOUNTS`: The whitelisted account addresses. Comma separated multiple addresses can be specified
   - `INITIAL_WHITELISTED_NODES`: The enode URLs of whitelisted nodes. Comma separated multiple nodes can be specified
-3. If this is the first time setting up the project, run `yarn install` to initialise project dependencies, otherwise skip this step. 
+3. If this is the first time setting up the project, run `yarn install` to initialise project dependencies, otherwise skip this step.
 4. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
