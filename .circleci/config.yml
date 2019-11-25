@@ -146,21 +146,26 @@ workflows:
   default:
     jobs:
       - dependencies
-      - build_app:
-          requires:
-            - dependencies
       - build_contracts:
           requires:
             - dependencies
       - lint_contracts:
           requires:
             - build_contracts
-      - lint_app:
-          requires:
-            - build_app
       - test_contracts:
           requires:
+            - dependencies
             - build_contracts
       - test_app:
           requires:
-            - build_app
+            - dependencies
+            - build_contracts
+      - lint_app:
+          requires:
+            - dependencies
+            - build_contracts
+      - build_app:
+          requires:
+            - dependencies
+            - build_contracts
+            - test_app
