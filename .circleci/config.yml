@@ -80,7 +80,7 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
-          name: Test app
+          name: Build app
           command: |
             yarn run build:app
       - persist_to_workspace:
