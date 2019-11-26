@@ -21,24 +21,6 @@ commands:
             - deps-{{ checksum "package.json" }}
             - deps-
 
-  capture_test_results:
-    description: "Capture test results"
-    steps:
-      - run:
-          name: Gather test results
-          when: always
-          command: |
-            FILES=`find . -name test-results`
-            for FILE in $FILES
-            do
-              MODULE=`echo "$FILE" | sed -e 's@./\(.*\)/build/test-results@\1@'`
-              TARGET="build/test-results/$MODULE"
-              mkdir -p "$TARGET"
-              cp -rf ${FILE}/*/* "$TARGET"
-            done
-      - store_test_results:
-          path: build/test-results
-
 jobs:
   dependencies:
     executor: med
@@ -120,7 +102,8 @@ jobs:
           name: Test Contracts
           command: |
             yarn run test:contracts
-      - capture_test_results
+      - store_test_results:
+          path: test-results/test-contract-results.xml
       - run:
           name: Collect Contract Coverage
           command: |
@@ -128,6 +111,8 @@ jobs:
             ./node_modules/.bin/istanbul report cobertura --root .
       - store_artifacts:
           path: coverage
+      - store_artifacts:
+          path: coverage.json
 
   test_app:
     executor: med
@@ -139,7 +124,8 @@ jobs:
           name: Test app
           command: |
             yarn run test:app:ci
-      - capture_test_results
+      - store_test_results:
+        path: junit.xml
 
 workflows:
   version: 2
