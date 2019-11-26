@@ -102,8 +102,10 @@ jobs:
           name: Test Contracts
           command: |
             yarn run test:contracts
+            mkdir -p test-results/contracts
+            mv test-results/test-contract-results.xml test-results/contracts/results.xml
       - store_test_results:
-          path: test-results/test-contract-results.xml
+          path: test-results
       - run:
           name: Collect Contract Coverage
           command: |
@@ -124,8 +126,10 @@ jobs:
           name: Test app
           command: |
             yarn run test:app:ci
+            mkdir -p test-results/app
+            mv junit.xml test-results/app/results.xml
       - store_test_results:
-          path: junit.xml
+          path: test-results
 
 workflows:
   version: 2
