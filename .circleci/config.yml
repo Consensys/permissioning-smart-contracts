@@ -140,18 +140,13 @@ workflows:
             - build_contracts
       - test_contracts:
           requires:
-            - dependencies
             - build_contracts
       - test_app:
           requires:
-            - dependencies
             - build_contracts
       - lint_app:
           requires:
-            - dependencies
             - build_contracts
       - build_app:
           requires:
-            - dependencies
-            - build_contracts
             - test_app
