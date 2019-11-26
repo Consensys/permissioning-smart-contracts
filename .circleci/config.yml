@@ -125,7 +125,7 @@ jobs:
           command: |
             yarn run test:app:ci
       - store_test_results:
-        path: junit.xml
+          path: junit.xml
 
 workflows:
   version: 2
