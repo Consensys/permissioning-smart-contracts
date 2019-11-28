@@ -108,7 +108,7 @@ jobs:
           name: Collect Contract Coverage
           command: |
             yarn run coverage:contracts
-            ./node_modules/.bin/istanbul report cobertura --root .
+            ./node_modules/.bin/istanbul report
       - store_artifacts:
           path: coverage
       - store_artifacts:
