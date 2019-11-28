@@ -113,6 +113,10 @@ jobs:
           path: coverage
       - store_artifacts:
           path: coverage.json
+      - run:
+          name: Check coverage metrics
+          command: |
+            ./node_modules/.bin/istanbul check-coverage
 
   test_app:
     executor: med
