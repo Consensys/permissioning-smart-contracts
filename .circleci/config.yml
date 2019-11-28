@@ -1,0 +1,154 @@
+---
+version: 2.1
+executors:
+  med: # 2cpu, 4G ram
+    docker:
+      - image: circleci/node:10
+    resource_class: medium
+    working_directory: ~/project
+
+commands:
+  prepare:
+    description: "Prepare"
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore cached dependencies
+          keys:
+            - deps-{{ checksum "package.json" }}-{{ .Branch }}-{{ .Revision }}
+            - deps-{{ checksum "package.json" }}
+            - deps-
+
+jobs:
+  dependencies:
+    executor: med
+    steps:
+      - prepare
+      - run:
+          name: Install Dependencies
+          command: |
+            yarn install
+      - save_cache:
+          name: Caching dependencies
+          key: deps-{{ checksum "package.json" }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./
+
+  build_contracts:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build Contracts
+          command: |
+            yarn run build:contracts
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./
+
+  build_app:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build app
+          command: |
+            yarn run build:app
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./
+
+  lint_contracts:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Lint
+          command: |
+            yarn run lint:contracts
+
+  lint_app:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Lint
+          command: |
+            yarn run lint:app
+
+  test_contracts:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Test Contracts
+          command: |
+            yarn run test:contracts
+            mkdir -p test-results/contracts
+            mv test-results/test-contract-results.xml test-results/contracts/results.xml
+      - store_test_results:
+          path: test-results
+      - run:
+          name: Collect Contract Coverage
+          command: |
+            yarn run coverage:contracts
+            ./node_modules/.bin/istanbul report cobertura --root .
+      - store_artifacts:
+          path: coverage
+      - store_artifacts:
+          path: coverage.json
+
+  test_app:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Test app
+          command: |
+            yarn run test:app:ci
+            mkdir -p test-results/app
+            mv junit.xml test-results/app/results.xml
+      - store_test_results:
+          path: test-results
+
+workflows:
+  version: 2
+  default:
+    jobs:
+      - dependencies
+      - build_contracts:
+          requires:
+            - dependencies
+      - lint_contracts:
+          requires:
+            - build_contracts
+      - test_contracts:
+          requires:
+            - build_contracts
+      - test_app:
+          requires:
+            - build_contracts
+      - lint_app:
+          requires:
+            - build_contracts
+      - build_app:
+          requires:
+            - test_app
