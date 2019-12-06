@@ -175,7 +175,7 @@ jobs:
           name: Build Docker
           command: |
             VERSION=$(git describe)
-            docker build pegasysenf/permissioning-smart-contracts-dapp:${VERSION} -f docker/Dockerfile .
+            docker build -t pegasysenf/permissioning-smart-contracts-dapp:${VERSION} -f docker/Dockerfile .
 
   publish_docker:
     executor: med
