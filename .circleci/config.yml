@@ -7,6 +7,12 @@ executors:
     resource_class: medium
     working_directory: ~/project
 
+  release: # 1cpu, 2G ram
+    docker:
+      - image: cibuilds/github:0.13.0
+    resource_class: small
+    working_directory: ~/project
+
 commands:
   prepare:
     description: "Prepare"
@@ -67,6 +73,34 @@ jobs:
           root: ~/project
           paths:
             - ./
+
+  build_deployment_app:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build app
+          command: |
+            yarn run build:app
+          environment:
+            GENERATE_SOURCEMAP: false
+      - run:
+          name: Bundle
+          working_directory: build
+          command: |
+            mkdir -p ../distribution
+            tar -czvf ../permissioning-smart-contracts-$(git describe).tar.gz *
+            zip -R ../permissionin-smart-contracts-$(git describe).zip *
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - distribution/
+      - store_artifacts:
+          name: Distributions
+          path: distribution/
+          when: always
 
   lint_contracts:
     executor: med
@@ -129,6 +163,23 @@ jobs:
       - store_test_results:
           path: test-results
 
+  release:
+    executor: release
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Publish Release on Github
+          command: |
+            VERSION=$(git describe)
+            ghr \
+              -t ${GITHUB_RELEASE_TOKEN} \
+              -u ${CIRCLE_PROJECT_USERNAME} \
+              -r ${CIRCLE_PROJECT_REPONAME} \
+              -c ${CIRCLE_SHA1} \
+              ./distributions/
+
 workflows:
   version: 2
   default:
@@ -152,3 +203,24 @@ workflows:
       - build_app:
           requires:
             - test_app
+          filters:
+            tags:
+              ignore:
+                - /.*/
+      - build_deployment_app:
+          requires:
+            - test_app
+          filters:
+            tags:
+              only:
+                - /.*/
+      - release:
+          requires:
+            - build_deployment_app
+            - lint_app
+            - test_contracts
+            - lint_contracts
+          filters:
+            tags:
+              only:
+                - /.*/
