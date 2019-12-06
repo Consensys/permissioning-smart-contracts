@@ -216,18 +216,38 @@ workflows:
       - build_contracts:
           requires:
             - dependencies
+          filters:
+            tags:
+              only:
+                - /.*/
       - lint_contracts:
           requires:
             - build_contracts
+          filters:
+            tags:
+              only:
+                - /.*/
       - test_contracts:
           requires:
             - build_contracts
+          filters:
+            tags:
+              only:
+                - /.*/
       - test_app:
           requires:
             - build_contracts
+          filters:
+            tags:
+              only:
+                - /.*/
       - lint_app:
           requires:
             - build_contracts
+          filters:
+            tags:
+              only:
+                - /.*/
       - build_app:
           requires:
             - test_app
