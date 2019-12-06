@@ -163,6 +163,34 @@ jobs:
       - store_test_results:
           path: test-results
 
+
+  build_docker:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - setup_remote_docker
+      - run:
+          name: Build Docker
+          command: |
+            VERSION=$(git describe)
+            docker build pegasysenf/permissioning-smart-contracts-dapp:${VERSION} -f docker/Dockerfile .
+
+  publish_docker:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - setup_remote_docker
+      - run:
+          name: Publish Docker
+          command: |
+            VERSION=$(git describe)
+            docker login --username "${DOCKER_USER}" --password "${DOCKER_PASSWORD}"
+            docker push  pegasysenf/permissioning-smart-contracts-dapp:${VERSION}
+
   release:
     executor: release
     steps:
@@ -210,6 +238,23 @@ workflows:
       - build_deployment_app:
           requires:
             - test_app
+          filters:
+            tags:
+              only:
+                - /.*/
+      - build_docker:
+          requires:
+            - build_deployment_app
+          filters:
+            tags:
+              only:
+                - /.*/
+      - publish_docker:
+          requires:
+            - build_docker
+            - lint_app
+            - test_contracts
+            - lint_contracts
           filters:
             tags:
               only:
