@@ -239,6 +239,9 @@ workflows:
           requires:
             - test_app
           filters:
+            branches:
+              ignore:
+                - /.*/
             tags:
               only:
                 - /.*/
@@ -246,6 +249,9 @@ workflows:
           requires:
             - build_deployment_app
           filters:
+            branches:
+              ignore:
+                - /.*/
             tags:
               only:
                 - /.*/
@@ -256,6 +262,9 @@ workflows:
             - test_contracts
             - lint_contracts
           filters:
+            branches:
+              ignore:
+                - /.*/
             tags:
               only:
                 - /.*/
@@ -266,6 +275,9 @@ workflows:
             - test_contracts
             - lint_contracts
           filters:
+            branches:
+              ignore:
+                - /.*/
             tags:
               only:
                 - /.*/
