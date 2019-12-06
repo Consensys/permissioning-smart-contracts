@@ -1,0 +1,13 @@
+reporting:
+    print: summary
+    reports:
+        - cobertura
+    dir: ./coverage
+    report-config:
+        cobertura: {file: cobertura-coverage.xml}
+check:
+    global:
+        statements: 85
+        lines: 85
+        branches: 85
+        functions: 85

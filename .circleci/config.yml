@@ -7,6 +7,12 @@ executors:
     resource_class: medium
     working_directory: ~/project
 
+  release: # 1cpu, 2G ram
+    docker:
+      - image: cibuilds/github:0.13.0
+    resource_class: small
+    working_directory: ~/project
+
 commands:
   prepare:
     description: "Prepare"
@@ -68,6 +74,34 @@ jobs:
           paths:
             - ./
 
+  build_deployment_app:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build app
+          command: |
+            yarn run build:app
+          environment:
+            GENERATE_SOURCEMAP: false
+      - run:
+          name: Bundle
+          working_directory: build
+          command: |
+            mkdir -p ../distribution
+            tar -czvf ../permissioning-smart-contracts-$(git describe).tar.gz *
+            zip -R ../permissionin-smart-contracts-$(git describe).zip *
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - distribution/
+      - store_artifacts:
+          name: Distributions
+          path: distribution/
+          when: always
+
   lint_contracts:
     executor: med
     steps:
@@ -108,7 +142,7 @@ jobs:
           name: Collect Contract Coverage
           command: |
             yarn run coverage:contracts
-            ./node_modules/.bin/istanbul report cobertura --root .
+            ./node_modules/.bin/istanbul report
       - store_artifacts:
           path: coverage
       - store_artifacts:
@@ -128,6 +162,51 @@ jobs:
             mv junit.xml test-results/app/results.xml
       - store_test_results:
           path: test-results
+
+
+  build_docker:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - setup_remote_docker
+      - run:
+          name: Build Docker
+          command: |
+            VERSION=$(git describe)
+            docker build -t pegasysenf/permissioning-smart-contracts-dapp:${VERSION} -f docker/Dockerfile .
+
+  publish_docker:
+    executor: med
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - setup_remote_docker
+      - run:
+          name: Publish Docker
+          command: |
+            VERSION=$(git describe)
+            docker login --username "${DOCKER_USER}" --password "${DOCKER_PASSWORD}"
+            docker push  pegasysenf/permissioning-smart-contracts-dapp:${VERSION}
+
+  release:
+    executor: release
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Publish Release on Github
+          command: |
+            VERSION=$(git describe)
+            ghr \
+              -t ${GITHUB_RELEASE_TOKEN} \
+              -u ${CIRCLE_PROJECT_USERNAME} \
+              -r ${CIRCLE_PROJECT_REPONAME} \
+              -c ${CIRCLE_SHA1} \
+              ./distributions/
 
 workflows:
   version: 2
@@ -152,3 +231,53 @@ workflows:
       - build_app:
           requires:
             - test_app
+          filters:
+            tags:
+              ignore:
+                - /.*/
+      - build_deployment_app:
+          requires:
+            - test_app
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /.*/
+      - build_docker:
+          requires:
+            - build_deployment_app
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /.*/
+      - publish_docker:
+          requires:
+            - build_docker
+            - lint_app
+            - test_contracts
+            - lint_contracts
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /.*/
+      - release:
+          requires:
+            - build_deployment_app
+            - lint_app
+            - test_contracts
+            - lint_contracts
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /.*/
