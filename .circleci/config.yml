@@ -212,7 +212,11 @@ workflows:
   version: 2
   default:
     jobs:
-      - dependencies
+      - dependencies:
+          filters:
+            tags:
+              only:
+                - /.*/
       - build_contracts:
           requires:
             - dependencies
