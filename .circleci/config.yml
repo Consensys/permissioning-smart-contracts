@@ -175,7 +175,7 @@ jobs:
           name: Build Docker
           command: |
             VERSION=$(git describe)
-            docker build -t pegasysenf/permissioning-smart-contracts-dapp:${VERSION} -f docker/Dockerfile .
+            docker build -t pegasyseng/permissioning-smart-contracts-dapp:${VERSION} -f docker/Dockerfile .
 
   publish_docker:
     executor: med
@@ -189,7 +189,7 @@ jobs:
           command: |
             VERSION=$(git describe)
             docker login --username "${DOCKER_USER}" --password "${DOCKER_PASSWORD}"
-            docker push  pegasysenf/permissioning-smart-contracts-dapp:${VERSION}
+            docker push  pegasyseng/permissioning-smart-contracts-dapp:${VERSION}
 
   release:
     executor: release
@@ -212,7 +212,11 @@ workflows:
   version: 2
   default:
     jobs:
-      - dependencies
+      - dependencies:
+          filters:
+            tags:
+              only:
+                - /.*/
       - build_contracts:
           requires:
             - dependencies
