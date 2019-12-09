@@ -97,6 +97,7 @@ jobs:
           root: ./
           paths:
             - distribution/
+            - build/
       - store_artifacts:
           name: Distributions
           path: distribution/
