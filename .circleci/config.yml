@@ -91,12 +91,13 @@ jobs:
           working_directory: build
           command: |
             mkdir -p ../distribution
-            tar -czvf ../permissioning-smart-contracts-$(git describe).tar.gz *
-            zip -R ../permissionin-smart-contracts-$(git describe).zip *
+            tar -czvf ../distribution/permissioning-smart-contracts-$(git describe).tar.gz *
+            zip -R ../distribution/permissionin-smart-contracts-$(git describe).zip *
       - persist_to_workspace:
           root: ./
           paths:
             - distribution/
+            - build/
       - store_artifacts:
           name: Distributions
           path: distribution/
@@ -206,7 +207,8 @@ jobs:
               -u ${CIRCLE_PROJECT_USERNAME} \
               -r ${CIRCLE_PROJECT_REPONAME} \
               -c ${CIRCLE_SHA1} \
-              ./distributions/
+              ${CIRCLE_TAG} \
+              ./distribution/
 
 workflows:
   version: 2
