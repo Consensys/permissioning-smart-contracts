@@ -29,13 +29,6 @@ module.exports = {
       host: '127.0.0.1',
       port: 7545,
       network_id: '*',
-    },
-    coverage: {
-      host: "localhost",
-      network_id: "*",
-      port: 8545,
-      gas: 0xfffffffffff,
-      gasPrice: 0x01
     }
   },
 
@@ -59,5 +52,7 @@ module.exports = {
     reporterOptions: {
       configFile: './mocha-reporter-config.json',
     },
-  }
+  },
+
+  plugins: ['solidity-coverage']
 };
