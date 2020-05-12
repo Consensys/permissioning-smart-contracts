@@ -31,7 +31,7 @@ This is the easiest way to get started for development with the permissioning Da
 
 #### Compile and migrate the contracts (Development mode) ####
 1. Get rid of your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS` AND
-`NETWORK_ID` - you might need to restart your terminal session after removing it to have your changes applied. If you are using a `.env` file, you can comment out the variables.
+`CHAIN_ID` - you might need to restart your terminal session after removing it to have your changes applied. If you are using a `.env` file, you can comment out the variables.
 1. Start a terminal session and start a truffle Ganache node running `truffle develop`. This will start a Ganache node and create a truffle console session.
 1. In the truffle console, run all migrations from scratch with `migrate --reset`. Keep this terminal session open to maintain your Ganache node running.
 
@@ -66,6 +66,7 @@ The deployment process covers 3 steps:
   - `BESU_NODE_PERM_ACCOUNT`: The address of the account that will be used to deploy the contracts
   - `BESU_NODE_PERM_KEY`: The private key associated with the deploying account's address
   - `BESU_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Besu node
+  - `CHAIN_ID`: The chain ID from the genesis file
 
 2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment.
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
