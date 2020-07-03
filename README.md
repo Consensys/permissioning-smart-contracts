@@ -3,18 +3,21 @@
 **Note:** The contracts herein have been third party audited. [Please
 contact us](https://pegasys.tech/contact/) if you would like more information, or if you are considering using this Dapp in a production environment.
 
-**Important:** The dependency chain for this implementation of onchain permissioning includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.  
+**Important:** The dependency chain for this implementation of onchain permissioning includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
 
 ## Using
 
+You probably got here from Besu.
 The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
-describes how to use the contracts for onchain permissioning.
+describes how to use the contracts for onchain permissioning with Besu.
+
+We recommend you use the latest released version of this project.
 
 ## Development
-_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest) if on Windows._
+_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at the [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest) if on Windows._
 
-### Initialise dependencies ###
-Run `yarn install` to initialise project dependencies. This step is only required when setting up project
+### Initialize dependencies ###
+Run `yarn install` to initialize project dependencies. This step is only required when setting up the project
 for the first time.
 
 ### Linting
@@ -30,7 +33,7 @@ The Dapp will facilitate managing permissioning rules and maintaining the list o
 This is the easiest way to get started for development with the permissioning Dapp:
 
 #### Compile and migrate the contracts (Development mode) ####
-1. Get rid of your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS` AND
+1. Delete your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS` AND
 `NETWORK_ID` - you might need to restart your terminal session after removing it to have your changes applied. If you are using a `.env` file, you can comment out the variables.
 1. Start a terminal session and start a truffle Ganache node running `truffle develop`. This will start a Ganache node and create a truffle console session.
 1. In the truffle console, run all migrations from scratch with `migrate --reset`. Keep this terminal session open to maintain your Ganache node running.
@@ -52,7 +55,7 @@ This is the easiest way to get started for development with the permissioning Da
 
 ## Deployment
 The deployment process covers 3 steps:
-1. Starting a Besu node with the required configurations.
+1. Starting a Besu node with the required configuration.
 2. Migrating the contracts provided in this repository to the running chain.
 3. Running the Dapp on a webserver.
 
@@ -71,7 +74,7 @@ The deployment process covers 3 steps:
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
   - `INITIAL_WHITELISTED_ACCOUNTS`: The whitelisted account addresses. Comma separated multiple addresses can be specified
   - `INITIAL_WHITELISTED_NODES`: The enode URLs of whitelisted nodes. Comma separated multiple nodes can be specified
-3. If this is the first time setting up the project, run `yarn install` to initialise project dependencies, otherwise skip this step.
+3. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step.
 4. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
