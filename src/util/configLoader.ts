@@ -27,7 +27,7 @@ const loadConfig = async (): Promise<Config> => {
     // if env variables exists, then we will assume we are connecting to besu, otherwise we will assume ganache
     let accountIngressAddress = process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS;
     let nodeIngressAddress = process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS;
-    let networkId = process.env.REACT_APP_NETWORK_ID;
+    let networkId = process.env.REACT_APP_CHAIN_ID;
 
     if (accountIngressAddress) {
       console.log('Using environment variables for contract addresses and network id');
