@@ -28,6 +28,10 @@ Linting is set up using solium. To run it over your code execute `yarn run lint`
 
 ### Permissioning Management Dapp
 
+Note: if you want to run against Besu, follow the Besu docs.
+
+ONLY use these instructions if you are doing development work on the Dapp itself, in which case connecting to a development server (Ganache) will enable faster development.
+
 The Dapp will facilitate managing permissioning rules and maintaining the list of admin accounts that can edit rules.
 
 This is the easiest way to get started for development with the permissioning Dapp:
@@ -54,22 +58,9 @@ This is the easiest way to get started for development with the permissioning Da
 1. You will need to set up MetaMask as for [the development server](#start-the-development-server)
 
 ## Deployment
-The deployment process covers 3 steps:
-1. Starting a Besu node with the required configuration.
-2. Migrating the contracts provided in this repository to the running chain.
-3. Running the Dapp on a webserver.
-
-### Starting a Besu node
-1. Have a Besu node running a chain that has the Node Ingress and Account Ingress contracts in its genesis accounts as shown in the alloc block of the [example genesis file](https://github.com/PegaSysEng/permissioning-smart-contracts/blob/master/genesis.json)
 
 ### Deploying the contracts
-1. Configure environment variables or provide a .env file in the root of this project that configures the following variables
-  - `NODE_INGRESS_CONTRACT_ADDRESS`: The address of the node ingress contract from the genesis accounts
-  - `ACCOUNT_INGRESS_CONTRACT_ADDRESS`: The address of the account ingress contract from the genesis accounts
-  - `BESU_NODE_PERM_ACCOUNT`: The address of the account that will be used to deploy the contracts
-  - `BESU_NODE_PERM_KEY`: The private key associated with the deploying account's address
-  - `BESU_NODE_PERM_ENDPOINT`: The json rpc url endpoint that can be used to communicate with your Besu node
-  - `CHAIN_ID`: The chain ID from the genesis file
+1. See besu docs for env vars
 
 2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment.
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
