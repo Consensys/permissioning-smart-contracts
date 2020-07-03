@@ -45,8 +45,8 @@ This is the easiest way to get started for development with the permissioning Da
 #### Start the development server ####
 1. Run `yarn run build` to build the Dapp.
 1. Run `yarn run start` to start the web server that is serving our Dapp.
-1. In your browser, connect Metamask to the Ganache network (the default endpoint is `http://127.0.0.1:9545/`)
-1. When you start Ganache, it gives you a list of accounts and private keys. Import the first one in Metamask to impersonate the first admin of the system.
+1. In your browser, connect MetaMask to the Ganache network (the default endpoint is `http://127.0.0.1:7545/`)
+1. When you start Ganache, it gives you a list of accounts and private keys. Import the first one in MetaMask to impersonate the first admin of the system.
 1. Navigate to `http://localhost:3000` to access the Permissioning Dapp.
 1. All changes made to the smart contracts or to the Dapp code are automatically refreshed on the website. There is no need to restart the web server after making changes.
 
@@ -60,13 +60,14 @@ This is the easiest way to get started for development with the permissioning Da
 ## Deployment
 
 ### Deploying the contracts
-1. See besu docs for env vars
+1. The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
+   describes how to use the contracts for onchain permissioning with Besu, including setting environment variables.
 
-2. The following environment variables are optional and can be used to whitelist accounts and nodes during initial contract deployment.
-  - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma separated multiple addresses can be specified
-  - `INITIAL_WHITELISTED_ACCOUNTS`: The whitelisted account addresses. Comma separated multiple addresses can be specified
-  - `INITIAL_WHITELISTED_NODES`: The enode URLs of whitelisted nodes. Comma separated multiple nodes can be specified
-3. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step.
+2. The following additional environment variables are optional and can be used to permit accounts and nodes during initial contract deployment
+  - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma-separated multiple addresses can be specified
+  - `INITIAL_WHITELISTED_ACCOUNTS`: The permitted account addresses. Comma-separated multiple addresses can be specified
+  - `INITIAL_WHITELISTED_NODES`: The enode URLs of permitted nodes. Comma-separated multiple nodes can be specified
+3. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step
 4. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
