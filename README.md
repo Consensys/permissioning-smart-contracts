@@ -39,13 +39,13 @@ This is the easiest way to get started for development with the permissioning Da
 #### Compile and migrate the contracts (Development mode) ####
 1. Delete your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS` AND
 `NETWORK_ID` - you might need to restart your terminal session after removing it to have your changes applied. If you are using a `.env` file, you can comment out the variables.
-1. Start a terminal session and start a truffle Ganache node running `truffle develop`. This will start a Ganache node and create a truffle console session.
+1. Start a terminal session and start a Truffle Ganache node running `truffle develop`. This will start a Ganache node and create a Truffle console session.
 1. In the truffle console, run all migrations from scratch with `migrate --reset`. Keep this terminal session open to maintain your Ganache node running.
 
 #### Start the development server ####
 1. Run `yarn run build` to build the Dapp.
 1. Run `yarn run start` to start the web server that is serving our Dapp.
-1. In your browser, connect MetaMask to the Ganache network (the default endpoint is `http://127.0.0.1:7545/`)
+1. In your browser, connect MetaMask to the Ganache network (the default endpoint is `http://127.0.0.1:9545/`)
 1. When you start Ganache, it gives you a list of accounts and private keys. Import the first one in MetaMask to impersonate the first admin of the system.
 1. Navigate to `http://localhost:3000` to access the Permissioning Dapp.
 1. All changes made to the smart contracts or to the Dapp code are automatically refreshed on the website. There is no need to restart the web server after making changes.
