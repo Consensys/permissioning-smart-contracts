@@ -11,7 +11,7 @@ contract Admin is AdminProxy, AdminList {
     }
 
     modifier notSelf(address _address) {
-        require(msg.sender != _address, "Cannnot invoke method with own account as parameter");
+        require(msg.sender != _address, "Cannot invoke method with own account as parameter");
         _;
     }
 
@@ -42,7 +42,7 @@ contract Admin is AdminProxy, AdminList {
     }
 
     function getAdmins() public view returns (address[] memory){
-        return whitelist;
+        return allowlist;
     }
 
     function addAdmins(address[] memory accounts) public onlyAdmin returns (bool) {
