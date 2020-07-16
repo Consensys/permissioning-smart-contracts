@@ -57,9 +57,9 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
           if (addSuccessResult === undefined) {
             openToast(value, FAIL, `Error while processing account: ${value}`);
           } else if (Boolean(addSuccessResult)) {
-            openToast(value, SUCCESS, `New whitelisted account processed: ${value}`);
+            openToast(value, SUCCESS, `New permitted account processed: ${value}`);
           } else {
-            openToast(value, FAIL, `Account "${value}" is already on whitelist`);
+            openToast(value, FAIL, `Account "${value}" is already permitted`);
           }
         }
         deleteTransaction(value);
@@ -70,7 +70,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
           openToast(
             value,
             FAIL,
-            'Could not add whitelisted account',
+            'Could not add permitted account',
             `${value} was unable to be added. Please try again.`
           )
         );
@@ -84,7 +84,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
-        openToast(value, SUCCESS, `Removal of whitelisted account processed: ${value}`);
+        openToast(value, SUCCESS, `Removal of permitted account processed: ${value}`);
         deleteTransaction(value);
       } catch (e) {
         console.log('error', e);
@@ -94,7 +94,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
           openToast(
             value,
             FAIL,
-            'Could not remove whitelisted account',
+            'Could not remove permitted account',
             `${value} was unable to be removed. Please try again.`
           )
         );
@@ -113,7 +113,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       if (isDuplicateAccount) {
         return {
           valid: false,
-          msg: 'Account address is already on whitelist.'
+          msg: 'Account address is already permitted.'
         };
       }
 
