@@ -31,41 +31,41 @@ contract("Account Rules (Permissioning)", (accounts) => {
     rulesContract = await RulesContract.new(ingressContract.address);
     await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
     let size = await rulesContract.getSize();
-    assert.equal(size, 1, "Whitelist initialises with 1 account");
+    assert.equal(size, 1, "Allowlist initialises with 1 account");
     let initialAccount = await rulesContract.getByIndex(0);
-    assert.equal(initialAccount, accounts[0], "Whitelist initialises allowing deploying account");
+    assert.equal(initialAccount, accounts[0], "Allowlist initialises allowing deploying account");
     await rulesContract.removeAccount(initialAccount);
   });
 
-  it('should NOT permit account when whitelist is empty', async () => {
+  it('should NOT permit account when allowlist is empty', async () => {
     let size = await rulesContract.getSize();
-    assert.equal(size, 0, "expected empty whitelist");
+    assert.equal(size, 0, "expected empty allowlist");
 
-    let permitted = await rulesContract.accountInWhitelist(address1);
+    let permitted = await rulesContract.accountPermitted(address1);
     assert.notOk(permitted, 'expected node NOT permitted');
   });
 
   it('Should NOT fail when removing account from empty list', async () => {
     let size = await rulesContract.getSize();
-    assert.equal(size, 0, "expected empty whitelist");
+    assert.equal(size, 0, "expected empty allowlist");
 
     let tx = await rulesContract.removeAccount(address1);
     assert.ok(tx.receipt.status);
   });
 
-  it('should add multiple accounts to whitelist', async () => {
+  it('should add multiple accounts to allowlist', async () => {
     await rulesContract.addAccount(address1);
     await rulesContract.addAccount(address2);
     await rulesContract.addAccount(address3);
 
-    permitted = await rulesContract.accountInWhitelist(address1);
-    assert.ok(permitted, 'expected account 1 added to be in whitelist');
+    permitted = await rulesContract.accountPermitted(address1);
+    assert.ok(permitted, 'expected account 1 added to be in allowlist');
 
-    permitted = await rulesContract.accountInWhitelist(address2);
-    assert.ok(permitted, 'expected account 2 added to be in whitelist');
+    permitted = await rulesContract.accountPermitted(address2);
+    assert.ok(permitted, 'expected account 2 added to be in allowlist');
 
-    permitted = await rulesContract.accountInWhitelist(address3);
-    assert.ok(permitted, 'expected account 3 added to be in whitelist');
+    permitted = await rulesContract.accountPermitted(address3);
+    assert.ok(permitted, 'expected account 3 added to be in allowlist');
   });
 
   it("getByIndex returns expected order", async () => {
@@ -79,7 +79,7 @@ contract("Account Rules (Permissioning)", (accounts) => {
     assert.equal(result.toLowerCase(), address3.toLowerCase());
   });
 
-  it('should allow a transaction from account added to the whitelist', async () => {
+  it('should allow a transaction from account added to the allowlist', async () => {
     let permitted = await rulesContract.transactionAllowed(address1, address2, txValue, txGasPrice, txGasLimit, txPayload);
     assert.equal(permitted, true, 'expected permitted address1');
 
@@ -87,9 +87,9 @@ contract("Account Rules (Permissioning)", (accounts) => {
     assert.equal(permitted, true, 'expected permitted address2');
   });
 
-  it('should NOT allow transaction from account removed from whitelist', async () => {
+  it('should NOT allow transaction from account removed from allowlist', async () => {
     await rulesContract.removeAccount(address3);
-    let permitted = await rulesContract.accountInWhitelist(address3);
+    let permitted = await rulesContract.accountPermitted(address3);
     assert.notOk(permitted, 'expected removed account NOT permitted');
 
     permitted = await rulesContract.transactionAllowed(address3, address1, txValue, txGasPrice, txGasLimit, txPayload);
@@ -99,19 +99,19 @@ contract("Account Rules (Permissioning)", (accounts) => {
     assert.equal(result, 2, "expected number of nodes");
   });
 
-  it('should permit an account added back to the whitelist', async () => {
-    let permitted = await rulesContract.accountInWhitelist(address3);
+  it('should permit an account added back to the allowlist', async () => {
+    let permitted = await rulesContract.accountPermitted(address3);
     assert.notOk(permitted, 'expected removed account NOT permitted');
 
     await rulesContract.addAccount(address3);
-    permitted = await rulesContract.accountInWhitelist(address3);
+    permitted = await rulesContract.accountPermitted(address3);
     assert.ok(permitted, 'expected added account permitted');
 
     permitted = await rulesContract.transactionAllowed(address3, address2, txValue, txGasPrice, txGasLimit, txPayload);
-    assert.equal(permitted, true, 'expected transaction allowed since account was added back to whitelist');
+    assert.equal(permitted, true, 'expected transaction allowed since account was added back to allowlist');
   });
 
-  it('should not allow non-admin account to add to whitelist', async () => {
+  it('should not allow non-admin account to add to allowlist', async () => {
     try {
       await rulesContract.addAccount(address1, { from: accounts[1] });
       expect.fail(null, null, "Modifier was not enforced")
@@ -120,7 +120,7 @@ contract("Account Rules (Permissioning)", (accounts) => {
     }
   });
 
-  it('should not allow non-admin account to remove from whitelist', async () => {
+  it('should not allow non-admin account to remove from allowlist', async () => {
     try {
       await rulesContract.addAccount(address1, { from: accounts[1] });
       expect.fail(null, null, "Modifier was not enforced")
@@ -129,21 +129,21 @@ contract("Account Rules (Permissioning)", (accounts) => {
     }
   });
 
-  it('should allow new admin account to remove from whitelist', async () => {
+  it('should allow new admin account to remove from allowlist', async () => {
     await adminContract.addAdmin(accounts[1]);
 
     await rulesContract.removeAccount(address1, { from: accounts[1] });
 
-    let permitted = await rulesContract.accountInWhitelist(address1);
+    let permitted = await rulesContract.accountPermitted(address1);
     assert.notOk(permitted, 'expected added node NOT permitted');
   });
 
-  it('should allow new admin account to add to whitelist', async () => {
+  it('should allow new admin account to add to allowlist', async () => {
     await adminContract.addAdmin(accounts[2]);
 
     await rulesContract.addAccount(address1, { from: accounts[2] });
 
-    let permitted = await rulesContract.accountInWhitelist(address1);
+    let permitted = await rulesContract.accountPermitted(address1);
     assert.ok(permitted, 'expected added account permitted');
   });
 });
