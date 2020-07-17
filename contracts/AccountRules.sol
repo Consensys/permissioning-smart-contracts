@@ -65,7 +65,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         bytes memory // payload
     ) public view returns (bool) {
         if (
-            accountInWhitelist (sender)
+            accountPermitted (sender)
         ) {
             return true;
         } else {
@@ -73,7 +73,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         }
     }
 
-    function accountInWhitelist(
+    function accountPermitted(
         address _account
     ) public view returns (bool) {
         return exists(_account);
@@ -100,11 +100,11 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     function getByIndex(uint index) public view returns (address account) {
-        return whitelist[index];
+        return allowlist[index];
     }
 
     function getAccounts() public view returns (address[] memory){
-        return whitelist;
+        return allowlist;
     }
 
     function addAccounts(address[] memory accounts) public onlyAdmin returns (bool) {
