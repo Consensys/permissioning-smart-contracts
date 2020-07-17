@@ -2901,7 +2901,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                       fontSize={2}
                       fontWeight="600"
                     >
-                      Whitelisted Accounts
+                      Accounts
                     </div>
                   </StyledComponent>
                 </Text>
@@ -4891,7 +4891,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                       fontSize={2}
                       fontWeight="600"
                     >
-                      Whitelisted Nodes
+                      Nodes
                     </div>
                   </StyledComponent>
                 </Text>
@@ -15201,7 +15201,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                       fontSize={2}
                       fontWeight="600"
                     >
-                      Whitelisted Accounts
+                      Accounts
                     </div>
                   </StyledComponent>
                 </Text>
@@ -17191,7 +17191,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                       fontSize={2}
                       fontWeight="600"
                     >
-                      Whitelisted Nodes
+                      Nodes
                     </div>
                   </StyledComponent>
                 </Text>
