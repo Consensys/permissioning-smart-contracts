@@ -121,7 +121,7 @@ contract("NodeRulesList (list manipulation)", async () => {
   });
 
   it("get by index on empty list should return undefined", async () => {
-    let node = await rulesListContract.whitelist[0];
+    let node = await rulesListContract.allowlist[0];
 
     assert.isUndefined(node);
   });

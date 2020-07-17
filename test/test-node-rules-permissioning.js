@@ -42,38 +42,38 @@ contract("NodeRules (Permissioning)", (accounts) => {
     await nodeIngressContract.setContractAddress(RULES_NAME, nodeRulesContract.address);
   });
 
-  it('should NOT permit node when whitelist is empty', async () => {
+  it('should NOT permit node when list is empty', async () => {
     let size = await nodeRulesContract.getSize();
-    assert.equal(size, 0, "expected empty whitelist");
+    assert.equal(size, 0, "expected empty list");
 
-    let permitted = await nodeRulesContract.enodeInWhitelist(node1High, node1Low, node1Host, node1Port);
+    let permitted = await nodeRulesContract.enodePermitted(node1High, node1Low, node1Host, node1Port);
     assert.notOk(permitted, 'expected node NOT permitted');
   });
 
   it('Should NOT fail when removing enode from empty list', async () => {
     let size = await nodeRulesContract.getSize();
-    assert.equal(size, 0, "expected empty whitelist");
+    assert.equal(size, 0, "expected empty list");
 
     let tx = await nodeRulesContract.removeEnode(node1High, node1Low, node1Host, node1Port);
     assert.ok(tx.receipt.status);
   });
 
-  it('should add multiple nodes to whitelist', async () => {
+  it('should add multiple nodes to list', async () => {
     await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
     await nodeRulesContract.addEnode(node2High, node2Low, node2Host, node2Port);
     await nodeRulesContract.addEnode(node3High, node3Low, node3Host, node3Port);
 
-    permitted = await nodeRulesContract.enodeInWhitelist(node1High, node1Low, node1Host, node1Port);
-    assert.ok(permitted, 'expected node 1 added to be in whitelist');
+    permitted = await nodeRulesContract.enodePermitted(node1High, node1Low, node1Host, node1Port);
+    assert.ok(permitted, 'expected node 1 added to be in list');
 
-    permitted = await nodeRulesContract.enodeInWhitelist(node2High, node2Low, node2Host, node2Port);
-    assert.ok(permitted, 'expected node 2 added to be in whitelist');
+    permitted = await nodeRulesContract.enodePermitted(node2High, node2Low, node2Host, node2Port);
+    assert.ok(permitted, 'expected node 2 added to be in list');
 
-    permitted = await nodeRulesContract.enodeInWhitelist(node3High, node3Low, node3Host, node3Port);
-    assert.ok(permitted, 'expected node 3 added to be in whitelist');
+    permitted = await nodeRulesContract.enodePermitted(node3High, node3Low, node3Host, node3Port);
+    assert.ok(permitted, 'expected node 3 added to be in list');
   });
 
-  it('should allow a connection between nodes added to the whitelist', async () => {
+  it('should allow a connection between nodes added to the list', async () => {
     let permitted = await nodeRulesContract.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
     assert.equal(permitted, PERMITTED, 'expected permitted node1 <---> node2');
 
@@ -84,9 +84,9 @@ contract("NodeRules (Permissioning)", (accounts) => {
     assert.equal(permitted, PERMITTED, 'expected permitted node2 <---> node3');
   });
 
-  it('should NOT allow connection with node removed from whitelist', async () => {
+  it('should NOT allow connection with node removed from list', async () => {
     await nodeRulesContract.removeEnode(node3High, node3Low, node3Host, node3Port);
-    let permitted = await nodeRulesContract.enodeInWhitelist(node3High, node3Low, node3Host, node3Port);
+    let permitted = await nodeRulesContract.enodePermitted(node3High, node3Low, node3Host, node3Port);
     assert.notOk(permitted, 'expected removed node NOT permitted');
 
     permitted = await nodeRulesContract.connectionAllowed(node3High, node3Low, node3Host, node3Port, node2High, node2Low, node2Host, node2Port);
@@ -96,19 +96,19 @@ contract("NodeRules (Permissioning)", (accounts) => {
     assert.equal(result, 2, "expected number of nodes");
   });
 
-  it('should permit a node added back to the whitelist', async () => {
-    let permitted = await nodeRulesContract.enodeInWhitelist(node3High, node3Low, node3Host, node3Port);
+  it('should permit a node added back to the list', async () => {
+    let permitted = await nodeRulesContract.enodePermitted(node3High, node3Low, node3Host, node3Port);
     assert.notOk(permitted, 'expected removed node NOT permitted');
 
     await nodeRulesContract.addEnode(node3High, node3Low, node3Host, node3Port);
-    permitted = await nodeRulesContract.enodeInWhitelist(node3High, node3Low, node3Host, node3Port);
+    permitted = await nodeRulesContract.enodePermitted(node3High, node3Low, node3Host, node3Port);
     assert.ok(permitted, 'expected added node permitted');
 
     permitted = await nodeRulesContract.connectionAllowed(node3High, node3Low, node3Host, node3Port, node2High, node2Low, node2Host, node2Port);
-    assert.equal(permitted, PERMITTED, 'expected connection allowed since node was added back to whitelist');
+    assert.equal(permitted, PERMITTED, 'expected connection allowed since node was added back to list');
   });
 
-  it('should not allow non-admin account to add node to whitelist', async () => {
+  it('should not allow non-admin account to add node to list', async () => {
     try {
       await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port, { from: accounts[1] });
       expect.fail(null, null, "Modifier was not enforced")
@@ -117,7 +117,7 @@ contract("NodeRules (Permissioning)", (accounts) => {
     }
   });
 
-  it('should not allow non-admin account to remove node to whitelist', async () => {
+  it('should not allow non-admin account to remove node to list', async () => {
     try {
       await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port, { from: accounts[1] });
       expect.fail(null, null, "Modifier was not enforced")
@@ -126,21 +126,21 @@ contract("NodeRules (Permissioning)", (accounts) => {
     }
   });
 
-  it('should allow new admin account to remove node from whitelist', async () => {
+  it('should allow new admin account to remove node from list', async () => {
     await adminContract.addAdmin(accounts[1]);
 
     await nodeRulesContract.removeEnode(node1High, node1Low, node1Host, node1Port, { from: accounts[1] });
 
-    let permitted = await nodeRulesContract.enodeInWhitelist(node1High, node1Low, node1Host, node1Port);
+    let permitted = await nodeRulesContract.enodePermitted(node1High, node1Low, node1Host, node1Port);
     assert.notOk(permitted, 'expected added node NOT permitted');
   });
 
-  it('should allow new admin account to add node to whitelist', async () => {
+  it('should allow new admin account to add node to list', async () => {
     await adminContract.addAdmin(accounts[2]);
 
     await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port, { from: accounts[2] });
 
-    let permitted = await nodeRulesContract.enodeInWhitelist(node1High, node1Low, node1Host, node1Port);
+    let permitted = await nodeRulesContract.enodePermitted(node1High, node1Low, node1Host, node1Port);
     assert.ok(permitted, 'expected added node permitted');
   });
 });

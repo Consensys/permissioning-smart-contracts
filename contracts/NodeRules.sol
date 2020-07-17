@@ -82,12 +82,12 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         uint16 destinationEnodePort
     ) public view returns (bytes32) {
         if (
-            enodeInWhitelist (
+            enodePermitted (
                 sourceEnodeHigh,
                 sourceEnodeLow,
                 sourceEnodeIp,
                 sourceEnodePort
-            ) && enodeInWhitelist(
+            ) && enodePermitted(
                 destinationEnodeHigh,
                 destinationEnodeLow,
                 destinationEnodeIp,
@@ -100,7 +100,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         }
     }
 
-    function enodeInWhitelist(
+    function enodePermitted(
         bytes32 enodeHigh,
         bytes32 enodeLow,
         bytes16 ip,
@@ -159,7 +159,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function getByIndex(uint index) public view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port) {
         if (index >= 0 && index < size()) {
-            enode memory item = whitelist[index];
+            enode memory item = allowlist[index];
             return (item.enodeHigh, item.enodeLow, item.ip, item.port);
         }
     }
