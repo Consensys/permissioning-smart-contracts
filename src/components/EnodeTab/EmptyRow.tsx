@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 const EmptyRow: React.FC<{}> = () => (
   <tr>
     <td colSpan={5} className={styles.emptyLine}>
-      No nodes have been permitted.
+      No nodes have been added.
     </td>
   </tr>
 );

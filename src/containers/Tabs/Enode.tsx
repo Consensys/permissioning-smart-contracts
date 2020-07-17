@@ -70,11 +70,11 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         } else {
           const addSuccessResult = idx(addEvent, _ => _.args[0]);
           if (addSuccessResult === undefined) {
-            openToast(value, FAIL, `Error while processing node: ${value}`);
+            openToast(value, FAIL, `Error while adding node: ${value}`);
           } else if (Boolean(addSuccessResult)) {
-            openToast(value, SUCCESS, `New permitted node processed: ${value}`);
+            openToast(value, SUCCESS, `New node added: ${value}`);
           } else {
-            openToast(value, FAIL, `Node "${value}" is already permitted`);
+            openToast(value, FAIL, `Node "${value}" is already added`);
           }
         }
         deleteTransaction(value);
@@ -113,7 +113,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
-        openToast(value, SUCCESS, `Removal of permitted node processed: ${enodeHigh}${enodeLow}`);
+        openToast(value, SUCCESS, `Removal of node processed: ${enodeHigh}${enodeLow}`);
         deleteTransaction(value);
       } catch (e) {
         toggleModal('remove')(false);
@@ -141,7 +141,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
       } else if (isDuplicateEnode(enode)) {
         return {
           valid: false,
-          msg: 'Specified enode is already permitted.'
+          msg: 'Specified enode is already added.'
         };
       } else {
         return {
