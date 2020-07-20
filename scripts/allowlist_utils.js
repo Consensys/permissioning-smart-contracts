@@ -36,33 +36,33 @@ function isInitialAdminAccountsAvailable() {
     return process.env.INITIAL_ADMIN_ACCOUNTS;
 }
 
-function isInitialWhitelistedAccountsAvailable() {
-    return process.env.INITIAL_WHITELISTED_ACCOUNTS;
+function isInitialAllowlistedAccountsAvailable() {
+    return process.env.INITIAL_ALLOWLISTED_ACCOUNTS;
 }
 
-function isInitialWhitelistedNodesAvailable() {
-    return process.env.INITIAL_WHITELISTED_NODES;
+function isInitialAllowlistedNodesAvailable() {
+    return process.env.INITIAL_ALLOWLISTED_NODES;
 }
 
 function getInitialAdminAccounts() {
     return getAccounts(isInitialAdminAccountsAvailable());
 }
 
-function getInitialWhitelistedAccounts() {
-    return getAccounts(isInitialWhitelistedAccountsAvailable());
+function getInitialAllowlistedAccounts() {
+    return getAccounts(isInitialAllowlistedAccountsAvailable());
 }
 
-function getInitialWhitelistedNodes() {
-    let envInitialWhitelistedNodes = isInitialWhitelistedNodesAvailable();
+function getInitialAllowlistedNodes() {
+    let envInitialAllowlistedNodes = isInitialAllowlistedNodesAvailable();
     let validENodes = new Set();
-    if (envInitialWhitelistedNodes) {
+    if (envInitialAllowlistedNodes) {
         let invalidENodes = new Set();
-        let initialWhitelistedNodesList = envInitialWhitelistedNodes.split(/,/).map(n => n.trim());
+        let initialAllowlistedNodesList = envInitialAllowlistedNodes.split(/,/).map(n => n.trim());
 
         //Convert to enode structure
-        if(initialWhitelistedNodesList && initialWhitelistedNodesList.length > 0) {
-            for (i=0; i < initialWhitelistedNodesList.length; i++) {
-                let enode = initialWhitelistedNodesList[i];
+        if(initialAllowlistedNodesList && initialAllowlistedNodesList.length > 0) {
+            for (i=0; i < initialAllowlistedNodesList.length; i++) {
+                let enode = initialAllowlistedNodesList[i];
                 if (isValidEnode(enode)) {
                     if(validENodes.has(enode)) {
                         console.log("     > Warning: Duplicate eNode Address: " + enode);
@@ -136,9 +136,9 @@ function toHex(number) {
 module.exports = {
     enodeToParams,
     isInitialAdminAccountsAvailable,
-    isInitialWhitelistedAccountsAvailable,
-    isInitialWhitelistedNodesAvailable,
+    isInitialAllowlistedAccountsAvailable,
+    isInitialAllowlistedNodesAvailable,
     getInitialAdminAccounts,
-    getInitialWhitelistedAccounts,
-    getInitialWhitelistedNodes
+    getInitialAllowlistedAccounts,
+    getInitialAllowlistedNodes
  }

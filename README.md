@@ -65,8 +65,8 @@ This is the easiest way to get started for development with the permissioning Da
 
 2. The following additional environment variables are optional and can be used to permit accounts and nodes during initial contract deployment
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma-separated multiple addresses can be specified
-  - `INITIAL_WHITELISTED_ACCOUNTS`: The permitted account addresses. Comma-separated multiple addresses can be specified
-  - `INITIAL_WHITELISTED_NODES`: The enode URLs of permitted nodes. Comma-separated multiple nodes can be specified
+  - `INITIAL_ALLOWLISTED_ACCOUNTS`: The permitted account addresses. Comma-separated multiple addresses can be specified
+  - `INITIAL_ALLOWLISTED_NODES`: The enode URLs of permitted nodes. Comma-separated multiple nodes can be specified
 3. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step
 4. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 

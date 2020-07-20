@@ -1,4 +1,4 @@
-const WhitelistUtils = require('../scripts/whitelist_utils');
+const AllowlistUtils = require('../scripts/allowlist_utils');
 
 const Admin = artifacts.require("./Admin.sol");
 
@@ -8,9 +8,9 @@ module.exports = async(deployer, network) => {
 
     let instance = await Admin.deployed();
 
-    if(WhitelistUtils.isInitialAdminAccountsAvailable()) {
+    if(AllowlistUtils.isInitialAdminAccountsAvailable()) {
         console.log("   > Adding Initial Admin Accounts ...");
-        let initialAdminAccounts = WhitelistUtils.getInitialAdminAccounts();
+        let initialAdminAccounts = AllowlistUtils.getInitialAdminAccounts();
         if (initialAdminAccounts.length > 0) {
             let adminAddedResult = await instance.addAdmins(initialAdminAccounts);
             console.log ("   > Initial admin accounts added : " + initialAdminAccounts); 
