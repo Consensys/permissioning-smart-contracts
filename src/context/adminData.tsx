@@ -29,7 +29,7 @@ const loadAdminData = (adminContract: Admin | undefined, setAdmins: (admins: str
 };
 
 /**
- * Provider for the data context that contains the Admin whitelist
+ * Provider for the data context that contains the Admin list
  * @param {Object} props Props given to the AdminDataProvider
  * @return The provider with the following value:
  *  - admins: list of Admin accounts from Admin Rules contract
@@ -82,11 +82,11 @@ export const AdminDataProvider: React.FC = (props: React.Props<{}>) => {
 /**
  * Fetch the appropriate Admin data on chain and synchronize with it
  * @return {Object} Contains data of interest:
- *  - dataReady: true if Admin whitelist has been correctly fetched,
+ *  - dataReady: true if Admin list has been correctly fetched,
  *  false otherwise
  *  - userAddress: Address of the user
- *  - isAdmin: user in an Admin,
- *  - whitelist: list of whitelist nodes from Node contract,
+ *  - isAdmin: user is an Admin,
+ *  - allowlist: list of admin accounts from Admin contract,
  */
 export const useAdminData = () => {
   const context = useContext(AdminDataContext);

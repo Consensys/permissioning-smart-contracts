@@ -11,8 +11,8 @@ type Enode = RawEnode & { identifier: string };
 
 type ContextType =
   | {
-      nodeWhitelist: Enode[];
-      setNodeWhitelist: React.Dispatch<React.SetStateAction<Enode[]>>;
+      nodeList: Enode[];
+      setNodeList: React.Dispatch<React.SetStateAction<Enode[]>>;
       nodeReadOnly?: boolean;
       setNodeReadOnly: React.Dispatch<React.SetStateAction<boolean | undefined>>;
       nodeRulesContract?: NodeRules;
@@ -24,48 +24,48 @@ const DataContext = createContext<ContextType>(undefined);
 
 const loadNodeData = (
   nodeRulesContract: NodeRules | undefined,
-  setNodeWhitelist: (account: Enode[]) => void,
+  setNodeList: (account: Enode[]) => void,
   setNodeReadOnly: (readOnly?: boolean) => void
 ) => {
   if (nodeRulesContract === undefined) {
-    setNodeWhitelist([]);
+    setNodeList([]);
     setNodeReadOnly(undefined);
   } else {
     nodeRulesContract.functions.isReadOnly().then(isReadOnly => setNodeReadOnly(isReadOnly));
-    nodeRulesContract.functions.getSize().then(whitelistSize => {
-      const whitelistElementPromises = [];
-      for (let i = 0; whitelistSize.gt(i); i++) {
-        whitelistElementPromises.push(nodeRulesContract.functions.getByIndex(i));
+    nodeRulesContract.functions.getSize().then(listSize => {
+      const listElementPromises = [];
+      for (let i = 0; listSize.gt(i); i++) {
+        listElementPromises.push(nodeRulesContract.functions.getByIndex(i));
       }
-      Promise.all(whitelistElementPromises).then(responses => {
-        const updatedNodeWhitelist = responses.map(r => {
+      Promise.all(listElementPromises).then(responses => {
+        const updatedNodeList = responses.map(r => {
           const withStringyPort = { ...r, port: r.port.toString() };
           return {
             ...withStringyPort,
             identifier: paramsToIdentifier(withStringyPort)
           };
         });
-        setNodeWhitelist(updatedNodeWhitelist);
+        setNodeList(updatedNodeList);
       });
     });
   }
 };
 
 /**
- * Provider for the data context that contains the node whitelist
+ * Provider for the data context that contains the node list
  * @param {Object} props Props given to the NodeDataProvider
  * @return The provider with the following value:
- *  - nodeWhitelist: list of whiteliist enode from Node Rules contract
- *  - setNodeWhitelist: setter for the whitelist state
+ *  - nodeList: list of whiteliist enode from Node Rules contract
+ *  - setNodeList: setter for the list state
  */
 export const NodeDataProvider: React.FC<{}> = props => {
-  const [nodeWhitelist, setNodeWhitelist] = useState<Enode[]>([]);
+  const [nodeList, setNodeList] = useState<Enode[]>([]);
   const [nodeReadOnly, setNodeReadOnly] = useState<boolean | undefined>(undefined);
   const [nodeRulesContract, setNodeRulesContract] = useState<NodeRules | undefined>(undefined);
 
   const value = useMemo(
-    () => ({ nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract }),
-    [nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract]
+    () => ({ nodeList, setNodeList, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract }),
+    [nodeList, setNodeList, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract]
   );
 
   const { nodeIngressContract } = useNetwork();
@@ -79,10 +79,10 @@ export const NodeDataProvider: React.FC<{}> = props => {
         contract.removeAllListeners('NodeAdded');
         contract.removeAllListeners('NodeRemoved');
         contract.on('NodeAdded', () => {
-          loadNodeData(contract, setNodeWhitelist, setNodeReadOnly);
+          loadNodeData(contract, setNodeList, setNodeReadOnly);
         });
         contract.on('NodeRemoved', () => {
-          loadNodeData(contract, setNodeWhitelist, setNodeReadOnly);
+          loadNodeData(contract, setNodeList, setNodeReadOnly);
         });
       });
     }
@@ -94,11 +94,11 @@ export const NodeDataProvider: React.FC<{}> = props => {
 /**
  * Fetch the appropriate node data on chain and synchronize with it
  * @return {Object} Contains data of interest:
- *  - dataReady: true if isReadOnly and node whitelist are correctly fetched,
+ *  - dataReady: true if isReadOnly and node allowlist are correctly fetched,
  *  false otherwise
  *  - userAddress: Address of the user
  *  - isReadOnly: Node contract is lock or unlock,
- *  - whitelist: list of whitelist nodes from Node contract,
+ *  - allowlist: list of permitted nodes from Node contract,
  */
 export const useNodeData = () => {
   const context = useContext(DataContext);
@@ -106,23 +106,23 @@ export const useNodeData = () => {
     throw new Error('useNodeData must be used within a NodeDataProvider.');
   }
 
-  const { nodeWhitelist, setNodeWhitelist, nodeReadOnly, setNodeReadOnly, nodeRulesContract } = context;
+  const { nodeList, setNodeList, nodeReadOnly, setNodeReadOnly, nodeRulesContract } = context;
 
   useEffect(() => {
-    loadNodeData(nodeRulesContract, setNodeWhitelist, setNodeReadOnly);
-  }, [nodeRulesContract, setNodeWhitelist, setNodeReadOnly]);
+    loadNodeData(nodeRulesContract, setNodeList, setNodeReadOnly);
+  }, [nodeRulesContract, setNodeList, setNodeReadOnly]);
 
-  const formattedNodeWhitelist = useMemo(() => {
-    return nodeWhitelist.map(enode => ({ ...enode, status: 'active' })).reverse();
-  }, [nodeWhitelist]);
+  const formattedNodeList = useMemo(() => {
+    return nodeList.map(enode => ({ ...enode, status: 'active' })).reverse();
+  }, [nodeList]);
 
   const dataReady = useMemo(() => {
-    return nodeRulesContract !== undefined && nodeReadOnly !== undefined && nodeWhitelist !== undefined;
-  }, [nodeRulesContract, nodeReadOnly, nodeWhitelist]);
+    return nodeRulesContract !== undefined && nodeReadOnly !== undefined && nodeList !== undefined;
+  }, [nodeRulesContract, nodeReadOnly, nodeList]);
 
   return {
     dataReady,
-    whitelist: formattedNodeWhitelist,
+    allowlist: formattedNodeList,
     isReadOnly: nodeReadOnly,
     nodeRulesContract
   };

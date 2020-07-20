@@ -37,10 +37,10 @@ type EnodeTabContainerProps = {
 
 const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { whitelist, isReadOnly, dataReady, nodeRulesContract } = useNodeData();
+  const { allowlist, isReadOnly, dataReady, nodeRulesContract } = useNodeData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
-    whitelist,
+    allowlist,
     identifierToParams
   );
 

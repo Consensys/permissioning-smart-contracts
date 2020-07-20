@@ -35,10 +35,10 @@ type Account = {
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { whitelist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
+  const { allowlist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
-    whitelist,
+    allowlist,
     (identifier: string) => ({ address: identifier })
   );
 
