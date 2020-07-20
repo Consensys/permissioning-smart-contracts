@@ -7,8 +7,8 @@ type Account = { address: string };
 
 type ContextType =
   | {
-      accountWhitelist: Account[];
-      setAccountWhitelist: React.Dispatch<React.SetStateAction<Account[]>>;
+      accountList: Account[];
+      setAccountList: React.Dispatch<React.SetStateAction<Account[]>>;
       accountReadOnly?: boolean;
       setAccountReadOnly: React.Dispatch<React.SetStateAction<boolean | undefined>>;
       accountRulesContract?: AccountRules;
@@ -20,55 +20,48 @@ const AccountDataContext = createContext<ContextType>(undefined);
 
 const loadAccountData = (
   accountRulesContract: AccountRules | undefined,
-  setAccountWhitelist: (account: Account[]) => void,
+  setAccountList: (account: Account[]) => void,
   setAccountReadOnly: (readOnly?: boolean) => void
 ) => {
   if (accountRulesContract === undefined) {
-    setAccountWhitelist([]);
+    setAccountList([]);
     setAccountReadOnly(undefined);
   } else {
     accountRulesContract.functions.isReadOnly().then(isReadOnly => setAccountReadOnly(isReadOnly));
-    accountRulesContract.functions.getSize().then(whitelistSize => {
-      const whitelistElementsPromises = [];
-      for (let i = 0; whitelistSize.gt(i); i++) {
-        whitelistElementsPromises.push(accountRulesContract.functions.getByIndex(i));
+    accountRulesContract.functions.getSize().then(listSize => {
+      const listElementsPromises = [];
+      for (let i = 0; listSize.gt(i); i++) {
+        listElementsPromises.push(accountRulesContract.functions.getByIndex(i));
       }
-      Promise.all(whitelistElementsPromises).then(responses => {
-        setAccountWhitelist(responses.map(address => ({ address })));
+      Promise.all(listElementsPromises).then(responses => {
+        setAccountList(responses.map(address => ({ address })));
       });
     });
   }
 };
 
 /**
- * Provider for the data context that contains the account whitelist
+ * Provider for the data context that contains the account list
  * @param {Object} props Props given to the AccountDataProvider
  * @return The provider with the following value:
- *  - accountWhitelist: list of whiteliist accounts from Account Rules contract
- *  - setNodeWhitelist: setter for the whitelist state
+ *  - accountList: list of permitted accounts from Account Rules contract
+ *  - setAccountList: setter for the allowlist state
  */
 export const AccountDataProvider: React.FC<{}> = props => {
-  const [accountWhitelist, setAccountWhitelist] = useState<Account[]>([]);
+  const [accountList, setAccountList] = useState<Account[]>([]);
   const [accountReadOnly, setAccountReadOnly] = useState<boolean | undefined>(undefined);
   const [accountRulesContract, setAccountRulesContract] = useState<AccountRules | undefined>(undefined);
 
   const value = useMemo(
     () => ({
-      accountWhitelist,
-      setAccountWhitelist,
+      accountList: accountList,
+      setAccountList: setAccountList,
       accountReadOnly,
       setAccountReadOnly,
       accountRulesContract,
       setAccountRulesContract
     }),
-    [
-      accountWhitelist,
-      setAccountWhitelist,
-      accountReadOnly,
-      setAccountReadOnly,
-      accountRulesContract,
-      setAccountRulesContract
-    ]
+    [accountList, setAccountList, accountReadOnly, setAccountReadOnly, accountRulesContract, setAccountRulesContract]
   );
 
   const { accountIngressContract } = useNetwork();
@@ -83,17 +76,17 @@ export const AccountDataProvider: React.FC<{}> = props => {
         contract.removeAllListeners('AccountRemoved');
         contract.on('AccountAdded', (success, account, event) => {
           if (success) {
-            loadAccountData(contract, setAccountWhitelist, setAccountReadOnly);
+            loadAccountData(contract, setAccountList, setAccountReadOnly);
           }
         });
         contract.on('AccountRemoved', (success, account, event) => {
           if (success) {
-            loadAccountData(contract, setAccountWhitelist, setAccountReadOnly);
+            loadAccountData(contract, setAccountList, setAccountReadOnly);
           }
         });
       });
     }
-  }, [accountIngressContract, setAccountWhitelist, setAccountReadOnly]);
+  }, [accountIngressContract, setAccountList, setAccountReadOnly]);
 
   return <AccountDataContext.Provider value={value} {...props} />;
 };
@@ -101,11 +94,11 @@ export const AccountDataProvider: React.FC<{}> = props => {
 /**
  * Fetch the appropriate account data on chain and synchronize with it
  * @return {Object} Contains data of interest:
- *  - dataReady: true if isReadOnly and account whitelist are correctly fetched,
+ *  - dataReady: true if isReadOnly and account allowlist are correctly fetched,
  *  false otherwise
  *  - userAddress: Address of the user
  *  - isReadOnly: Account contract is lock or unlock,
- *  - whitelist: list of whitelist accounts from Account contract,
+ *  - allowlist: list of permitted accounts from Account contract,
  */
 export const useAccountData = () => {
   const context = useContext(AccountDataContext);
@@ -114,29 +107,29 @@ export const useAccountData = () => {
     throw new Error('useAccountData must be used within an AccountDataProvider.');
   }
 
-  const { accountWhitelist, setAccountWhitelist, accountReadOnly, setAccountReadOnly, accountRulesContract } = context;
+  const { accountList, setAccountList, accountReadOnly, setAccountReadOnly, accountRulesContract } = context;
 
   useEffect(() => {
-    loadAccountData(accountRulesContract, setAccountWhitelist, setAccountReadOnly);
-  }, [accountRulesContract, setAccountWhitelist, setAccountReadOnly]);
+    loadAccountData(accountRulesContract, setAccountList, setAccountReadOnly);
+  }, [accountRulesContract, setAccountList, setAccountReadOnly]);
 
-  const formattedAccountWhitelist = useMemo(() => {
-    return accountWhitelist
+  const formattedAccountList = useMemo(() => {
+    return accountList
       .map(account => ({
         ...account,
         identifier: account.address.toLowerCase(),
         status: 'active'
       }))
       .reverse();
-  }, [accountWhitelist]);
+  }, [accountList]);
 
   const dataReady = useMemo(() => {
-    return accountRulesContract !== undefined && accountReadOnly !== undefined && accountWhitelist !== undefined;
-  }, [accountRulesContract, accountReadOnly, accountWhitelist]);
+    return accountRulesContract !== undefined && accountReadOnly !== undefined && accountList !== undefined;
+  }, [accountRulesContract, accountReadOnly, accountList]);
 
   return {
     dataReady,
-    whitelist: formattedAccountWhitelist,
+    allowlist: formattedAccountList,
     isReadOnly: accountReadOnly,
     accountRulesContract
   };
