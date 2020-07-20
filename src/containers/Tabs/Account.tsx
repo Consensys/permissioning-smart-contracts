@@ -99,7 +99,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         };
       }
 
-      let isDuplicateAccount = list.filter((item: Account) => address === item.address).length > 0;
+      let isDuplicateAccount =
+        list.filter((item: Account) => address.toLowerCase() === item.address.toLowerCase()).length > 0;
       if (isDuplicateAccount) {
         return {
           valid: false,
