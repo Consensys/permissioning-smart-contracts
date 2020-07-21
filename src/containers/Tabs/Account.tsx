@@ -35,10 +35,10 @@ type Account = {
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { whitelist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
+  const { allowlist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
-    whitelist,
+    allowlist,
     (identifier: string) => ({ address: identifier })
   );
 
@@ -99,7 +99,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         };
       }
 
-      let isDuplicateAccount = list.filter((item: Account) => address === item.address).length > 0;
+      let isDuplicateAccount =
+        list.filter((item: Account) => address.toLowerCase() === item.address.toLowerCase()).length > 0;
       if (isDuplicateAccount) {
         return {
           valid: false,

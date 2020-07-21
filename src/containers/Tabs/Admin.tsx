@@ -101,7 +101,7 @@ const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
         };
       }
 
-      let isAdmin = list.filter((item: Admin) => item.address === address).length > 0;
+      let isAdmin = list.filter((item: Admin) => item.address.toLowerCase() === address.toLowerCase()).length > 0;
       if (isAdmin) {
         return {
           valid: false,
