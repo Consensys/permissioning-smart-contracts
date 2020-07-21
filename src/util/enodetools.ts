@@ -82,8 +82,8 @@ export const isValidEnode = (str: string) => {
 
 export const isEqual = (node1: Enode, node2: Enode) => {
   return (
-    node1.enodeHigh === node2.enodeHigh &&
-    node1.enodeLow === node2.enodeLow &&
+    node1.enodeHigh.toLowerCase() === node2.enodeHigh.toLowerCase() &&
+    node1.enodeLow.toLowerCase() === node2.enodeLow.toLowerCase() &&
     node1.ip === node2.ip &&
     node1.port === node2.port
   );
