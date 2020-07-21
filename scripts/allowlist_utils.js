@@ -37,23 +37,38 @@ function isInitialAdminAccountsAvailable() {
 }
 
 function isInitialAllowlistedAccountsAvailable() {
-    return process.env.INITIAL_ALLOWLISTED_ACCOUNTS;
+    if (process.env.INITIAL_ALLOWLISTED_ACCOUNTS) {
+        return process.env.INITIAL_ALLOWLISTED_ACCOUNTS;
+    }
+    if (process.env.INITIAL_WHITELISTED_ACCOUNTS) {
+        console.log("INITIAL_WHITELISTED_ACCOUNTS has been deprecated. Please use INITIAL_ALLOWLISTED_ACCOUNTS instead.");
+        return process.env.INITIAL_WHITELISTED_ACCOUNTS;
+    }
 }
 
 function isInitialAllowlistedNodesAvailable() {
-    return process.env.INITIAL_ALLOWLISTED_NODES;
+    if (process.env.INITIAL_ALLOWLISTED_NODES) {
+        return process.env.INITIAL_ALLOWLISTED_NODES;
+    }
+    if (process.env.INITIAL_WHITELISTED_NODES) {
+        console.log("INITIAL_WHITELISTED_NODES has been deprecated. Please use INITIAL_ALLOWLISTED_NODES instead.");
+        return process.env.INITIAL_WHITELISTED_NODES;
+    }
 }
 
 function getInitialAdminAccounts() {
+    console.log(isInitialAdminAccountsAvailable());
     return getAccounts(isInitialAdminAccountsAvailable());
 }
 
 function getInitialAllowlistedAccounts() {
+    console.log(isInitialAllowlistedAccountsAvailable());
     return getAccounts(isInitialAllowlistedAccountsAvailable());
 }
 
 function getInitialAllowlistedNodes() {
     let envInitialAllowlistedNodes = isInitialAllowlistedNodesAvailable();
+    console.log(isInitialAllowlistedNodesAvailable());
     let validENodes = new Set();
     if (envInitialAllowlistedNodes) {
         let invalidENodes = new Set();
