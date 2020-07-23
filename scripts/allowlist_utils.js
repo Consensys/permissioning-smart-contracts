@@ -41,7 +41,7 @@ function isInitialAllowlistedAccountsAvailable() {
         return process.env.INITIAL_ALLOWLISTED_ACCOUNTS;
     }
     if (process.env.INITIAL_WHITELISTED_ACCOUNTS) {
-        console.log("INITIAL_WHITELISTED_ACCOUNTS has been deprecated. Please use INITIAL_ALLOWLISTED_ACCOUNTS instead.");
+        console.warn("INITIAL_WHITELISTED_ACCOUNTS has been deprecated. Please use INITIAL_ALLOWLISTED_ACCOUNTS instead.");
         return process.env.INITIAL_WHITELISTED_ACCOUNTS;
     }
 }
@@ -51,7 +51,7 @@ function isInitialAllowlistedNodesAvailable() {
         return process.env.INITIAL_ALLOWLISTED_NODES;
     }
     if (process.env.INITIAL_WHITELISTED_NODES) {
-        console.log("INITIAL_WHITELISTED_NODES has been deprecated. Please use INITIAL_ALLOWLISTED_NODES instead.");
+        console.warn("INITIAL_WHITELISTED_NODES has been deprecated. Please use INITIAL_ALLOWLISTED_NODES instead.");
         return process.env.INITIAL_WHITELISTED_NODES;
     }
 }
