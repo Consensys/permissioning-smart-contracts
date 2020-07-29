@@ -1,5 +1,5 @@
 const Web3Utils = require("web3-utils");
-const WhitelistUtils = require('../scripts/whitelist_utils');
+const AllowlistUtils = require('../scripts/allowlist_utils');
 
 const Rules = artifacts.require("./AccountRules.sol");
 const AccountIngress = artifacts.require("./AccountIngress.sol");
@@ -37,12 +37,12 @@ module.exports = async(deployer, network) => {
     console.log("   > Rules deployed with AccountIngress.address = " + accountIngress);
     let accountRulesContract = await Rules.deployed();
 
-    if (WhitelistUtils.isInitialWhitelistedAccountsAvailable()) {
-        console.log("   > Adding Initial Whitelisted Accounts ...");
-        let whitelistedAccounts = WhitelistUtils.getInitialWhitelistedAccounts();
-        if (whitelistedAccounts.length > 0) {
-            let accountsAddedResult = await accountRulesContract.addAccounts(whitelistedAccounts);
-            console.log ("   > Initial Whitelisted Accounts added: " + whitelistedAccounts);
+    if (AllowlistUtils.isInitialAllowlistedAccountsAvailable()) {
+        console.log("   > Adding Initial Allowlisted Accounts ...");
+        let allowlistedAccounts = AllowlistUtils.getInitialAllowlistedAccounts();
+        if (allowlistedAccounts.length > 0) {
+            let accountsAddedResult = await accountRulesContract.addAccounts(allowlistedAccounts);
+            console.log ("   > Initial Allowlisted Accounts added: " + allowlistedAccounts);
         }
     }
 
