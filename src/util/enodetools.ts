@@ -1,8 +1,14 @@
+// @ts-ignore
+import utf8 from 'utf8';
+
 export type Enode = {
   enodeHigh: string;
   enodeLow: string;
   ip: string;
   port: string;
+  kind: number;
+  geoHash: string;
+  name: string;
 };
 
 export const enodeToParams = (enodeURL: string) => {
@@ -29,7 +35,9 @@ export const enodeToParams = (enodeURL: string) => {
     enodeHigh,
     enodeLow,
     ip: ip ? getHexIpv4(ip) : '',
-    port
+    port,
+    kind: -1,
+    name: 'Node Name'
   };
 };
 
@@ -64,8 +72,37 @@ export const identifierToParams = (identifier: string) => {
     enodeLow,
     ip,
     port,
-    identifier
+    identifier,
+    kind: 0,
+    geoHash: '',
+    name: ''
   };
+};
+
+export const hexToUTF8 = (hex: string) => {
+  let str = '';
+  let code = 0;
+  hex = hex.replace(/^0x/i, '');
+
+  hex = hex.replace(/^(?:00)*/, '');
+  hex = hex
+    .split('')
+    .reverse()
+    .join('');
+  hex = hex.replace(/^(?:00)*/, '');
+  hex = hex
+    .split('')
+    .reverse()
+    .join('');
+
+  let l = hex.length;
+
+  for (let i = 0; i < l; i += 2) {
+    code = parseInt(hex.substr(i, 2), 16);
+    str += String.fromCharCode(code);
+  }
+
+  return str;
 };
 
 export const identifierToEnodeHighAndLow = (identifier: string) => {

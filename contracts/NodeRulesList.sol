@@ -4,12 +4,23 @@ pragma solidity 0.5.9;
 
 contract NodeRulesList {
 
+    enum NodeType{
+        Boot,
+        Validator,
+        Writer,
+        Observer,
+        Other
+    }
+
     // struct size = 82 bytes
     struct enode {
         bytes32 enodeHigh;
         bytes32 enodeLow;
         bytes16 ip;
         uint16 port;
+        NodeType kind;
+        bytes6 geoHash;
+        string name;
     }
 
     enode[] public allowlist;
@@ -27,10 +38,10 @@ contract NodeRulesList {
         return indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)] != 0;
     }
 
-    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal returns (bool) {
+    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _type, bytes6 _geoHash, string memory _name ) internal returns (bool) {
         uint256 key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
         if (indexOf[key] == 0) {
-            indexOf[key] = allowlist.push(enode(_enodeHigh, _enodeLow, _ip, _port));
+            indexOf[key] = allowlist.push(enode(_enodeHigh, _enodeLow, _ip, _port, _type, _geoHash, _name));
             return true;
         }
         return false;

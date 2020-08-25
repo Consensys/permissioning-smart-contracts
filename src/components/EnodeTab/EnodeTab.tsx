@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types'; // Components
 import EnodeTable from './Table';
-import AddModal from '../../containers/Modals/Add';
+import AddNodeModal from '../../containers/Modals/AddNode';
 import RemoveModal from '../../containers/Modals/Remove';
 // Constants
 import { addEnodeDisplay, removeEnodeDisplay } from '../../constants/modals';
@@ -47,7 +47,7 @@ const EnodeTab: React.FC<EnodeTab> = ({
           deleteTransaction={deleteTransaction}
           isReadOnly={isReadOnly}
         />
-        <AddModal
+        <AddNodeModal
           isOpen={modals.add && isAdmin && !isReadOnly}
           closeModal={() => toggleModal('add')(false)}
           handleAdd={handleAdd}

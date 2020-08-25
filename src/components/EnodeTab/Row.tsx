@@ -11,6 +11,7 @@ import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '
 import TextWithTooltip from './TextWithTooltip';
 // Styles
 import styles from './styles.module.scss';
+import { hexToUTF8 } from '../../util/enodetools';
 
 type EnodeRow = {
   isAdmin: boolean;
@@ -20,6 +21,9 @@ type EnodeRow = {
   enodeLow: string;
   ip: string;
   port: string;
+  kind: number;
+  geoHash: string;
+  name: string;
   status: string;
   identifier: string;
 };
@@ -32,11 +36,28 @@ const EnodeRow: React.FC<EnodeRow> = ({
   enodeLow,
   ip,
   port,
+  kind,
+  geoHash,
+  name,
   status,
   identifier
 }) => (
   <tr className={styles.row}>
-    <td colSpan={2}>
+    <td>
+      <Flex alignItems="center" className={styles.tooltipFix}>
+        <TextWithTooltip
+          isAdmin={isAdmin}
+          status={status}
+          text={`${['Bootnode', 'Validator', 'Writer', 'Observer'][kind]}`}
+        />
+      </Flex>
+    </td>
+    <td>
+      <Flex alignItems="center" className={styles.tooltipFix}>
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={`${name}`} />
+      </Flex>
+    </td>
+    <td>
       <Flex alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip isAdmin={isAdmin} status={status} text={`${enodeHigh}${enodeLow}`} />
       </Flex>
@@ -105,6 +126,9 @@ EnodeRow.propTypes = {
   enodeLow: PropTypes.string.isRequired,
   ip: PropTypes.string.isRequired,
   port: PropTypes.string.isRequired,
+  kind: PropTypes.number.isRequired,
+  geoHash: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   identifier: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   isAdmin: PropTypes.bool.isRequired,

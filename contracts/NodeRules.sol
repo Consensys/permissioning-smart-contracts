@@ -113,9 +113,12 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         bytes32 enodeHigh,
         bytes32 enodeLow,
         bytes16 ip,
-        uint16 port
+        uint16 port,
+        NodeType kind,
+        bytes6 geoHash,
+        string memory name
     ) public onlyAdmin onlyOnEditMode returns (bool) {
-        bool added = add(enodeHigh, enodeLow, ip, port);
+        bool added = add(enodeHigh, enodeLow, ip, port, kind, geoHash, name );
 
         if (added) {
             triggerRulesChangeEvent(false);
@@ -157,10 +160,10 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return size();
     }
 
-    function getByIndex(uint index) public view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port) {
+    function getByIndex(uint index) public view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port, NodeType kind, bytes6 geoHash, string memory name) {
         if (index >= 0 && index < size()) {
             enode memory item = allowlist[index];
-            return (item.enodeHigh, item.enodeLow, item.ip, item.port);
+            return (item.enodeHigh, item.enodeLow, item.ip, item.port, item.kind, item.geoHash, item.name);
         }
     }
 

@@ -36,6 +36,7 @@ type EnodeTabContainerProps = {
 };
 
 const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
+  const types = { Bootnode: 0, Validator: 1, Writer: 2, Observer: 3 };
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
   const { allowlist, isReadOnly, dataReady, nodeRulesContract } = useNodeData();
 
@@ -45,8 +46,9 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   );
 
   if (!!nodeRulesContract) {
-    const handleAdd = async (value: string) => {
-      const { enodeHigh, enodeLow, ip, port } = enodeToParams(value);
+    const handleAdd = async (value: any) => {
+      const { enode, type, geoHash, name } = value;
+      const { enodeHigh, enodeLow, ip, port } = enodeToParams(enode);
       const identifier = paramsToIdentifier({
         enodeHigh,
         enodeLow,
@@ -59,7 +61,11 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
           utils.hexlify(enodeHigh),
           utils.hexlify(enodeLow),
           utils.hexlify(ip),
-          utils.bigNumberify(port)
+          utils.bigNumberify(port),
+          // @ts-ignore
+          utils.hexlify(types[type]),
+          utils.hexlify(parseInt(geoHash, 16)),
+          name
         );
         toggleModal('add')(false);
         addTransaction(identifier, PENDING_ADDITION);
@@ -79,6 +85,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         }
         deleteTransaction(value);
       } catch (e) {
+        console.log(e);
         toggleModal('add')(false);
         updateTransaction(identifier, FAIL_ADDITION);
         errorToast(e, identifier, openToast, () =>
@@ -130,7 +137,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     };
 
     const isDuplicateEnode = (enode: string) => {
-      return list.filter((item: Enode) => isEqual(item, enodeToParams(enode))).length > 0;
+      return false; //list.filter((item: Enode) => isEqual(item, enodeToParams(enode))).length > 0;
     };
 
     const isValid = (enode: string) => {
