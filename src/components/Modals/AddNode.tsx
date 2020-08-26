@@ -82,15 +82,15 @@ const AddNodeModal: React.FC<{
           </Form.Field>
           <Form.Field
             mt={3}
-            label="Location"
+            label="Organization"
             className={node.geoHash ? `${validationResult.valid ? styles.validField : styles.invalidField}` : null}
           >
             <Form.Input
               width={1}
               type="text"
-              name="geoHash"
-              placeholder="GeoHash (Ex: gbsuv7)"
-              value={node.geoHash}
+              name="organization"
+              placeholder="Ex: BIDLab"
+              value={node.organization}
               onChange={modifyInput}
               className={styles.fieldInput}
               required

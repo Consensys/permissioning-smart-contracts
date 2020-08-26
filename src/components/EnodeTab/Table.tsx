@@ -27,6 +27,7 @@ const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction
         <tr>
           <th className={styles.headerCell}>Type</th>
           <th className={styles.headerCell}>Node Name</th>
+          <th className={styles.headerCell}>Organization</th>
           <th className={styles.headerCell}>Public Key</th>
           <th className={styles.headerCell}>IP Address</th>
           <th className={styles.headerCell}>Port</th>

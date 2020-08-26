@@ -1,14 +1,37 @@
 // @ts-ignore
-import utf8 from 'utf8';
+import request from 'request';
+import web3 from 'web3';
+// @ts-ignore
+import ngeohash from 'ngeohash';
 
 export type Enode = {
   enodeHigh: string;
   enodeLow: string;
   ip: string;
   port: string;
-  kind: number;
+  nodeType: number;
   geoHash: string;
+  organization: string;
   name: string;
+};
+
+const splitAddress = (address: string, digits: number) => {
+  const bits: string[] = [];
+
+  while (address.length >= digits) {
+    bits.push(address.slice(0, digits));
+    address = address.slice(digits);
+  }
+  return bits;
+};
+
+const getIpv4 = (address: string) => {
+  const ipv4Prefix = '00000000000000000000ffff';
+  return splitAddress(address.split(ipv4Prefix)[1], 2)
+    .map(hex => {
+      return parseInt(hex, 16);
+    })
+    .join('.');
 };
 
 export const enodeToParams = (enodeURL: string) => {
@@ -36,23 +59,59 @@ export const enodeToParams = (enodeURL: string) => {
     enodeLow,
     ip: ip ? getHexIpv4(ip) : '',
     port,
-    kind: -1,
+    nodeType: -1,
     name: 'Node Name'
   };
 };
+
+export const getGeohash = (ip: string) =>
+  new Promise<string>(resolve => {
+    let url = `http://api.ipstack.com/${getIpv4(ip)}?access_key=67332e46b2ec77d406cffe607d152297`;
+    request(
+      {
+        url: url,
+        method: 'GET',
+        json: true
+      },
+      (error: any, response: any, body: any) => {
+        if (response.statusCode !== 200) {
+          resolve(web3.utils.asciiToHex('0x000000'));
+        }
+
+        if (body.success === false) {
+          resolve(web3.utils.asciiToHex('0x000000'));
+        }
+
+        if (typeof body.latitude !== 'undefined') {
+          const geoHash = ngeohash.encode(body.latitude, body.longitude, 6);
+          console.log(body, geoHash);
+          resolve(web3.utils.asciiToHex(geoHash));
+        }
+        resolve(web3.utils.asciiToHex('0x000000'));
+      }
+    );
+  });
 
 export const paramsToIdentifier = ({
   enodeHigh,
   enodeLow,
   ip,
-  port
+  port,
+  nodeType,
+  geoHash,
+  name,
+  organization
 }: {
   enodeHigh: string;
   enodeLow: string;
   ip: string;
   port: string;
+  nodeType: number;
+  geoHash: string;
+  name: string;
+  organization: string;
 }) => {
-  return `${enodeHigh}_${enodeLow}_${ip}_${port}`;
+  return `${enodeHigh}_${enodeLow}_${ip}_${port}_${nodeType}_${geoHash}_${name}_${organization}`;
 };
 
 function getHexIpv4(stringIp: string) {
@@ -66,43 +125,18 @@ function toHex(number: string) {
 }
 
 export const identifierToParams = (identifier: string) => {
-  const [enodeHigh, enodeLow, ip, port] = identifier.split('_');
+  const [enodeHigh, enodeLow, ip, port, nodeType, geoHash, name, organization] = identifier.split('_');
   return {
     enodeHigh,
     enodeLow,
     ip,
     port,
     identifier,
-    kind: 0,
-    geoHash: '',
-    name: ''
+    nodeType: parseInt(nodeType),
+    geoHash,
+    organization,
+    name
   };
-};
-
-export const hexToUTF8 = (hex: string) => {
-  let str = '';
-  let code = 0;
-  hex = hex.replace(/^0x/i, '');
-
-  hex = hex.replace(/^(?:00)*/, '');
-  hex = hex
-    .split('')
-    .reverse()
-    .join('');
-  hex = hex.replace(/^(?:00)*/, '');
-  hex = hex
-    .split('')
-    .reverse()
-    .join('');
-
-  let l = hex.length;
-
-  for (let i = 0; i < l; i += 2) {
-    code = parseInt(hex.substr(i, 2), 16);
-    str += String.fromCharCode(code);
-  }
-
-  return str;
 };
 
 export const identifierToEnodeHighAndLow = (identifier: string) => {

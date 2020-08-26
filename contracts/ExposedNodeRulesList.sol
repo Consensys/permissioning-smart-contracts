@@ -17,8 +17,8 @@ contract ExposedNodeRulesList is NodeRulesList {
         return exists(_enodeHigh, _enodeLow, _ip, _port);
     }
 
-    function _add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _type, bytes6 _geoHash, string memory _name ) public returns (bool) {
-        return add(_enodeHigh, _enodeLow, _ip, _port, _type, _geoHash, _name);
+    function _add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization ) public returns (bool) {
+        return add(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization);
     }
 
     function _remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public returns (bool) {

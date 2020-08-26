@@ -18,9 +18,10 @@ contract NodeRulesList {
         bytes32 enodeLow;
         bytes16 ip;
         uint16 port;
-        NodeType kind;
+        NodeType nodeType;
         bytes6 geoHash;
         string name;
+        string organization;
     }
 
     enode[] public allowlist;
@@ -38,10 +39,10 @@ contract NodeRulesList {
         return indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)] != 0;
     }
 
-    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _type, bytes6 _geoHash, string memory _name ) internal returns (bool) {
+    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization ) internal returns (bool) {
         uint256 key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
         if (indexOf[key] == 0) {
-            indexOf[key] = allowlist.push(enode(_enodeHigh, _enodeLow, _ip, _port, _type, _geoHash, _name));
+            indexOf[key] = allowlist.push(enode(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization));
             return true;
         }
         return false;

@@ -14,7 +14,8 @@ import {
   enodeToParams,
   Enode,
   isEqual,
-  isValidEnode
+  isValidEnode,
+  getGeohash
 } from '../../util/enodetools';
 import { errorToast } from '../../util/tabTools';
 // Components
@@ -47,15 +48,20 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
 
   if (!!nodeRulesContract) {
     const handleAdd = async (value: any) => {
-      const { enode, type, geoHash, name } = value;
+      const { enode, type, organization, name } = value;
       const { enodeHigh, enodeLow, ip, port } = enodeToParams(enode);
+
+      const geoHash = await getGeohash(ip);
       const identifier = paramsToIdentifier({
         enodeHigh,
         enodeLow,
         ip,
-        port
+        port,
+        nodeType: type,
+        geoHash,
+        name,
+        organization
       });
-
       try {
         const tx = await nodeRulesContract!.functions.addEnode(
           utils.hexlify(enodeHigh),
@@ -64,8 +70,9 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
           utils.bigNumberify(port),
           // @ts-ignore
           utils.hexlify(types[type]),
-          utils.hexlify(parseInt(geoHash, 16)),
-          name
+          geoHash,
+          name,
+          organization
         );
         toggleModal('add')(false);
         addTransaction(identifier, PENDING_ADDITION);
@@ -83,7 +90,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
             openToast(value, FAIL, `Node "${value}" is already added`);
           }
         }
-        deleteTransaction(value);
+        deleteTransaction(identifier);
       } catch (e) {
         console.log(e);
         toggleModal('add')(false);
