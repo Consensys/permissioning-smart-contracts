@@ -30,7 +30,6 @@ you are agreeing to uphold this code. Please report unacceptable behavior. Pleas
 
 > **Note:** Please don't file an issue to ask a question.  You'll get faster results by using the resources below.
 
-* [permissioning-smart-contracts documentation]
 * [RocketChat]
 
 ## How to Contribute
