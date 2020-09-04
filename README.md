@@ -1,7 +1,7 @@
 # Permissioning Smart Contracts
 
 **Note:** The contracts herein have been third party audited. [Please
-contact us](https://pegasys.tech/contact/) if you would like more information, or if you are considering using this Dapp in a production environment.
+contact us](https://consensys.net/quorum/contact-us) if you would like more information, or if you are considering using this Dapp in a production environment.
 
 **Important:** The dependency chain for this implementation of onchain permissioning includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
 
