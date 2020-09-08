@@ -24,14 +24,13 @@ and feel free to propose changes to this document in a pull request.
 
 ## Code of Conduct
 * This project is governed by the [permissioning-smart-contracts Code of Conduct](CODE_OF_CONDUCT.md). By participating, 
-you are agreeing to uphold this code. Please report unacceptable behavior. Please report unacceptable behavior to [private@pegasys.tech].
+you are agreeing to uphold this code. Please report unacceptable behavior. Please report unacceptable behavior to [private-quorum@consensys.net].
 
 ## I just have a quick question
 
 > **Note:** Please don't file an issue to ask a question.  You'll get faster results by using the resources below.
 
-* [permissioning-smart-contracts documentation]
-* [Gitter]
+* [Discord]
 
 ## How to Contribute
 
@@ -96,6 +95,6 @@ bigger changes should contain more detail.
 * Provide a summary on the first line with more details on additional lines as needed
 * Reference issues and pull requests liberally
 
-[private@pegasys.tech]: mailto:private@pegasys.tech
-[Gitter]: https://gitter.im/PegaSysEng/pantheon
+[private-quorum@consensys.net]: mailto:private-quorum@consensys.net
+[Discord]: https://discord.gg/TCtK3YM
 [CLA.md]: /CLA.md
