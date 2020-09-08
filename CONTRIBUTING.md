@@ -30,7 +30,7 @@ you are agreeing to uphold this code. Please report unacceptable behavior. Pleas
 
 > **Note:** Please don't file an issue to ask a question.  You'll get faster results by using the resources below.
 
-* [RocketChat]
+* [Discord]
 
 ## How to Contribute
 
@@ -96,5 +96,5 @@ bigger changes should contain more detail.
 * Reference issues and pull requests liberally
 
 [private-quorum@consensys.net]: mailto:private-quorum@consensys.net
-[RocketChat]: https://chat.hyperledger.org/channel/besu
+[Discord]: https://discord.gg/TCtK3YM
 [CLA.md]: /CLA.md
