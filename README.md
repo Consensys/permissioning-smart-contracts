@@ -62,13 +62,16 @@ This is the easiest way to get started for development with the permissioning Da
 ### Deploying the contracts
 1. The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
    describes how to use the contracts for onchain permissioning with Besu, including setting environment variables.
-
-2. The following additional environment variables are optional and can be used to permit accounts and nodes during initial contract deployment
+2. The following additional environment variables are optional and can be used to prevent redeployment of rules contracts. If set to true, that contract will not be redeployed and current list data will be preserved.
+  - `RETAIN_ADMIN_CONTRACT=true`
+  - `RETAIN_NODE_RULES_CONTRACT=true`
+  - `RETAIN_ACCOUNT_RULES_CONTRACT=true`
+3. The following additional environment variables are optional and can be used to permit accounts and nodes during initial contract deployment
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma-separated multiple addresses can be specified
   - `INITIAL_ALLOWLISTED_ACCOUNTS`: The permitted account addresses. Comma-separated multiple addresses can be specified
   - `INITIAL_ALLOWLISTED_NODES`: The enode URLs of permitted nodes. Comma-separated multiple nodes can be specified
-3. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step
-4. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
+4. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step
+5. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
 1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest)
