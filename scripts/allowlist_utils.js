@@ -137,7 +137,7 @@ function getAccounts(accounts) {
 
 function getRetainAdminContract() {
     if (process.env.RETAIN_ADMIN_CONTRACT) {
-        return process.env.RETAIN_ADMIN_CONTRACT === 'true';
+        return process.env.RETAIN_ADMIN_CONTRACT.toLowerCase === 'true';
     } else {
         return false;
     }
@@ -146,7 +146,7 @@ function getRetainAdminContract() {
 
 function getRetainNodeRulesContract() {
     if (process.env.RETAIN_NODE_RULES_CONTRACT) {
-        return process.env.RETAIN_NODE_RULES_CONTRACT === 'true';
+        return process.env.RETAIN_NODE_RULES_CONTRACT.toLowerCase === 'true';
     } else {
         return false;
     }
@@ -155,7 +155,7 @@ function getRetainNodeRulesContract() {
 
 function getRetainAccountRulesContract() {
     if (process.env.RETAIN_ACCOUNT_RULES_CONTRACT) {
-        return process.env.RETAIN_ACCOUNT_RULES_CONTRACT === 'true';
+        return process.env.RETAIN_ACCOUNT_RULES_CONTRACT.toLowerCase === 'true';
     } else {
         return false;
     }

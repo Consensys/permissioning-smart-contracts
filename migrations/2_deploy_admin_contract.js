@@ -6,7 +6,7 @@ module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract
     let retainCurrentRulesContract = AllowlistUtils.getRetainAdminContract();
     if (retainCurrentRulesContract) {
-        console.log("not deploying because retain=" + retainCurrentRulesContract);
+        console.log("not deploying Admin Rules because retain=" + retainCurrentRulesContract);
         return;
     }
     await deployer.deploy(Admin);

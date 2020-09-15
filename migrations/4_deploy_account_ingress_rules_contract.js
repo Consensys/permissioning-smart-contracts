@@ -15,7 +15,7 @@ let retainCurrentRulesContract = AllowlistUtils.getRetainAccountRulesContract();
 module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract
     if (retainCurrentRulesContract) {
-        console.log("not deploying because retain=" + retainCurrentRulesContract);
+        console.log("not deploying AccountRules because retain=" + retainCurrentRulesContract);
         return;
     }
     if (! accountIngress) {
