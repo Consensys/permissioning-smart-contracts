@@ -10,8 +10,14 @@ const rulesContractName = Web3Utils.utf8ToHex("rules");
 
 /* The address of the account ingress contract if pre deployed */
 let accountIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
+let retainCurrentRulesContract = AllowlistUtils.getRetainAccountRulesContract();
 
 module.exports = async(deployer, network) => {
+    // exit early if we are NOT redeploying this contract
+    if (retainCurrentRulesContract) {
+        console.log("not deploying AccountRules because retain=" + retainCurrentRulesContract);
+        return;
+    }
     if (! accountIngress) {
         // Only deploy if we haven't been provided a predeployed address
         await deployer.deploy(AccountIngress);

@@ -10,8 +10,14 @@ const rulesContractName = Web3Utils.utf8ToHex("rules");
 
 /* The address of the node ingress contract if pre deployed */
 let nodeIngress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
+let retainCurrentRulesContract = AllowlistUtils.getRetainNodeRulesContract();
 
 module.exports = async(deployer, network) => {
+    // exit early if we are NOT redeploying this contract
+    if (retainCurrentRulesContract) {
+        console.log("not deploying NodeRules because retain=" + retainCurrentRulesContract);
+        return;
+    }
     if (! nodeIngress) {
         // Only deploy if we haven't been provided a predeployed address
         await deployer.deploy(NodeIngress);

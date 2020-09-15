@@ -135,6 +135,32 @@ function getAccounts(accounts) {
     return [];
 }
 
+function getRetainAdminContract() {
+    if (process.env.RETAIN_ADMIN_CONTRACT) {
+        return process.env.RETAIN_ADMIN_CONTRACT.toLowerCase === 'true';
+    } else {
+        return false;
+    }
+
+}
+
+function getRetainNodeRulesContract() {
+    if (process.env.RETAIN_NODE_RULES_CONTRACT) {
+        return process.env.RETAIN_NODE_RULES_CONTRACT.toLowerCase === 'true';
+    } else {
+        return false;
+    }
+
+}
+
+function getRetainAccountRulesContract() {
+    if (process.env.RETAIN_ACCOUNT_RULES_CONTRACT) {
+        return process.env.RETAIN_ACCOUNT_RULES_CONTRACT.toLowerCase === 'true';
+    } else {
+        return false;
+    }
+
+}
 
 function getHexIpv4(stringIp) {
     const splitIp = stringIp.split(".");
@@ -155,5 +181,8 @@ module.exports = {
     isInitialAllowlistedNodesAvailable,
     getInitialAdminAccounts,
     getInitialAllowlistedAccounts,
-    getInitialAllowlistedNodes
+    getInitialAllowlistedNodes,
+    getRetainAdminContract,
+    getRetainNodeRulesContract,
+    getRetainAccountRulesContract
  }
