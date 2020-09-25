@@ -1,6 +1,6 @@
 import { tint, shade } from 'polished';
 
-import baseColors, { pegasys, blue, green, yellow, red } from './colors';
+import baseColors, { protocol, blue, green, yellow, red } from './colors';
 
 // theme.js
 export default {
@@ -31,9 +31,9 @@ export default {
     disabled: 0.4
   },
   colors: {
-    primary: pegasys.base,
-    'primary-light': pegasys.light[1],
-    'primary-dark': pegasys.dark[1],
+    primary: protocol.base,
+    'primary-light': protocol.light[1],
+    'primary-dark': protocol.dark[1],
     blue: baseColors.consensysblue,
     copyColor: '#3F3D4B',
     // black: '#000',
@@ -109,11 +109,11 @@ export default {
   },
   buttons: {
     primary: {
-      color: pegasys.text,
-      backgroundColor: pegasys.base,
+      color: protocol.text,
+      backgroundColor: protocol.base,
       // use css custom props
-      '--main-color': pegasys.base,
-      '--contrast-color': pegasys.text
+      '--main-color': protocol.base,
+      '--contrast-color': protocol.text
     },
     success: {
       '--main-color': green.base,
