@@ -69,7 +69,7 @@ const AddModal: React.FC<{
             type="submit"
             ml={3}
             color="white"
-            bg="pegasys"
+            bg="protocol"
             hovercolor="#25D78F"
             border={1}
             onClick={handleSubmit}

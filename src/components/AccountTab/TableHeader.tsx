@@ -16,7 +16,7 @@ const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd 
       <Heading.h2 fontWeight="700">Accounts ({number})</Heading.h2>
     </Box>
     <Flex alignItems="center">
-      <Button icon="AddCircleOutline" mainColor="#25D78F" onClick={() => openAddModal()} disabled={disabledAdd}>
+      <Button icon="AddCircleOutline" onClick={() => openAddModal()} disabled={disabledAdd}>
         Add Account
       </Button>
     </Flex>
