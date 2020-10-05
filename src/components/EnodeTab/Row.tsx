@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Pill, Flex, Button } from 'rimble-ui';
 // Util Helper
 import hexToIp from '../../util/ipConverter';
+import { buildEnode } from '../../util/enodetools';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -38,7 +39,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
   <tr className={styles.row}>
     <td colSpan={2}>
       <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={`${enodeHigh}${enodeLow}`} />
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={`${buildEnode(enodeHigh, enodeLow)}`} />
       </Flex>
     </td>
     <td>
