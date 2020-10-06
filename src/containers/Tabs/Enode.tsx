@@ -46,7 +46,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
 
   if (!!nodeRulesContract) {
     const handleAdd = async (value: string) => {
-      const { enodeHigh, enodeLow, ip, port, extraParams } = enodeToParams(value);
+      const { enodeHigh, enodeLow, ip, port } = enodeToParams(value);
       const identifier = paramsToIdentifier({
         enodeHigh,
         enodeLow,
