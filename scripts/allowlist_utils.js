@@ -1,30 +1,36 @@
 const Web3Utils = require("web3-utils");
+const url = require('url');
+const leftPad = require('left-pad');
+const padIpv6 = require("pad-ipv6");
 
 const enodeToParams = enodeURL => {
     let enodeHigh = "";
     let enodeLow = "";
     let ip = "";
     let port = "";
+    let extraParams = {};
 
-    const splitURL = enodeURL.split("//")[1];
-    if (splitURL) {
-        const [enodeId, rawIpAndPort] = splitURL.split("@");
-        if (enodeId && enodeId.length === 128) {
-            enodeHigh = "0x" + enodeId.slice(0, 64);
-            enodeLow = "0x" + enodeId.slice(64);
-        }
-        if (rawIpAndPort) {
-            const [ipAndPort] = rawIpAndPort.split("?");
-            if (ipAndPort) {
-                [ip, port] = ipAndPort.split(":");
+    try {
+        const node = new URL(enodeURL);
+        if (node.protocol === 'enode:') {
+            if (node.username.length === 128) {
+                enodeHigh = "0x" + node.username.slice(0, 64);
+                enodeLow = "0x" + node.username.slice(64);
             }
+
+            ip = parseHostname(node.hostname)
+            port = node.port;
+
+            node.searchParams.forEach((value, name, searchParams) => { extraParams[name.toLowerCase()] = value; });
         }
-    }
+    } catch (err) {}
+
     return {
         enodeHigh,
         enodeLow,
-        ip: ip ? getHexIpv4(ip) : "",
-        port
+        ip,
+        port,
+        extraParams
     };
 };
 
@@ -162,6 +168,14 @@ function getRetainAccountRulesContract() {
 
 }
 
+function parseHostname (stringHostname) {
+    if (stringHostname[0] === '[') {
+        const ipv6 = stringHostname.slice(1,-1);
+        return getHexIpv6(ipv6);
+    }
+    return getHexIpv4(stringHostname);
+}
+
 function getHexIpv4(stringIp) {
     const splitIp = stringIp.split(".");
     return `0x00000000000000000000ffff${toHex(splitIp[0])}${toHex(
@@ -169,13 +183,19 @@ function getHexIpv4(stringIp) {
     )}${toHex(splitIp[2])}${toHex(splitIp[3])}`;
 }
 
+function getHexIpv6(stringIpv6) {
+    const ipv6 = padIpv6(stringIpv6).split(":").join('');
+    return '0x' + ipv6;
+}
+
 function toHex(number) {
     const num = Number(number).toString(16);
-    return num.length < 2 ? `0${num}` : num;
+    return leftPad(num, 2, '0');
 }
 
 module.exports = {
     enodeToParams,
+    parseHostname,
     isInitialAdminAccountsAvailable,
     isInitialAllowlistedAccountsAvailable,
     isInitialAllowlistedNodesAvailable,
