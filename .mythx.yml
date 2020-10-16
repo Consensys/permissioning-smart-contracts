@@ -1,0 +1,27 @@
+# Run me by typing `mythx analyze` in the directory of the yml file! :)
+
+ci: true
+confirm: true
+analyze:
+    mode: quick
+    async: false
+    create-group: true
+    solc: 0.5.9
+    remappings:
+        - "@openzeppelin=node_modules/@openzeppelin"
+    targets:
+      - contracts/AccountIngress.sol:AccountIngress
+      - contracts/AccountRulesList.sol:AccountRulesList
+      - contracts/AccountRulesProxy.sol:AccountRulesProxy
+      - contracts/AccountRules.sol:AccountRules
+      - contracts/AdminList.sol:AdminList
+      - contracts/AdminProxy.sol:AdminProxy
+      - contracts/Admin.sol:Admin
+      - contracts/ExposedAccountRulesList.sol:ExposedAccountRulesList
+      - contracts/ExposedAdminList.sol:ExposedAdminList
+      - contracts/ExposedNodeRulesList.sol:ExposedNodeRulesList
+      - contracts/Ingress.sol:Ingress
+      - contracts/NodeIngress.sol:NodeIngress
+      - contracts/NodeRulesList.sol:NodeRulesList
+      - contracts/NodeRulesProxy.sol:NodeRulesProxy
+      - contracts/NodeRules.sol:NodeRules
