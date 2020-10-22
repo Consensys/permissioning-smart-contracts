@@ -260,6 +260,16 @@ workflows:
             tags:
               only:
                 - /.*/
+      - run_mythx:
+          requires:
+            - build_contracts
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              only:
+                - /.*/
       - test_app:
           requires:
             - build_contracts
