@@ -7,6 +7,12 @@ executors:
     resource_class: medium
     working_directory: ~/project
 
+  med_py:
+    docker:
+      - image: circleci/python:3.8
+    resource_class: medium
+    working_directory: ~/project
+
   release: # 1cpu, 2G ram
     docker:
       - image: cibuilds/github:0.13.0
@@ -125,6 +131,20 @@ jobs:
           command: |
             yarn run lint:app
 
+  # Run vulnerability detection with MythX 
+  run_mythx:
+    executor: med_py
+    steps:
+      - prepare
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install MythX CLI
+          command: pip install mythx-cli
+      - run:
+          name: Analyze with MythX
+          command: mythx analyze
+  
   test_contracts:
     executor: med
     steps:
