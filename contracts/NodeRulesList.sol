@@ -49,6 +49,7 @@ contract NodeRulesList {
             }
 
             //shrink array
+            // mythx-disable-line SWC-101
             allowlist.length -= 1;
             indexOf[key] = 0;
             return true;
