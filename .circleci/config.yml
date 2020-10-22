@@ -131,6 +131,7 @@ jobs:
           command: |
             yarn run lint:app
 
+  # Run vulnerability detection with MythX 
   run_mythx:
     executor: med_py
     steps:
