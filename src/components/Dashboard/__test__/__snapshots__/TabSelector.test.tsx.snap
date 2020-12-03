@@ -915,7 +915,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
         }
       >
         <div
-          className="sc-bdVaJa choicesContainer sc-bwzfXH hmtMuU"
+          className="sc-bdVaJa sc-bwzfXH hmtMuU choicesContainer"
           height="33px"
         >
           <Box
@@ -1789,7 +1789,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               width="200px"
             >
               <div
-                className="choiceBox sc-bdVaJa llyVvt"
+                className="sc-bdVaJa llyVvt choiceBox"
                 onClick={[Function]}
                 width="200px"
               >
@@ -3779,7 +3779,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               width="200px"
             >
               <div
-                className="choiceBox sc-bdVaJa llyVvt"
+                className="sc-bdVaJa llyVvt choiceBox"
                 onClick={[Function]}
                 width="200px"
               >
@@ -5769,7 +5769,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               width="200px"
             >
               <div
-                className="selected choiceBox sc-bdVaJa llyVvt"
+                className="sc-bdVaJa llyVvt selected choiceBox"
                 onClick={[Function]}
                 width="200px"
               >
@@ -11047,12 +11047,12 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                                       size="24px"
                                     >
                                       <Icon
-                                        className="icon sc-kVyEtE dQcTLo"
+                                        className="sc-kVyEtE dQcTLo icon"
                                         display="block"
                                         size="24px"
                                       >
                                         <svg
-                                          className="icon sc-kVyEtE dQcTLo"
+                                          className="sc-kVyEtE dQcTLo icon"
                                           display="block"
                                           fill="currentcolor"
                                           height="24px"
@@ -13215,7 +13215,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
         }
       >
         <div
-          className="sc-bdVaJa choicesContainer sc-bwzfXH hmtMuU"
+          className="sc-bdVaJa sc-bwzfXH hmtMuU choicesContainer"
           height="33px"
         >
           <Box
@@ -14089,7 +14089,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               width="200px"
             >
               <div
-                className="choiceBox sc-bdVaJa llyVvt"
+                className="sc-bdVaJa llyVvt choiceBox"
                 onClick={[Function]}
                 width="200px"
               >
@@ -16079,7 +16079,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               width="200px"
             >
               <div
-                className="selected choiceBox sc-bdVaJa llyVvt"
+                className="sc-bdVaJa llyVvt selected choiceBox"
                 onClick={[Function]}
                 width="200px"
               >
@@ -18069,7 +18069,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               width="200px"
             >
               <div
-                className="choiceBox sc-bdVaJa llyVvt"
+                className="sc-bdVaJa llyVvt choiceBox"
                 onClick={[Function]}
                 width="200px"
               >
@@ -23354,12 +23354,12 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                                           size="24px"
                                         >
                                           <Icon
-                                            className="icon sc-kVyEtE dQcTLo"
+                                            className="sc-kVyEtE dQcTLo icon"
                                             display="block"
                                             size="24px"
                                           >
                                             <svg
-                                              className="icon sc-kVyEtE dQcTLo"
+                                              className="sc-kVyEtE dQcTLo icon"
                                               display="block"
                                               fill="currentcolor"
                                               height="24px"
