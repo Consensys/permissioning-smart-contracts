@@ -24,9 +24,9 @@ contract("Account Rules (Events & Management)", (accounts) => {
       rulesContract = await RulesContract.new(ingressContract.address);
       await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
       let size = await rulesContract.getSize();
-      assert.equal(size, 1, "Whitelist initialises with 1 account");
+      assert.equal(size, 1, "Allowlist initializes with 1 account");
       let initialAccount = await rulesContract.getByIndex(0);
-      assert.equal(initialAccount, accounts[0], "Whitelist initialises allowing deploying account");
+      assert.equal(initialAccount, accounts[0], "Allowlist initializes allowing deploying account");
       await rulesContract.removeAccount(initialAccount);
     });
 
