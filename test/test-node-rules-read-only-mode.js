@@ -2,8 +2,8 @@ const NodeIngress = artifacts.require('NodeIngress.sol');
 const NodeRules = artifacts.require('NodeRules.sol');
 const Admin = artifacts.require('Admin.sol');
 
-var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
-var node1Low = "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
+var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
++ "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 var node1Host = "0x0000000000000000000011119bd359fd";
 var node1Port = 30303;
 
@@ -40,7 +40,7 @@ contract('NodeRules (Read-only mode)', () => {
     await nodeRulesContract.enterReadOnly();
 
     try {
-      await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
+      await nodeRulesContract.addEnode(node1High, node1Host, node1Port);
       assert.fail("Expected error when adding enode on readOnly mode");
     } catch (err) {
       expect(err.reason).to.contain("In read only mode: rules cannot be modified");
@@ -51,7 +51,7 @@ contract('NodeRules (Read-only mode)', () => {
     await nodeRulesContract.enterReadOnly();
 
     try {
-      await nodeRulesContract.removeEnode(node1High, node1Low, node1Host, node1Port);
+      await nodeRulesContract.removeEnode(node1High, node1Host, node1Port);
       assert.fail("Expected error when adding enode on readOnly mode");
     } catch (err) {
       expect(err.reason).to.contain("In read only mode: rules cannot be modified");

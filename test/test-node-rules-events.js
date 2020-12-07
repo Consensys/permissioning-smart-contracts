@@ -10,8 +10,8 @@ const ADMIN_NAME = "0x61646d696e697374726174696f6e000000000000000000000000000000
 const PERMITTED = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 const NOT_PERMITTED = "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 
-const node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
-const node1Low = "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
+const node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
++ "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 const node1Host = "0x0000000000000000000011119bd359fd";
 const node1Port = 30303;
 
@@ -33,8 +33,8 @@ contract("NodeRules (Events)", () => {
   })
 
   it('should emit events when node added', async () => {
-    await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
-    await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
+    await nodeRulesContract.addEnode(node1High, node1Host, node1Port);
+    await nodeRulesContract.addEnode(node1High, node1Host, node1Port);
 
     // Get the events
     let result = await nodeRulesContract.getPastEvents("NodeAdded", {fromBlock: 0, toBlock: "latest" });
@@ -47,9 +47,9 @@ contract("NodeRules (Events)", () => {
   });
 
   it('should emit events when node removed', async () => {
-    await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
-    await nodeRulesContract.removeEnode(node1High, node1Low, node1Host, node1Port);
-    await nodeRulesContract.removeEnode(node1High, node1Low, node1Host, node1Port);
+    await nodeRulesContract.addEnode(node1High, node1Host, node1Port);
+    await nodeRulesContract.removeEnode(node1High, node1Host, node1Port);
+    await nodeRulesContract.removeEnode(node1High, node1Host, node1Port);
 
     // Get the events
     let result = await nodeRulesContract.getPastEvents("NodeRemoved", {fromBlock: 0, toBlock: "latest" });
