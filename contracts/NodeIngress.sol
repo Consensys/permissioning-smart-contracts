@@ -24,11 +24,11 @@ contract NodeIngress is Ingress {
     function connectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
-        bytes16 sourceEnodeIp,
+        string memory sourceEnodeIp,
         uint16 sourceEnodePort,
         bytes32 destinationEnodeHigh,
         bytes32 destinationEnodeLow,
-        bytes16 destinationEnodeIp,
+        string memory destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bytes32) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {

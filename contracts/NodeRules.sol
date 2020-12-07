@@ -12,7 +12,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         bool nodeAdded,
         bytes32 enodeHigh,
         bytes32 enodeLow,
-        bytes16 enodeIp,
+        string enodeIp,
         uint16 enodePort
     );
 
@@ -20,7 +20,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         bool nodeRemoved,
         bytes32 enodeHigh,
         bytes32 enodeLow,
-        bytes16 enodeIp,
+        string enodeIp,
         uint16 enodePort
     );
 
@@ -74,11 +74,11 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     function connectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
-        bytes16 sourceEnodeIp,
+        string memory sourceEnodeIp,
         uint16 sourceEnodePort,
         bytes32 destinationEnodeHigh,
         bytes32 destinationEnodeLow,
-        bytes16 destinationEnodeIp,
+        string memory destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bytes32) {
         if (
@@ -103,7 +103,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     function enodePermitted(
         bytes32 enodeHigh,
         bytes32 enodeLow,
-        bytes16 ip,
+        string memory ip,
         uint16 port
     ) public view returns (bool) {
         return exists(enodeHigh, enodeLow, ip, port);
@@ -112,7 +112,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     function addEnode(
         bytes32 enodeHigh,
         bytes32 enodeLow,
-        bytes16 ip,
+        string memory ip,
         uint16 port
     ) public onlyAdmin onlyOnEditMode returns (bool) {
         bool added = add(enodeHigh, enodeLow, ip, port);
@@ -134,7 +134,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     function removeEnode(
         bytes32 enodeHigh,
         bytes32 enodeLow,
-        bytes16 ip,
+        string memory ip,
         uint16 port
     ) public onlyAdmin onlyOnEditMode returns (bool) {
         bool removed = remove(enodeHigh, enodeLow, ip, port);
@@ -157,7 +157,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return size();
     }
 
-    function getByIndex(uint index) public view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port) {
+    function getByIndex(uint index) public view returns (bytes32 enodeHigh, bytes32 enodeLow, string memory ip, uint16 port) {
         if (index >= 0 && index < size()) {
             enode memory item = allowlist[index];
             return (item.enodeHigh, item.enodeLow, item.ip, item.port);

@@ -4,11 +4,11 @@ interface NodeRulesProxy {
     function connectionAllowed(
         bytes32 sourceEnodeHigh,
         bytes32 sourceEnodeLow,
-        bytes16 sourceEnodeIp,
+        string calldata sourceEnodeIp,
         uint16 sourceEnodePort,
         bytes32 destinationEnodeHigh,
         bytes32 destinationEnodeLow,
-        bytes16 destinationEnodeIp,
+        string calldata destinationEnodeIp,
         uint16 destinationEnodePort
     ) external view returns (bytes32);
 }
