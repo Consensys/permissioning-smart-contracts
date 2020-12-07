@@ -6,7 +6,7 @@ contract NodeRulesList {
 
     // struct size = 82 bytes
     struct enode {
-        bytes32 enodeHigh;
+        string enodeHigh;
         bytes32 enodeLow;
         string ip;
         uint16 port;
@@ -15,7 +15,7 @@ contract NodeRulesList {
     enode[] public allowlist;
     mapping (uint256 => uint256) private indexOf; //1-based indexing. 0 means non-existent
 
-    function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal pure returns(uint256) {
+    function calculateKey(string memory  _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal pure returns(uint256) {
         return uint256(keccak256(abi.encodePacked(_enodeHigh, _enodeLow, _ip, _port)));
     }
 
@@ -23,11 +23,11 @@ contract NodeRulesList {
         return allowlist.length;
     }
 
-    function exists(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal view returns (bool) {
+    function exists(string memory _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal view returns (bool) {
         return indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)] != 0;
     }
 
-    function add(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal returns (bool) {
+    function add(string memory _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal returns (bool) {
         uint256 key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
         if (indexOf[key] == 0) {
             indexOf[key] = allowlist.push(enode(_enodeHigh, _enodeLow, _ip, _port));
@@ -36,7 +36,7 @@ contract NodeRulesList {
         return false;
     }
 
-    function remove(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal returns (bool) {
+    function remove(string memory _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) internal returns (bool) {
         uint256 key = calculateKey(_enodeHigh, _enodeLow, _ip, _port);
         uint256 index = indexOf[key];
 

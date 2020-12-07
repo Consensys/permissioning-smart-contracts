@@ -22,11 +22,11 @@ contract NodeIngress is Ingress {
     }
 
     function connectionAllowed(
-        bytes32 sourceEnodeHigh,
+        string memory sourceEnodeHigh,
         bytes32 sourceEnodeLow,
         string memory sourceEnodeIp,
         uint16 sourceEnodePort,
-        bytes32 destinationEnodeHigh,
+        string memory destinationEnodeHigh,
         bytes32 destinationEnodeLow,
         string memory destinationEnodeIp,
         uint16 destinationEnodePort

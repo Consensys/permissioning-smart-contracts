@@ -10,7 +10,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     event NodeAdded(
         bool nodeAdded,
-        bytes32 enodeHigh,
+        string enodeHigh,
         bytes32 enodeLow,
         string enodeIp,
         uint16 enodePort
@@ -18,7 +18,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     event NodeRemoved(
         bool nodeRemoved,
-        bytes32 enodeHigh,
+        string enodeHigh,
         bytes32 enodeLow,
         string enodeIp,
         uint16 enodePort
@@ -72,11 +72,11 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function connectionAllowed(
-        bytes32 sourceEnodeHigh,
+        string memory sourceEnodeHigh,
         bytes32 sourceEnodeLow,
         string memory sourceEnodeIp,
         uint16 sourceEnodePort,
-        bytes32 destinationEnodeHigh,
+        string memory destinationEnodeHigh,
         bytes32 destinationEnodeLow,
         string memory destinationEnodeIp,
         uint16 destinationEnodePort
@@ -101,7 +101,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function enodePermitted(
-        bytes32 enodeHigh,
+        string memory enodeHigh,
         bytes32 enodeLow,
         string memory ip,
         uint16 port
@@ -110,7 +110,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function addEnode(
-        bytes32 enodeHigh,
+        string memory enodeHigh,
         bytes32 enodeLow,
         string memory ip,
         uint16 port
@@ -132,7 +132,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function removeEnode(
-        bytes32 enodeHigh,
+        string memory enodeHigh,
         bytes32 enodeLow,
         string memory ip,
         uint16 port
@@ -157,7 +157,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return size();
     }
 
-    function getByIndex(uint index) public view returns (bytes32 enodeHigh, bytes32 enodeLow, string memory ip, uint16 port) {
+    function getByIndex(uint index) public view returns (string memory enodeHigh, bytes32 enodeLow, string memory ip, uint16 port) {
         if (index >= 0 && index < size()) {
             enode memory item = allowlist[index];
             return (item.enodeHigh, item.enodeLow, item.ip, item.port);

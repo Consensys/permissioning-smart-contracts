@@ -5,7 +5,7 @@ import "./NodeRulesList.sol";
 
 contract ExposedNodeRulesList is NodeRulesList {
 
-    function _calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public pure returns(uint256) {
+    function _calculateKey(string memory _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public pure returns(uint256) {
         return calculateKey(_enodeHigh, _enodeLow, _ip, _port);
     }
 
@@ -13,15 +13,15 @@ contract ExposedNodeRulesList is NodeRulesList {
         return size();
     }
 
-    function _exists(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public view returns (bool) {
+    function _exists(string memory _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public view returns (bool) {
         return exists(_enodeHigh, _enodeLow, _ip, _port);
     }
 
-    function _add(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public returns (bool) {
+    function _add(string memory _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public returns (bool) {
         return add(_enodeHigh, _enodeLow, _ip, _port);
     }
 
-    function _remove(bytes32 _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public returns (bool) {
+    function _remove(string memory _enodeHigh, bytes32 _enodeLow, string memory _ip, uint16 _port) public returns (bool) {
         return remove(_enodeHigh, _enodeLow, _ip, _port);
     }
 }
