@@ -22,10 +22,10 @@ contract NodeIngress is Ingress {
     }
 
     function connectionAllowed(
-        string memory sourceEnodeHigh,
+        string memory sourceEnodeId,
         string memory sourceEnodeIp,
         uint16 sourceEnodePort,
-        string memory destinationEnodeHigh,
+        string memory destinationEnodeId,
         string memory destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bytes32) {
@@ -35,10 +35,10 @@ contract NodeIngress is Ingress {
         }
 
         return NodeRulesProxy(registry[RULES_CONTRACT]).connectionAllowed(
-            sourceEnodeHigh,
+            sourceEnodeId,
             sourceEnodeIp,
             sourceEnodePort,
-            destinationEnodeHigh,
+            destinationEnodeId,
             destinationEnodeIp,
             destinationEnodePort
         );

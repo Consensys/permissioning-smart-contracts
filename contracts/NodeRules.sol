@@ -10,14 +10,14 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     event NodeAdded(
         bool nodeAdded,
-        string enodeHigh,
+        string enodeId,
         string enodeIp,
         uint16 enodePort
     );
 
     event NodeRemoved(
         bool nodeRemoved,
-        string enodeHigh,
+        string enodeId,
         string enodeIp,
         uint16 enodePort
     );
@@ -70,20 +70,20 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function connectionAllowed(
-        string memory sourceEnodeHigh,
+        string memory sourceEnodeId,
         string memory sourceEnodeIp,
         uint16 sourceEnodePort,
-        string memory destinationEnodeHigh,
+        string memory destinationEnodeId,
         string memory destinationEnodeIp,
         uint16 destinationEnodePort
     ) public view returns (bytes32) {
         if (
             enodePermitted (
-                sourceEnodeHigh,
+                sourceEnodeId,
                 sourceEnodeIp,
                 sourceEnodePort
             ) && enodePermitted(
-                destinationEnodeHigh,
+                destinationEnodeId,
                 destinationEnodeIp,
                 destinationEnodePort
             )
@@ -95,26 +95,26 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function enodePermitted(
-        string memory enodeHigh,
+        string memory enodeId,
         string memory ip,
         uint16 port
     ) public view returns (bool) {
-        return exists(enodeHigh, ip, port);
+        return exists(enodeId, ip, port);
     }
 
     function addEnode(
-        string memory enodeHigh,
+        string memory enodeId,
         string memory ip,
         uint16 port
     ) public onlyAdmin onlyOnEditMode returns (bool) {
-        bool added = add(enodeHigh, ip, port);
+        bool added = add(enodeId, ip, port);
 
         if (added) {
             triggerRulesChangeEvent(false);
         }
         emit NodeAdded(
             added,
-            enodeHigh,
+            enodeId,
             ip,
             port
         );
@@ -123,18 +123,18 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function removeEnode(
-        string memory enodeHigh,
+        string memory enodeId,
         string memory ip,
         uint16 port
     ) public onlyAdmin onlyOnEditMode returns (bool) {
-        bool removed = remove(enodeHigh, ip, port);
+        bool removed = remove(enodeId, ip, port);
 
         if (removed) {
             triggerRulesChangeEvent(true);
         }
         emit NodeRemoved(
             removed,
-            enodeHigh,
+            enodeId,
             ip,
             port
         );
@@ -146,10 +146,10 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return size();
     }
 
-    function getByIndex(uint index) public view returns (string memory enodeHigh, string memory ip, uint16 port) {
+    function getByIndex(uint index) public view returns (string memory enodeId, string memory ip, uint16 port) {
         if (index >= 0 && index < size()) {
             enode memory item = allowlist[index];
-            return (item.enodeHigh, item.ip, item.port);
+            return (item.enodeId, item.ip, item.port);
         }
     }
 
