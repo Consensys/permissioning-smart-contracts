@@ -2,15 +2,13 @@ const leftPad = require('left-pad');
 const padIpv6 = require('pad-ipv6');
 
 export type Enode = {
-  enodeHigh: string;
-  enodeLow: string;
+  enodeId: string;
   ip: string;
   port: string;
 };
 
 export const enodeToParams = (enodeURL: string) => {
-  let enodeHigh = '';
-  let enodeLow = '';
+  let enodeId = '';
   let ip = '';
   let port = '';
   let extraParams = new Map();
@@ -22,8 +20,7 @@ export const enodeToParams = (enodeURL: string) => {
       node.protocol = 'https';
 
       if (node.username.length === 128) {
-        enodeHigh = '0x' + node.username.slice(0, 64);
-        enodeLow = '0x' + node.username.slice(64);
+        enodeId = '0x' + node.username;
       }
       ip = parseHostname(node.hostname);
       port = node.port;
@@ -35,26 +32,15 @@ export const enodeToParams = (enodeURL: string) => {
   } catch (err) {}
 
   return {
-    enodeHigh,
-    enodeLow,
+    enodeId,
     ip,
     port,
     extraParams
   };
 };
 
-export const paramsToIdentifier = ({
-  enodeHigh,
-  enodeLow,
-  ip,
-  port
-}: {
-  enodeHigh: string;
-  enodeLow: string;
-  ip: string;
-  port: string;
-}) => {
-  return `${enodeHigh}_${enodeLow}_${ip}_${port}`;
+export const paramsToIdentifier = ({ enodeId, ip, port }: { enodeId: string; ip: string; port: string }) => {
+  return `${enodeId}_${ip}_${port}`;
 };
 
 function parseHostname(stringHostname: string) {
@@ -82,25 +68,20 @@ function toHex(number: string) {
   return leftPad(num, 2, '0');
 }
 
-export const buildEnode = (enodeHigh: string, enodeLow: string) => {
-  return `${enodeHigh.slice(2)}${enodeLow.slice(2)}`;
-};
-
 export const identifierToParams = (identifier: string) => {
-  const [enodeHigh, enodeLow, ip, port] = identifier.split('_');
+  const [enodeId, ip, port] = identifier.split('_');
   return {
-    enodeHigh,
-    enodeLow,
+    enodeId,
     ip,
     port,
     identifier
   };
 };
 
-export const identifierToEnodeHighAndLow = (identifier: string) => {
+export const identifierToEnodeId = (identifier: string) => {
   if (identifier) {
-    const [enodeHigh, enodeLow] = identifier.split('_');
-    return `${enodeHigh}${enodeLow}`;
+    const [enodeHigh] = identifier.split('_');
+    return `${enodeHigh}`;
   }
   return '';
 };
@@ -111,9 +92,6 @@ export const isValidEnode = (str: string) => {
 
 export const isEqual = (node1: Enode, node2: Enode) => {
   return (
-    node1.enodeHigh.toLowerCase() === node2.enodeHigh.toLowerCase() &&
-    node1.enodeLow.toLowerCase() === node2.enodeLow.toLowerCase() &&
-    node1.ip === node2.ip &&
-    node1.port === node2.port
+    node1.enodeId.toLowerCase() === node2.enodeId.toLowerCase() && node1.ip === node2.ip && node1.port === node2.port
   );
 };

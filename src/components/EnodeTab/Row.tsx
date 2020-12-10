@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Pill, Flex, Button } from 'rimble-ui';
 // Util Helper
 import hexToIp from '../../util/ipConverter';
-import { buildEnode } from '../../util/enodetools';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -17,8 +16,7 @@ type EnodeRow = {
   isAdmin: boolean;
   deleteTransaction: (address: string) => void;
   openRemoveModal: (address: string) => void;
-  enodeHigh: string;
-  enodeLow: string;
+  enodeId: string;
   ip: string;
   port: string;
   status: string;
@@ -29,8 +27,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
   isAdmin,
   deleteTransaction,
   openRemoveModal,
-  enodeHigh,
-  enodeLow,
+  enodeId,
   ip,
   port,
   status,
@@ -39,7 +36,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
   <tr className={styles.row}>
     <td colSpan={2}>
       <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={`${buildEnode(enodeHigh, enodeLow)}`} />
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
       </Flex>
     </td>
     <td>
@@ -102,8 +99,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
 );
 
 EnodeRow.propTypes = {
-  enodeHigh: PropTypes.string.isRequired,
-  enodeLow: PropTypes.string.isRequired,
+  enodeId: PropTypes.string.isRequired,
   ip: PropTypes.string.isRequired,
   port: PropTypes.string.isRequired,
   identifier: PropTypes.string.isRequired,
