@@ -4,8 +4,7 @@ const leftPad = require('left-pad');
 const padIpv6 = require("pad-ipv6");
 
 const enodeToParams = enodeURL => {
-    let enodeHigh = "";
-    let enodeLow = "";
+    let enodeId = "";
     let ip = "";
     let port = "";
     let extraParams = {};
@@ -14,8 +13,7 @@ const enodeToParams = enodeURL => {
         const node = new URL(enodeURL);
         if (node.protocol === 'enode:') {
             if (node.username.length === 128) {
-                enodeHigh = "0x" + node.username.slice(0, 64);
-                enodeLow = "0x" + node.username.slice(64);
+                enodeId = "0x" + node.username;
             }
 
             ip = parseHostname(node.hostname)
@@ -26,8 +24,7 @@ const enodeToParams = enodeURL => {
     } catch (err) {}
 
     return {
-        enodeHigh,
-        enodeLow,
+        enodeId,
         ip,
         port,
         extraParams

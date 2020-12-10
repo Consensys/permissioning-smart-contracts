@@ -72,20 +72,13 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     function connectionAllowed(
         string memory sourceEnodeId,
         string memory sourceEnodeIp,
-        uint16 sourceEnodePort,
-        string memory destinationEnodeId,
-        string memory destinationEnodeIp,
-        uint16 destinationEnodePort
+        uint16 sourceEnodePort
     ) public view returns (bytes32) {
         if (
             enodePermitted (
                 sourceEnodeId,
                 sourceEnodeIp,
                 sourceEnodePort
-            ) && enodePermitted(
-                destinationEnodeId,
-                destinationEnodeIp,
-                destinationEnodePort
             )
         ) {
             return 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
