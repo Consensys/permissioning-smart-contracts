@@ -6,10 +6,6 @@ const AdminContract = artifacts.require('Admin.sol');
 const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";
 const ADMIN_NAME = "0x61646d696e697374726174696f6e000000000000000000000000000000000000";
 
-// enodeAllowed reponses
-const PERMITTED = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
-const NOT_PERMITTED = "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
-
 const enode1 = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 + "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 const node1Host = "0x0000000000000000000011119bd359fd";
@@ -74,14 +70,14 @@ contract("NodeRules (Permissioning)", (accounts) => {
   });
 
   it('should allow a connection between nodes added to the list', async () => {
-    let permitted = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port, enode2, node2Host, node2Port);
-    assert.equal(permitted, PERMITTED, 'expected permitted node1 <---> node2');
+    let permitted = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port);
+    assert.equal(permitted, true, 'expected permitted node1');
 
-    permitted = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port, enode3, node3Host, node3Port);
-    assert.equal(permitted, PERMITTED, 'expected permitted node1 <---> node3');
+    permitted = await nodeRulesContract.connectionAllowed(enode2, node2Host, node2Port);
+    assert.equal(permitted, true, 'expected permitted node2');
 
-    permitted = await nodeRulesContract.connectionAllowed(enode2, node2Host, node2Port, enode3, node3Host, node3Port);
-    assert.equal(permitted, PERMITTED, 'expected permitted node2 <---> node3');
+    permitted = await nodeRulesContract.connectionAllowed(enode3, node3Host, node3Port);
+    assert.equal(permitted, true, 'expected permitted node3');
   });
 
   it('should NOT allow connection with node removed from list', async () => {
@@ -89,8 +85,8 @@ contract("NodeRules (Permissioning)", (accounts) => {
     let permitted = await nodeRulesContract.enodePermitted(enode3, node3Host, node3Port);
     assert.notOk(permitted, 'expected removed node NOT permitted');
 
-    permitted = await nodeRulesContract.connectionAllowed(enode3, node3Host, node3Port, enode2, node2Host, node2Port);
-    assert.equal(permitted, NOT_PERMITTED, 'expected source disallowed since it was removed');
+    permitted = await nodeRulesContract.connectionAllowed(enode3, node3Host, node3Port);
+    assert.equal(permitted, false, 'expected source disallowed since it was removed');
 
     let result = await nodeRulesContract.getSize();
     assert.equal(result, 2, "expected number of nodes");
@@ -104,8 +100,8 @@ contract("NodeRules (Permissioning)", (accounts) => {
     permitted = await nodeRulesContract.enodePermitted(enode3, node3Host, node3Port);
     assert.ok(permitted, 'expected added node permitted');
 
-    permitted = await nodeRulesContract.connectionAllowed(enode3, node3Host, node3Port, enode2, node2Host, node2Port);
-    assert.equal(permitted, PERMITTED, 'expected connection allowed since node was added back to list');
+    permitted = await nodeRulesContract.connectionAllowed(enode3, node3Host, node3Port,);
+    assert.equal(permitted, true, 'expected connection allowed since node was added back to list');
   });
 
   it('should not allow non-admin account to add node to list', async () => {

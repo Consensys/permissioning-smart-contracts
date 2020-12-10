@@ -46,19 +46,18 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
     assert.equal(result, nodeRulesContract.address, 'NodeRules contract should be reg');
 
     // Verify that the nodes are not permitted to talk
-    result2 = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port, enode2, node2Host, node2Port);
-    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port, enode2, node2Host, node2Port);
-    assert.equal(result, "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "Connection should NOT be allowed before Enodes have been registered");
+    result2 = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port);
+    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port);
+    assert.equal(result, false, "Connection should NOT be allowed before Enodes have been registered");
     assert.equal(result, result2, "Call and proxy call did NOT return the same value");
 
-    // Add the two Enodes to the NodeRules register
+    // Add the Enode to the NodeRules register
     result = await nodeRulesContract.addEnode(enode1, node1Host, node1Port);
-    result = await nodeRulesContract.addEnode(enode2, node2Host, node2Port);
 
     // Verify that the nodes are now able to talk
-    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port, enode2, node2Host, node2Port);
-    result2 = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port, enode2, node2Host, node2Port);
-    assert.equal(result, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "Connection SHOULD be allowed after Enodes have been registered");
+    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port);
+    result2 = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port);
+    assert.equal(result, true, "Connection SHOULD be allowed after Enodes have been registered");
     assert.equal(result, result2, "Call and proxy call did NOT return the same value");
   });
 
