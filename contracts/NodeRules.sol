@@ -73,18 +73,13 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         string memory sourceEnodeId,
         string memory sourceEnodeIp,
         uint16 sourceEnodePort
-    ) public view returns (bytes32) {
-        if (
+    ) public view returns (bool) {
+        return
             enodePermitted (
                 sourceEnodeId,
                 sourceEnodeIp,
                 sourceEnodePort
-            )
-        ) {
-            return 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-        } else {
-            return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-        }
+            );
     }
 
     function enodePermitted(

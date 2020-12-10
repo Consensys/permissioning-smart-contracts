@@ -25,10 +25,9 @@ contract NodeIngress is Ingress {
         string memory sourceEnodeId,
         string memory sourceEnodeIp,
         uint16 sourceEnodePort
-    ) public view returns (bytes32) {
+    ) public view returns (bool) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {
-            //reject connection
-            return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+            return false;
         }
 
         return NodeRulesProxy(registry[RULES_CONTRACT]).connectionAllowed(

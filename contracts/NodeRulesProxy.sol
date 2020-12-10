@@ -5,5 +5,5 @@ interface NodeRulesProxy {
         string calldata sourceEnodeId,
         string calldata sourceEnodeIp,
         uint16 sourceEnodePort
-    ) external view returns (bytes32);
+    ) external view returns (bool);
 }
