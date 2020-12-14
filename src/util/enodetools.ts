@@ -52,8 +52,8 @@ export const identifierToParams = (identifier: string) => {
 
 export const identifierToEnodeId = (identifier: string) => {
   if (identifier) {
-    const [enodeHigh] = identifier.split('_');
-    return `${enodeHigh}`;
+    const [enodeId] = identifier.split('_');
+    return `${enodeId}`;
   }
   return '';
 };
