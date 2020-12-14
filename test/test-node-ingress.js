@@ -5,15 +5,10 @@ const AdminContract = artifacts.require("Admin.sol");
 const RULES="0x72756c6573000000000000000000000000000000000000000000000000000000";
 const ADMIN="0x61646d696e697374726174696f6e000000000000000000000000000000000000";
 
-var enode1 = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
+var enodeId = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 + "892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 var nodeHost = "localhost";
 var nodePort = 30303;
-
-var enode2 = "892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
-+ "cb320c1b62f37892092b7f59bd359fdc3a2ed5df436c3d8914b1532740128929";
-var node2Host = "127.0.0.1";
-var node2Port = 30304;
 
 const address2 = "0x345ca3e014aaf5dca488057592ee47305d9b3e10".toLowerCase();
 
@@ -32,7 +27,7 @@ contract ("Node Ingress (no contracts registered)", (accounts) => {
         result = await nodeIngressContract.getContractAddress(RULES);
         assert.equal(result, "0x0000000000000000000000000000000000000000", "NodeRules contract should NOT be registered");
 
-        let permitted = await nodeIngressContract.connectionAllowed(enode1, nodeHost, nodePort);
+        let permitted = await nodeIngressContract.connectionAllowed(enodeId, nodeHost, nodePort);
         assert.equal(permitted, false, "expected connectionAllowed to return false");
     });
 
@@ -246,7 +241,7 @@ contract("Ingress contract", (accounts) => {
 
     it("Should emit an event when the NodeRules are updated", async () => {
         //Add a more restrictive rule
-        await nodeRulesContract.addEnode(enode1, nodeHost, nodePort, { from: accounts[0] });
+        await nodeRulesContract.addEnode(enodeId, nodeHost, nodePort, { from: accounts[0] });
 
         // Get the events
         let result = await nodeIngressContract.getPastEvents("NodePermissionsUpdated", {fromBlock: 0, toBlock: "latest" });
@@ -255,7 +250,7 @@ contract("Ingress contract", (accounts) => {
         assert.equal(result[0].returnValues.addsRestrictions, false, "addsRestrictions SHOULD be false");
 
         // Add a less restrictive rule
-        result = await nodeRulesContract.removeEnode(enode1, nodeHost, nodePort);
+        result = await nodeRulesContract.removeEnode(enodeId, nodeHost, nodePort);
 
         // Get the events
         result = await nodeIngressContract.getPastEvents("NodePermissionsUpdated", {fromBlock: 0, toBlock: "latest" });

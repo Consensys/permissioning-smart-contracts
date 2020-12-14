@@ -10,11 +10,6 @@ var enode1 = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 var node1Host = "127.0.0.1";
 var node1Port = 1;
 
-var enode2 = "892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
-+ "cb320c1b62f37892092b7f59bd359fdc3a2ed5df436c3d8914b1532740128929";
-var node2Host = "localhost";
-var node2Port = 2;
-
 contract ('NodeIngress (proxying permissioning check to rules contract)', () => {
 
   let nodeIngressContract;
