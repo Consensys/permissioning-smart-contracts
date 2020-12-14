@@ -1,15 +1,15 @@
 const BN = web3.utils.BN;
 const NodeRulesList = artifacts.require('ExposedNodeRulesList.sol');
 
-const enode1 = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
+const enode1 = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 + "2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 const node1Host = "139.86.2.1";
 const node1Port = 30303;
-const enode2 = "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
+const enode2 = "892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
 + "cb320c1b62f37892092b7f59bd359fdc3a2ed5df436c3d8914b1532740128929";
 const node2Host = "127.0.0.1";
 const node2Port = 30304;
-const enode3 = "0x765092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
+const enode3 = "765092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
 + "920982b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 const node3Host = "domain.com";
 const node3Port = 30305;
