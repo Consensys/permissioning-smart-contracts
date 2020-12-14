@@ -158,23 +158,7 @@ function getRetainAccountRulesContract() {
 }
 
 function parseHostname (stringHostname) {
-    if (stringHostname[0] === '[') {
-        const ipv6 = stringHostname.slice(1,-1);
-        return getHexIpv6(ipv6);
-    }
-    return getHexIpv4(stringHostname);
-}
-
-function getHexIpv4(stringIp) {
-    const splitIp = stringIp.split(".");
-    return `0x00000000000000000000ffff${toHex(splitIp[0])}${toHex(
-        splitIp[1]
-    )}${toHex(splitIp[2])}${toHex(splitIp[3])}`;
-}
-
-function getHexIpv6(stringIpv6) {
-    const ipv6 = padIpv6(stringIpv6).split(":").join('');
-    return '0x' + ipv6;
+    return stringHostname;
 }
 
 function toHex(number) {
