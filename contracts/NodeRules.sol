@@ -70,15 +70,15 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function connectionAllowed(
-        string memory sourceEnodeId,
-        string memory sourceEnodeIp,
-        uint16 sourceEnodePort
+        string memory enodeId,
+        string memory enodeIp,
+        uint16 enodePort
     ) public view returns (bool) {
         return
             enodePermitted (
-                sourceEnodeId,
-                sourceEnodeIp,
-                sourceEnodePort
+                enodeId,
+                enodeIp,
+                enodePort
             );
     }
 
