@@ -1,7 +1,5 @@
 const Web3Utils = require("web3-utils");
 const url = require('url');
-const leftPad = require('left-pad');
-const padIpv6 = require("pad-ipv6");
 
 const enodeToParams = enodeURL => {
     let enodeId = "";
@@ -16,7 +14,7 @@ const enodeToParams = enodeURL => {
                 enodeId = "0x" + node.username;
             }
 
-            ip = parseHostname(node.hostname)
+            ip = node.hostname
             port = node.port;
 
             node.searchParams.forEach((value, name, searchParams) => { extraParams[name.toLowerCase()] = value; });
@@ -157,18 +155,8 @@ function getRetainAccountRulesContract() {
 
 }
 
-function parseHostname (stringHostname) {
-    return stringHostname;
-}
-
-function toHex(number) {
-    const num = Number(number).toString(16);
-    return leftPad(num, 2, '0');
-}
-
 module.exports = {
     enodeToParams,
-    parseHostname,
     isInitialAdminAccountsAvailable,
     isInitialAllowlistedAccountsAvailable,
     isInitialAllowlistedNodesAvailable,

@@ -3,8 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
 import { Pill, Flex, Button } from 'rimble-ui';
-// Util Helper
-import hexToIp from '../../util/ipConverter';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -41,7 +39,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
     </td>
     <td>
       <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={hexToIp(ip)} />
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={ip} />
       </Flex>
     </td>
     <td>

@@ -54,11 +54,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
       });
 
       try {
-        const tx = await nodeRulesContract!.functions.addEnode(
-          utils.hexlify(enodeId),
-          utils.hexlify(ip),
-          utils.bigNumberify(port)
-        );
+        const tx = await nodeRulesContract!.functions.addEnode(enodeId, ip, utils.bigNumberify(port));
         toggleModal('add')(false);
         addTransaction(identifier, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
@@ -88,19 +84,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     const handleRemove = async (value: string) => {
       const { enodeId, ip, port } = identifierToParams(value);
       try {
-        const est = await nodeRulesContract!.estimate.removeEnode(
-          utils.hexlify(enodeId),
-          utils.hexlify(ip),
-          utils.bigNumberify(port)
-        );
-        const tx = await nodeRulesContract!.functions.removeEnode(
-          utils.hexlify(enodeId),
-          utils.hexlify(ip),
-          utils.bigNumberify(port),
-          {
-            gasLimit: est.toNumber() * 2
-          }
-        );
+        const est = await nodeRulesContract!.estimate.removeEnode(enodeId, ip, utils.bigNumberify(port));
+        const tx = await nodeRulesContract!.functions.removeEnode(enodeId, ip, utils.bigNumberify(port), {
+          gasLimit: est.toNumber() * 2
+        });
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
