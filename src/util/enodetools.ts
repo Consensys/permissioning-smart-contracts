@@ -17,7 +17,7 @@ export const enodeToParams = (enodeURL: string) => {
       node.protocol = 'https';
 
       if (node.username.length === 128) {
-        enodeId = '0x' + node.username;
+        enodeId = node.username;
       }
       ip = node.hostname;
       port = node.port;

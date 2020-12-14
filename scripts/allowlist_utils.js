@@ -11,7 +11,7 @@ const enodeToParams = enodeURL => {
         const node = new URL(enodeURL);
         if (node.protocol === 'enode:') {
             if (node.username.length === 128) {
-                enodeId = "0x" + node.username;
+                enodeId = node.username;
             }
 
             ip = node.hostname
