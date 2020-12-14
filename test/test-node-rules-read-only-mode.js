@@ -4,7 +4,7 @@ const Admin = artifacts.require('Admin.sol');
 
 var enode1 = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 + "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
-var node1Host = "0x0000000000000000000011119bd359fd";
+var node1Host = "127.0.0.1";
 var node1Port = 30303;
 
 var newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732".toLowerCase();

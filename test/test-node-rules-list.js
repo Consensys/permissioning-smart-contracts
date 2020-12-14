@@ -3,15 +3,15 @@ const NodeRulesList = artifacts.require('ExposedNodeRulesList.sol');
 
 const enode1 = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 + "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
-const node1Host = "0x0000000000000000000011119bd359fd";
+const node1Host = "139.86.2.1";
 const node1Port = 30303;
 const enode2 = "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
 + "0xcb320c1b62f37892092b7f59bd359fdc3a2ed5df436c3d8914b1532740128929";
-const node2Host = "0x0000000000000000000011119bd359fd";
+const node2Host = "127.0.0.1";
 const node2Port = 30304;
 const enode3 = "0x765092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929"
 + "0x920982b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
-const node3Host = "0x0000000000000000000011117fc359fd";
+const node3Host = "domain.com";
 const node3Port = 30305;
 
 contract("NodeRulesList (list manipulation)", async () => {
