@@ -3,7 +3,7 @@ const NodeRules = artifacts.require('NodeRules.sol');
 const Admin = artifacts.require('Admin.sol');
 
 var enode1 = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
-+ "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
++ "892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
 var node1Host = "127.0.0.1";
 var node1Port = 30303;
 

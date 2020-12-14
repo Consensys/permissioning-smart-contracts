@@ -6,13 +6,9 @@ const AdminContract = artifacts.require('Admin.sol');
 const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";
 const ADMIN_NAME = "0x61646d696e697374726174696f6e000000000000000000000000000000000000";
 
-// enodeAllowed reponses
-const PERMITTED = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
-const NOT_PERMITTED = "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
-
 const enode1 = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
-+ "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
-const node1Host = "0x0000000000000000000011119bd359fd";
++ "2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
+const node1Host = "127.0.0.1";
 const node1Port = 30303;
 
 const newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
