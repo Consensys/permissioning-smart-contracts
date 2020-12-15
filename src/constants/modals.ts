@@ -1,4 +1,4 @@
-import { identifierToEnodeHighAndLow } from '../util/enodetools';
+import { identifierToEnodeId } from '../util/enodetools';
 
 export type ModalDisplay = {
   heading: string;
@@ -49,5 +49,5 @@ export const addEnodeDisplay: ModalDisplay = {
 
 export const removeEnodeDisplay: (value: string) => ModalDisplay = value => ({
   heading: 'Are you sure?',
-  subHeading: `Remove node “${identifierToEnodeHighAndLow(value)}”?`
+  subHeading: `Remove node “${identifierToEnodeId(value)}”?`
 });

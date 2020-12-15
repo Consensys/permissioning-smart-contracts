@@ -22,29 +22,18 @@ contract NodeIngress is Ingress {
     }
 
     function connectionAllowed(
-        bytes32 sourceEnodeHigh,
-        bytes32 sourceEnodeLow,
-        bytes16 sourceEnodeIp,
-        uint16 sourceEnodePort,
-        bytes32 destinationEnodeHigh,
-        bytes32 destinationEnodeLow,
-        bytes16 destinationEnodeIp,
-        uint16 destinationEnodePort
-    ) public view returns (bytes32) {
+        string memory enodeId,
+        string memory enodeIp,
+        uint16 enodePort
+    ) public view returns (bool) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {
-            //reject connection
-            return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+            return false;
         }
 
         return NodeRulesProxy(registry[RULES_CONTRACT]).connectionAllowed(
-            sourceEnodeHigh,
-            sourceEnodeLow,
-            sourceEnodeIp,
-            sourceEnodePort,
-            destinationEnodeHigh,
-            destinationEnodeLow,
-            destinationEnodeIp,
-            destinationEnodePort
+            enodeId,
+            enodeIp,
+            enodePort
         );
     }
 }
