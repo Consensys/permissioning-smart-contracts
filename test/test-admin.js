@@ -8,7 +8,7 @@ contract("Admin (admin management)", async accounts => {
     adminContract = await Admin.new();
   })
 
-  it("accounts that deployed contract should be admin", async () => {
+  it("account that deployed contract should be admin", async () => {
     let isAuthorized = await adminContract.isAuthorized(accounts[0]);
 
     assert.ok(isAuthorized);

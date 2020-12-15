@@ -46,21 +46,15 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
 
   if (!!nodeRulesContract) {
     const handleAdd = async (value: string) => {
-      const { enodeHigh, enodeLow, ip, port } = enodeToParams(value);
+      const { enodeId, ip, port } = enodeToParams(value);
       const identifier = paramsToIdentifier({
-        enodeHigh,
-        enodeLow,
+        enodeId,
         ip,
         port
       });
 
       try {
-        const tx = await nodeRulesContract!.functions.addEnode(
-          utils.hexlify(enodeHigh),
-          utils.hexlify(enodeLow),
-          utils.hexlify(ip),
-          utils.bigNumberify(port)
-        );
+        const tx = await nodeRulesContract!.functions.addEnode(enodeId, ip, utils.bigNumberify(port));
         toggleModal('add')(false);
         addTransaction(identifier, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
@@ -82,49 +76,28 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         toggleModal('add')(false);
         updateTransaction(identifier, FAIL_ADDITION);
         errorToast(e, identifier, openToast, () =>
-          openToast(
-            identifier,
-            FAIL,
-            'Could not add node',
-            `${enodeHigh}${enodeLow} was unable to be added. Please try again`
-          )
+          openToast(identifier, FAIL, 'Could not add node', `${enodeId} was unable to be added. Please try again`)
         );
       }
     };
 
     const handleRemove = async (value: string) => {
-      const { enodeHigh, enodeLow, ip, port } = identifierToParams(value);
+      const { enodeId, ip, port } = identifierToParams(value);
       try {
-        const est = await nodeRulesContract!.estimate.removeEnode(
-          utils.hexlify(enodeHigh),
-          utils.hexlify(enodeLow),
-          utils.hexlify(ip),
-          utils.bigNumberify(port)
-        );
-        const tx = await nodeRulesContract!.functions.removeEnode(
-          utils.hexlify(enodeHigh),
-          utils.hexlify(enodeLow),
-          utils.hexlify(ip),
-          utils.bigNumberify(port),
-          {
-            gasLimit: est.toNumber() * 2
-          }
-        );
+        const est = await nodeRulesContract!.estimate.removeEnode(enodeId, ip, utils.bigNumberify(port));
+        const tx = await nodeRulesContract!.functions.removeEnode(enodeId, ip, utils.bigNumberify(port), {
+          gasLimit: est.toNumber() * 2
+        });
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
-        openToast(value, SUCCESS, `Removal of node processed: ${enodeHigh}${enodeLow}`);
+        openToast(value, SUCCESS, `Removal of node processed: ${enodeId}`);
         deleteTransaction(value);
       } catch (e) {
         toggleModal('remove')(false);
         updateTransaction(value, FAIL_REMOVAL);
         errorToast(e, value, openToast, () =>
-          openToast(
-            value,
-            FAIL,
-            'Could not remove node',
-            `${enodeHigh}${enodeLow} was unable to be removed. Please try again.`
-          )
+          openToast(value, FAIL, 'Could not remove node', `${enodeId} was unable to be removed. Please try again.`)
         );
       }
     };
