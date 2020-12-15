@@ -1,4 +1,3 @@
-const { getRetainAdminContract } = require('../scripts/allowlist_utils');
 const AllowlistUtils = require('../scripts/allowlist_utils');
 
 const Admin = artifacts.require("./Admin.sol");
