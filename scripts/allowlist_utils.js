@@ -1,11 +1,8 @@
 const Web3Utils = require("web3-utils");
 const url = require('url');
-const leftPad = require('left-pad');
-const padIpv6 = require("pad-ipv6");
 
 const enodeToParams = enodeURL => {
-    let enodeHigh = "";
-    let enodeLow = "";
+    let enodeId = "";
     let ip = "";
     let port = "";
     let extraParams = {};
@@ -14,11 +11,10 @@ const enodeToParams = enodeURL => {
         const node = new URL(enodeURL);
         if (node.protocol === 'enode:') {
             if (node.username.length === 128) {
-                enodeHigh = "0x" + node.username.slice(0, 64);
-                enodeLow = "0x" + node.username.slice(64);
+                enodeId = node.username;
             }
 
-            ip = parseHostname(node.hostname)
+            ip = node.hostname
             port = node.port;
 
             node.searchParams.forEach((value, name, searchParams) => { extraParams[name.toLowerCase()] = value; });
@@ -26,8 +22,7 @@ const enodeToParams = enodeURL => {
     } catch (err) {}
 
     return {
-        enodeHigh,
-        enodeLow,
+        enodeId,
         ip,
         port,
         extraParams
@@ -46,19 +41,11 @@ function isInitialAllowlistedAccountsAvailable() {
     if (process.env.INITIAL_ALLOWLISTED_ACCOUNTS) {
         return process.env.INITIAL_ALLOWLISTED_ACCOUNTS;
     }
-    if (process.env.INITIAL_WHITELISTED_ACCOUNTS) {
-        console.warn("INITIAL_WHITELISTED_ACCOUNTS has been deprecated. Please use INITIAL_ALLOWLISTED_ACCOUNTS instead.");
-        return process.env.INITIAL_WHITELISTED_ACCOUNTS;
-    }
 }
 
 function isInitialAllowlistedNodesAvailable() {
     if (process.env.INITIAL_ALLOWLISTED_NODES) {
         return process.env.INITIAL_ALLOWLISTED_NODES;
-    }
-    if (process.env.INITIAL_WHITELISTED_NODES) {
-        console.warn("INITIAL_WHITELISTED_NODES has been deprecated. Please use INITIAL_ALLOWLISTED_NODES instead.");
-        return process.env.INITIAL_WHITELISTED_NODES;
     }
 }
 
@@ -143,7 +130,7 @@ function getAccounts(accounts) {
 
 function getRetainAdminContract() {
     if (process.env.RETAIN_ADMIN_CONTRACT) {
-        return process.env.RETAIN_ADMIN_CONTRACT.toLowerCase === 'true';
+        return "true" === process.env.RETAIN_ADMIN_CONTRACT;
     } else {
         return false;
     }
@@ -152,7 +139,7 @@ function getRetainAdminContract() {
 
 function getRetainNodeRulesContract() {
     if (process.env.RETAIN_NODE_RULES_CONTRACT) {
-        return process.env.RETAIN_NODE_RULES_CONTRACT.toLowerCase === 'true';
+        return "true" === process.env.RETAIN_NODE_RULES_CONTRACT;
     } else {
         return false;
     }
@@ -161,41 +148,15 @@ function getRetainNodeRulesContract() {
 
 function getRetainAccountRulesContract() {
     if (process.env.RETAIN_ACCOUNT_RULES_CONTRACT) {
-        return process.env.RETAIN_ACCOUNT_RULES_CONTRACT.toLowerCase === 'true';
+        return "true" === process.env.RETAIN_ACCOUNT_RULES_CONTRACT;
     } else {
         return false;
     }
 
 }
 
-function parseHostname (stringHostname) {
-    if (stringHostname[0] === '[') {
-        const ipv6 = stringHostname.slice(1,-1);
-        return getHexIpv6(ipv6);
-    }
-    return getHexIpv4(stringHostname);
-}
-
-function getHexIpv4(stringIp) {
-    const splitIp = stringIp.split(".");
-    return `0x00000000000000000000ffff${toHex(splitIp[0])}${toHex(
-        splitIp[1]
-    )}${toHex(splitIp[2])}${toHex(splitIp[3])}`;
-}
-
-function getHexIpv6(stringIpv6) {
-    const ipv6 = padIpv6(stringIpv6).split(":").join('');
-    return '0x' + ipv6;
-}
-
-function toHex(number) {
-    const num = Number(number).toString(16);
-    return leftPad(num, 2, '0');
-}
-
 module.exports = {
     enodeToParams,
-    parseHostname,
     isInitialAdminAccountsAvailable,
     isInitialAllowlistedAccountsAvailable,
     isInitialAllowlistedNodesAvailable,

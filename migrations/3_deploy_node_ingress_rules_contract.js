@@ -53,12 +53,11 @@ module.exports = async(deployer, network) => {
         let allowlistedNodes = AllowlistUtils.getInitialAllowlistedNodes();
         for (i = 0; i < allowlistedNodes.length; i++) {
             let enode = allowlistedNodes[i];
-            const { enodeHigh, enodeLow, ip, port } = AllowlistUtils.enodeToParams(enode);
+            const { enodeId, ip, port } = AllowlistUtils.enodeToParams(enode);
             
             let result = await nodeRulesContract.addEnode(
-                Web3Utils.hexToBytes(enodeHigh),
-                Web3Utils.hexToBytes(enodeLow),
-                Web3Utils.hexToBytes(ip),    
+                enodeId,
+                ip,    
                 Web3Utils.toBN(port)
             );
             console.log("     > eNode added: " + enode );

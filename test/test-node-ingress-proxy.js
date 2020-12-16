@@ -5,15 +5,10 @@ const Admin = artifacts.require('Admin.sol');
 const RULES='0x72756c6573000000000000000000000000000000000000000000000000000000';
 const ADMIN='0x61646d696e697374726174696f6e000000000000000000000000000000000000';
 
-var node1High = "0x9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375";
-var node1Low = "0x2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
-var node1Host = "0x0000000000000000000011119bd359fd";
+var enode1 = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
++ "2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
+var node1Host = "127.0.0.1";
 var node1Port = 1;
-
-var node2High = "0x892092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
-var node2Low = "0xcb320c1b62f37892092b7f59bd359fdc3a2ed5df436c3d8914b1532740128929";
-var node2Host = "0x0000000000000000000011119bd359fd";
-var node2Port = 2;
 
 contract ('NodeIngress (proxying permissioning check to rules contract)', () => {
 
@@ -46,19 +41,18 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
     assert.equal(result, nodeRulesContract.address, 'NodeRules contract should be reg');
 
     // Verify that the nodes are not permitted to talk
-    result2 = await nodeRulesContract.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-    result = await nodeIngressContract.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-    assert.equal(result, "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "Connection should NOT be allowed before Enodes have been registered");
+    result2 = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port);
+    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port);
+    assert.equal(result, false, "Connection should NOT be allowed before Enodes have been registered");
     assert.equal(result, result2, "Call and proxy call did NOT return the same value");
 
-    // Add the two Enodes to the NodeRules register
-    result = await nodeRulesContract.addEnode(node1High, node1Low, node1Host, node1Port);
-    result = await nodeRulesContract.addEnode(node2High, node2Low, node2Host, node2Port);
+    // Add the Enode to the NodeRules register
+    result = await nodeRulesContract.addEnode(enode1, node1Host, node1Port);
 
     // Verify that the nodes are now able to talk
-    result = await nodeIngressContract.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-    result2 = await nodeRulesContract.connectionAllowed(node1High, node1Low, node1Host, node1Port, node2High, node2Low, node2Host, node2Port);
-    assert.equal(result, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "Connection SHOULD be allowed after Enodes have been registered");
+    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port);
+    result2 = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port);
+    assert.equal(result, true, "Connection SHOULD be allowed after Enodes have been registered");
     assert.equal(result, result2, "Call and proxy call did NOT return the same value");
   });
 

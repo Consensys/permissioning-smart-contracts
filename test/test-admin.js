@@ -8,7 +8,7 @@ contract("Admin (admin management)", async accounts => {
     adminContract = await Admin.new();
   })
 
-  it("accounts that deployed contract should be admin", async () => {
+  it("account that deployed contract should be admin", async () => {
     let isAuthorized = await adminContract.isAuthorized(accounts[0]);
 
     assert.ok(isAuthorized);
@@ -53,7 +53,7 @@ contract("Admin (admin management)", async accounts => {
     assert.notOk(isAuthorized);
   });
 
-  it("admin cannot remove himself", async () => {
+  it("admin cannot remove themselves", async () => {
     try {
       await adminContract.removeAdmin(accounts[0], { from: accounts[0] });
       expect.fail(null, null, "Modifier was not enforced")

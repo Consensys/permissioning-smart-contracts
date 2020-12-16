@@ -24,6 +24,26 @@ tr td.emptyLine {
   }
 }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.2s ease-in-out;
+
+  &.pendingAddition {
+    opacity: 0.5;
+  }
+
+  &.lock {
+    opacity: 0.5;
+  }
+
+  &.pendingRemoval {
+    opacity: 0.5;
+    text-decoration: line-through;
+  }
+}
+
 .removeIcon {
   opacity: 0;
   transition: color 0.2s ease-in-out, opacity 0.5s ease-in-out;
@@ -37,11 +57,8 @@ tr td.emptyLine {
   }
 }
 
-.infoIcon {
-  color: #aaa;
-  transition: color 0.3s ease-in-out;
-  &:hover {
-    color: #777;
-    cursor: pointer;
+.tooltipFix {
+  span {
+    max-width: 100%;
   }
 }
