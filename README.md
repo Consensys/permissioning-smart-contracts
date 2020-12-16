@@ -28,11 +28,11 @@ Linting is set up using solium. To run it over your code execute `yarn run lint`
 
 ### Permissioning Management Dapp
 
+The Dapp will facilitate managing permissioning rules and maintaining the list of admin accounts that can edit rules.
+
 Note: if you want to run against Besu, follow the Besu docs.
 
 ONLY use these instructions if you are doing development work on the Dapp itself, in which case connecting to a development server (Ganache) will enable faster development.
-
-The Dapp will facilitate managing permissioning rules and maintaining the list of admin accounts that can edit rules.
 
 This is the easiest way to get started for development with the permissioning Dapp:
 
@@ -49,6 +49,11 @@ This is the easiest way to get started for development with the permissioning Da
 1. When you start Ganache, it gives you a list of accounts and private keys. Import the first one in MetaMask to impersonate the first admin of the system.
 1. Navigate to `http://localhost:3000` to access the Permissioning Dapp.
 1. All changes made to the smart contracts or to the Dapp code are automatically refreshed on the website. There is no need to restart the web server after making changes.
+
+#### Snapshots ####
+Snapshots are compared as part of the test suite, to check any changes made to the Dapp are sensible. If you change the Dapp, you also need to update the snapshots.
+1. `yarn jest -u`
+1. or if using npm: `npm run test:app -- -u`
 
 #### Build the permissioning Dapp for deployment ####
 
