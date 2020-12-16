@@ -52,7 +52,8 @@ This is the easiest way to get started for development with the permissioning Da
 
 #### Snapshots ####
 Snapshots are compared as part of the test suite, to check any changes made to the Dapp are sensible. If you change the Dapp, you also need to update the snapshots.
-1. `npm run test:app -- -u`
+1. `yarn jest -u`
+1. or if using npm: `npm run test:app -- -u`
 
 #### Build the permissioning Dapp for deployment ####
 
