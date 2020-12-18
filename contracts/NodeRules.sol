@@ -48,32 +48,32 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     // VERSION
-    function getContractVersion() public view returns (uint) {
+    function getContractVersion() external view returns (uint) {
         return version;
     }
 
     // READ ONLY MODE
-    function isReadOnly() public view returns (bool) {
+    function isReadOnly() external view returns (bool) {
         return readOnlyMode;
     }
 
-    function enterReadOnly() public onlyAdmin returns (bool) {
+    function enterReadOnly() external onlyAdmin returns (bool) {
         require(readOnlyMode == false, "Already in read only mode");
         readOnlyMode = true;
         return true;
     }
 
-    function exitReadOnly() public onlyAdmin returns (bool) {
+    function exitReadOnly() external onlyAdmin returns (bool) {
         require(readOnlyMode == true, "Not in read only mode");
         readOnlyMode = false;
         return true;
     }
 
     function connectionAllowed(
-        string memory enodeId,
-        string memory enodeIp,
+        string calldata enodeId,
+        string calldata enodeIp,
         uint16 enodePort
-    ) public view returns (bool) {
+    ) external view returns (bool) {
         return
             enodePermitted (
                 enodeId,
@@ -91,10 +91,10 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function addEnode(
-        string memory enodeId,
-        string memory ip,
+        string calldata enodeId,
+        string calldata ip,
         uint16 port
-    ) public onlyAdmin onlyOnEditMode returns (bool) {
+    ) external onlyAdmin onlyOnEditMode returns (bool) {
         bool added = add(enodeId, ip, port);
 
         if (added) {
@@ -111,10 +111,10 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function removeEnode(
-        string memory enodeId,
-        string memory ip,
+        string calldata enodeId,
+        string calldata ip,
         uint16 port
-    ) public onlyAdmin onlyOnEditMode returns (bool) {
+    ) external onlyAdmin onlyOnEditMode returns (bool) {
         bool removed = remove(enodeId, ip, port);
 
         if (removed) {
@@ -130,11 +130,11 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return removed;
     }
 
-    function getSize() public view returns (uint) {
+    function getSize() external view returns (uint) {
         return size();
     }
 
-    function getByIndex(uint index) public view returns (string memory enodeId, string memory ip, uint16 port) {
+    function getByIndex(uint index) external view returns (string memory enodeId, string memory ip, uint16 port) {
         if (index >= 0 && index < size()) {
             enode memory item = allowlist[index];
             return (item.enodeId, item.ip, item.port);

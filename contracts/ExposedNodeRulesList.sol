@@ -5,23 +5,23 @@ import "./NodeRulesList.sol";
 
 contract ExposedNodeRulesList is NodeRulesList {
 
-    function _calculateKey(string memory _enodeId, string memory _ip, uint16 _port) public pure returns(uint256) {
+    function _calculateKey(string calldata _enodeId, string calldata _ip, uint16 _port) external pure returns(uint256) {
         return calculateKey(_enodeId, _ip, _port);
     }
 
-    function _size() public view returns (uint256) {
+    function _size() external view returns (uint256) {
         return size();
     }
 
-    function _exists(string memory _enodeId, string memory _ip, uint16 _port) public view returns (bool) {
+    function _exists(string calldata _enodeId, string calldata _ip, uint16 _port) external view returns (bool) {
         return exists(_enodeId, _ip, _port);
     }
 
-    function _add(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
+    function _add(string calldata _enodeId, string calldata _ip, uint16 _port) external returns (bool) {
         return add(_enodeId, _ip, _port);
     }
 
-    function _remove(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
+    function _remove(string calldata _enodeId, string calldata _ip, uint16 _port) external returns (bool) {
         return remove(_enodeId, _ip, _port);
     }
 }
