@@ -5,8 +5,10 @@ RUN apk --no-cache add curl
 HEALTHCHECK CMD curl -f http://localhost/healthcheck || exit 1
 
 # Copy nginx conf
-COPY docker/default.conf /etc/nginx/conf.d/default.conf
-COPY docker/config.json.template /tmp/config.json.template
+#COPY docker/default.conf /etc/nginx/conf.d/default.conf
+#COPY docker/config.json.template /tmp/config.json.template
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY config.json.template /tmp/config.json.template
 
 # Copy application bundle
 RUN mkdir -p /var/www/html
