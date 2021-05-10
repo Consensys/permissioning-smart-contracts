@@ -2,8 +2,8 @@
 .git
 .gitignore
 .dockerignore
-Dockerfile*
-docker-compose*
+#Dockerfile*
+#docker-compose*
 .gitlab-ci.yml
 
 # Dependency directory
