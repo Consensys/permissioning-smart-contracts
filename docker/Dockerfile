@@ -12,7 +12,7 @@ COPY config.json.template /tmp/config.json.template
 
 # Copy application bundle
 RUN mkdir -p /var/www/html
-COPY build /var/www/html/
+COPY ../build /var/www/html/
 
 # Runtime
 EXPOSE 80
