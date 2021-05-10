@@ -20,11 +20,9 @@ node_modules
 config/development/contracts.json
 config/development/*.sol.js
 config/test/contracts.json
-build
 dist
 test-results/
 node_modules
-build
 src/chain/abis
 src/chain/@types
 .DS_Store
