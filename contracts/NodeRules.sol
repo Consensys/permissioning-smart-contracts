@@ -24,9 +24,9 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     // in read-only mode rules can't be added/removed
     // this will be used to protect data when upgrading contracts
-    bool readOnlyMode = false;
+    bool private readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint version = 1000000;
+    uint private version = 1000000;
 
     NodeIngress private nodeIngressContract;
 
