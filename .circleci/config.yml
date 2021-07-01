@@ -266,7 +266,7 @@ workflows:
           filters:
             branches:
               only:
-                - mythx
+                - master
             tags:
               only:
                 - /.*/
