@@ -4,6 +4,7 @@ import "./AccountRulesProxy.sol";
 import "./AccountRulesList.sol";
 import "./AccountIngress.sol";
 import "./Admin.sol";
+import "./AccountRulesListEternalStorage.sol";
 
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
@@ -29,9 +30,13 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         _;
     }
 
-    constructor (AccountIngress _ingressContract) public {
+    constructor (AccountIngress _ingressContract, AccountRulesListEternalStorage _eternalStorage) public {
+        setStorage(_eternalStorage);
         ingressContract = _ingressContract;
-        add(msg.sender);
+    }
+
+    function upgradeRulesVersion(address _newVersion) public onlyAdmin {
+        upgradeVersion(_newVersion);
     }
 
     // VERSION
@@ -97,14 +102,6 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function getSize() public view returns (uint) {
         return size();
-    }
-
-    function getByIndex(uint index) public view returns (address account) {
-        return allowlist[index];
-    }
-
-    function getAccounts() public view returns (address[] memory){
-        return allowlist;
     }
 
     function addAccounts(address[] memory accounts) public onlyAdmin returns (bool) {

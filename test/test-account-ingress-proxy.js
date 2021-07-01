@@ -1,6 +1,7 @@
 const AccountIngress = artifacts.require('AccountIngress.sol');
 const AccountRules = artifacts.require('AccountRules.sol');
 const Admin = artifacts.require('Admin.sol');
+const RulesStorage = artifacts.require('AccountRulesListEternalStorage.sol');
 
 const RULES='0x72756c6573000000000000000000000000000000000000000000000000000000';
 const ADMIN='0x61646d696e697374726174696f6e000000000000000000000000000000000000';
@@ -13,13 +14,22 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
   let accountIngressContract;
   let accountRulesContract;
   let adminContract;
+  let storageContract;
 
   beforeEach(async () => {
     accountIngressContract = await AccountIngress.new();
     adminContract = await Admin.new();
+
+    // set the storage
+    storageContract = await RulesStorage.new();
+    console.log("   >>> Storage contract deployed with address = " + storageContract.address);
     
     await accountIngressContract.setContractAddress(ADMIN, adminContract.address);
-    accountRulesContract = await AccountRules.new(accountIngressContract.address);
+    accountRulesContract = await AccountRules.new(accountIngressContract.address, storageContract.address);
+
+    // set rules as the storage owner
+    await storageContract.upgradeVersion(accountRulesContract.address);
+    console.log("   >>> Set storage owner to Rules.address");
 
     result = await accountIngressContract.getContractAddress(ADMIN);
     assert.equal(result, adminContract.address, 'Admin contract should be reg');
@@ -57,10 +67,11 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
 
   it('Should permit changing active AccountRules contract addresses', async () => {
     let result;
-    let result2;
 
-    // const icProxy = await AccountIngress.new();
-    const rcProxy1 = await AccountRules.new(accountIngressContract.address);
+    const rcProxy1 = await AccountRules.new(accountIngressContract.address, storageContract.address);
+
+    // existing rules calls upgrade to change storage owner to the new one
+    accountRulesContract.upgradeRulesVersion(rcProxy1.address);
 
     // Verify that the AccountRules contract has not been registered
     result = await accountIngressContract.getContractAddress(RULES);

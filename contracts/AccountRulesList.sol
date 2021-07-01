@@ -1,5 +1,7 @@
 pragma solidity 0.5.9;
 
+import "./AccountRulesListEternalStorage.sol";
+
 
 contract AccountRulesList {
     event AccountAdded(
@@ -12,23 +14,26 @@ contract AccountRulesList {
         address accountAddress
     );
 
-    address[] public allowlist;
-    mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
+    AccountRulesListEternalStorage private eternalStorage;
+
+    function setStorage(AccountRulesListEternalStorage _eternalStorage) internal {
+        eternalStorage = _eternalStorage;
+    }
+
+    function upgradeVersion(address _newVersion) internal {
+        eternalStorage.upgradeVersion(_newVersion);
+    }
 
     function size() internal view returns (uint256) {
-        return allowlist.length;
+        return eternalStorage.size();
     }
 
     function exists(address _account) internal view returns (bool) {
-        return indexOf[_account] != 0;
+        return eternalStorage.exists(_account);
     }
 
     function add(address _account) internal returns (bool) {
-        if (indexOf[_account] == 0) {
-            indexOf[_account] = allowlist.push(_account);
-            return true;
-        }
-        return false;
+        return eternalStorage.add(_account);
     }
 
     function addAll(address[] memory accounts) internal returns (bool) {
@@ -43,20 +48,14 @@ contract AccountRulesList {
     }
 
     function remove(address _account) internal returns (bool) {
-        uint256 index = indexOf[_account];
-        if (index > 0 && index <= allowlist.length) { //1-based indexing
-            //move last address into index being vacated (unless we are dealing with last index)
-            if (index != allowlist.length) {
-                address lastAccount = allowlist[allowlist.length - 1];
-                allowlist[index - 1] = lastAccount;
-                indexOf[lastAccount] = index;
-            }
+        return eternalStorage.remove(_account);
+    }
 
-            //shrink array
-            allowlist.length -= 1; // mythx-disable-line SWC-101
-            indexOf[_account] = 0;
-            return true;
-        }
-        return false;
+    function getByIndex(uint index) public view returns (address account) {
+        return eternalStorage.getByIndex(index);
+    }
+
+    function getAccounts() public view returns (address[] memory){
+        return eternalStorage.getAccounts();
     }
 }

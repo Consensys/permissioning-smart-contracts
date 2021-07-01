@@ -8,6 +8,9 @@ const Admin = artifacts.require("./Admin.sol");
 const adminContractName = Web3Utils.utf8ToHex("administration");
 const rulesContractName = Web3Utils.utf8ToHex("rules");
 
+const AccountRulesListEternalStorage = artifacts.require("./AccountRulesListEternalStorage.sol");
+
+
 /* The address of the account ingress contract if pre deployed */
 let accountIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
 let retainCurrentRulesContract = AllowlistUtils.getRetainAccountRulesContract();
@@ -35,19 +38,33 @@ module.exports = async(deployer, network) => {
         console.error("   > Predeployed AccountIngress contract is not responding like an AccountIngress contract at address = " + accountIngress);
     }
 
+    // STORAGE
+    // if I'm already deployed this just gets the instance
+    // TODO what happens if I'm not already deployed
+    //let storage = await AccountRulesListEternalStorage.deployed();
+    // let storageAddress = storage.address;
+    await deployer.deploy(AccountRulesListEternalStorage);
+    let storageAddress = AccountRulesListEternalStorage.address;
+    console.log("   >>> AccountRulesListEternalStorage contract deployed with address = " + storageAddress);
+    let storageInstance = await AccountRulesListEternalStorage.deployed();
+
     const admin = await Admin.deployed();
     await accountIngressInstance.setContractAddress(adminContractName, admin.address);
     console.log("   > Updated AccountIngress with Admin address = " + admin.address);
 
-    await deployer.deploy(Rules, accountIngress);
-    console.log("   > Rules deployed with AccountIngress.address = " + accountIngress);
+    await deployer.deploy(Rules, accountIngress, storageAddress);
+    console.log("   > Rules deployed with AccountIngress.address = " + accountIngress + "\n   > and storageAddress = " + storageAddress);
     let accountRulesContract = await Rules.deployed();
+
+    // TODO call upgradeVersion(rules.address)
+    await storageInstance.upgradeVersion(Rules.address);
+    console.log("   >>> Set storage owner to Rules.address");
 
     if (AllowlistUtils.isInitialAllowlistedAccountsAvailable()) {
         console.log("   > Adding Initial Allowlisted Accounts ...");
         let allowlistedAccounts = AllowlistUtils.getInitialAllowlistedAccounts();
         if (allowlistedAccounts.length > 0) {
-            let accountsAddedResult = await accountRulesContract.addAccounts(allowlistedAccounts);
+            await accountRulesContract.addAccounts(allowlistedAccounts);
             console.log ("   > Initial Allowlisted Accounts added: " + allowlistedAccounts);
         }
     }

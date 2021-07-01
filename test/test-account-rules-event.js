@@ -1,6 +1,7 @@
 const IngressContract = artifacts.require('Ingress.sol');
 const RulesContract = artifacts.require('AccountRules.sol');
 const AdminContract = artifacts.require('Admin.sol');
+const RulesStorage = artifacts.require('AccountRulesListEternalStorage.sol');
 
 // Contract keys
 const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";
@@ -14,6 +15,7 @@ contract("Account Rules (Events & Management)", (accounts) => {
     let ingressContract;
     let rulesContract;
     let adminContract;
+    let storageContract;
 
     before(async () => {
       ingressContract = await IngressContract.new();
@@ -21,12 +23,24 @@ contract("Account Rules (Events & Management)", (accounts) => {
       adminContract = await AdminContract.new();
       await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
 
-      rulesContract = await RulesContract.new(ingressContract.address);
+      // initialize storage
+      storageContract = await RulesStorage.new();
+      console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+
+      // setup rules -> storage
+      rulesContract = await RulesContract.new(ingressContract.address, storageContract.address);
       await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
+
+      // set storage -> rules
+      await storageContract.upgradeVersion(rulesContract.address);
+      console.log("   >>> Set storage owner to Rules.address " + rulesContract.address);
+
+      // assert initial state
       let size = await rulesContract.getSize();
       assert.equal(size, 1, "Allowlist initializes with 1 account");
       let initialAccount = await rulesContract.getByIndex(0);
-      assert.equal(initialAccount, accounts[0], "Allowlist initializes allowing deploying account");
+      assert.equal(initialAccount, rulesContract.address, "Storage initializes allowing rules contract")
+    //   assert.equal(initialAccount, accounts[0], "Allowlist initializes allowing deploying account");
       await rulesContract.removeAccount(initialAccount);
     });
 
