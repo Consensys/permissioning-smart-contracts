@@ -264,6 +264,9 @@ workflows:
           requires:
             - build_contracts
           filters:
+            branches:
+              only:
+                - master
             tags:
               only:
                 - /.*/
