@@ -7,7 +7,7 @@ Version 1 of these contracts was audited by a third party. Read the report [here
 [Please contact us](https://consensys.net/quorum/contact-us) if you have questions or are considering using this implementation of onchain permissioning in a production environment.
 **Important:** The dependency chain for this Dapp includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
 
-## Usage
+## Usings
 You probably got here from Besu.
 The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
 describes how to use the contracts for onchain permissioning with Besu.
