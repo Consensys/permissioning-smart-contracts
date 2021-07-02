@@ -4,12 +4,10 @@ const AllowlistUtils = require('../scripts/allowlist_utils');
 const Rules = artifacts.require("./AccountRules.sol");
 const AccountIngress = artifacts.require("./AccountIngress.sol");
 const Admin = artifacts.require("./Admin.sol");
+const AccountRulesListEternalStorage = artifacts.require("./AccountRulesListEternalStorage.sol");
 
 const adminContractName = Web3Utils.utf8ToHex("administration");
 const rulesContractName = Web3Utils.utf8ToHex("rules");
-
-const AccountRulesListEternalStorage = artifacts.require("./AccountRulesListEternalStorage.sol");
-
 
 /* The address of the account ingress contract if pre deployed */
 let accountIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
@@ -39,8 +37,6 @@ module.exports = async(deployer, network) => {
     }
 
     const admin = await Admin.deployed();
-    // let a = await admin.isAuthorized("0x097Cb66A858D45CfD205fc0A0761411568D3c655");
-    // console.log("0x097Cb66A858D45CfD205fc0A0761411568D3c655 authorized? " + a);
     await accountIngressInstance.setContractAddress(adminContractName, admin.address);
     console.log("   > Updated AccountIngress with Admin address = " + admin.address);
 
