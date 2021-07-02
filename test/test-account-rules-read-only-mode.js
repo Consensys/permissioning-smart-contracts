@@ -15,7 +15,7 @@ contract('Account Rules (Read-only mode)', () => {
     ingressContract = await Ingress.deployed();
 
     // initialize the storage
-    storageContract = await RulesStorage.new();
+    storageContract = await RulesStorage.new(ingressContract.address);
     console.log("   >>> Storage contract deployed with address = " + storageContract.address);
 
     // set rules -> storage

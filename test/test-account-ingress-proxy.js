@@ -21,7 +21,7 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
     adminContract = await Admin.new();
 
     // set the storage
-    storageContract = await RulesStorage.new();
+    storageContract = await RulesStorage.new(accountIngressContract.address);
     console.log("   >>> Storage contract deployed with address = " + storageContract.address);
     
     await accountIngressContract.setContractAddress(ADMIN, adminContract.address);
@@ -71,7 +71,7 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
     const rcProxy1 = await AccountRules.new(accountIngressContract.address, storageContract.address);
 
     // existing rules calls upgrade to change storage owner to the new one
-    accountRulesContract.upgradeRulesVersion(rcProxy1.address);
+    storageContract.upgradeVersion(rcProxy1.address);
 
     // Verify that the AccountRules contract has not been registered
     result = await accountIngressContract.getContractAddress(RULES);

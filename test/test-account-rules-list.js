@@ -1,3 +1,5 @@
+const { AddressZero } = require("ethers/constants");
+
 const BN = web3.utils.BN;
 const RulesList = artifacts.require('ExposedAccountRulesList.sol');
 const RulesStorage = artifacts.require('AccountRulesListEternalStorage.sol');
@@ -15,7 +17,7 @@ contract("AccountRulesList (list manipulation)", async () => {
   beforeEach(async () => {
     rulesListContract = await RulesList.new();
     // initialize the storage
-    storageContract = await RulesStorage.new();
+    storageContract = await RulesStorage.new(AddressZero);
     console.log("   >>> Storage contract deployed with address = " + storageContract.address);
     // set rules -> storage
     rulesListContract._setStorage(storageContract.address);

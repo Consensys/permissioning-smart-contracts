@@ -35,10 +35,6 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         ingressContract = _ingressContract;
     }
 
-    function upgradeRulesVersion(address _newVersion) public onlyAdmin {
-        upgradeVersion(_newVersion);
-    }
-
     // VERSION
     function getContractVersion() public view returns (uint) {
         return version;

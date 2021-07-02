@@ -24,7 +24,7 @@ contract("Account Rules (Events & Management)", (accounts) => {
       await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
 
       // initialize storage
-      storageContract = await RulesStorage.new();
+      storageContract = await RulesStorage.new(ingressContract.address);
       console.log("   >>> Storage contract deployed with address = " + storageContract.address);
 
       // setup rules -> storage

@@ -11,6 +11,7 @@ contract AccountRulesListEternalStorage {
     );
     // initialize this to the deployer of this contract
     address private latestVersion = msg.sender;
+    address private owner = msg.sender;
 
     AccountIngress private ingressContract;
 
@@ -21,17 +22,21 @@ contract AccountRulesListEternalStorage {
         ingressContract = _ingressContract;
         add(msg.sender);
     }
-    
+
     modifier onlyLatestVersion() {
         require(msg.sender == latestVersion, "only the latestVersion can modify the list");
         _;
     }
 
     modifier onlyAdmin() {
-        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+        if (address(0) == address(ingressContract)) {
+            require(msg.sender == owner, "only owner permitted since ingressContract is explicitly set to zero");
+        } else {
+            address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
-        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-        require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
+            require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+            require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
+        }
         _;
     }
 
