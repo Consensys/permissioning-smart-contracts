@@ -42,13 +42,12 @@ contract("Account Rules (Permissioning)", (accounts) => {
     console.log("   >>> Set storage owner to Rules.address " + rulesContract.address);
 
     await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
-    // TODO this is duplicated in another test file
+    // TODO this is duplicated in event test file
     // assert initial state
     let size = await rulesContract.getSize();
     assert.equal(size, 1, "Allowlist initializes with 1 account");
     let initialAccount = await rulesContract.getByIndex(0);
-    assert.equal(initialAccount, rulesContract.address, "Allowlist initializes allowing rules contract");
-
+    assert.equal(initialAccount, accounts[0], "Allowlist initializes allowing deploying account");
     await rulesContract.removeAccount(initialAccount);
   });
 

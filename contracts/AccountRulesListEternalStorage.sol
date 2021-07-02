@@ -7,21 +7,24 @@ contract AccountRulesListEternalStorage {
         address newAddress
     );
     // initialize this to the deployer of this contract
-    address latestVersion = msg.sender;
+    address private latestVersion = msg.sender;
 
+    address[] public allowlist;
+    mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
+
+    constructor () public {
+        add(msg.sender);
+    }
+    
     modifier onlyLatestVersion() {
         require(msg.sender == latestVersion, "only the owner can call this ");
         _;
     }
 
     function upgradeVersion(address _newVersion) public onlyLatestVersion {
-        add(_newVersion);
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
     }
-
-    address[] public allowlist;
-    mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
 
     function size() public view returns (uint256) {
         return allowlist.length;
