@@ -1,5 +1,8 @@
 pragma solidity 0.5.9;
 
+import "./Admin.sol";
+import "./AccountIngress.sol";
+
 
 contract AccountRulesListEternalStorage {
     event VersionChange(
@@ -7,19 +10,16 @@ contract AccountRulesListEternalStorage {
         address newAddress
     );
     // initialize this to the deployer of this contract
-    address private owner = msg.sender;
     address private latestVersion = msg.sender;
+
+    AccountIngress private ingressContract;
 
     address[] public allowlist;
     mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
 
-    constructor () public {
+    constructor (AccountIngress _ingressContract) public {
+        ingressContract = _ingressContract;
         add(msg.sender);
-    }
-    
-    modifier onlyOwner() {
-        require(msg.sender == owner, "only the OWNER can update the version ");
-        _;
     }
     
     modifier onlyLatestVersion() {
@@ -27,7 +27,15 @@ contract AccountRulesListEternalStorage {
         _;
     }
 
-    function upgradeVersion(address _newVersion) public onlyOwner {
+    modifier onlyAdmin() {
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
+        _;
+    }
+
+    function upgradeVersion(address _newVersion) public onlyAdmin {
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
     }

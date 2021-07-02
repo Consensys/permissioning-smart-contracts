@@ -38,22 +38,24 @@ module.exports = async(deployer, network) => {
         console.error("   > Predeployed AccountIngress contract is not responding like an AccountIngress contract at address = " + accountIngress);
     }
 
+    const admin = await Admin.deployed();
+    // let a = await admin.isAuthorized("0x097Cb66A858D45CfD205fc0A0761411568D3c655");
+    // console.log("0x097Cb66A858D45CfD205fc0A0761411568D3c655 authorized? " + a);
+    await accountIngressInstance.setContractAddress(adminContractName, admin.address);
+    console.log("   > Updated AccountIngress with Admin address = " + admin.address);
+
     // STORAGE
-    let storageInstance;
+    var storageInstance;
     let forceStorageReset = false;
     if (forceStorageReset) {
-        storageInstance = await deployer.deploy(AccountRulesListEternalStorage);
+        storageInstance = await deployer.deploy(AccountRulesListEternalStorage, accountIngress);
         console.log(">>> Forced storage reset. NEW STORAGE " + storageInstance.address);
     } else {
         // deploy if not already
-        storageInstance = await AccountRulesListEternalStorage.deployed();
+        storageInstance = await AccountRulesListEternalStorage.deployed(admin.address);// TODO is this right
         console.log(">>> Using existing storage " + storageInstance.address);
     }
     let storageAddress = storageInstance.address;
-
-    const admin = await Admin.deployed();
-    await accountIngressInstance.setContractAddress(adminContractName, admin.address);
-    console.log("   > Updated AccountIngress with Admin address = " + admin.address);
 
     // rules -> storage
     await deployer.deploy(Rules, accountIngress, storageAddress);
