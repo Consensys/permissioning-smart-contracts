@@ -1,7 +1,10 @@
 # Permissioning Smart Contracts
 
-**Note:** The contracts herein have been third party audited. [Please
-contact us](https://consensys.net/quorum/contact-us) if you would like more information, or if you are considering using this Dapp in a production environment.
+## Production use
+[Please contact us](https://consensys.net/quorum/contact-us) if you are considering using this Dapp in a production environment.
+
+## Audit
+Version 1 of these contracts was audited by a third party. Read the report [here](https://consensys.net/diligence/audits/2019/08/pegasys-permissioning/)
 
 **Important:** The dependency chain for this implementation of onchain permissioning includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
 
