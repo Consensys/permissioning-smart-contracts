@@ -46,13 +46,18 @@ module.exports = async(deployer, network) => {
 
     // STORAGE
     var storageInstance;
-    let forceStorageReset = false;
+    let forceStorageReset = true;
     if (forceStorageReset) {
         storageInstance = await deployer.deploy(AccountRulesListEternalStorage, accountIngress);
         console.log(">>> Forced storage reset. NEW STORAGE " + storageInstance.address);
     } else {
-        // deploy if not already
-        storageInstance = await AccountRulesListEternalStorage.deployed(admin.address);// TODO is this right
+        // is there a storage already deployed
+        storageInstance = await AccountRulesListEternalStorage.deployed();
+        console.log("trying to get deployed()");
+        console.log(">>> Using existing storage " + storageInstance.address);
+        if (storageInstance.address == 0) {
+            storageInstance = await deployer.deploy(AccountRulesListEternalStorage, accountIngress);
+        }
         console.log(">>> Using existing storage " + storageInstance.address);
     }
     let storageAddress = storageInstance.address;
