@@ -39,10 +39,17 @@ module.exports = async(deployer, network) => {
     }
 
     // STORAGE
-    // deploy if not already
-    let storageInstance = await AccountRulesListEternalStorage.deployed();
+    let storageInstance;
+    let forceStorageReset = false;
+    if (forceStorageReset) {
+        storageInstance = await deployer.deploy(AccountRulesListEternalStorage);
+        console.log(">>> Forced storage reset. NEW STORAGE " + storageInstance.address);
+    } else {
+        // deploy if not already
+        storageInstance = await AccountRulesListEternalStorage.deployed();
+        console.log(">>> Using existing storage " + storageInstance.address);
+    }
     let storageAddress = storageInstance.address;
-    console.log("   >>> AccountRulesListEternalStorage contract deployed with address = " + storageAddress);
 
     const admin = await Admin.deployed();
     await accountIngressInstance.setContractAddress(adminContractName, admin.address);
@@ -55,7 +62,7 @@ module.exports = async(deployer, network) => {
 
     // storage -> rules
     await storageInstance.upgradeVersion(Rules.address);
-    console.log("   >>> Set storage owner to Rules.address");
+    console.log("   >>> Set storage owner to Rules.address " + Rules.address);
 
     if (AllowlistUtils.isInitialAllowlistedAccountsAvailable()) {
         console.log("   > Adding Initial Allowlisted Accounts ...");

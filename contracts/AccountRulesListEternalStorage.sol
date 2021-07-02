@@ -7,6 +7,7 @@ contract AccountRulesListEternalStorage {
         address newAddress
     );
     // initialize this to the deployer of this contract
+    address private owner = msg.sender;
     address private latestVersion = msg.sender;
 
     address[] public allowlist;
@@ -16,12 +17,17 @@ contract AccountRulesListEternalStorage {
         add(msg.sender);
     }
     
+    modifier onlyOwner() {
+        require(msg.sender == owner, "only the OWNER can update the version ");
+        _;
+    }
+    
     modifier onlyLatestVersion() {
-        require(msg.sender == latestVersion, "only the owner can call this ");
+        require(msg.sender == latestVersion, "only the latestVersion can modify the list");
         _;
     }
 
-    function upgradeVersion(address _newVersion) public onlyLatestVersion {
+    function upgradeVersion(address _newVersion) public onlyOwner {
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
     }
