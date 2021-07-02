@@ -39,24 +39,21 @@ module.exports = async(deployer, network) => {
     }
 
     // STORAGE
-    // if I'm already deployed this just gets the instance
-    // TODO what happens if I'm not already deployed
-    //let storage = await AccountRulesListEternalStorage.deployed();
-    // let storageAddress = storage.address;
-    await deployer.deploy(AccountRulesListEternalStorage);
-    let storageAddress = AccountRulesListEternalStorage.address;
-    console.log("   >>> AccountRulesListEternalStorage contract deployed with address = " + storageAddress);
+    // deploy if not already
     let storageInstance = await AccountRulesListEternalStorage.deployed();
+    let storageAddress = storageInstance.address;
+    console.log("   >>> AccountRulesListEternalStorage contract deployed with address = " + storageAddress);
 
     const admin = await Admin.deployed();
     await accountIngressInstance.setContractAddress(adminContractName, admin.address);
     console.log("   > Updated AccountIngress with Admin address = " + admin.address);
 
+    // rules -> storage
     await deployer.deploy(Rules, accountIngress, storageAddress);
     console.log("   > Rules deployed with AccountIngress.address = " + accountIngress + "\n   > and storageAddress = " + storageAddress);
     let accountRulesContract = await Rules.deployed();
 
-    // TODO call upgradeVersion(rules.address)
+    // storage -> rules
     await storageInstance.upgradeVersion(Rules.address);
     console.log("   >>> Set storage owner to Rules.address");
 
