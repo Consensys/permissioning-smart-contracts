@@ -48,26 +48,35 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
     result = await accountIngressContract.getContractAddress(RULES);
     assert.equal(result, accountRulesContract.address, 'AccountRules contract should be reg');
 
-    // Verify that the nodes are not permitted to talk
+    // Verify that the accounts are not permitted 
     result2 = await accountRulesContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
     result = await accountIngressContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
-    assert.equal(result, false, "Connection should NOT be allowed before Enodes have been registered");
+    assert.equal(result, false, "Transaction should NOT be allowed before accounts have been registered");
     assert.equal(result, result2, "Call and proxy call did NOT return the same value");
 
-    // Add the two Enodes to the AccountRules register
+    // Add the two accounts to the AccountRules register
     result = await accountRulesContract.addAccount(address1);
     result = await accountRulesContract.addAccount(address2);
 
-    // Verify that the nodes are now able to talk
+    // Verify that the accounts are now permitted
     result2 = await accountRulesContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
     result = await accountIngressContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
-    assert.equal(result, true, "Connection SHOULD be allowed after Enodes have been registered");
+    assert.equal(result, true, "Transaction SHOULD be allowed after accounts have been registered");
     assert.equal(result, result2, "Call and proxy call did NOT return the same value");
   });
 
-  it('Should permit changing active AccountRules contract addresses', async () => {
+  it('Should permit changing active AccountRules contract addresses WHILE keeping existing storage', async () => {
     let result;
 
+    // Add the two accounts to the AccountRules register
+    result = await accountRulesContract.addAccount(address1);
+    result = await accountRulesContract.addAccount(address2);
+
+    // Verify that the accounts are permitted
+    result = await accountIngressContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
+    assert.equal(result, true, "Transaction SHOULD be allowed after accounts have been registered");
+
+    // create a NEW AccountRules
     const rcProxy1 = await AccountRules.new(accountIngressContract.address, storageContract.address);
 
     // existing rules calls upgrade to change storage owner to the new one
@@ -88,6 +97,10 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
     let contract = await AccountRules.at(result);
     result = await contract.getContractVersion();
     assert.equal(web3.utils.toDecimal(result), 1000000, 'Initial contract is NOT the correct version');
+
+    // Verify that the accounts are permitted
+    result = await accountIngressContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
+    assert.equal(result, true, "Transaction SHOULD be allowed after accounts have been registered");
 
   });
 });
