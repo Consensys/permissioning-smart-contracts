@@ -9,8 +9,10 @@ const AccountRulesListEternalStorage = artifacts.require("./AccountRulesListEter
 const adminContractName = Web3Utils.utf8ToHex("administration");
 const rulesContractName = Web3Utils.utf8ToHex("rules");
 
-/* The address of the account ingress contract if pre deployed */
+/* The address of the account ingress contract if pre-deployed */
 let accountIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
+/* The address of the account storage contract if pre-deployed */
+let accountStorage = process.env.ACCOUNT_STORAGE_CONTRACT_ADDRESS;
 let retainCurrentRulesContract = AllowlistUtils.getRetainAccountRulesContract();
 
 module.exports = async(deployer, network) => {
@@ -20,7 +22,7 @@ module.exports = async(deployer, network) => {
         return;
     }
     if (! accountIngress) {
-        // Only deploy if we haven't been provided a predeployed address
+        // Only deploy if we haven't been provided a pre-deployed address
         await deployer.deploy(AccountIngress);
         console.log("   > Deployed AccountIngress contract to address = " + AccountIngress.address);
         accountIngress = AccountIngress.address;
@@ -42,25 +44,21 @@ module.exports = async(deployer, network) => {
 
     // STORAGE
     var storageInstance;
-    let forceStorageReset = true;
-    if (forceStorageReset) {
+    if (! accountStorage) {
+        // Only deploy if we haven't been provided a pre-deployed address
         storageInstance = await deployer.deploy(AccountRulesListEternalStorage, accountIngress);
-        console.log(">>> Forced storage reset. NEW STORAGE " + storageInstance.address);
+        console.log("   > Deployed AccountStorage contract to address = " + AccountRulesListEternalStorage.address);
+        accountStorage = AccountRulesListEternalStorage.address;
     } else {
         // is there a storage already deployed
-        storageInstance = await AccountRulesListEternalStorage.deployed();
-        console.log("trying to get deployed()");
-        console.log(">>> Using existing storage " + storageInstance.address);
-        if (storageInstance.address == 0) {
-            storageInstance = await deployer.deploy(AccountRulesListEternalStorage, accountIngress);
-        }
-        console.log(">>> Using existing storage " + storageInstance.address);
+        storageInstance = await AccountRulesListEternalStorage.at(accountStorage);
+        console.log(">>> Using existing AccountStorage " + storageInstance.address);
+        // TODO check that this contract is a storage contract eg call a method
     }
-    let storageAddress = storageInstance.address;
 
     // rules -> storage
-    await deployer.deploy(Rules, accountIngress, storageAddress);
-    console.log("   > Rules deployed with AccountIngress.address = " + accountIngress + "\n   > and storageAddress = " + storageAddress);
+    await deployer.deploy(Rules, accountIngress, accountStorage);
+    console.log("   > Rules deployed with AccountIngress.address = " + accountIngress + "\n   > and storageAddress = " + accountStorage);
     let accountRulesContract = await Rules.deployed();
 
     // storage -> rules
