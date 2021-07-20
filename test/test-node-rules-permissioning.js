@@ -1,5 +1,6 @@
 const NodeIngressContract = artifacts.require('NodeIngress.sol');
-const NodeRulesContract = artifacts.require('NodeRules.sol');
+const NodeRules = artifacts.require('NodeRules.sol');
+const RulesStorage = artifacts.require('NodeRulesListEternalStorage.sol');
 const AdminContract = artifacts.require('Admin.sol');
 
 // Contract keys
@@ -27,6 +28,7 @@ contract("NodeRules (Permissioning)", (accounts) => {
   let nodeIngressContract;
   let nodeRulesContract;
   let adminContract;
+  let storageContract;
 
   before(async () => {
     nodeIngressContract = await NodeIngressContract.new();
@@ -34,8 +36,16 @@ contract("NodeRules (Permissioning)", (accounts) => {
     adminContract = await AdminContract.new();
     await nodeIngressContract.setContractAddress(ADMIN_NAME, adminContract.address);
 
-    nodeRulesContract = await NodeRulesContract.new(nodeIngressContract.address);
+    // set the storage
+    storageContract = await RulesStorage.new(nodeIngressContract.address);
+    console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+    
+    nodeRulesContract = await NodeRules.new(nodeIngressContract.address, storageContract.address);
     await nodeIngressContract.setContractAddress(RULES_NAME, nodeRulesContract.address);
+
+    // set rules as the storage owner
+    await storageContract.upgradeVersion(nodeRulesContract.address);
+    console.log("   >>> Set storage owner to Rules.address");
   });
 
   it('should NOT permit node when list is empty', async () => {

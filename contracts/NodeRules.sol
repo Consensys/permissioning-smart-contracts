@@ -43,7 +43,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         _;
     }
 
-    constructor (NodeIngress _nodeIngressAddress) public {
+    constructor (NodeIngress _nodeIngressAddress, NodeRulesListEternalStorage _eternalStorage) public {
+        setStorage(_eternalStorage);
         nodeIngressContract = _nodeIngressAddress;
     }
 
@@ -132,13 +133,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function getSize() external view returns (uint) {
         return size();
-    }
-
-    function getByIndex(uint index) external view returns (string memory enodeId, string memory ip, uint16 port) {
-        if (index >= 0 && index < size()) {
-            enode memory item = allowlist[index];
-            return (item.enodeId, item.ip, item.port);
-        }
     }
 
     function triggerRulesChangeEvent(bool addsRestrictions) public {

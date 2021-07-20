@@ -1,8 +1,9 @@
 const Web3Utils = require("web3-utils");
 const AllowlistUtils = require('../scripts/allowlist_utils');
 
-const NodeRules = artifacts.require("./NodeRules.sol");
+const Rules = artifacts.require("./NodeRules.sol");
 const NodeIngress = artifacts.require("./NodeIngress.sol");
+const NodeRulesListEternalStorage = artifacts.require("./NodeRulesListEternalStorage.sol");
 const Admin = artifacts.require("./Admin.sol");
 
 const adminContractName = Web3Utils.utf8ToHex("administration");
@@ -10,6 +11,8 @@ const rulesContractName = Web3Utils.utf8ToHex("rules");
 
 /* The address of the node ingress contract if pre deployed */
 let nodeIngress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
+/* The address of the node ingress contract if pre deployed */
+let nodeStorage = process.env.NODE_STORAGE_CONTRACT_ADDRESS;
 let retainCurrentRulesContract = AllowlistUtils.getRetainNodeRulesContract();
 
 module.exports = async(deployer, network) => {
@@ -39,14 +42,31 @@ module.exports = async(deployer, network) => {
     await nodeIngressInstance.setContractAddress(adminContractName, admin.address);
     console.log("   > Updated NodeIngress with Admin  address = " + admin.address);
 
-    await deployer.deploy(NodeRules, nodeIngress);
-    console.log("   > NodeRules deployed with NodeIngress.address = " + nodeIngress);
-    let nodeRulesContract = await NodeRules.deployed();
+    let nodeRulesContract = await Rules.deployed();
+
+    // STORAGE
+    var storageInstance;
+    if (! nodeStorage) {
+        // Only deploy if we haven't been provided a pre-deployed address
+        storageInstance = await deployer.deploy(NodeRulesListEternalStorage, nodeIngress);
+        console.log("   > Deployed NodeStorage contract to address = " + NodeRulesListEternalStorage.address);
+        nodeStorage = NodeRulesListEternalStorage.address;
+    } else {
+        // is there a storage already deployed
+        storageInstance = await NodeRulesListEternalStorage.at(nodeStorage);
+        console.log(">>> Using existing NodeStorage " + storageInstance.address);
+        // TODO check that this contract is a storage contract eg call a method
+    }
+
+    // rules -> storage
+    await deployer.deploy(Rules, nodeIngress, nodeStorage);
+    console.log("   > Rules deployed with NodeIngress.address = " + nodeIngress + "\n   > and storageAddress = " + nodeStorage);
+    console.log("   > Rules.address " + Rules.address);
 
     
 
-    await nodeIngressInstance.setContractAddress(rulesContractName, NodeRules.address);
-    console.log("   > Updated NodeIngress contract with NodeRules address = " + NodeRules.address);
+    await nodeIngressInstance.setContractAddress(rulesContractName, Rules.address);
+    console.log("   > Updated NodeIngress contract with NodeRules address = " + Rules.address);
 
     if(AllowlistUtils.isInitialAllowlistedNodesAvailable()) {
         console.log("   > Adding Initial Allowlisted eNodes ...");

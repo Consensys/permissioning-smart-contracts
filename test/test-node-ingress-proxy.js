@@ -1,6 +1,7 @@
 const NodeIngress = artifacts.require('NodeIngress.sol');
 const NodeRules = artifacts.require('NodeRules.sol');
 const Admin = artifacts.require('Admin.sol');
+const RulesStorage = artifacts.require('NodeRulesListEternalStorage.sol');
 
 const RULES='0x72756c6573000000000000000000000000000000000000000000000000000000';
 const ADMIN='0x61646d696e697374726174696f6e000000000000000000000000000000000000';
@@ -15,13 +16,22 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
   let nodeIngressContract;
   let nodeRulesContract;
   let adminContract;
+  let storageContract;
 
   beforeEach(async () => {
     nodeIngressContract = await NodeIngress.new();
     adminContract = await Admin.new();
+
+    // set the storage
+    storageContract = await RulesStorage.new(nodeIngressContract.address);
+    console.log("   >>> Storage contract deployed with address = " + storageContract.address);
     
     await nodeIngressContract.setContractAddress(ADMIN, adminContract.address);
-    nodeRulesContract = await NodeRules.new(nodeIngressContract.address);
+    nodeRulesContract = await NodeRules.new(nodeIngressContract.address, storageContract.address);
+
+    // set rules as the storage owner
+    await storageContract.upgradeVersion(nodeRulesContract.address);
+    console.log("   >>> Set storage owner to Rules.address");
 
     result = await nodeIngressContract.getContractAddress(ADMIN);
     assert.equal(result, adminContract.address, 'Admin contract should be reg');
@@ -56,17 +66,17 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
     assert.equal(result, result2, "Call and proxy call did NOT return the same value");
   });
 
-  it('Should permit changing active NodeRules contract addresses', async () => {
+  it('Should permit changing active NodeRules contract addresses WHILE keeping existing storage', async () => {
     let result;
-    let result2;
-
-    // const icProxy = await NodeIngress.new();
-    const rcProxy1 = await NodeRules.new(nodeIngressContract.address);
-    const rcProxy2 = await NodeRules.new(nodeIngressContract.address);
 
     // Verify that the NodeRules contract has not been registered
     result = await nodeIngressContract.getContractAddress(RULES);
     assert.equal(result, "0x0000000000000000000000000000000000000000", 'NodeRules contract should NOT already be registered');
+
+    // create a NEW Rules contract
+    const rcProxy1 = await NodeRules.new(nodeIngressContract.address, storageContract.address);
+    // existing rules calls upgrade to change storage owner to the new one
+    storageContract.upgradeVersion(rcProxy1.address);
 
     // Register the initial NodeRules contract
     await nodeIngressContract.setContractAddress(RULES, rcProxy1.address);
