@@ -123,7 +123,7 @@ contract("NodeRules (Permissioning)", (accounts) => {
     }
   });
 
-  it('should not allow non-admin account to remove node to list', async () => {
+  it('should not allow non-admin account to remove node from list', async () => {
     try {
       await nodeRulesContract.addEnode(enode1, node1Host, node1Port, { from: accounts[1] });
       expect.fail(null, null, "Modifier was not enforced")
