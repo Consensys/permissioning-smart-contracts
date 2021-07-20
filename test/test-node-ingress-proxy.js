@@ -73,22 +73,39 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
     result = await nodeIngressContract.getContractAddress(RULES);
     assert.equal(result, "0x0000000000000000000000000000000000000000", 'NodeRules contract should NOT already be registered');
 
+    // Register the initial NodeRules contract
+    await nodeIngressContract.setContractAddress(RULES, nodeRulesContract.address);
+    // Verify the initial rules contract has been registered
+    result = await nodeIngressContract.getContractAddress(RULES);
+    assert.equal(result, nodeRulesContract.address, 'Initial contract has NOT been registered correctly');
+
+    // Add the Enode to the NodeRules register
+    result = await nodeRulesContract.addEnode(enode1, node1Host, node1Port);
+
+    // Verify that the node is permitted
+    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port);
+    assert.equal(result, true, "Connection SHOULD be allowed after Enodes have been registered");
+
     // create a NEW Rules contract
     const rcProxy1 = await NodeRules.new(nodeIngressContract.address, storageContract.address);
     // existing rules calls upgrade to change storage owner to the new one
     storageContract.upgradeVersion(rcProxy1.address);
 
-    // Register the initial NodeRules contract
+    // Register the NEW NodeRules contract
     await nodeIngressContract.setContractAddress(RULES, rcProxy1.address);
 
-    // Verify the initial rules contract has been registered
+    // Verify the NEW rules contract has been registered
     result = await nodeIngressContract.getContractAddress(RULES);
-    assert.equal(result, rcProxy1.address, 'Initial contract has NOT been registered correctly');
+    assert.equal(result, rcProxy1.address, 'NEW Rules contract has NOT been registered correctly');
 
-    // Verify that the newly registered contract is the initial version
+    // Verify that the newly registered contract is the correct version
     let contract = await NodeRules.at(result);
     result = await contract.getContractVersion();
-    assert.equal(web3.utils.toDecimal(result), 1000000, 'Initial contract is NOT the correct version');
+    assert.equal(web3.utils.toDecimal(result), 1000000, 'Rules contract is NOT the correct version');
+
+    // Verify that the node is permitted
+    result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port);
+    assert.equal(result, true, "Connection SHOULD be allowed after Enodes have been registered");
 
   });
 });
