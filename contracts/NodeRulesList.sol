@@ -41,4 +41,8 @@ contract NodeRulesList {
     function calculateKey(string memory _enodeId, string memory _ip, uint16 _port) public view returns(uint256) {
         return eternalStorage.calculateKey(_enodeId, _ip, _port);
     }
+
+    function getByIndex(uint index) external view returns (string memory enodeId, string memory ip, uint16 port) {
+        return eternalStorage.getByIndex(index);
+    }
 }
