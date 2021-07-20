@@ -101,7 +101,7 @@ contract ('NodeIngress (proxying permissioning check to rules contract)', () => 
     // Verify that the newly registered contract is the correct version
     let contract = await NodeRules.at(result);
     result = await contract.getContractVersion();
-    assert.equal(web3.utils.toDecimal(result), 1000000, 'Rules contract is NOT the correct version');
+    assert.equal(web3.utils.toDecimal(result), 3000000, 'Rules contract is NOT the correct version');
 
     // Verify that the node is permitted
     result = await nodeIngressContract.connectionAllowed(enode1, node1Host, node1Port);
