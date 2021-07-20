@@ -60,7 +60,7 @@ module.exports = async(deployer, network) => {
     await deployer.deploy(Rules, nodeIngress, nodeStorage);
     console.log("   > Rules deployed with NodeIngress.address = " + nodeIngress + "\n   > and storageAddress = " + nodeStorage);
     console.log("   > Rules.address " + Rules.address);
-
+    let nodeRulesContract = await Rules.deployed();
     
 
     await nodeIngressInstance.setContractAddress(rulesContractName, Rules.address);
@@ -73,7 +73,7 @@ module.exports = async(deployer, network) => {
             let enode = allowlistedNodes[i];
             const { enodeId, ip, port } = AllowlistUtils.enodeToParams(enode);
             
-            let result = await Rules.addEnode(
+            let result = await nodeRulesContract.addEnode(
                 enodeId,
                 ip,    
                 Web3Utils.toBN(port)
