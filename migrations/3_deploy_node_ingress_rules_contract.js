@@ -42,8 +42,6 @@ module.exports = async(deployer, network) => {
     await nodeIngressInstance.setContractAddress(adminContractName, admin.address);
     console.log("   > Updated NodeIngress with Admin  address = " + admin.address);
 
-    let nodeRulesContract = await Rules.deployed();
-
     // STORAGE
     var storageInstance;
     if (! nodeStorage) {
@@ -75,7 +73,7 @@ module.exports = async(deployer, network) => {
             let enode = allowlistedNodes[i];
             const { enodeId, ip, port } = AllowlistUtils.enodeToParams(enode);
             
-            let result = await nodeRulesContract.addEnode(
+            let result = await Rules.addEnode(
                 enodeId,
                 ip,    
                 Web3Utils.toBN(port)
