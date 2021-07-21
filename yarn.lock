@@ -7105,7 +7105,7 @@
   "resolved" "https://registry.npmjs.org/https-browserify/-/https-browserify-1.0.0.tgz"
   "version" "1.0.0"
 
-"husky@^2.2.0":
+"husky@^2.7.0":
   "integrity" "sha512-LIi8zzT6PyFpcYKdvWRCn/8X+6SuG2TgYYMrM6ckEYhlp44UcEduVymZGIZNLiwOUjrEud+78w/AsAiqJA/kRg=="
   "resolved" "https://registry.npmjs.org/husky/-/husky-2.7.0.tgz"
   "version" "2.7.0"
