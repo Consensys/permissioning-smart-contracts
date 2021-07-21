@@ -5,7 +5,6 @@
     "url": "https://github.com/ConsenSys/permissioning-smart-contracts"
   },
   "license": "Apache-2.0",
-  "private": true,
   "scripts": {
     "lint:contracts": "yarn solium -d contracts",
     "lint:app": "yarn prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
