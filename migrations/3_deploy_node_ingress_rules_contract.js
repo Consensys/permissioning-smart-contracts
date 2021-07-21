@@ -11,7 +11,7 @@ const rulesContractName = Web3Utils.utf8ToHex("rules");
 
 /* The address of the node ingress contract if pre deployed */
 let nodeIngress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
-/* The address of the node ingress contract if pre deployed */
+/* The address of the node storage contract if pre deployed */
 let nodeStorage = process.env.NODE_STORAGE_CONTRACT_ADDRESS;
 let retainCurrentRulesContract = AllowlistUtils.getRetainNodeRulesContract();
 
