@@ -37,7 +37,7 @@ contract ("Node Ingress (no contracts registered)", (accounts) => {
         let permitted = await nodeIngressContract.connectionAllowed(enodeId, nodeHost, nodePort);
         assert.equal(permitted, false, "expected connectionAllowed to return false");
     });
-7
+
     it("Should return empty value if NodeRules contract has not been registered", async () => {
         let result = await nodeIngressContract.getContractAddress(RULES);
         assert.equal(result, "0x0000000000000000000000000000000000000000", "NodeRules contract should NOT already be registered");
