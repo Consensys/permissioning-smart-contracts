@@ -1,6 +1,9 @@
 {
   "name": "permissioning-smart-contracts",
-  "repository": "permissioning-smart-contracts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ConsenSys/permissioning-smart-contracts"
+  },
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
@@ -73,7 +76,7 @@
     "enzyme-to-json": "^3.3.5",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "husky": "^2.2.0",
+    "husky": "^2.7.0",
     "istanbul": "^0.4.5",
     "lint-staged": "^8.1.6",
     "mocha-junit-reporter": "^1.21.0",
@@ -109,5 +112,18 @@
       "!**/src/index.tsx",
       "!**/src/serviceWorker.ts"
     ]
-  }
+  },
+  "description": "Smart contracts and dapp implementing onchain permissioning",
+  "version": "2.0.0",
+  "main": "README.md",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "EEA",
+    "besu",
+    "permissioning",
+    "onchain"
+  ],
+  "author": "ConsenSys"
 }
