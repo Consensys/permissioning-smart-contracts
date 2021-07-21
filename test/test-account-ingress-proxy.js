@@ -96,7 +96,7 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
     // Verify that the newly registered contract is the initial version
     let contract = await AccountRules.at(result);
     result = await contract.getContractVersion();
-    assert.equal(web3.utils.toDecimal(result), 1000000, 'Initial contract is NOT the correct version');
+    assert.equal(web3.utils.toDecimal(result), 3000000, 'Initial contract is NOT the correct version');
 
     // Verify that the accounts are permitted
     result = await accountIngressContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
