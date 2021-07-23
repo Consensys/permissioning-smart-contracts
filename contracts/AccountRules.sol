@@ -35,22 +35,22 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     // VERSION
-    function getContractVersion() public view returns (uint) {
+    function getContractVersion() external view returns (uint) {
         return version;
     }
 
     // READ ONLY MODE
-    function isReadOnly() public view returns (bool) {
+    function isReadOnly() external view returns (bool) {
         return readOnlyMode;
     }
 
-    function enterReadOnly() public onlyAdmin returns (bool) {
+    function enterReadOnly() external onlyAdmin returns (bool) {
         require(readOnlyMode == false, "Already in read only mode");
         readOnlyMode = true;
         return true;
     }
 
-    function exitReadOnly() public onlyAdmin returns (bool) {
+    function exitReadOnly() external onlyAdmin returns (bool) {
         require(readOnlyMode == true, "Not in read only mode");
         readOnlyMode = false;
         return true;
@@ -81,7 +81,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function addAccount(
         address account
-    ) public onlyAdmin onlyOnEditMode returns (bool) {
+    ) external onlyAdmin onlyOnEditMode returns (bool) {
         bool added = add(account);
         emit AccountAdded(added, account);
         return added;
@@ -89,25 +89,25 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function removeAccount(
         address account
-    ) public onlyAdmin onlyOnEditMode returns (bool) {
+    ) external onlyAdmin onlyOnEditMode returns (bool) {
         bool removed = remove(account);
         emit AccountRemoved(removed, account);
         return removed;
     }
 
-    function getSize() public view returns (uint) {
+    function getSize() external view returns (uint) {
         return size();
     }
 
-    function getByIndex(uint index) public view returns (address account) {
+    function getByIndex(uint index) external view returns (address account) {
         return allowlist[index];
     }
 
-    function getAccounts() public view returns (address[] memory){
-        return allowlist;
+    function getAccounts() external view returns (address[] memory){
+        return allowlist; // mythx-disable-line SWC-128
     }
 
-    function addAccounts(address[] memory accounts) public onlyAdmin returns (bool) {
+    function addAccounts(address[] calldata accounts) external onlyAdmin returns (bool) {
         return addAll(accounts);
     }
 }

@@ -5,23 +5,23 @@ import "./AccountRulesList.sol";
 
 contract ExposedAccountRulesList is AccountRulesList {
 
-    function _size() public view returns (uint256) {
+    function _size() external view returns (uint256) {
         return size();
     }
 
-    function _exists(address _account) public view returns (bool) {
+    function _exists(address _account) external view returns (bool) {
         return exists(_account);
     }
 
-    function _add(address _account) public returns (bool) {
+    function _add(address _account) external returns (bool) {
         return add(_account);
     }
 
-    function _addAll(address[] memory accounts) public returns (bool) {
+    function _addAll(address[] calldata accounts) external returns (bool) {
         return addAll(accounts);
     }
 
-    function _remove(address _account) public returns (bool) {
+    function _remove(address _account) external returns (bool) {
         return remove(_account);
     }
 }
