@@ -1,5 +1,5 @@
 {
-  "name": "permissioning-smart-contracts",
+  "name": "@consensys-software/permissioning-smart-contracts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ConsenSys/permissioning-smart-contracts"
@@ -113,7 +113,7 @@
     ]
   },
   "description": "Smart contracts and dapp implementing onchain permissioning",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "README.md",
   "directories": {
     "test": "test"
@@ -124,5 +124,5 @@
     "permissioning",
     "onchain"
   ],
-  "author": "ConsenSys"
+  "author": "ConsenSys Software"
 }
