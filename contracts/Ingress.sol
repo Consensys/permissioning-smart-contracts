@@ -19,7 +19,7 @@ contract Ingress {
         bytes32 contractName
     );
 
-    function getContractAddress(bytes32 name) public view returns(address) { // mythx-disable-line SWC-000
+    function getContractAddress(bytes32 name) public view returns(address) {
         require(name > 0, "Contract name must not be empty.");
         return registry[name];
     }
