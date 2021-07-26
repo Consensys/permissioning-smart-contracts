@@ -6,6 +6,7 @@ async function logCurrentAdmins(instance) {
     let currentAdmins = await instance.getAdmins();
     console.log("\n<<< current ADMIN list >>>");
     console.log(currentAdmins);
+    console.log("\n<<< end of current ADMIN list >>>");
 }
 
 module.exports = async(deployer, network) => {

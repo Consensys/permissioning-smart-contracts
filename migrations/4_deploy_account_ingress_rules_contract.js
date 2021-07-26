@@ -16,6 +16,7 @@ async function logCurrentAllowlist(instance) {
     let currentAllowlist = await instance.getAccounts();
     console.log("\n<<< current ACCOUNT allowlist >>>");
     console.log(currentAllowlist);
+    console.log("\n<<< end of current ACCOUNT allowlist >>>");
 }
 module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract

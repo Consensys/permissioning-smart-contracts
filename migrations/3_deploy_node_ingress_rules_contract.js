@@ -19,7 +19,7 @@ async function logCurrentAllowlist(instance) {
         let x = await instance.getByIndex(i);
         console.log("enode://" + x[0] + "@" + x[1] + ":" + x[2]);
     }
-    console.log("<<< end of enode list >>>");
+    console.log("<<< end of current NODE list >>>");
 }
 
 module.exports = async(deployer, network) => {
