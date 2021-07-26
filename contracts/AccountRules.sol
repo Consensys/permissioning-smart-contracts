@@ -62,8 +62,8 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         uint256, // value
         uint256, // gasPrice
         uint256, // gasLimit
-        bytes memory // payload
-    ) public view returns (bool) {
+        bytes calldata // payload
+    ) external view returns (bool) {
         if (
             accountPermitted (sender)
         ) {
