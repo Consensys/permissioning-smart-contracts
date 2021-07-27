@@ -113,7 +113,7 @@
     ]
   },
   "description": "Smart contracts and dapp implementing EEA spec onchain permissioning",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "README.md",
   "directories": {
     "test": "test"
