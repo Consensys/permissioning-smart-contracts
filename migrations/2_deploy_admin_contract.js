@@ -20,7 +20,9 @@ module.exports = async(deployer, network) => {
     }
     await deployer.deploy(Admin);
     console.log("   > Admin contract deployed with address = " + Admin.address);
+
     let instance = await Admin.deployed();
+    logCurrentAdmins(instance);
 
     if(AllowlistUtils.isInitialAdminAccountsAvailable()) {
         console.log("   > Adding Initial Admin Accounts ...");
@@ -30,6 +32,4 @@ module.exports = async(deployer, network) => {
             console.log ("   > Initial admin accounts added : " + initialAdminAccounts); 
         }
     } 
-
-    logCurrentAdmins(instance);
 }
