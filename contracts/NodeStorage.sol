@@ -4,7 +4,7 @@ import "./Admin.sol";
 import "./NodeIngress.sol";
 
 
-contract NodeRulesListEternalStorage {
+contract NodeStorage {
     event VersionChange(
         address oldAddress,
         address newAddress

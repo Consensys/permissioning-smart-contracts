@@ -1,7 +1,7 @@
 const NodeIngress = artifacts.require('NodeIngress.sol');
 const NodeRules = artifacts.require('NodeRules.sol');
 const Admin = artifacts.require('Admin.sol');
-const RulesStorage = artifacts.require('NodeRulesListEternalStorage.sol');
+const RulesStorage = artifacts.require('NodeStorage.sol');
 
 const RULES='0x72756c6573000000000000000000000000000000000000000000000000000000';
 const ADMIN='0x61646d696e697374726174696f6e000000000000000000000000000000000000';

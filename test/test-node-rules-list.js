@@ -2,7 +2,7 @@ const BN = web3.utils.BN;
 const { AddressZero } = require("ethers/constants");
 
 const RulesList = artifacts.require('ExposedNodeRulesList.sol');
-const RulesStorage = artifacts.require('NodeRulesListEternalStorage.sol');
+const RulesStorage = artifacts.require('NodeStorage.sol');
 
 const enode1 = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 + "2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";

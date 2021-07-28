@@ -1,6 +1,6 @@
 const NodeIngressContract = artifacts.require('NodeIngress.sol');
 const NodeRules = artifacts.require('NodeRules.sol');
-const RulesStorage = artifacts.require('NodeRulesListEternalStorage.sol');
+const RulesStorage = artifacts.require('NodeStorage.sol');
 const AdminContract = artifacts.require('Admin.sol');
 
 // Contract keys

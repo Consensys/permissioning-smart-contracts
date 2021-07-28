@@ -43,8 +43,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         _;
     }
 
-    constructor (NodeIngress _nodeIngressAddress, NodeRulesListEternalStorage _eternalStorage) public {
-        setStorage(_eternalStorage);
+    constructor (NodeIngress _nodeIngressAddress, NodeStorage _storage) public {
+        setStorage(_storage);
         nodeIngressContract = _nodeIngressAddress;
     }
 

@@ -3,7 +3,7 @@ const AllowlistUtils = require('../scripts/allowlist_utils');
 
 const Rules = artifacts.require("./NodeRules.sol");
 const NodeIngress = artifacts.require("./NodeIngress.sol");
-const NodeRulesListEternalStorage = artifacts.require("./NodeRulesListEternalStorage.sol");
+const NodeStorage = artifacts.require("./NodeStorage.sol");
 const Admin = artifacts.require("./Admin.sol");
 
 const adminContractName = Web3Utils.utf8ToHex("administration");
@@ -46,12 +46,12 @@ module.exports = async(deployer, network) => {
     var storageInstance;
     if (! nodeStorage) {
         // Only deploy if we haven't been provided a pre-deployed address
-        storageInstance = await deployer.deploy(NodeRulesListEternalStorage, nodeIngress);
-        console.log("   > Deployed NodeStorage contract to address = " + NodeRulesListEternalStorage.address);
-        nodeStorage = NodeRulesListEternalStorage.address;
+        storageInstance = await deployer.deploy(NodeStorage, nodeIngress);
+        console.log("   > Deployed NodeStorage contract to address = " + NodeStorage.address);
+        nodeStorage = NodeStorage.address;
     } else {
         // is there a storage already deployed
-        storageInstance = await NodeRulesListEternalStorage.at(nodeStorage);
+        storageInstance = await NodeStorage.at(nodeStorage);
         console.log(">>> Using existing NodeStorage " + storageInstance.address);
         // TODO check that this contract is a storage contract eg call a method
     }

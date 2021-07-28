@@ -1,6 +1,6 @@
 pragma solidity 0.5.9;
 
-import "./NodeRulesListEternalStorage.sol";
+import "./NodeStorage.sol";
 
 
 contract NodeRulesList {
@@ -12,37 +12,37 @@ contract NodeRulesList {
         uint16 port;
     }
 
-    NodeRulesListEternalStorage private eternalStorage;
+    NodeStorage private nodeStorage;
 
-    function setStorage(NodeRulesListEternalStorage _eternalStorage) internal {
-        eternalStorage = _eternalStorage;
+    function setStorage(NodeStorage _storage) internal {
+        nodeStorage = _storage;
     }
 
     function upgradeVersion(address _newVersion) internal {
-        eternalStorage.upgradeVersion(_newVersion);
+        nodeStorage.upgradeVersion(_newVersion);
     }
 
     function size() internal view returns (uint256) {
-        return eternalStorage.size();
+        return nodeStorage.size();
     }
 
     function exists(string memory _enodeId, string memory _ip, uint16 _port) internal view returns (bool) {
-        return eternalStorage.exists(_enodeId, _ip, _port);
+        return nodeStorage.exists(_enodeId, _ip, _port);
     }
 
     function add(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
-        return eternalStorage.add(_enodeId, _ip, _port);
+        return nodeStorage.add(_enodeId, _ip, _port);
     }
 
     function remove(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
-        return eternalStorage.remove(_enodeId, _ip, _port);
+        return nodeStorage.remove(_enodeId, _ip, _port);
     }
 
     function calculateKey(string memory _enodeId, string memory _ip, uint16 _port) public view returns(uint256) {
-        return eternalStorage.calculateKey(_enodeId, _ip, _port);
+        return nodeStorage.calculateKey(_enodeId, _ip, _port);
     }
 
     function getByIndex(uint index) external view returns (string memory enodeId, string memory ip, uint16 port) {
-        return eternalStorage.getByIndex(index);
+        return nodeStorage.getByIndex(index);
     }
 }
