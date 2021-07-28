@@ -23,7 +23,7 @@ contract Admin is AdminProxy, AdminList {
         return exists(_address);
     }
 
-    function addAdmin(address _address) public onlyAdmin returns (bool) {
+    function addAdmin(address _address) external onlyAdmin returns (bool) {
         if (msg.sender == _address) {
             emit AdminAdded(false, _address, "Adding own account as Admin is not permitted");
             return false;
@@ -35,17 +35,17 @@ contract Admin is AdminProxy, AdminList {
         }
     }
 
-    function removeAdmin(address _address) public onlyAdmin notSelf(_address) returns (bool) {
+    function removeAdmin(address _address) external onlyAdmin notSelf(_address) returns (bool) {
         bool removed = remove(_address);
         emit AdminRemoved(removed, _address);
         return removed;
     }
 
-    function getAdmins() public view returns (address[] memory){
-        return allowlist;
+    function getAdmins() external view returns (address[] memory){
+        return allowlist; // mythx-disable-line SWC-128
     }
 
-    function addAdmins(address[] memory accounts) public onlyAdmin returns (bool) {
+    function addAdmins(address[] calldata accounts) external onlyAdmin returns (bool) {
         return addAll(accounts);
     }
 }

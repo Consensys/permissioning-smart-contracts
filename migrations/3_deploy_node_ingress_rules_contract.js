@@ -12,10 +12,22 @@ const rulesContractName = Web3Utils.utf8ToHex("rules");
 let nodeIngress = process.env.NODE_INGRESS_CONTRACT_ADDRESS;
 let retainCurrentRulesContract = AllowlistUtils.getRetainNodeRulesContract();
 
+async function logCurrentAllowlist(instance) {
+    let s = await instance.getSize();
+    console.log("\n<<< current NODE allowlist >>>");
+    for (i = 0; i < s; i ++) {
+        let x = await instance.getByIndex(i);
+        console.log("enode://" + x[0] + "@" + x[1] + ":" + x[2]);
+    }
+    console.log("<<< end of current NODE list >>>");
+}
+
 module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract
     if (retainCurrentRulesContract) {
         console.log("not deploying NodeRules because retain=" + retainCurrentRulesContract);
+        let nodeRulesContract = await NodeRules.deployed();
+        logCurrentAllowlist(nodeRulesContract);
         return;
     }
     if (! nodeIngress) {
@@ -63,4 +75,6 @@ module.exports = async(deployer, network) => {
             console.log("     > eNode added: " + enode );
         }
     }
+
+    logCurrentAllowlist(nodeRulesContract);
 }

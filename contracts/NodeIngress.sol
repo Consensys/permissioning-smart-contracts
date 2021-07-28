@@ -12,20 +12,20 @@ contract NodeIngress is Ingress {
         bool addsRestrictions
     );
 
-    function getContractVersion() public view returns(uint) {
+    function getContractVersion() external view returns(uint) {
         return version;
     }
 
-    function emitRulesChangeEvent(bool addsRestrictions) public {
+    function emitRulesChangeEvent(bool addsRestrictions) external {
         require(registry[RULES_CONTRACT] == msg.sender, "Only Rules contract can trigger Rules change events");
         emit NodePermissionsUpdated(addsRestrictions);
     }
 
     function connectionAllowed(
-        string memory enodeId,
-        string memory enodeIp,
+        string calldata enodeId,
+        string calldata enodeIp,
         uint16 enodePort
-    ) public view returns (bool) {
+    ) external view returns (bool) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {
             return false;
         }

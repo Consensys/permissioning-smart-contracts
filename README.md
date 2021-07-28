@@ -4,7 +4,9 @@
 Version 1 of these contracts was audited by a third party. Read the report [here](https://consensys.net/diligence/audits/2019/08/pegasys-permissioning/)
 
 ## Production use
-[Please contact us](https://consensys.net/quorum/contact-us) if you have questions or are considering using this implementation of onchain permissioning in a production environment.
+[Please contact us](https://consensys.net/quorum/contact-us) if you have questions. Additionally we would love to hear from you if you are considering using this implementation of onchain permissioning in a production environment.
+## License
+The contents of this repository are Apache 2.0 licensed.
 **Important:** The dependency chain for this Dapp includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
 
 ## Usings

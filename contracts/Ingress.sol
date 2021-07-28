@@ -24,7 +24,7 @@ contract Ingress {
         return registry[name];
     }
 
-    function getSize() public view returns (uint256) {
+    function getSize() external view returns (uint256) {
         return contractKeys.length;
     }
 
@@ -36,7 +36,7 @@ contract Ingress {
         }
     }
 
-    function setContractAddress(bytes32 name, address addr) public returns (bool) {
+    function setContractAddress(bytes32 name, address addr) external returns (bool) {
         require(name > 0, "Contract name must not be empty.");
         require(addr != address(0), "Contract address must not be zero.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
@@ -52,7 +52,7 @@ contract Ingress {
         return true;
     }
 
-    function removeContract(bytes32 _name) public returns(bool) {
+    function removeContract(bytes32 _name) external returns(bool) {
         require(_name > 0, "Contract name must not be empty.");
         require(contractKeys.length > 0, "Must have at least one registered contract to execute delete operation.");
         require(isAuthorized(msg.sender), "Not authorized to update contract registry.");
@@ -76,7 +76,7 @@ contract Ingress {
         return false;
     }
 
-    function getAllContractKeys() public view returns(bytes32[] memory) {
-        return contractKeys;
+    function getAllContractKeys() external view returns(bytes32[] memory) {
+        return contractKeys; // mythx-disable-line SWC-128
     }
 }

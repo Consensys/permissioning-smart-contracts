@@ -15,10 +15,17 @@ let accountIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
 let accountStorage = process.env.ACCOUNT_STORAGE_CONTRACT_ADDRESS;
 let retainCurrentRulesContract = AllowlistUtils.getRetainAccountRulesContract();
 
+async function logCurrentAllowlist(instance) {
+    let currentAllowlist = await instance.getAccounts();
+    console.log("\n<<< current ACCOUNT allowlist >>>");
+    console.log(currentAllowlist);
+    console.log("\n<<< end of current ACCOUNT allowlist >>>");
+}
 module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract
     if (retainCurrentRulesContract) {
         console.log("not deploying AccountRules because retain=" + retainCurrentRulesContract);
+        logCurrentAllowlist(await Rules.deployed());
         return;
     }
     if (! accountIngress) {
@@ -73,6 +80,8 @@ module.exports = async(deployer, network) => {
             console.log ("   > Initial Allowlisted Accounts added: " + allowlistedAccounts);
         }
     }
+
+    logCurrentAllowlist(accountRulesContract);
 
     await accountIngressInstance.setContractAddress(rulesContractName, Rules.address);
     console.log("   > Updated AccountIngress contract with Rules address = " + Rules.address);
