@@ -1,13 +1,13 @@
 pragma solidity 0.5.9;
 
 import "./AccountRulesList.sol";
-import "./AccountRulesListEternalStorage.sol";
+import "./AccountStorage.sol";
 
 
 contract ExposedAccountRulesList is AccountRulesList {
 
-    function _setStorage(AccountRulesListEternalStorage _eternalStorage) public {
-        return setStorage(_eternalStorage);
+    function _setStorage(AccountStorage _storage) public {
+        return setStorage(_storage);
     }
 
     function _size() public view returns (uint256) {

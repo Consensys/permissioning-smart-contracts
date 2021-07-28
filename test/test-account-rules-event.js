@@ -1,7 +1,7 @@
 const IngressContract = artifacts.require('Ingress.sol');
 const RulesContract = artifacts.require('AccountRules.sol');
 const AdminContract = artifacts.require('Admin.sol');
-const RulesStorage = artifacts.require('AccountRulesListEternalStorage.sol');
+const RulesStorage = artifacts.require('AccountStorage.sol');
 
 // Contract keys
 const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";

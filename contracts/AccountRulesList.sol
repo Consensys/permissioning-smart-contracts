@@ -1,6 +1,6 @@
 pragma solidity 0.5.9;
 
-import "./AccountRulesListEternalStorage.sol";
+import "./AccountStorage.sol";
 
 
 contract AccountRulesList {
@@ -14,26 +14,26 @@ contract AccountRulesList {
         address accountAddress
     );
 
-    AccountRulesListEternalStorage private eternalStorage;
+    AccountStorage private accountStorage;
 
-    function setStorage(AccountRulesListEternalStorage _eternalStorage) internal {
-        eternalStorage = _eternalStorage;
+    function setStorage(AccountStorage _storage) internal {
+        accountStorage = _storage;
     }
 
     function upgradeVersion(address _newVersion) internal {
-        eternalStorage.upgradeVersion(_newVersion);
+        accountStorage.upgradeVersion(_newVersion);
     }
 
     function size() internal view returns (uint256) {
-        return eternalStorage.size();
+        return accountStorage.size();
     }
 
     function exists(address _account) internal view returns (bool) {
-        return eternalStorage.exists(_account);
+        return accountStorage.exists(_account);
     }
 
     function add(address _account) internal returns (bool) {
-        return eternalStorage.add(_account);
+        return accountStorage.add(_account);
     }
 
     function addAll(address[] memory accounts) internal returns (bool) {
@@ -48,14 +48,14 @@ contract AccountRulesList {
     }
 
     function remove(address _account) internal returns (bool) {
-        return eternalStorage.remove(_account);
+        return accountStorage.remove(_account);
     }
 
     function getByIndex(uint index) public view returns (address account) {
-        return eternalStorage.getByIndex(index);
+        return accountStorage.getByIndex(index);
     }
 
     function getAccounts() public view returns (address[] memory){
-        return eternalStorage.getAccounts();
+        return accountStorage.getAccounts();
     }
 }

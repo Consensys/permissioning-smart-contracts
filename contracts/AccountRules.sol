@@ -4,7 +4,7 @@ import "./AccountRulesProxy.sol";
 import "./AccountRulesList.sol";
 import "./AccountIngress.sol";
 import "./Admin.sol";
-import "./AccountRulesListEternalStorage.sol";
+import "./AccountStorage.sol";
 
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
@@ -30,8 +30,8 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         _;
     }
 
-    constructor (AccountIngress _ingressContract, AccountRulesListEternalStorage _eternalStorage) public {
-        setStorage(_eternalStorage);
+    constructor (AccountIngress _ingressContract, AccountStorage _storage) public {
+        setStorage(_storage);
         ingressContract = _ingressContract;
     }
 

@@ -1,7 +1,7 @@
 const AccountIngress = artifacts.require('AccountIngress.sol');
 const AccountRules = artifacts.require('AccountRules.sol');
 const Admin = artifacts.require('Admin.sol');
-const RulesStorage = artifacts.require('AccountRulesListEternalStorage.sol');
+const RulesStorage = artifacts.require('AccountStorage.sol');
 
 const RULES='0x72756c6573000000000000000000000000000000000000000000000000000000';
 const ADMIN='0x61646d696e697374726174696f6e000000000000000000000000000000000000';

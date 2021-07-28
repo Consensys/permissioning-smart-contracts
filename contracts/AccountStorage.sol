@@ -4,7 +4,7 @@ import "./Admin.sol";
 import "./AccountIngress.sol";
 
 
-contract AccountRulesListEternalStorage {
+contract AccountStorage {
     event VersionChange(
         address oldAddress,
         address newAddress

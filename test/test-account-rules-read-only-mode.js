@@ -1,7 +1,7 @@
 const Ingress = artifacts.require('AccountIngress.sol');
 const Rules = artifacts.require('AccountRules.sol');
 const Admin = artifacts.require('Admin.sol');
-const RulesStorage = artifacts.require('AccountRulesListEternalStorage.sol');
+const RulesStorage = artifacts.require('AccountStorage.sol');
 
 var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
 

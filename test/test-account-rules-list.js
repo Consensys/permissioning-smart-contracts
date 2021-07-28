@@ -2,7 +2,7 @@ const { AddressZero } = require("ethers/constants");
 
 const BN = web3.utils.BN;
 const RulesList = artifacts.require('ExposedAccountRulesList.sol');
-const RulesStorage = artifacts.require('AccountRulesListEternalStorage.sol');
+const RulesStorage = artifacts.require('AccountStorage.sol');
 
 var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
 var address2 = "0xf17f52151EbEF6C7334FAD080c5704D77216b732".toLowerCase();
