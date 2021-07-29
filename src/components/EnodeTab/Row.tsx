@@ -15,7 +15,7 @@ type EnodeRow = {
   deleteTransaction: (address: string) => void;
   openRemoveModal: (address: string) => void;
   enodeId: string;
-  ip: string;
+  host: string;
   port: string;
   status: string;
   identifier: string;
@@ -26,7 +26,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
   deleteTransaction,
   openRemoveModal,
   enodeId,
-  ip,
+  host,
   port,
   status,
   identifier
@@ -39,7 +39,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
     </td>
     <td>
       <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={ip} />
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
       </Flex>
     </td>
     <td>
@@ -98,7 +98,7 @@ const EnodeRow: React.FC<EnodeRow> = ({
 
 EnodeRow.propTypes = {
   enodeId: PropTypes.string.isRequired,
-  ip: PropTypes.string.isRequired,
+  host: PropTypes.string.isRequired,
   port: PropTypes.string.isRequired,
   identifier: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,

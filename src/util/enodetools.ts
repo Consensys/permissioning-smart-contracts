@@ -1,12 +1,12 @@
 export type Enode = {
   enodeId: string;
-  ip: string;
+  host: string;
   port: string;
 };
 
 export const enodeToParams = (enodeURL: string) => {
   let enodeId = '';
-  let ip = '';
+  let host = '';
   let port = '';
   let extraParams = new Map();
 
@@ -19,7 +19,7 @@ export const enodeToParams = (enodeURL: string) => {
       if (node.username.length === 128) {
         enodeId = node.username;
       }
-      ip = node.hostname;
+      host = node.hostname;
       port = node.port;
 
       node.searchParams.forEach((value, name, searchParams) => {
@@ -30,21 +30,21 @@ export const enodeToParams = (enodeURL: string) => {
 
   return {
     enodeId,
-    ip,
+    host,
     port,
     extraParams
   };
 };
 
-export const paramsToIdentifier = ({ enodeId, ip, port }: { enodeId: string; ip: string; port: string }) => {
-  return `${enodeId}_${ip}_${port}`;
+export const paramsToIdentifier = ({ enodeId, host, port }: { enodeId: string; host: string; port: string }) => {
+  return `${enodeId}_${host}_${port}`;
 };
 
 export const identifierToParams = (identifier: string) => {
-  const [enodeId, ip, port] = identifier.split('_');
+  const [enodeId, host, port] = identifier.split('_');
   return {
     enodeId,
-    ip,
+    host,
     port,
     identifier
   };
@@ -64,6 +64,8 @@ export const isValidEnode = (str: string) => {
 
 export const isEqual = (node1: Enode, node2: Enode) => {
   return (
-    node1.enodeId.toLowerCase() === node2.enodeId.toLowerCase() && node1.ip === node2.ip && node1.port === node2.port
+    node1.enodeId.toLowerCase() === node2.enodeId.toLowerCase() &&
+    node1.host === node2.host &&
+    node1.port === node2.port
   );
 };
