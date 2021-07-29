@@ -32,6 +32,10 @@ contract AccountRulesList {
         return accountStorage.exists(_account);
     }
 
+    function canCreateContracts(address _account) internal view returns (bool) {
+        return accountStorage.getCanCreateContract(_account);
+    }
+
     function add(address _account) internal returns (bool) {
         return accountStorage.add(_account);
     }

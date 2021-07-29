@@ -59,7 +59,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function transactionAllowed(
         address sender,
-        address, // target
+        address target, // target
         uint256, // value
         uint256, // gasPrice
         uint256, // gasLimit
@@ -68,6 +68,10 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         if (
             accountPermitted (sender)
         ) {
+            if (target == address(0)) {
+                // contract creation
+                return canCreateContracts(sender);
+            }
             return true;
         } else {
             return false;
