@@ -26,7 +26,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     // this will be used to protect data when upgrading contracts
     bool private readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint private version = 1000000;
+    uint private version = 3000000;
 
     NodeIngress private nodeIngressContract;
 
@@ -43,7 +43,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         _;
     }
 
-    constructor (NodeIngress _nodeIngressAddress) public {
+    constructor (NodeIngress _nodeIngressAddress, NodeStorage _storage) public {
+        setStorage(_storage);
         nodeIngressContract = _nodeIngressAddress;
     }
 
@@ -132,13 +133,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function getSize() external view returns (uint) {
         return size();
-    }
-
-    function getByIndex(uint index) external view returns (string memory enodeId, string memory host, uint16 port) {
-        if (index >= 0 && index < size()) {
-            enode memory item = allowlist[index];
-            return (item.enodeId, item.host, item.port);
-        }
     }
 
     function triggerRulesChangeEvent(bool addsRestrictions) public {

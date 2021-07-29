@@ -1,5 +1,6 @@
 pragma solidity 0.5.9;
 
+import "./NodeStorage.sol";
 
 
 contract NodeRulesList {
@@ -11,48 +12,37 @@ contract NodeRulesList {
         uint16 port;
     }
 
-    enode[] public allowlist;
-    mapping (uint256 => uint256) private indexOf; //1-based indexing. 0 means non-existent
+    NodeStorage private nodeStorage;
 
-    function calculateKey(string memory _enodeId, string memory _host, uint16 _port) internal pure returns(uint256) {
-        return uint256(keccak256(abi.encodePacked(_enodeId, _host, _port)));
+    function setStorage(NodeStorage _storage) internal {
+        nodeStorage = _storage;
+    }
+
+    function upgradeVersion(address _newVersion) internal {
+        nodeStorage.upgradeVersion(_newVersion);
     }
 
     function size() internal view returns (uint256) {
-        return allowlist.length;
+        return nodeStorage.size();
     }
 
     function exists(string memory _enodeId, string memory _host, uint16 _port) internal view returns (bool) {
-        return indexOf[calculateKey(_enodeId, _host, _port)] != 0;
+        return nodeStorage.exists(_enodeId, _host, _port);
     }
 
     function add(string memory _enodeId, string memory _host, uint16 _port) internal returns (bool) {
-        uint256 key = calculateKey(_enodeId, _host, _port);
-        if (indexOf[key] == 0) {
-            indexOf[key] = allowlist.push(enode(_enodeId, _host, _port));
-            return true;
-        }
-        return false;
+        return nodeStorage.add(_enodeId, _host, _port);
     }
 
     function remove(string memory _enodeId, string memory _host, uint16 _port) internal returns (bool) {
-        uint256 key = calculateKey(_enodeId, _host, _port);
-        uint256 index = indexOf[key];
+        return nodeStorage.remove(_enodeId, _host, _port);
+    }
 
-        if (index > 0 && index <= allowlist.length) { //1 based indexing
-            //move last item into index being vacated (unless we are dealing with last index)
-            if (index != allowlist.length) {
-                enode memory lastEnode = allowlist[allowlist.length - 1];
-                allowlist[index - 1] = lastEnode;
-                indexOf[calculateKey(lastEnode.enodeId, lastEnode.host, lastEnode.port)] = index;
-            }
+    function calculateKey(string memory _enodeId, string memory _host, uint16 _port) public view returns(uint256) {
+        return nodeStorage.calculateKey(_enodeId, _host, _port);
+    }
 
-            //shrink array
-            allowlist.length -= 1; // mythx-disable-line SWC-101
-            indexOf[key] = 0;
-            return true;
-        }
-
-        return false;
+    function getByIndex(uint index) external view returns (string memory enodeId, string memory host, uint16 port) {
+        return nodeStorage.getByIndex(index);
     }
 }

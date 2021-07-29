@@ -1,11 +1,16 @@
 pragma solidity 0.5.9;
 
 import "./NodeRulesList.sol";
+import "./NodeStorage.sol";
 
 
 contract ExposedNodeRulesList is NodeRulesList {
 
-    function _calculateKey(string calldata _enodeId, string calldata _host, uint16 _port) external pure returns(uint256) {
+    function _setStorage(NodeStorage _storage) public {
+        return setStorage(_storage);
+    }
+
+    function _calculateKey(string calldata _enodeId, string calldata _host, uint16 _port) external view returns(uint256) {
         return calculateKey(_enodeId, _host, _port);
     }
 

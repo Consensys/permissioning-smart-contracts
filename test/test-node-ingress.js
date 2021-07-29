@@ -1,6 +1,7 @@
 const NodeIngressContract = artifacts.require("NodeIngress.sol");
-const NodeRulesContract = artifacts.require("NodeRules.sol");
+const NodeRules = artifacts.require("NodeRules.sol");
 const AdminContract = artifacts.require("Admin.sol");
+const RulesStorage = artifacts.require('NodeStorage.sol');
 
 const RULES="0x72756c6573000000000000000000000000000000000000000000000000000000";
 const ADMIN="0x61646d696e697374726174696f6e000000000000000000000000000000000000";
@@ -16,12 +17,18 @@ contract ("Node Ingress (no contracts registered)", (accounts) => {
     let nodeIngressContract;
     let nodeRulesContract;
     let adminContract;
+    let storageContract;
 
     beforeEach("create a new contract for each test", async () => {
         nodeIngressContract = await NodeIngressContract.new();
         adminContract = await AdminContract.new();
-        nodeRulesContract = await NodeRulesContract.new(nodeIngressContract.address);
-    })
+
+        // set the storage
+        storageContract = await RulesStorage.new(nodeIngressContract.address);
+        console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+        
+        nodeRulesContract = await NodeRules.new(nodeIngressContract.address, storageContract.address);
+        })
 
     it("should forbid any connection if rules contract has not been registered", async () => {
         result = await nodeIngressContract.getContractAddress(RULES);
@@ -161,13 +168,23 @@ contract("Ingress contract", (accounts) => {
     let nodeIngressContract;
     let nodeRulesContract;
     let adminContract;
+    let storageContract;
 
     beforeEach("Setup contract registry", async () => {
         nodeIngressContract = await NodeIngressContract.new();
         adminContract = await AdminContract.new();
         await nodeIngressContract.setContractAddress(ADMIN, adminContract.address);
-        nodeRulesContract = await NodeRulesContract.new(nodeIngressContract.address);
+
+        // set the storage
+        storageContract = await RulesStorage.new(nodeIngressContract.address);
+        console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+        
+        nodeRulesContract = await NodeRules.new(nodeIngressContract.address, storageContract.address);
+    
         await nodeIngressContract.setContractAddress(RULES, nodeRulesContract.address);
+        // set rules as the storage owner
+        await storageContract.upgradeVersion(nodeRulesContract.address);
+        console.log("   >>> Set storage owner to Rules.address");
     })
 
     it("Should not allow an unauthorized account to perform administration operations", async () => {
@@ -262,7 +279,7 @@ contract("Ingress contract", (accounts) => {
     it("Should only trigger NodeRules update events when issued from NodeRules contract", async () => {
         let result;
 
-        const acProxy = await NodeRulesContract.new(nodeIngressContract.address);
+        const acProxy = await NodeRules.new(nodeIngressContract.address, storageContract.address);
 
         // Register the contracts
         await nodeIngressContract.setContractAddress(RULES, nodeRulesContract.address);

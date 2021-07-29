@@ -40,7 +40,7 @@ ONLY use these instructions if you are doing development work on the Dapp itself
 This is the easiest way to get started for development with the permissioning Dapp:
 
 #### Compile and migrate the contracts (Development mode) ####
-1. Delete your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_STORAGE_CONTRACT_ADDRESS` AND
+1. Delete your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_STORAGE_CONTRACT_ADDRESS`, `NODE_STORAGE_CONTRACT_ADDRESS` AND
 `CHAIN_ID` - you might need to restart your terminal session to have your changes applied. If you are using a `.env` file, you can comment out the variables.
 1. Start a terminal session and start a Truffle Ganache node running `truffle develop`. This will start a Ganache node and create a Truffle console session.
 1. In the truffle console, run all migrations from scratch with `migrate --reset`. Keep this terminal session open to maintain your Ganache node running.
