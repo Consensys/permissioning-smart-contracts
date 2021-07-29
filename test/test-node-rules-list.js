@@ -1,5 +1,8 @@
 const BN = web3.utils.BN;
-const NodeRulesList = artifacts.require('ExposedNodeRulesList.sol');
+const { AddressZero } = require("ethers/constants");
+
+const RulesList = artifacts.require('ExposedNodeRulesList.sol');
+const RulesStorage = artifacts.require('NodeStorage.sol');
 
 const enode1 = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
 + "2e1092b7fcb320c1b62f3759bd359fdc3a2ed5df436c3d8914b1532740128929";
@@ -19,7 +22,15 @@ contract("NodeRulesList (list manipulation)", async () => {
   let rulesListContract;
 
   beforeEach(async () => {
-    rulesListContract = await NodeRulesList.new();
+    rulesListContract = await RulesList.new();
+    // initialize the storage
+    storageContract = await RulesStorage.new(AddressZero);
+    console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+    // set rules -> storage
+    rulesListContract._setStorage(storageContract.address);
+    // set rules as the storage owner: storage -> rules
+    await storageContract.upgradeVersion(rulesListContract.address);
+    console.log("   >>> Set storage owner to Rules.address " + rulesListContract.address);
   });
 
   it("should calculate same key for same enode", async () => {
@@ -118,11 +129,5 @@ contract("NodeRulesList (list manipulation)", async () => {
     assert.equal(size, 0);
     exists = await rulesListContract._exists(enode1, node1Host, node1Port);
     assert.notOk(exists);
-  });
-
-  it("get by index on empty list should return undefined", async () => {
-    let node = await rulesListContract.allowlist[0];
-
-    assert.isUndefined(node);
   });
 });

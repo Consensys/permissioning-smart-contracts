@@ -1,9 +1,14 @@
 pragma solidity 0.5.9;
 
 import "./AccountRulesList.sol";
+import "./AccountStorage.sol";
 
 
 contract ExposedAccountRulesList is AccountRulesList {
+
+    function _setStorage(AccountStorage _storage) public {
+        return setStorage(_storage);
+    }
 
     function _size() external view returns (uint256) {
         return size();

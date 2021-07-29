@@ -1,5 +1,6 @@
 const NodeIngress = artifacts.require('NodeIngress.sol');
 const NodeRules = artifacts.require('NodeRules.sol');
+const RulesStorage = artifacts.require('NodeStorage.sol');
 const Admin = artifacts.require('Admin.sol');
 
 var enode1 = "9bd359fdc3a2ed5df436c3d8914b1532740128929892092b7fcb320c1b62f375"
@@ -17,7 +18,16 @@ contract('NodeRules (Read-only mode)', () => {
 
   beforeEach(async () => {
     nodeIngressContract = await NodeIngress.deployed();
-    nodeRulesContract = await NodeRules.new(NodeIngress.address);
+
+    // set the storage
+    storageContract = await RulesStorage.new(nodeIngressContract.address);
+    console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+    
+    nodeRulesContract = await NodeRules.new(nodeIngressContract.address, storageContract.address);
+
+    // set rules as the storage owner
+    await storageContract.upgradeVersion(nodeRulesContract.address);
+    console.log("   >>> Set storage owner to Rules.address");
   })
 
   it("should toggle read-only flag on enter/exit read-mode method invocation", async () => {

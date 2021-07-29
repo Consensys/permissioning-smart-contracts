@@ -1,6 +1,7 @@
 const IngressContract = artifacts.require('Ingress.sol');
 const RulesContract = artifacts.require('AccountRules.sol');
 const AdminContract = artifacts.require('Admin.sol');
+const RulesStorage = artifacts.require('AccountStorage.sol');
 
 // Contract keys
 const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";
@@ -21,6 +22,7 @@ contract("Account Rules (Permissioning)", (accounts) => {
   let ingressContract;
   let rulesContract;
   let adminContract;
+  let storageContract;
 
   before(async () => {
     ingressContract = await IngressContract.new();
@@ -28,8 +30,20 @@ contract("Account Rules (Permissioning)", (accounts) => {
     adminContract = await AdminContract.new();
     await ingressContract.setContractAddress(ADMIN_NAME, adminContract.address);
 
-    rulesContract = await RulesContract.new(ingressContract.address);
+    // initialize the storage
+    storageContract = await RulesStorage.new(ingressContract.address);
+    console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+
+    // set rules -> storage
+    rulesContract = await RulesContract.new(ingressContract.address, storageContract.address);
+
+    // set storage -> rules
+    await storageContract.upgradeVersion(rulesContract.address);
+    console.log("   >>> Set storage owner to Rules.address " + rulesContract.address);
+
     await ingressContract.setContractAddress(RULES_NAME, rulesContract.address);
+    // TODO this is duplicated in event test file
+    // assert initial state
     let size = await rulesContract.getSize();
     assert.equal(size, 1, "Allowlist initializes with 1 account");
     let initialAccount = await rulesContract.getByIndex(0);

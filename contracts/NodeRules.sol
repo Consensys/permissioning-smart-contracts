@@ -11,14 +11,14 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     event NodeAdded(
         bool nodeAdded,
         string enodeId,
-        string enodeIp,
+        string enodeHost,
         uint16 enodePort
     );
 
     event NodeRemoved(
         bool nodeRemoved,
         string enodeId,
-        string enodeIp,
+        string enodeHost,
         uint16 enodePort
     );
 
@@ -26,7 +26,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     // this will be used to protect data when upgrading contracts
     bool private readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint private version = 1000000;
+    uint private version = 3000000;
 
     NodeIngress private nodeIngressContract;
 
@@ -43,7 +43,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         _;
     }
 
-    constructor (NodeIngress _nodeIngressAddress) public {
+    constructor (NodeIngress _nodeIngressAddress, NodeStorage _storage) public {
+        setStorage(_storage);
         nodeIngressContract = _nodeIngressAddress;
     }
 
@@ -71,31 +72,31 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function connectionAllowed(
         string calldata enodeId,
-        string calldata enodeIp,
+        string calldata enodeHost,
         uint16 enodePort
     ) external view returns (bool) {
         return
             enodePermitted (
                 enodeId,
-                enodeIp,
+                enodeHost,
                 enodePort
             );
     }
 
     function enodePermitted(
         string memory enodeId,
-        string memory ip,
+        string memory host,
         uint16 port
     ) public view returns (bool) {
-        return exists(enodeId, ip, port);
+        return exists(enodeId, host, port);
     }
 
     function addEnode(
         string calldata enodeId,
-        string calldata ip,
+        string calldata host,
         uint16 port
     ) external onlyAdmin onlyOnEditMode returns (bool) {
-        bool added = add(enodeId, ip, port);
+        bool added = add(enodeId, host, port);
 
         if (added) {
             triggerRulesChangeEvent(false);
@@ -103,7 +104,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         emit NodeAdded(
             added,
             enodeId,
-            ip,
+            host,
             port
         );
 
@@ -112,10 +113,10 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function removeEnode(
         string calldata enodeId,
-        string calldata ip,
+        string calldata host,
         uint16 port
     ) external onlyAdmin onlyOnEditMode returns (bool) {
-        bool removed = remove(enodeId, ip, port);
+        bool removed = remove(enodeId, host, port);
 
         if (removed) {
             triggerRulesChangeEvent(true);
@@ -123,7 +124,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         emit NodeRemoved(
             removed,
             enodeId,
-            ip,
+            host,
             port
         );
 
@@ -132,13 +133,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function getSize() external view returns (uint) {
         return size();
-    }
-
-    function getByIndex(uint index) external view returns (string memory enodeId, string memory ip, uint16 port) {
-        if (index >= 0 && index < size()) {
-            enode memory item = allowlist[index];
-            return (item.enodeId, item.ip, item.port);
-        }
     }
 
     function triggerRulesChangeEvent(bool addsRestrictions) public {
