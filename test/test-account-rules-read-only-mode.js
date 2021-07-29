@@ -1,18 +1,29 @@
 const Ingress = artifacts.require('AccountIngress.sol');
 const Rules = artifacts.require('AccountRules.sol');
 const Admin = artifacts.require('Admin.sol');
+const RulesStorage = artifacts.require('AccountStorage.sol');
 
 var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
 
 contract('Account Rules (Read-only mode)', () => {
 
   let ingressContract;
-  let adminContract;
   let rulesContract;
+  let storageContract;
 
   beforeEach(async () => {
     ingressContract = await Ingress.deployed();
-    rulesContract = await Rules.new(Ingress.address);
+
+    // initialize the storage
+    storageContract = await RulesStorage.new(ingressContract.address);
+    console.log("   >>> Storage contract deployed with address = " + storageContract.address);
+
+    // set rules -> storage
+    rulesContract = await Rules.new(ingressContract.address, storageContract.address);
+
+    // set storage -> rules
+    await storageContract.upgradeVersion(rulesContract.address);
+    console.log("   >>> Set storage owner to Rules.address " + rulesContract.address);
   })
 
   it("should toggle read-only flag on enter/exit read-mode method invocation", async () => {
