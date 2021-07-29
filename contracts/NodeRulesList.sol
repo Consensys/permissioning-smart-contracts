@@ -8,7 +8,7 @@ contract NodeRulesList {
     // struct size = 82 bytes
     struct enode {
         string enodeId;
-        string ip;
+        string host;
         uint16 port;
     }
 
@@ -26,23 +26,23 @@ contract NodeRulesList {
         return nodeStorage.size();
     }
 
-    function exists(string memory _enodeId, string memory _ip, uint16 _port) internal view returns (bool) {
-        return nodeStorage.exists(_enodeId, _ip, _port);
+    function exists(string memory _enodeId, string memory _host, uint16 _port) internal view returns (bool) {
+        return nodeStorage.exists(_enodeId, _host, _port);
     }
 
-    function add(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
-        return nodeStorage.add(_enodeId, _ip, _port);
+    function add(string memory _enodeId, string memory _host, uint16 _port) internal returns (bool) {
+        return nodeStorage.add(_enodeId, _host, _port);
     }
 
-    function remove(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
-        return nodeStorage.remove(_enodeId, _ip, _port);
+    function remove(string memory _enodeId, string memory _host, uint16 _port) internal returns (bool) {
+        return nodeStorage.remove(_enodeId, _host, _port);
     }
 
-    function calculateKey(string memory _enodeId, string memory _ip, uint16 _port) public view returns(uint256) {
-        return nodeStorage.calculateKey(_enodeId, _ip, _port);
+    function calculateKey(string memory _enodeId, string memory _host, uint16 _port) public view returns(uint256) {
+        return nodeStorage.calculateKey(_enodeId, _host, _port);
     }
 
-    function getByIndex(uint index) external view returns (string memory enodeId, string memory ip, uint16 port) {
+    function getByIndex(uint index) external view returns (string memory enodeId, string memory host, uint16 port) {
         return nodeStorage.getByIndex(index);
     }
 }

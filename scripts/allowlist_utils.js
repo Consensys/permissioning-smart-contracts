@@ -3,7 +3,7 @@ const url = require('url');
 
 const enodeToParams = enodeURL => {
     let enodeId = "";
-    let ip = "";
+    let host = "";
     let port = "";
     let extraParams = {};
 
@@ -14,7 +14,7 @@ const enodeToParams = enodeURL => {
                 enodeId = node.username;
             }
 
-            ip = node.hostname
+            host = node.hostname
             port = node.port;
 
             node.searchParams.forEach((value, name, searchParams) => { extraParams[name.toLowerCase()] = value; });
@@ -23,7 +23,7 @@ const enodeToParams = enodeURL => {
 
     return {
         enodeId,
-        ip,
+        host,
         port,
         extraParams
     };

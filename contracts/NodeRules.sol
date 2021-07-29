@@ -11,14 +11,14 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     event NodeAdded(
         bool nodeAdded,
         string enodeId,
-        string enodeIp,
+        string enodeHost,
         uint16 enodePort
     );
 
     event NodeRemoved(
         bool nodeRemoved,
         string enodeId,
-        string enodeIp,
+        string enodeHost,
         uint16 enodePort
     );
 
@@ -72,31 +72,31 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function connectionAllowed(
         string calldata enodeId,
-        string calldata enodeIp,
+        string calldata enodeHost,
         uint16 enodePort
     ) external view returns (bool) {
         return
             enodePermitted (
                 enodeId,
-                enodeIp,
+                enodeHost,
                 enodePort
             );
     }
 
     function enodePermitted(
         string memory enodeId,
-        string memory ip,
+        string memory host,
         uint16 port
     ) public view returns (bool) {
-        return exists(enodeId, ip, port);
+        return exists(enodeId, host, port);
     }
 
     function addEnode(
         string calldata enodeId,
-        string calldata ip,
+        string calldata host,
         uint16 port
     ) external onlyAdmin onlyOnEditMode returns (bool) {
-        bool added = add(enodeId, ip, port);
+        bool added = add(enodeId, host, port);
 
         if (added) {
             triggerRulesChangeEvent(false);
@@ -104,7 +104,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         emit NodeAdded(
             added,
             enodeId,
-            ip,
+            host,
             port
         );
 
@@ -113,10 +113,10 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
 
     function removeEnode(
         string calldata enodeId,
-        string calldata ip,
+        string calldata host,
         uint16 port
     ) external onlyAdmin onlyOnEditMode returns (bool) {
-        bool removed = remove(enodeId, ip, port);
+        bool removed = remove(enodeId, host, port);
 
         if (removed) {
             triggerRulesChangeEvent(true);
@@ -124,7 +124,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         emit NodeRemoved(
             removed,
             enodeId,
-            ip,
+            host,
             port
         );
 

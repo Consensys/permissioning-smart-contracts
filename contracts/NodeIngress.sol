@@ -23,7 +23,7 @@ contract NodeIngress is Ingress {
 
     function connectionAllowed(
         string calldata enodeId,
-        string calldata enodeIp,
+        string calldata enodeHost,
         uint16 enodePort
     ) external view returns (bool) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {
@@ -32,7 +32,7 @@ contract NodeIngress is Ingress {
 
         return NodeRulesProxy(registry[RULES_CONTRACT]).connectionAllowed(
             enodeId,
-            enodeIp,
+            enodeHost,
             enodePort
         );
     }
