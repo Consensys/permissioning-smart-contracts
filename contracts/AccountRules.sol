@@ -4,6 +4,7 @@ import "./AccountRulesProxy.sol";
 import "./AccountRulesList.sol";
 import "./AccountIngress.sol";
 import "./Admin.sol";
+import "./AccountStorage.sol";
 
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
@@ -12,7 +13,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     // this will be used to protect data when upgrading contracts
     bool private readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint private version = 1000000;
+    uint private version = 3000000;
 
     AccountIngress private ingressContract;
 
@@ -29,9 +30,9 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         _;
     }
 
-    constructor (AccountIngress _ingressContract) public {
+    constructor (AccountIngress _ingressContract, AccountStorage _storage) public {
+        setStorage(_storage);
         ingressContract = _ingressContract;
-        add(msg.sender);
     }
 
     // VERSION
@@ -97,14 +98,6 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function getSize() external view returns (uint) {
         return size();
-    }
-
-    function getByIndex(uint index) external view returns (address account) {
-        return allowlist[index];
-    }
-
-    function getAccounts() external view returns (address[] memory){
-        return allowlist; // mythx-disable-line SWC-128
     }
 
     function addAccounts(address[] calldata accounts) external onlyAdmin returns (bool) {
