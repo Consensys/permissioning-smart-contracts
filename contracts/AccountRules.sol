@@ -70,7 +70,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         ) {
             if (target == address(0)) {
                 // contract creation
-                return canCreateContracts(sender);
+                return getCanCreateContracts(sender);
             }
             return true;
         } else {
@@ -98,6 +98,14 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         bool removed = remove(account);
         emit AccountRemoved(removed, account);
         return removed;
+    }
+    
+    function setCreateContractPermission(address _account, bool _allowed) public onlyAdmin returns (bool){
+        return setCanCreateContracts(_account, _allowed);
+    }
+    
+    function getCreateContractPermission(address _account) public onlyAdmin returns (bool){
+        return getCanCreateContracts(_account);
     }
 
     function getSize() external view returns (uint) {

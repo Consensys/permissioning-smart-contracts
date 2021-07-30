@@ -80,10 +80,10 @@ contract AccountStorage {
         return false;
     }
 
-    function setCanCreateContract(address _account) public onlyLatestVersion returns (bool){
+    function setCanCreateContract(address _account, bool _allowed) public onlyLatestVersion returns (bool){
         // assuming they are already on the list
-        require(indexOf[_account] != 0, "add account to the allowlist first");
-        createContractPermissions[_account] = true;
+        require(indexOf[_account] != 0, "add account to the allowlist before setting create contract permission");
+        createContractPermissions[_account] = _allowed;
     }
 
     function getCanCreateContract(address _account) public view returns (bool) {
