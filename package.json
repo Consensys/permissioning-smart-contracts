@@ -65,7 +65,7 @@
     "styled-components": "^4.2.0",
     "truffle-hdwallet-provider": "^1.0.17",
     "typescript": "^3.5.1",
-    "web3": "1.2.5",
+    "web3": "^1.5.1",
     "web3-utils": "^1.0.0-beta.52"
   },
   "devDependencies": {
