@@ -50,7 +50,7 @@
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "@types/styled-components": "^4.1.15",
-    "classnames": "^2.2.6",
+    "classnames": "2.3.1",
     "dotenv": "^7.0.0",
     "ethers": "4.0.47",
     "idx": "^2.5.6",
