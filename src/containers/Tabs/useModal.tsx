@@ -6,14 +6,16 @@ export default () => {
     add: boolean;
     remove: string;
     lock: boolean;
+    setCreateContractPermission: boolean;
   }>({
     add: false,
     remove: '',
-    lock: false
+    lock: false,
+    setCreateContractPermission: false
   });
 
   const toggleModal = useCallback(
-    (modal: 'add' | 'remove' | 'lock') => (value?: string | boolean) => {
+    (modal: 'add' | 'remove' | 'lock' | 'setCreateContractPermission') => (value?: string | boolean) => {
       setModals(modals => ({
         ...modals,
         [modal]: value ? value : !modals[modal]

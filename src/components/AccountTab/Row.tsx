@@ -7,22 +7,34 @@ import { Pill, Flex, Button } from 'rimble-ui';
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
 import TextWithTooltip from './TextWithTooltip';
+import CheckBox from '@react-native-community/checkbox';
 // Styles
 import styles from './styles.module.scss';
 
 type AccountRow = {
   address: string;
+  createContractPermission: boolean;
   status: string;
   isAdmin: boolean;
   deleteTransaction: (address: string) => void;
   openRemoveModal: (address: string) => void;
+  setCreateContractPermission: (newValue: boolean) => void;
 };
 
-const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTransaction, openRemoveModal }) => (
+const AccountRow: React.FC<AccountRow> = ({
+  address,
+  status,
+  createContractPermission,
+  isAdmin,
+  deleteTransaction,
+  openRemoveModal,
+  setCreateContractPermission
+}) => (
   <tr className={styles.row}>
     <td>
       <Flex alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip status={status} text={address} isAdmin={isAdmin} />
+        <CheckBox disabled={true} value={createContractPermission} />
       </Flex>
     </td>
     <td>
@@ -76,10 +88,12 @@ const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTran
 
 AccountRow.propTypes = {
   address: PropTypes.string.isRequired,
+  createContractPermission: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
-  openRemoveModal: PropTypes.func.isRequired
+  openRemoveModal: PropTypes.func.isRequired,
+  setCreateContractPermission: PropTypes.func.isRequired
 };
 
 export default AccountRow;

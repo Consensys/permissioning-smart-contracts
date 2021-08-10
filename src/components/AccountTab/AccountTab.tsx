@@ -15,7 +15,7 @@ type AccountTab = {
     remove: boolean | string;
     lock: boolean;
   };
-  toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
+  toggleModal: (name: 'add' | 'remove' | 'lock' | 'setCreateContractPermission') => (value?: boolean | string) => void;
   handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
   isAdmin: boolean;

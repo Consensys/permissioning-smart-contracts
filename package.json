@@ -42,6 +42,7 @@
     ]
   },
   "dependencies": {
+    "@react-native-community/checkbox": "^0.5.8",
     "@types/classnames": "^2.2.8",
     "@types/enzyme": "^3.9.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
