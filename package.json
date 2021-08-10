@@ -42,6 +42,7 @@
     ]
   },
   "dependencies": {
+    "@truffle/hdwallet-provider": "^1.4.3",
     "@types/classnames": "^2.2.8",
     "@types/enzyme": "^3.9.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
@@ -63,7 +64,6 @@
     "react-scripts": "3.0.1",
     "rimble-ui": "^0.8.0",
     "styled-components": "^4.2.0",
-    "truffle-hdwallet-provider": "^1.0.17",
     "typescript": "^3.5.1",
     "web3": "^1.5.1",
     "web3-utils": "^1.0.0-beta.52"
