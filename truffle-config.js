@@ -18,7 +18,7 @@ if (endpoint === undefined) {
 
 module.exports = {
   networks: {
-    besu: {
+    development: {
      provider: () => new HDWalletProvider(privateKey, endpoint),
      host: "127.0.0.1",
      port: 8545,
