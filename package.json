@@ -65,8 +65,8 @@
     "rimble-ui": "^0.8.0",
     "styled-components": "^4.2.0",
     "typescript": "^3.5.1",
-    "web3": "^1.5.1",
-    "web3-utils": "1.5.1"
+    "web3": "1.5.2",
+    "web3-utils": "1.5.2"
   },
   "devDependencies": {
     "enzyme": "^3.11.0",
