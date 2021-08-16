@@ -85,7 +85,7 @@
     "truffle": "5.0.17",
     "truffle-typings": "^1.0.8",
     "ts-jest": "27.0.4",
-    "typechain": "^0.3.17"
+    "typechain": "5.1.2"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
