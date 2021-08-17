@@ -1,14 +1,14 @@
 import React from 'react';
-import { Flex } from 'rimble-ui';
+import { Grid } from '@material-ui/core';
 import styles from './styles.module.scss';
 
 const Footer: React.FC<{}> = () => {
   return (
-    <Flex>
+    <Grid>
       <a href="https://consensys.net/quorum" target="_blank" rel="noopener noreferrer" className={styles.footerLogo}>
         Created by ConsenSys
       </a>
-    </Flex>
+    </Grid>
   );
 };
 
