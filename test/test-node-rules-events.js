@@ -1,4 +1,4 @@
-const NodeIngressContract = artifacts.require('NodeIngress.sol');
+const NodeIngress = artifacts.require('NodeIngress.sol');
 const NodeRules = artifacts.require('NodeRules.sol');
 const RulesStorage = artifacts.require('NodeStorage.sol');
 const AdminContract = artifacts.require('Admin.sol');
@@ -20,7 +20,7 @@ contract("NodeRules (Events)", () => {
   let adminContract;
 
   beforeEach(async () => {
-    nodeIngressContract = await NodeIngressContract.new();
+    nodeIngressContract = await NodeIngress.new();
 
     adminContract = await AdminContract.new();
     await nodeIngressContract.setContractAddress(ADMIN_NAME, adminContract.address);
