@@ -82,7 +82,7 @@
     "prettier": "1.18.2",
     "solidity-coverage": "^0.7.1",
     "solium": "1.2.5",
-    "truffle": "5.0.17",
+    "truffle": "5.4.6",
     "truffle-typings": "^1.0.8",
     "ts-jest": "27.0.4",
     "typechain": "0.3.21"
