@@ -11,7 +11,7 @@ type PendingToast = {
 };
 
 const PendingToast: React.FC<PendingToast> = ({ message, closeToast }) => (
-  <Snackbar message={message} onClose={closeToast} className={styles.fadeIn} />
+  <Snackbar message={message} open={true} onClose={closeToast} className={styles.fadeIn} />
 );
 
 PendingToast.propTypes = {

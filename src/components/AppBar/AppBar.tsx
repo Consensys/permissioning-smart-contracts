@@ -6,8 +6,8 @@ import { Grid } from '@material-ui/core';
 import styles from './styles.module.scss';
 
 const AppBar: React.FC<{}> = () => (
-  <Grid className={styles.appBar}>
-    <h3>Besu Permissioning</h3>
+  <Grid container alignItems="center" justifyContent="space-between" className={styles.appBar}>
+    <h2>Besu Permissioning</h2>
   </Grid>
 );
 

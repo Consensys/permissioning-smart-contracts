@@ -12,7 +12,7 @@ type ErrorToast = {
 };
 
 const ErrorToast: React.FC<ErrorToast> = ({ message, secondaryMessage, closeToast }) => (
-  <Snackbar message={message + secondaryMessage} onClose={closeToast} className={styles.fadeInOut} />
+  <Snackbar message={message + secondaryMessage} open={true} onClose={closeToast} className={styles.fadeInOut} />
 );
 
 ErrorToast.propTypes = {
