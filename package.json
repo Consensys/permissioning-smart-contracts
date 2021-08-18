@@ -13,7 +13,7 @@
     "test:app": "yarn react-scripts test --env=jsdom --watchAll=false",
     "test:app:watch": "yarn react-scripts test --env=jsdom",
     "test:app:ci": "yarn react-scripts test --reporters=default --reporters=jest-junit",
-    "test:contracts": "yarn truffle test --network develop",
+    "test:contracts": "yarn truffle test --network development",
     "test": "yarn run test:contracts && yarn run test:app",
     "coverage:contracts": "yarn truffle run coverage",
     "coverage": "yarn run coverage:contracts",
