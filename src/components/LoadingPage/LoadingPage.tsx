@@ -1,13 +1,11 @@
 // Libs
 import React from 'react';
 // Rimble Components
-import { Grid, Box, Chip } from '@material-ui/core';
+import { Grid, Chip } from '@material-ui/core';
 
 const LoadingPage: React.FC<{}> = () => (
-  <Grid alignItems="center" justifyContent="center">
-    <Box mt={5}>
-      <Chip color="primary" label="Loading" />
-    </Box>
+  <Grid container alignItems="center" justifyContent="center">
+    <Chip color="primary" label="Loading" />
   </Grid>
 );
 

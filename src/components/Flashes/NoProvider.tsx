@@ -1,15 +1,17 @@
 // Libs
 import React from 'react';
 import { Box, Link, Grid } from '@material-ui/core';
+import WarningIcon from '@material-ui/icons/Warning';
 // Styles
 import styles from './styles.module.scss';
 
 const NoProvider: React.FC<{}> = () => (
   <Box>
-    <Grid alignItems="center">
+    <Grid container alignItems="center">
+      <WarningIcon />
       <b>You are not connected to your network.</b>
     </Grid>
-    <Grid alignItems="center">
+    <Grid container alignItems="center">
       <div className={styles.icon} />
       <p>
         If you need help, we recommend MetaMask to connect, see

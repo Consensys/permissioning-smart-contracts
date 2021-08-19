@@ -2,30 +2,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Grid } from '@material-ui/core';
-// Styles
-import styles from './styles.module.scss';
+import WarningIcon from '@material-ui/icons/Warning';
 
 const WrongNetwork: React.FC<{ networkId: number }> = ({ networkId }) => (
   <Box>
-    <Grid alignItems="center">
+    <Grid container alignItems="center">
+      <WarningIcon />
       <b>Connect to the network where the contracts are deployed.</b>
     </Grid>
-    <Grid alignItems="center">
-      <div className={styles.icon} />
-      <p className="wrongNetworkMessage">
-        Change your network using MetaMask.
-        {networkId === 1
-          ? " You're currently on the Main Ethereum Network."
-          : networkId === 2
-          ? " You're currently on the Morden Classic Test Network."
-          : networkId === 3
-          ? " You're currently on the Ropsten Test Network."
-          : networkId === 4
-          ? " You're currently on the Rinkeby Test Network."
-          : networkId === 5
-          ? " You're currently on the Goerli Test Network."
-          : ` You're currently on unknown network of id ${networkId}.`}
-      </p>
+    <Grid container alignItems="center">
+      <div className="wrongNetworkMessage">
+        <p>
+          Change your network using MetaMask.
+          {networkId === 1
+            ? " You're currently on the Main Ethereum Network."
+            : networkId === 2
+            ? " You're currently on the Morden Classic Test Network."
+            : networkId === 3
+            ? " You're currently on the Ropsten Test Network."
+            : networkId === 4
+            ? " You're currently on the Rinkeby Test Network."
+            : networkId === 5
+            ? " You're currently on the Goerli Test Network."
+            : ` You're currently on unknown network of id ${networkId}.`}
+        </p>
+      </div>
     </Grid>
   </Box>
 );
