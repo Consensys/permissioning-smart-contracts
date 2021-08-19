@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
-import { Grid, Box, Button } from '@material-ui/core';
+import { Grid, Box, Button, Icon } from '@material-ui/core';
 
 type TableHeader = {
   number: Number;
@@ -16,7 +16,13 @@ const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd 
       <h2>Accounts ({number})</h2>
     </Box>
     <Grid alignItems="center">
-      <Button variant="contained" color="primary" onClick={() => openAddModal()} disabled={disabledAdd}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => openAddModal()}
+        disabled={disabledAdd}
+        startIcon={<Icon>add_circle</Icon>}
+      >
         Add Account
       </Button>
     </Grid>
