@@ -1,25 +1,24 @@
 // Libs
 import React from 'react';
-// Rimble Components
-import { Flash, Text, Link, Icon, Flex } from 'rimble-ui';
+import { Box, Link, Grid } from '@material-ui/core';
 // Styles
 import styles from './styles.module.scss';
 
 const NoProvider: React.FC<{}> = () => (
-  <Flash variant="danger">
-    <Flex alignItems="center">
-      <Icon name="Warning" className={styles.icon} />
-      <Text bold>You are not connected to your network.</Text>
-    </Flex>
-    <Flex alignItems="center">
+  <Box>
+    <Grid alignItems="center">
+      <b>You are not connected to your network.</b>
+    </Grid>
+    <Grid alignItems="center">
       <div className={styles.icon} />
-      <Text>If you need help, we recommend MetaMask to connect, see</Text>
-      <Link ml={1} href="https://www.metamask.io" target="_blank" title="Access MetaMask page">
-        www.metamask.io
-      </Link>
-      <Text>.</Text>
-    </Flex>
-  </Flash>
+      <p>
+        If you need help, we recommend MetaMask to connect, see
+        <Link href="https://www.metamask.io" target="_blank" title="Access MetaMask page">
+          www.metamask.io
+        </Link>
+      </p>
+    </Grid>
+  </Box>
 );
 
 export default NoProvider;
