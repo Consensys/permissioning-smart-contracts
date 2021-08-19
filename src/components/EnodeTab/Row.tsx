@@ -1,8 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Pill, Flex, Button } from 'rimble-ui';
+import { Chip, Grid } from '@material-ui/core';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -33,65 +32,55 @@ const EnodeRow: React.FC<EnodeRow> = ({
 }) => (
   <tr className={styles.row}>
     <td colSpan={2}>
-      <Flex alignItems="center" className={styles.tooltipFix}>
+      <Grid container alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
-      </Flex>
+      </Grid>
     </td>
     <td>
-      <Flex alignItems="center" className={styles.tooltipFix}>
+      <Grid container alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
-      </Flex>
+      </Grid>
     </td>
     <td>
-      <Flex alignItems="center" className={styles.tooltipFix}>
+      <Grid container alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip isAdmin={isAdmin} status={status} text={port} />
-      </Flex>
+      </Grid>
     </td>
     <td>
-      <Flex justifyContent="space-between" alignItems="center">
+      <Grid container justifyContent="space-between" alignItems="center">
         {status === 'active' ? (
-          <Pill color="#018002" className={styles.pill}>
-            Active
-          </Pill>
+          <Chip color="primary" className={styles.pill} label="Active" />
         ) : status === PENDING_ADDITION ? (
-          <Pill color="#FFA505" className={styles.pill}>
-            Pending Addition
-          </Pill>
+          <Chip color="secondary" className={styles.pill} label="Pending Addition" />
         ) : status === PENDING_REMOVAL ? (
-          <Pill color="#FFA505" className={styles.pill}>
-            Pending Removal
-          </Pill>
+          <Chip color="secondary" className={styles.pill} label="Pending Removal" />
         ) : status === FAIL_ADDITION ? (
-          <Flex>
-            <Pill color="#FF1C1E" className={styles.pill}>
-              Addition Failed
-            </Pill>
-            <Pill color="green" ml={2} className={styles.pill} onClick={() => deleteTransaction(identifier)}>
-              Clear
-            </Pill>
-          </Flex>
+          <Grid container>
+            <Chip color="secondary" className={styles.pill} label="Addition Failed" />
+            <Chip
+              color="secondary"
+              className={styles.pill}
+              onClick={() => deleteTransaction(identifier)}
+              label="Clear"
+            />
+          </Grid>
         ) : status === FAIL_REMOVAL ? (
-          <Flex>
-            <Pill color="#FF1C1E" className={styles.pill}>
-              Removal Failed
-            </Pill>
-            <Pill color="green" ml={2} className={styles.pill} onClick={() => deleteTransaction(identifier)}>
-              Clear
-            </Pill>
-          </Flex>
+          <Grid container>
+            <Chip color="secondary" className={styles.pill} label="Removal Failed" />
+            <Chip
+              color="secondary"
+              className={styles.pill}
+              onClick={() => deleteTransaction(identifier)}
+              label="Clear"
+            />
+          </Grid>
         ) : (
           <div />
         )}
         {isAdmin && status === 'active' && (
-          <Button.Text
-            mainColor="#CCC"
-            icon="Delete"
-            icononly
-            className={styles.removeIcon}
-            onClick={() => openRemoveModal(identifier)}
-          />
+          <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(identifier)} />
         )}
-      </Flex>
+      </Grid>
     </td>
   </tr>
 );

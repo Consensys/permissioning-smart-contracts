@@ -1,7 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Chip, Grid, Button } from '@material-ui/core';
+import { Chip, Grid } from '@material-ui/core';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -34,8 +34,8 @@ const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTran
           <Chip color="secondary" className={styles.pill} label="Pending Removal" />
         ) : status === FAIL_ADDITION ? (
           <Grid>
-            <Chip color="primary" className={styles.pill} label="Addition Failed" />
-            <Chip color="primary" className={styles.pill} onClick={() => deleteTransaction(address)} label="Clear" />
+            <Chip color="secondary" className={styles.pill} label="Addition Failed" />
+            <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(address)} label="Clear" />
           </Grid>
         ) : status === FAIL_REMOVAL ? (
           <Grid>
