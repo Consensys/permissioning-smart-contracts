@@ -1,8 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Table, Box } from 'rimble-ui';
+import { Table, Box, TableHead, TableRow, TableBody } from '@material-ui/core';
 // Components
 import AccountTableHeader from './TableHeader';
 import AccountRow from './Row';
@@ -25,14 +24,14 @@ const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransac
       openAddModal={() => toggleModal('add')(true)}
       disabledAdd={!isAdmin || isReadOnly}
     />
-    <Table mt={4}>
-      <thead>
-        <tr>
+    <Table>
+      <TableHead>
+        <TableRow>
           <th className={styles.headerCell}>Account Address</th>
           <th className={styles.headerCell}>Status</th>
-        </tr>
-      </thead>
-      <tbody>
+        </TableRow>
+      </TableHead>
+      <TableBody>
         {list.map(({ address, status }) => (
           <AccountRow
             key={address}
@@ -44,7 +43,7 @@ const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransac
           />
         ))}
         {list.length === 0 && <EmptyRow />}
-      </tbody>
+      </TableBody>
     </Table>
   </Box>
 );

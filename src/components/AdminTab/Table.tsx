@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
-import { Table, Box } from 'rimble-ui';
+import { Table, Box } from '@material-ui/core';
 // Components
 import AdminTableHeader from './TableHeader';
 import AdminRow from './Row';
@@ -20,7 +20,7 @@ type AdminTable = {
 const AdminTable: React.FC<AdminTable> = ({ list, toggleModal, deleteTransaction, isAdmin, userAddress }) => (
   <Box mt={5}>
     <AdminTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
-    <Table mt={4}>
+    <Table>
       <thead>
         <tr>
           <th className={styles.headerCell}>Account Address</th>

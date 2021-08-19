@@ -15,7 +15,7 @@ const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd 
     <Box display="flex" alignItems="center">
       <h2>Accounts ({number})</h2>
     </Box>
-    <Grid container alignItems="center">
+    <Grid alignItems="center">
       <Button variant="contained" color="primary" onClick={() => openAddModal()} disabled={disabledAdd}>
         Add Account
       </Button>

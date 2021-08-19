@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
-import { Table, Box } from 'rimble-ui';
+import { Table, Box, TableHead, TableBody } from '@material-ui/core';
 // Components
 import EnodeTableHeader from './TableHeader';
 import EnodeRow from './Row';
@@ -22,8 +22,8 @@ type EnodeTable = {
 const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction, isAdmin }) => (
   <Box mt={5}>
     <EnodeTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
-    <Table mt={4}>
-      <thead>
+    <Table>
+      <TableHead>
         <tr>
           <th colSpan={2} className={styles.headerCell}>
             Node ID
@@ -32,8 +32,8 @@ const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction
           <th className={styles.headerCell}>Port</th>
           <th className={styles.headerCell}>Status</th>
         </tr>
-      </thead>
-      <tbody>
+      </TableHead>
+      <TableBody>
         {list.map(enode => (
           <EnodeRow
             key={enode.identifier}
@@ -44,7 +44,7 @@ const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction
           />
         ))}
         {list.length === 0 && <EmptyRow />}
-      </tbody>
+      </TableBody>
     </Table>
   </Box>
 );
