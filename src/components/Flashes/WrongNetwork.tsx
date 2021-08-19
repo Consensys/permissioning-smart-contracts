@@ -1,20 +1,18 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Flash, Text, Icon, Flex } from 'rimble-ui';
+import { Box, Grid } from '@material-ui/core';
 // Styles
 import styles from './styles.module.scss';
 
 const WrongNetwork: React.FC<{ networkId: number }> = ({ networkId }) => (
-  <Flash variant="danger">
-    <Flex alignItems="center">
-      <Icon name="Warning" className={styles.icon} />
-      <Text bold>Connect to the network where the contracts are deployed.</Text>
-    </Flex>
-    <Flex alignItems="center">
+  <Box>
+    <Grid alignItems="center">
+      <b>Connect to the network where the contracts are deployed.</b>
+    </Grid>
+    <Grid alignItems="center">
       <div className={styles.icon} />
-      <Text className="wrongNetworkMessage">
+      <p className="wrongNetworkMessage">
         Change your network using MetaMask.
         {networkId === 1
           ? " You're currently on the Main Ethereum Network."
@@ -27,9 +25,9 @@ const WrongNetwork: React.FC<{ networkId: number }> = ({ networkId }) => (
           : networkId === 5
           ? " You're currently on the Goerli Test Network."
           : ` You're currently on unknown network of id ${networkId}.`}
-      </Text>
-    </Flex>
-  </Flash>
+      </p>
+    </Grid>
+  </Box>
 );
 
 WrongNetwork.propTypes = {
