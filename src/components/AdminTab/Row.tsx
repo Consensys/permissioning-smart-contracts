@@ -46,7 +46,7 @@ const AdminRow: React.FC<AdminRow> = ({ address, status, isSelf, isAdmin, delete
         ) : (
           <div />
         )}
-        {isAdmin && status === 'active' && (
+        {!isSelf && isAdmin && status === 'active' && (
           <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(address)} />
         )}
       </Grid>
