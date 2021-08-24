@@ -2,7 +2,7 @@
 
 exports[`<App /> matches snapshot 1`] = `
 <ConfigDataProvider>
-  <ThemeProvider
+  <Component
     theme={
       Object {
         "borderWidths": Array [
@@ -252,6 +252,6 @@ exports[`<App /> matches snapshot 1`] = `
         </Initializer>
       </Layout>
     </NetworkProvider>
-  </ThemeProvider>
+  </Component>
 </ConfigDataProvider>
 `;
