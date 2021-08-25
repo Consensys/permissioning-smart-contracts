@@ -34,9 +34,11 @@ const TextWithTooltip: React.FC<TextWithTooltip> = ({ status, isAdmin, text }) =
       </Typography>
     </Tooltip>
   ) : (
-    <Typography variant="body1" className={styles.ellipsis}>
-      {text}
-    </Typography>
+    <Tooltip title={text} placement="bottom">
+      <Typography variant="body1" className={styles.ellipsis}>
+        {text}
+      </Typography>
+    </Tooltip>
   );
 };
 

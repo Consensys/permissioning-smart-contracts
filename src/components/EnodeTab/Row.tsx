@@ -1,7 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Chip, Grid, TableCell, TableRow } from '@material-ui/core';
+import { Box, Chip, Grid, TableCell, TableRow } from '@material-ui/core';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -32,7 +32,9 @@ const EnodeRow: React.FC<EnodeRow> = ({
 }) => (
   <TableRow className={styles.row}>
     <TableCell>
-      <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
+      <Box className={styles.ellipsis} maxWidth="700px">
+        <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
+      </Box>
     </TableCell>
     <TableCell>
       <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
