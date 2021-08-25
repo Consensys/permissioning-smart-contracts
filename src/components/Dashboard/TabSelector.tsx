@@ -1,7 +1,7 @@
 // Libs
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Box } from '@material-ui/core';
+import { Grid, Box, Typography } from '@material-ui/core';
 // Constants
 import tabs from '../../constants/tabs';
 // Styles
@@ -22,7 +22,7 @@ const TabSelector: React.FC<TabSelector> = ({ tab, setTab }) => (
         px={3}
         onClick={() => setTab(id)}
       >
-        {text}
+        <Typography variant="body1">{text}</Typography>
       </Box>
     ))}
   </Grid>
