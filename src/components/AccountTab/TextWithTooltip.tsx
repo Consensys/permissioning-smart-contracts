@@ -2,7 +2,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { Tooltip } from '@material-ui/core';
+import { Tooltip, Typography } from '@material-ui/core';
 // Constants
 import { PENDING_ADDITION, PENDING_REMOVAL } from '../../constants/transactions';
 // Styles
@@ -20,7 +20,8 @@ const TextWithTooltip: React.FC<TextWithTooltip> = ({ status, isAdmin, text }) =
       placement="bottom"
       title={isAdmin ? 'This transaction is pending.' : 'You must be an admin to perform modifications.'}
     >
-      <p
+      <Typography
+        variant="body1"
         className={classnames(
           styles.ellipsis,
           status === PENDING_REMOVAL
@@ -31,10 +32,10 @@ const TextWithTooltip: React.FC<TextWithTooltip> = ({ status, isAdmin, text }) =
         )}
       >
         {text}
-      </p>
+      </Typography>
     </Tooltip>
   ) : (
-    <p className={styles.ellipsis}>{text}</p>
+    <Typography className={styles.ellipsis}>{text}</Typography>
   );
 };
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
-import { Table, Box, TableHead, TableBody } from '@material-ui/core';
+import { Table, Box, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 // Components
 import EnodeTableHeader from './TableHeader';
 import EnodeRow from './Row';
@@ -20,18 +20,18 @@ type EnodeTable = {
 };
 
 const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction, isAdmin }) => (
-  <Box mt={5}>
+  <Box>
     <EnodeTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
     <Table>
       <TableHead>
-        <tr>
-          <th colSpan={2} className={styles.headerCell}>
+        <TableRow>
+          <TableCell colSpan={2} className={styles.headerCell}>
             Node ID
-          </th>
-          <th className={styles.headerCell}>Host</th>
-          <th className={styles.headerCell}>Port</th>
-          <th className={styles.headerCell}>Status</th>
-        </tr>
+          </TableCell>
+          <TableCell className={styles.headerCell}>Host</TableCell>
+          <TableCell className={styles.headerCell}>Port</TableCell>
+          <TableCell className={styles.headerCell}>Status</TableCell>
+        </TableRow>
       </TableHead>
       <TableBody>
         {list.map(enode => (

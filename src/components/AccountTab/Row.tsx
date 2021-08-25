@@ -1,7 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Chip, Grid } from '@material-ui/core';
+import { Chip, Grid, TableCell, TableRow } from '@material-ui/core';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -18,13 +18,11 @@ type AccountRow = {
 };
 
 const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTransaction, openRemoveModal }) => (
-  <tr className={styles.row}>
-    <td>
-      <Grid container alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip status={status} text={address} isAdmin={isAdmin} />
-      </Grid>
-    </td>
-    <td>
+  <TableRow className={styles.row}>
+    <TableCell>
+      <TextWithTooltip status={status} text={address} isAdmin={isAdmin} />
+    </TableCell>
+    <TableCell>
       <Grid container justifyContent="space-between" alignItems="center">
         {status === 'active' ? (
           <Chip color="primary" className={styles.pill} label="Active" />
@@ -49,8 +47,8 @@ const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTran
           <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(address)} />
         )}
       </Grid>
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 );
 
 AccountRow.propTypes = {

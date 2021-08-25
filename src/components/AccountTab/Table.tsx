@@ -1,13 +1,14 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Box, TableHead, TableRow, TableBody } from '@material-ui/core';
+import { Table, Box, TableHead, TableRow, TableBody, TableCell } from '@material-ui/core';
 // Components
 import AccountTableHeader from './TableHeader';
 import AccountRow from './Row';
 import EmptyRow from './EmptyRow';
 // Styles
 import styles from './styles.module.scss';
+import TableHeader from './TableHeader';
 
 type AccountTable = {
   list: { address: string; status: string }[];
@@ -27,8 +28,8 @@ const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransac
     <Table>
       <TableHead>
         <TableRow>
-          <th className={styles.headerCell}>Account Address</th>
-          <th className={styles.headerCell}>Status</th>
+          <TableCell className={styles.headerCell}>Account Address</TableCell>
+          <TableCell className={styles.headerCell}>Status</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

@@ -1,7 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Chip, Grid } from '@material-ui/core';
+import { Chip, Grid, TableCell, TableRow } from '@material-ui/core';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -30,23 +30,21 @@ const EnodeRow: React.FC<EnodeRow> = ({
   status,
   identifier
 }) => (
-  <tr className={styles.row}>
-    <td colSpan={2}>
+  <TableRow className={styles.row}>
+    <TableCell colSpan={2}>
       <Grid container alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
       </Grid>
-    </td>
-    <td>
+    </TableCell>
+    <TableCell>
       <Grid container alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
       </Grid>
-    </td>
-    <td>
-      <Grid container alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={port} />
-      </Grid>
-    </td>
-    <td>
+    </TableCell>
+    <TableCell>
+      <TextWithTooltip isAdmin={isAdmin} status={status} text={port} />
+    </TableCell>
+    <TableCell>
       <Grid container justifyContent="space-between" alignItems="center">
         {status === 'active' ? (
           <Chip color="primary" className={styles.pill} label="Active" />
@@ -81,8 +79,8 @@ const EnodeRow: React.FC<EnodeRow> = ({
           <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(identifier)} />
         )}
       </Grid>
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 );
 
 EnodeRow.propTypes = {
