@@ -3,7 +3,6 @@ import React, { MouseEvent } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Button, DialogTitle, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
 // Styles
-import styles from './styles.module.scss';
 import { ModalDisplay } from '../../constants/modals';
 
 const RemoveModal: React.FC<{
