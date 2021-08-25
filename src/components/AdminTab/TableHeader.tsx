@@ -1,7 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Button, Icon } from '@material-ui/core';
+import { Grid, Button, Icon, Typography } from '@material-ui/core';
 
 type TableHeader = {
   number: Number;
@@ -11,7 +11,7 @@ type TableHeader = {
 
 const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd }) => (
   <Grid container alignItems="center" justifyContent="space-between">
-    <h2>Admins ({number})</h2>
+    <Typography variant="h3">Admins ({number})</Typography>
     <Button
       color="primary"
       variant="contained"
