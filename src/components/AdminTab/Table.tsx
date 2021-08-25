@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
-import { Table, Box } from '@material-ui/core';
+import { Table, Box, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 // Components
 import AdminTableHeader from './TableHeader';
 import AdminRow from './Row';
@@ -21,13 +21,13 @@ const AdminTable: React.FC<AdminTable> = ({ list, toggleModal, deleteTransaction
   <Box mt={5}>
     <AdminTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
     <Table>
-      <thead>
-        <tr>
-          <th className={styles.headerCell}>Account Address</th>
-          <th className={styles.headerCell}>Status</th>
-        </tr>
-      </thead>
-      <tbody>
+      <TableHead>
+        <TableRow>
+          <TableCell className={styles.headerCell}>Account Address</TableCell>
+          <TableCell className={styles.headerCell}>Status</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
         {list.map(({ address, status }) => (
           <AdminRow
             key={address}
@@ -39,7 +39,7 @@ const AdminTable: React.FC<AdminTable> = ({ list, toggleModal, deleteTransaction
             openRemoveModal={toggleModal('remove')}
           />
         ))}
-      </tbody>
+      </TableBody>
     </Table>
   </Box>
 );

@@ -8,7 +8,6 @@ import AccountRow from './Row';
 import EmptyRow from './EmptyRow';
 // Styles
 import styles from './styles.module.scss';
-import TableHeader from './TableHeader';
 
 type AccountTable = {
   list: { address: string; status: string }[];

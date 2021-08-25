@@ -22,7 +22,7 @@ type EnodeTable = {
 const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction, isAdmin }) => (
   <Box>
     <EnodeTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
-    <Table>
+    <Table size="small">
       <TableHead>
         <TableRow>
           <TableCell colSpan={2} className={styles.headerCell}>
