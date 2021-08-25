@@ -1,6 +1,5 @@
 // Libs
 import React from 'react';
-// Rimble Components
 import { Grid, Chip } from '@material-ui/core';
 
 const LoadingPage: React.FC<{}> = () => (

@@ -1,7 +1,6 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
 import { Grid, Box } from '@material-ui/core';
 // Containers
 import AppBar from '../AppBar/AppBar';

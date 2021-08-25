@@ -1,6 +1,5 @@
 // Libs
 import React from 'react';
-// Rimble Components
 import { Grid, Typography } from '@material-ui/core';
 // Styles
 import styles from './styles.module.scss';
