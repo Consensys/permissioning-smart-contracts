@@ -60,6 +60,7 @@
     "jest-junit": "^12.2.0",
     "node-sass": "4.14.1",
     "pad-ipv6": "^1.0.2",
+    "polished": "^4.1.3",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-router-dom": "^5.0.0",
