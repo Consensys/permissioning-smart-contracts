@@ -7,8 +7,10 @@ exports[`<AppBar /> matches snapshot 1`] = `
   container={true}
   justifyContent="space-between"
 >
-  <h2>
+  <WithStyles(ForwardRef(Typography))
+    variant="h2"
+  >
     Besu Permissioning
-  </h2>
+  </WithStyles(ForwardRef(Typography))>
 </WithStyles(ForwardRef(Grid))>
 `;

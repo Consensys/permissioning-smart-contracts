@@ -138,7 +138,53 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               className="MuiBox-root MuiBox-root-25 choiceBox"
               onClick={[Function]}
             >
-              Accounts
+              <WithStyles(ForwardRef(Typography))
+                variant="body1"
+              >
+                <ForwardRef(Typography)
+                  classes={
+                    Object {
+                      "alignCenter": "MuiTypography-alignCenter",
+                      "alignJustify": "MuiTypography-alignJustify",
+                      "alignLeft": "MuiTypography-alignLeft",
+                      "alignRight": "MuiTypography-alignRight",
+                      "body1": "MuiTypography-body1",
+                      "body2": "MuiTypography-body2",
+                      "button": "MuiTypography-button",
+                      "caption": "MuiTypography-caption",
+                      "colorError": "MuiTypography-colorError",
+                      "colorInherit": "MuiTypography-colorInherit",
+                      "colorPrimary": "MuiTypography-colorPrimary",
+                      "colorSecondary": "MuiTypography-colorSecondary",
+                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                      "displayBlock": "MuiTypography-displayBlock",
+                      "displayInline": "MuiTypography-displayInline",
+                      "gutterBottom": "MuiTypography-gutterBottom",
+                      "h1": "MuiTypography-h1",
+                      "h2": "MuiTypography-h2",
+                      "h3": "MuiTypography-h3",
+                      "h4": "MuiTypography-h4",
+                      "h5": "MuiTypography-h5",
+                      "h6": "MuiTypography-h6",
+                      "noWrap": "MuiTypography-noWrap",
+                      "overline": "MuiTypography-overline",
+                      "paragraph": "MuiTypography-paragraph",
+                      "root": "MuiTypography-root",
+                      "srOnly": "MuiTypography-srOnly",
+                      "subtitle1": "MuiTypography-subtitle1",
+                      "subtitle2": "MuiTypography-subtitle2",
+                    }
+                  }
+                  variant="body1"
+                >
+                  <p
+                    className="MuiTypography-root MuiTypography-body1"
+                  >
+                    Accounts
+                  </p>
+                </ForwardRef(Typography)>
+              </WithStyles(ForwardRef(Typography))>
             </div>
           </Styled(MuiBox)>
           <Styled(MuiBox)
@@ -152,7 +198,53 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               className="MuiBox-root MuiBox-root-26 choiceBox"
               onClick={[Function]}
             >
-              Nodes
+              <WithStyles(ForwardRef(Typography))
+                variant="body1"
+              >
+                <ForwardRef(Typography)
+                  classes={
+                    Object {
+                      "alignCenter": "MuiTypography-alignCenter",
+                      "alignJustify": "MuiTypography-alignJustify",
+                      "alignLeft": "MuiTypography-alignLeft",
+                      "alignRight": "MuiTypography-alignRight",
+                      "body1": "MuiTypography-body1",
+                      "body2": "MuiTypography-body2",
+                      "button": "MuiTypography-button",
+                      "caption": "MuiTypography-caption",
+                      "colorError": "MuiTypography-colorError",
+                      "colorInherit": "MuiTypography-colorInherit",
+                      "colorPrimary": "MuiTypography-colorPrimary",
+                      "colorSecondary": "MuiTypography-colorSecondary",
+                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                      "displayBlock": "MuiTypography-displayBlock",
+                      "displayInline": "MuiTypography-displayInline",
+                      "gutterBottom": "MuiTypography-gutterBottom",
+                      "h1": "MuiTypography-h1",
+                      "h2": "MuiTypography-h2",
+                      "h3": "MuiTypography-h3",
+                      "h4": "MuiTypography-h4",
+                      "h5": "MuiTypography-h5",
+                      "h6": "MuiTypography-h6",
+                      "noWrap": "MuiTypography-noWrap",
+                      "overline": "MuiTypography-overline",
+                      "paragraph": "MuiTypography-paragraph",
+                      "root": "MuiTypography-root",
+                      "srOnly": "MuiTypography-srOnly",
+                      "subtitle1": "MuiTypography-subtitle1",
+                      "subtitle2": "MuiTypography-subtitle2",
+                    }
+                  }
+                  variant="body1"
+                >
+                  <p
+                    className="MuiTypography-root MuiTypography-body1"
+                  >
+                    Nodes
+                  </p>
+                </ForwardRef(Typography)>
+              </WithStyles(ForwardRef(Typography))>
             </div>
           </Styled(MuiBox)>
           <Styled(MuiBox)
@@ -166,7 +258,53 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               className="MuiBox-root MuiBox-root-27 selected choiceBox"
               onClick={[Function]}
             >
-              Admins
+              <WithStyles(ForwardRef(Typography))
+                variant="body1"
+              >
+                <ForwardRef(Typography)
+                  classes={
+                    Object {
+                      "alignCenter": "MuiTypography-alignCenter",
+                      "alignJustify": "MuiTypography-alignJustify",
+                      "alignLeft": "MuiTypography-alignLeft",
+                      "alignRight": "MuiTypography-alignRight",
+                      "body1": "MuiTypography-body1",
+                      "body2": "MuiTypography-body2",
+                      "button": "MuiTypography-button",
+                      "caption": "MuiTypography-caption",
+                      "colorError": "MuiTypography-colorError",
+                      "colorInherit": "MuiTypography-colorInherit",
+                      "colorPrimary": "MuiTypography-colorPrimary",
+                      "colorSecondary": "MuiTypography-colorSecondary",
+                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                      "displayBlock": "MuiTypography-displayBlock",
+                      "displayInline": "MuiTypography-displayInline",
+                      "gutterBottom": "MuiTypography-gutterBottom",
+                      "h1": "MuiTypography-h1",
+                      "h2": "MuiTypography-h2",
+                      "h3": "MuiTypography-h3",
+                      "h4": "MuiTypography-h4",
+                      "h5": "MuiTypography-h5",
+                      "h6": "MuiTypography-h6",
+                      "noWrap": "MuiTypography-noWrap",
+                      "overline": "MuiTypography-overline",
+                      "paragraph": "MuiTypography-paragraph",
+                      "root": "MuiTypography-root",
+                      "srOnly": "MuiTypography-srOnly",
+                      "subtitle1": "MuiTypography-subtitle1",
+                      "subtitle2": "MuiTypography-subtitle2",
+                    }
+                  }
+                  variant="body1"
+                >
+                  <p
+                    className="MuiTypography-root MuiTypography-body1"
+                  >
+                    Admins
+                  </p>
+                </ForwardRef(Typography)>
+              </WithStyles(ForwardRef(Typography))>
             </div>
           </Styled(MuiBox)>
         </div>
@@ -632,7 +770,53 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               className="MuiBox-root MuiBox-root-57 choiceBox"
               onClick={[Function]}
             >
-              Accounts
+              <WithStyles(ForwardRef(Typography))
+                variant="body1"
+              >
+                <ForwardRef(Typography)
+                  classes={
+                    Object {
+                      "alignCenter": "MuiTypography-alignCenter",
+                      "alignJustify": "MuiTypography-alignJustify",
+                      "alignLeft": "MuiTypography-alignLeft",
+                      "alignRight": "MuiTypography-alignRight",
+                      "body1": "MuiTypography-body1",
+                      "body2": "MuiTypography-body2",
+                      "button": "MuiTypography-button",
+                      "caption": "MuiTypography-caption",
+                      "colorError": "MuiTypography-colorError",
+                      "colorInherit": "MuiTypography-colorInherit",
+                      "colorPrimary": "MuiTypography-colorPrimary",
+                      "colorSecondary": "MuiTypography-colorSecondary",
+                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                      "displayBlock": "MuiTypography-displayBlock",
+                      "displayInline": "MuiTypography-displayInline",
+                      "gutterBottom": "MuiTypography-gutterBottom",
+                      "h1": "MuiTypography-h1",
+                      "h2": "MuiTypography-h2",
+                      "h3": "MuiTypography-h3",
+                      "h4": "MuiTypography-h4",
+                      "h5": "MuiTypography-h5",
+                      "h6": "MuiTypography-h6",
+                      "noWrap": "MuiTypography-noWrap",
+                      "overline": "MuiTypography-overline",
+                      "paragraph": "MuiTypography-paragraph",
+                      "root": "MuiTypography-root",
+                      "srOnly": "MuiTypography-srOnly",
+                      "subtitle1": "MuiTypography-subtitle1",
+                      "subtitle2": "MuiTypography-subtitle2",
+                    }
+                  }
+                  variant="body1"
+                >
+                  <p
+                    className="MuiTypography-root MuiTypography-body1"
+                  >
+                    Accounts
+                  </p>
+                </ForwardRef(Typography)>
+              </WithStyles(ForwardRef(Typography))>
             </div>
           </Styled(MuiBox)>
           <Styled(MuiBox)
@@ -646,7 +830,53 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               className="MuiBox-root MuiBox-root-58 selected choiceBox"
               onClick={[Function]}
             >
-              Nodes
+              <WithStyles(ForwardRef(Typography))
+                variant="body1"
+              >
+                <ForwardRef(Typography)
+                  classes={
+                    Object {
+                      "alignCenter": "MuiTypography-alignCenter",
+                      "alignJustify": "MuiTypography-alignJustify",
+                      "alignLeft": "MuiTypography-alignLeft",
+                      "alignRight": "MuiTypography-alignRight",
+                      "body1": "MuiTypography-body1",
+                      "body2": "MuiTypography-body2",
+                      "button": "MuiTypography-button",
+                      "caption": "MuiTypography-caption",
+                      "colorError": "MuiTypography-colorError",
+                      "colorInherit": "MuiTypography-colorInherit",
+                      "colorPrimary": "MuiTypography-colorPrimary",
+                      "colorSecondary": "MuiTypography-colorSecondary",
+                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                      "displayBlock": "MuiTypography-displayBlock",
+                      "displayInline": "MuiTypography-displayInline",
+                      "gutterBottom": "MuiTypography-gutterBottom",
+                      "h1": "MuiTypography-h1",
+                      "h2": "MuiTypography-h2",
+                      "h3": "MuiTypography-h3",
+                      "h4": "MuiTypography-h4",
+                      "h5": "MuiTypography-h5",
+                      "h6": "MuiTypography-h6",
+                      "noWrap": "MuiTypography-noWrap",
+                      "overline": "MuiTypography-overline",
+                      "paragraph": "MuiTypography-paragraph",
+                      "root": "MuiTypography-root",
+                      "srOnly": "MuiTypography-srOnly",
+                      "subtitle1": "MuiTypography-subtitle1",
+                      "subtitle2": "MuiTypography-subtitle2",
+                    }
+                  }
+                  variant="body1"
+                >
+                  <p
+                    className="MuiTypography-root MuiTypography-body1"
+                  >
+                    Nodes
+                  </p>
+                </ForwardRef(Typography)>
+              </WithStyles(ForwardRef(Typography))>
             </div>
           </Styled(MuiBox)>
           <Styled(MuiBox)
@@ -660,7 +890,53 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               className="MuiBox-root MuiBox-root-59 choiceBox"
               onClick={[Function]}
             >
-              Admins
+              <WithStyles(ForwardRef(Typography))
+                variant="body1"
+              >
+                <ForwardRef(Typography)
+                  classes={
+                    Object {
+                      "alignCenter": "MuiTypography-alignCenter",
+                      "alignJustify": "MuiTypography-alignJustify",
+                      "alignLeft": "MuiTypography-alignLeft",
+                      "alignRight": "MuiTypography-alignRight",
+                      "body1": "MuiTypography-body1",
+                      "body2": "MuiTypography-body2",
+                      "button": "MuiTypography-button",
+                      "caption": "MuiTypography-caption",
+                      "colorError": "MuiTypography-colorError",
+                      "colorInherit": "MuiTypography-colorInherit",
+                      "colorPrimary": "MuiTypography-colorPrimary",
+                      "colorSecondary": "MuiTypography-colorSecondary",
+                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                      "displayBlock": "MuiTypography-displayBlock",
+                      "displayInline": "MuiTypography-displayInline",
+                      "gutterBottom": "MuiTypography-gutterBottom",
+                      "h1": "MuiTypography-h1",
+                      "h2": "MuiTypography-h2",
+                      "h3": "MuiTypography-h3",
+                      "h4": "MuiTypography-h4",
+                      "h5": "MuiTypography-h5",
+                      "h6": "MuiTypography-h6",
+                      "noWrap": "MuiTypography-noWrap",
+                      "overline": "MuiTypography-overline",
+                      "paragraph": "MuiTypography-paragraph",
+                      "root": "MuiTypography-root",
+                      "srOnly": "MuiTypography-srOnly",
+                      "subtitle1": "MuiTypography-subtitle1",
+                      "subtitle2": "MuiTypography-subtitle2",
+                    }
+                  }
+                  variant="body1"
+                >
+                  <p
+                    className="MuiTypography-root MuiTypography-body1"
+                  >
+                    Admins
+                  </p>
+                </ForwardRef(Typography)>
+              </WithStyles(ForwardRef(Typography))>
             </div>
           </Styled(MuiBox)>
         </div>
