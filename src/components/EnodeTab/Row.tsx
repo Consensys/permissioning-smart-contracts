@@ -31,54 +31,38 @@ const EnodeRow: React.FC<EnodeRow> = ({
   identifier
 }) => (
   <TableRow className={styles.row}>
-    <TableCell colSpan={2}>
-      <Grid container alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
-      </Grid>
+    <TableCell>
+      <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
     </TableCell>
     <TableCell>
-      <Grid container alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
-      </Grid>
+      <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
     </TableCell>
     <TableCell>
       <TextWithTooltip isAdmin={isAdmin} status={status} text={port} />
     </TableCell>
     <TableCell>
-      <Grid container justifyContent="space-between" alignItems="center">
-        {status === 'active' ? (
-          <Chip color="primary" className={styles.pill} label="Active" />
-        ) : status === PENDING_ADDITION ? (
-          <Chip color="secondary" className={styles.pill} label="Pending Addition" />
-        ) : status === PENDING_REMOVAL ? (
-          <Chip color="secondary" className={styles.pill} label="Pending Removal" />
-        ) : status === FAIL_ADDITION ? (
-          <Grid container>
-            <Chip color="secondary" className={styles.pill} label="Addition Failed" />
-            <Chip
-              color="secondary"
-              className={styles.pill}
-              onClick={() => deleteTransaction(identifier)}
-              label="Clear"
-            />
-          </Grid>
-        ) : status === FAIL_REMOVAL ? (
-          <Grid container>
-            <Chip color="secondary" className={styles.pill} label="Removal Failed" />
-            <Chip
-              color="secondary"
-              className={styles.pill}
-              onClick={() => deleteTransaction(identifier)}
-              label="Clear"
-            />
-          </Grid>
-        ) : (
-          <div />
-        )}
-        {isAdmin && status === 'active' && (
-          <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(identifier)} />
-        )}
-      </Grid>
+      {status === 'active' ? (
+        <Chip color="primary" className={styles.pill} label="Active" />
+      ) : status === PENDING_ADDITION ? (
+        <Chip color="secondary" className={styles.pill} label="Pending Addition" />
+      ) : status === PENDING_REMOVAL ? (
+        <Chip color="secondary" className={styles.pill} label="Pending Removal" />
+      ) : status === FAIL_ADDITION ? (
+        <Grid container>
+          <Chip color="secondary" className={styles.pill} label="Addition Failed" />
+          <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(identifier)} label="Clear" />
+        </Grid>
+      ) : status === FAIL_REMOVAL ? (
+        <Grid container>
+          <Chip color="secondary" className={styles.pill} label="Removal Failed" />
+          <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(identifier)} label="Clear" />
+        </Grid>
+      ) : (
+        <div />
+      )}
+      {isAdmin && status === 'active' && (
+        <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(identifier)} />
+      )}
     </TableCell>
   </TableRow>
 );

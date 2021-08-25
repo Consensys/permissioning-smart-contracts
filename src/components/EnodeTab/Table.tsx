@@ -22,12 +22,10 @@ type EnodeTable = {
 const EnodeTable: React.FC<EnodeTable> = ({ list, toggleModal, deleteTransaction, isAdmin }) => (
   <Box mt={5}>
     <EnodeTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
-    <Table size="small">
+    <Table>
       <TableHead>
         <TableRow>
-          <TableCell colSpan={2} className={styles.headerCell}>
-            Node ID
-          </TableCell>
+          <TableCell className={styles.headerCell}>Node ID</TableCell>
           <TableCell className={styles.headerCell}>Host</TableCell>
           <TableCell className={styles.headerCell}>Port</TableCell>
           <TableCell className={styles.headerCell}>Status</TableCell>
