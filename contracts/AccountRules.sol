@@ -23,10 +23,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     modifier onlyAdmin() {
-        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
-
-        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-        require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
+        require(isAuthorizedAdmin(msg.sender), "Sender not authorized");
         _;
     }
 
@@ -65,13 +62,13 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         uint256, // gasLimit
         bytes calldata // payload
     ) external view returns (bool) {
-        if (
-            accountPermitted (sender)
-        ) {
+        if (accountPermitted(sender)) {
             return true;
-        } else {
-            return false;
         }
+        if (isAuthorizedAdmin(sender)) {
+            return true;
+        }
+        return false;
     }
 
     function accountPermitted(
@@ -102,5 +99,12 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function addAccounts(address[] calldata accounts) external onlyAdmin returns (bool) {
         return addAll(accounts);
+    }
+
+    function isAuthorizedAdmin(address user) private view returns (bool) {
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        return Admin(adminContractAddress).isAuthorized(user);
     }
 }

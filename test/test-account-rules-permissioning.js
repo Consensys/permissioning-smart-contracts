@@ -1,4 +1,4 @@
-const IngressContract = artifacts.require('Ingress.sol');
+const IngressContract = artifacts.require('AccountIngress.sol');
 const RulesContract = artifacts.require('AccountRules.sol');
 const AdminContract = artifacts.require('Admin.sol');
 const RulesStorage = artifacts.require('AccountStorage.sol');
@@ -7,9 +7,10 @@ const RulesStorage = artifacts.require('AccountStorage.sol');
 const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";
 const ADMIN_NAME = "0x61646d696e697374726174696f6e000000000000000000000000000000000000";
 
-var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
-var address2 = "0x470f4787c58EEec8be0282e1Cdf7534b1A095201".toLowerCase();
-var address3 = "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73".toLowerCase();
+var address1 = "0xde3422671d38ecdd7a75702db7f54d4b30c022ea";
+var address2 = "0x470f4787c58eeec8be0282e1cdf7534b1a095201";
+var address3 = "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73";
+var address4 = "0xc8381e432a2840308697029c23bb0a2d81563b94";
 
 const newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
@@ -159,5 +160,15 @@ contract("Account Rules (Permissioning)", (accounts) => {
 
     let permitted = await rulesContract.accountPermitted(address1);
     assert.ok(permitted, 'expected added account permitted');
+  });
+
+  it('should allow transactions from an admin account that is not on the allow list', async () => {
+    await adminContract.addAdmin(address4);
+
+    let permitted = await rulesContract.accountPermitted(address4);
+    assert.notOk(permitted, 'expected account not permitted since it is not on the allow list');
+
+    permitted = await rulesContract.transactionAllowed(address4, address2, txValue, txGasPrice, txGasLimit, txPayload);
+    assert.ok(permitted, 'expected transaction allowed since account is an admin');
   });
 });
