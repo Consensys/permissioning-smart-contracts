@@ -11,7 +11,7 @@ const RemoveModal: React.FC<{
   handleSubmit: (e: MouseEvent) => void;
   display: ModalDisplay;
 }> = ({ closeModal, isOpen, handleSubmit, display }) => (
-  <Dialog open={isOpen} onClose={handleSubmit} aria-labelledby="form-dialog-title">
+  <Dialog open={isOpen} onClose={closeModal} aria-labelledby="form-dialog-title">
     <DialogTitle id="form-dialog-title">{display.heading}</DialogTitle>
     <DialogContent>
       <DialogContentText>
