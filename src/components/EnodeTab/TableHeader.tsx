@@ -1,8 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Flex, Box, Heading, Button } from 'rimble-ui';
+import { Grid, Button, Icon, Typography } from '@material-ui/core';
 
 type TableHeader = {
   number: number;
@@ -11,16 +10,18 @@ type TableHeader = {
 };
 
 const TableHeader: React.FC<TableHeader> = ({ number, openAddModal, disabledAdd }) => (
-  <Flex alignItems="center" justifyContent="space-between">
-    <Box>
-      <Heading.h2 fontWeight="700">Nodes ({number})</Heading.h2>
-    </Box>
-    <Flex alignItems="center">
-      <Button icon="AddCircleOutline" onClick={() => openAddModal()} disabled={disabledAdd}>
-        Add Node
-      </Button>
-    </Flex>
-  </Flex>
+  <Grid container alignItems="center" justifyContent="space-between">
+    <Typography variant="h2">Nodes ({number})</Typography>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => openAddModal()}
+      disabled={disabledAdd}
+      startIcon={<Icon>add_circle</Icon>}
+    >
+      Add Node
+    </Button>
+  </Grid>
 );
 
 TableHeader.propTypes = {
