@@ -139,7 +139,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               onClick={[Function]}
             >
               <WithStyles(ForwardRef(Typography))
-                variant="body1"
+                variant="subtitle1"
               >
                 <ForwardRef(Typography)
                   classes={
@@ -176,13 +176,13 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                       "subtitle2": "MuiTypography-subtitle2",
                     }
                   }
-                  variant="body1"
+                  variant="subtitle1"
                 >
-                  <p
-                    className="MuiTypography-root MuiTypography-body1"
+                  <h6
+                    className="MuiTypography-root MuiTypography-subtitle1"
                   >
                     Accounts
-                  </p>
+                  </h6>
                 </ForwardRef(Typography)>
               </WithStyles(ForwardRef(Typography))>
             </div>
@@ -199,7 +199,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               onClick={[Function]}
             >
               <WithStyles(ForwardRef(Typography))
-                variant="body1"
+                variant="subtitle1"
               >
                 <ForwardRef(Typography)
                   classes={
@@ -236,13 +236,13 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                       "subtitle2": "MuiTypography-subtitle2",
                     }
                   }
-                  variant="body1"
+                  variant="subtitle1"
                 >
-                  <p
-                    className="MuiTypography-root MuiTypography-body1"
+                  <h6
+                    className="MuiTypography-root MuiTypography-subtitle1"
                   >
                     Nodes
-                  </p>
+                  </h6>
                 </ForwardRef(Typography)>
               </WithStyles(ForwardRef(Typography))>
             </div>
@@ -259,7 +259,7 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
               onClick={[Function]}
             >
               <WithStyles(ForwardRef(Typography))
-                variant="body1"
+                variant="subtitle1"
               >
                 <ForwardRef(Typography)
                   classes={
@@ -296,13 +296,13 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                       "subtitle2": "MuiTypography-subtitle2",
                     }
                   }
-                  variant="body1"
+                  variant="subtitle1"
                 >
-                  <p
-                    className="MuiTypography-root MuiTypography-body1"
+                  <h6
+                    className="MuiTypography-root MuiTypography-subtitle1"
                   >
                     Admins
-                  </p>
+                  </h6>
                 </ForwardRef(Typography)>
               </WithStyles(ForwardRef(Typography))>
             </div>
@@ -603,13 +603,57 @@ exports[`<Dashboard /> Dashboard ready tab=ADMIN_TAB matches snapshot 1`] = `
                           </ForwardRef(SvgIcon)>
                         </WithStyles(ForwardRef(SvgIcon))>
                       </ForwardRef(WarningIcon)>
-                      <p>
-                        Unable to locate 
-                        <b>
-                          Admin
-                        </b>
-                         contract. Please review the Dapp configuration and confirm that the contract is correctly deployed.
-                      </p>
+                      <WithStyles(ForwardRef(Typography))
+                        color="error"
+                        variant="body1"
+                      >
+                        <ForwardRef(Typography)
+                          classes={
+                            Object {
+                              "alignCenter": "MuiTypography-alignCenter",
+                              "alignJustify": "MuiTypography-alignJustify",
+                              "alignLeft": "MuiTypography-alignLeft",
+                              "alignRight": "MuiTypography-alignRight",
+                              "body1": "MuiTypography-body1",
+                              "body2": "MuiTypography-body2",
+                              "button": "MuiTypography-button",
+                              "caption": "MuiTypography-caption",
+                              "colorError": "MuiTypography-colorError",
+                              "colorInherit": "MuiTypography-colorInherit",
+                              "colorPrimary": "MuiTypography-colorPrimary",
+                              "colorSecondary": "MuiTypography-colorSecondary",
+                              "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                              "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                              "displayBlock": "MuiTypography-displayBlock",
+                              "displayInline": "MuiTypography-displayInline",
+                              "gutterBottom": "MuiTypography-gutterBottom",
+                              "h1": "MuiTypography-h1",
+                              "h2": "MuiTypography-h2",
+                              "h3": "MuiTypography-h3",
+                              "h4": "MuiTypography-h4",
+                              "h5": "MuiTypography-h5",
+                              "h6": "MuiTypography-h6",
+                              "noWrap": "MuiTypography-noWrap",
+                              "overline": "MuiTypography-overline",
+                              "paragraph": "MuiTypography-paragraph",
+                              "root": "MuiTypography-root",
+                              "srOnly": "MuiTypography-srOnly",
+                              "subtitle1": "MuiTypography-subtitle1",
+                              "subtitle2": "MuiTypography-subtitle2",
+                            }
+                          }
+                          color="error"
+                          variant="body1"
+                        >
+                          <p
+                            className="MuiTypography-root MuiTypography-body1 MuiTypography-colorError"
+                          >
+                            Unable to locate 
+                            Admin
+                             contract. Please review the Dapp configuration and confirm that the contract is correctly deployed.
+                          </p>
+                        </ForwardRef(Typography)>
+                      </WithStyles(ForwardRef(Typography))>
                     </div>
                   </ForwardRef(Grid)>
                 </WithStyles(ForwardRef(Grid))>
@@ -771,7 +815,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               onClick={[Function]}
             >
               <WithStyles(ForwardRef(Typography))
-                variant="body1"
+                variant="subtitle1"
               >
                 <ForwardRef(Typography)
                   classes={
@@ -808,13 +852,13 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                       "subtitle2": "MuiTypography-subtitle2",
                     }
                   }
-                  variant="body1"
+                  variant="subtitle1"
                 >
-                  <p
-                    className="MuiTypography-root MuiTypography-body1"
+                  <h6
+                    className="MuiTypography-root MuiTypography-subtitle1"
                   >
                     Accounts
-                  </p>
+                  </h6>
                 </ForwardRef(Typography)>
               </WithStyles(ForwardRef(Typography))>
             </div>
@@ -831,7 +875,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               onClick={[Function]}
             >
               <WithStyles(ForwardRef(Typography))
-                variant="body1"
+                variant="subtitle1"
               >
                 <ForwardRef(Typography)
                   classes={
@@ -868,13 +912,13 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                       "subtitle2": "MuiTypography-subtitle2",
                     }
                   }
-                  variant="body1"
+                  variant="subtitle1"
                 >
-                  <p
-                    className="MuiTypography-root MuiTypography-body1"
+                  <h6
+                    className="MuiTypography-root MuiTypography-subtitle1"
                   >
                     Nodes
-                  </p>
+                  </h6>
                 </ForwardRef(Typography)>
               </WithStyles(ForwardRef(Typography))>
             </div>
@@ -891,7 +935,7 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
               onClick={[Function]}
             >
               <WithStyles(ForwardRef(Typography))
-                variant="body1"
+                variant="subtitle1"
               >
                 <ForwardRef(Typography)
                   classes={
@@ -928,13 +972,13 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                       "subtitle2": "MuiTypography-subtitle2",
                     }
                   }
-                  variant="body1"
+                  variant="subtitle1"
                 >
-                  <p
-                    className="MuiTypography-root MuiTypography-body1"
+                  <h6
+                    className="MuiTypography-root MuiTypography-subtitle1"
                   >
                     Admins
-                  </p>
+                  </h6>
                 </ForwardRef(Typography)>
               </WithStyles(ForwardRef(Typography))>
             </div>
@@ -1242,13 +1286,57 @@ exports[`<Dashboard /> Dashboard ready tab=ENODE_TAB matches snapshot 1`] = `
                               </ForwardRef(SvgIcon)>
                             </WithStyles(ForwardRef(SvgIcon))>
                           </ForwardRef(WarningIcon)>
-                          <p>
-                            Unable to locate 
-                            <b>
-                              Node Rules
-                            </b>
-                             contract. Please review the Dapp configuration and confirm that the contract is correctly deployed.
-                          </p>
+                          <WithStyles(ForwardRef(Typography))
+                            color="error"
+                            variant="body1"
+                          >
+                            <ForwardRef(Typography)
+                              classes={
+                                Object {
+                                  "alignCenter": "MuiTypography-alignCenter",
+                                  "alignJustify": "MuiTypography-alignJustify",
+                                  "alignLeft": "MuiTypography-alignLeft",
+                                  "alignRight": "MuiTypography-alignRight",
+                                  "body1": "MuiTypography-body1",
+                                  "body2": "MuiTypography-body2",
+                                  "button": "MuiTypography-button",
+                                  "caption": "MuiTypography-caption",
+                                  "colorError": "MuiTypography-colorError",
+                                  "colorInherit": "MuiTypography-colorInherit",
+                                  "colorPrimary": "MuiTypography-colorPrimary",
+                                  "colorSecondary": "MuiTypography-colorSecondary",
+                                  "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                                  "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                                  "displayBlock": "MuiTypography-displayBlock",
+                                  "displayInline": "MuiTypography-displayInline",
+                                  "gutterBottom": "MuiTypography-gutterBottom",
+                                  "h1": "MuiTypography-h1",
+                                  "h2": "MuiTypography-h2",
+                                  "h3": "MuiTypography-h3",
+                                  "h4": "MuiTypography-h4",
+                                  "h5": "MuiTypography-h5",
+                                  "h6": "MuiTypography-h6",
+                                  "noWrap": "MuiTypography-noWrap",
+                                  "overline": "MuiTypography-overline",
+                                  "paragraph": "MuiTypography-paragraph",
+                                  "root": "MuiTypography-root",
+                                  "srOnly": "MuiTypography-srOnly",
+                                  "subtitle1": "MuiTypography-subtitle1",
+                                  "subtitle2": "MuiTypography-subtitle2",
+                                }
+                              }
+                              color="error"
+                              variant="body1"
+                            >
+                              <p
+                                className="MuiTypography-root MuiTypography-body1 MuiTypography-colorError"
+                              >
+                                Unable to locate 
+                                Node Rules
+                                 contract. Please review the Dapp configuration and confirm that the contract is correctly deployed.
+                              </p>
+                            </ForwardRef(Typography)>
+                          </WithStyles(ForwardRef(Typography))>
                         </div>
                       </ForwardRef(Grid)>
                     </WithStyles(ForwardRef(Grid))>

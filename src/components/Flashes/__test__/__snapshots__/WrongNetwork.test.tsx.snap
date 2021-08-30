@@ -7,9 +7,12 @@ exports[`<WrongNetwork /> error message matches snapshot 1`] = `
     container={true}
   >
     <Memo(ForwardRef(WarningIcon)) />
-    <b>
+    <WithStyles(ForwardRef(Typography))
+      color="error"
+      variant="body1"
+    >
       Connect to the network where the contracts are deployed.
-    </b>
+    </WithStyles(ForwardRef(Typography))>
   </WithStyles(ForwardRef(Grid))>
   <WithStyles(ForwardRef(Grid))
     alignItems="center"
@@ -18,10 +21,12 @@ exports[`<WrongNetwork /> error message matches snapshot 1`] = `
     <div
       className="wrongNetworkMessage"
     >
-      <p>
+      <WithStyles(ForwardRef(Typography))
+        variant="body1"
+      >
         Change your network using MetaMask.
          You're currently on unknown network of id 7.
-      </p>
+      </WithStyles(ForwardRef(Typography))>
     </div>
   </WithStyles(ForwardRef(Grid))>
 </Styled(MuiBox)>

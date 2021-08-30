@@ -7,27 +7,33 @@ exports[`<NoProvider /> matches snapshot 1`] = `
     container={true}
   >
     <Memo(ForwardRef(WarningIcon)) />
-    <b>
+    <WithStyles(ForwardRef(Typography))
+      color="error"
+      variant="body1"
+    >
       You are not connected to your network.
-    </b>
+    </WithStyles(ForwardRef(Typography))>
   </WithStyles(ForwardRef(Grid))>
   <WithStyles(ForwardRef(Grid))
     alignItems="center"
     container={true}
   >
-    <div
-      className="icon"
-    />
-    <p>
-      If you need help, we recommend MetaMask to connect, see
+    <WithStyles(ForwardRef(Typography))
+      variant="body1"
+    >
+      If you need help, we recommend MetaMask to connect: 
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(Typography))
+      variant="body1"
+    >
       <WithStyles(ForwardRef(Link))
         href="https://www.metamask.io"
         target="_blank"
-        title="Access MetaMask page"
+        title="MetaMask.io"
       >
-        www.metamask.io
+        https://www.metamask.io
       </WithStyles(ForwardRef(Link))>
-    </p>
+    </WithStyles(ForwardRef(Typography))>
   </WithStyles(ForwardRef(Grid))>
 </Styled(MuiBox)>
 `;
