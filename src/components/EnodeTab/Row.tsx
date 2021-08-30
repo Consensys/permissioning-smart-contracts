@@ -51,12 +51,12 @@ const EnodeRow: React.FC<EnodeRow> = ({
         <Chip color="secondary" className={styles.pill} label="Pending Removal" />
       ) : status === FAIL_ADDITION ? (
         <Grid container>
-          <Chip color="secondary" className={styles.pill} label="Addition Failed" />
+          <Chip className={styles.pill} label="Addition Failed" />
           <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(identifier)} label="Clear" />
         </Grid>
       ) : status === FAIL_REMOVAL ? (
         <Grid container>
-          <Chip color="secondary" className={styles.pill} label="Removal Failed" />
+          <Chip className={styles.pill} label="Removal Failed" />
           <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(identifier)} label="Clear" />
         </Grid>
       ) : (

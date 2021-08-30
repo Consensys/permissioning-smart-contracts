@@ -35,12 +35,12 @@ const AdminRow: React.FC<AdminRow> = ({ address, status, isSelf, isAdmin, delete
           <Chip color="secondary" className={styles.pill} label="Pending Removal" />
         ) : status === FAIL_ADDITION ? (
           <Grid>
-            <Chip color="secondary" className={styles.pill} label="Addition Failed" />
+            <Chip className={styles.pill} label="Addition Failed" />
             <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(address)} label="Clear" />
           </Grid>
         ) : status === FAIL_REMOVAL ? (
           <Grid>
-            <Chip color="secondary" className={styles.pill} label="Removal Failed" />
+            <Chip className={styles.pill} label="Removal Failed" />
             <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(address)} label="Clear" />
           </Grid>
         ) : (
