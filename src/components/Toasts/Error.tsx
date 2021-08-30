@@ -1,8 +1,7 @@
 // Libs
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { ToastMessage } from 'rimble-ui';
+import { Snackbar } from '@material-ui/core';
 // Styles
 import styles from './styles.module.scss';
 
@@ -13,15 +12,7 @@ type ErrorToast = {
 };
 
 const ErrorToast: React.FC<ErrorToast> = ({ message, secondaryMessage, closeToast }) => (
-  <ToastMessage.Failure
-    minWidth="300px"
-    zIndex="2"
-    message={message}
-    secondaryMessage={secondaryMessage}
-    closeElem
-    closeFunction={closeToast}
-    className={styles.fadeInOut}
-  />
+  <Snackbar message={message + ' ' + secondaryMessage} open={true} onClose={closeToast} className={styles.fadeInOut} />
 );
 
 ErrorToast.propTypes = {

@@ -1,8 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Table, Box } from 'rimble-ui';
+import { TableContainer, Paper, Table, Box, TableHead, TableRow, TableBody, TableCell } from '@material-ui/core';
 // Components
 import AccountTableHeader from './TableHeader';
 import AccountRow from './Row';
@@ -20,32 +19,34 @@ type AccountTable = {
 
 const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransaction, isAdmin, isReadOnly }) => (
   <Box mt={5}>
-    <AccountTableHeader
-      number={list.length}
-      openAddModal={() => toggleModal('add')(true)}
-      disabledAdd={!isAdmin || isReadOnly}
-    />
-    <Table mt={4}>
-      <thead>
-        <tr>
-          <th className={styles.headerCell}>Account Address</th>
-          <th className={styles.headerCell}>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map(({ address, status }) => (
-          <AccountRow
-            key={address}
-            address={address}
-            status={status}
-            isAdmin={isAdmin}
-            deleteTransaction={deleteTransaction}
-            openRemoveModal={toggleModal('remove')}
-          />
-        ))}
-        {list.length === 0 && <EmptyRow />}
-      </tbody>
-    </Table>
+    <TableContainer component={Paper}>
+      <AccountTableHeader
+        number={list.length}
+        openAddModal={() => toggleModal('add')(true)}
+        disabledAdd={!isAdmin || isReadOnly}
+      />
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell className={styles.headerCell}>Account Address</TableCell>
+            <TableCell className={styles.headerCell}>Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {list.map(({ address, status }) => (
+            <AccountRow
+              key={address}
+              address={address}
+              status={status}
+              isAdmin={isAdmin}
+              deleteTransaction={deleteTransaction}
+              openRemoveModal={toggleModal('remove')}
+            />
+          ))}
+          {list.length === 0 && <EmptyRow />}
+        </TableBody>
+      </Table>
+    </TableContainer>
   </Box>
 );
 

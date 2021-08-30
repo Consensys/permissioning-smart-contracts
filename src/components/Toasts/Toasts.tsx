@@ -5,11 +5,10 @@ import PropTypes from 'prop-types';
 import PendingToast from './Pending';
 import ErrorToast from './Error';
 import SuccessToast from './Success';
+import { Grid } from '@material-ui/core';
+import { Toast } from '../../context/toasts';
 // Constants
 import { PENDING, SUCCESS, FAIL } from '../../constants/transactions';
-// Rimble Components
-import { Flex } from 'rimble-ui';
-import { Toast } from '../../context/toasts';
 
 type Toasts = {
   toasts: Toast[];
@@ -17,7 +16,7 @@ type Toasts = {
 };
 
 const Toasts: React.FC<Toasts> = ({ toasts, closeToast }) => (
-  <Flex position="absolute" bottom="50px" right="50px" flexDirection="column">
+  <Grid>
     {toasts.map(({ status, identifier, ...messages }, index) => (
       <Fragment key={index}>
         {status === PENDING && <PendingToast {...messages} closeToast={closeToast(identifier)} />}
@@ -25,7 +24,7 @@ const Toasts: React.FC<Toasts> = ({ toasts, closeToast }) => (
         {status === SUCCESS && <SuccessToast {...messages} closeToast={closeToast(identifier)} />}
       </Fragment>
     ))}
-  </Flex>
+  </Grid>
 );
 
 Toasts.propTypes = {

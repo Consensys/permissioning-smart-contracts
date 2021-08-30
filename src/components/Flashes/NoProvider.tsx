@@ -1,25 +1,25 @@
 // Libs
 import React from 'react';
-// Rimble Components
-import { Flash, Text, Link, Icon, Flex } from 'rimble-ui';
-// Styles
-import styles from './styles.module.scss';
+import { Box, Link, Grid, Typography } from '@material-ui/core';
+import WarningIcon from '@material-ui/icons/Warning';
 
 const NoProvider: React.FC<{}> = () => (
-  <Flash variant="danger">
-    <Flex alignItems="center">
-      <Icon name="Warning" className={styles.icon} />
-      <Text bold>You are not connected to your network.</Text>
-    </Flex>
-    <Flex alignItems="center">
-      <div className={styles.icon} />
-      <Text>If you need help, we recommend MetaMask to connect, see</Text>
-      <Link ml={1} href="https://www.metamask.io" target="_blank" title="Access MetaMask page">
-        www.metamask.io
-      </Link>
-      <Text>.</Text>
-    </Flex>
-  </Flash>
+  <Box>
+    <Grid container alignItems="center">
+      <WarningIcon />
+      <Typography variant="body1" color="error">
+        You are not connected to your network.
+      </Typography>
+    </Grid>
+    <Grid container alignItems="center">
+      <Typography variant="body1">If you need help, we recommend MetaMask to connect: </Typography>
+      <Typography variant="body1">
+        <Link href="https://www.metamask.io" target="_blank" title="MetaMask.io">
+          https://www.metamask.io
+        </Link>
+      </Typography>
+    </Grid>
+  </Box>
 );
 
 export default NoProvider;
