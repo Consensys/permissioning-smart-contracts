@@ -1,8 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Pill, Flex, Button } from 'rimble-ui';
+import { Box, Chip, Grid, TableCell, TableRow } from '@material-ui/core';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -31,69 +30,45 @@ const EnodeRow: React.FC<EnodeRow> = ({
   status,
   identifier
 }) => (
-  <tr className={styles.row}>
-    <td colSpan={2}>
-      <Flex alignItems="center" className={styles.tooltipFix}>
+  <TableRow className={styles.row}>
+    <TableCell>
+      <Box className={styles.ellipsis} maxWidth="700px">
         <TextWithTooltip isAdmin={isAdmin} status={status} text={enodeId} />
-      </Flex>
-    </td>
-    <td>
-      <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
-      </Flex>
-    </td>
-    <td>
-      <Flex alignItems="center" className={styles.tooltipFix}>
-        <TextWithTooltip isAdmin={isAdmin} status={status} text={port} />
-      </Flex>
-    </td>
-    <td>
-      <Flex justifyContent="space-between" alignItems="center">
-        {status === 'active' ? (
-          <Pill color="#018002" className={styles.pill}>
-            Active
-          </Pill>
-        ) : status === PENDING_ADDITION ? (
-          <Pill color="#FFA505" className={styles.pill}>
-            Pending Addition
-          </Pill>
-        ) : status === PENDING_REMOVAL ? (
-          <Pill color="#FFA505" className={styles.pill}>
-            Pending Removal
-          </Pill>
-        ) : status === FAIL_ADDITION ? (
-          <Flex>
-            <Pill color="#FF1C1E" className={styles.pill}>
-              Addition Failed
-            </Pill>
-            <Pill color="green" ml={2} className={styles.pill} onClick={() => deleteTransaction(identifier)}>
-              Clear
-            </Pill>
-          </Flex>
-        ) : status === FAIL_REMOVAL ? (
-          <Flex>
-            <Pill color="#FF1C1E" className={styles.pill}>
-              Removal Failed
-            </Pill>
-            <Pill color="green" ml={2} className={styles.pill} onClick={() => deleteTransaction(identifier)}>
-              Clear
-            </Pill>
-          </Flex>
-        ) : (
-          <div />
-        )}
-        {isAdmin && status === 'active' && (
-          <Button.Text
-            mainColor="#CCC"
-            icon="Delete"
-            icononly
-            className={styles.removeIcon}
-            onClick={() => openRemoveModal(identifier)}
-          />
-        )}
-      </Flex>
-    </td>
-  </tr>
+      </Box>
+    </TableCell>
+    <TableCell>
+      <TextWithTooltip isAdmin={isAdmin} status={status} text={host} />
+    </TableCell>
+    <TableCell>
+      <TextWithTooltip isAdmin={isAdmin} status={status} text={port} />
+    </TableCell>
+    <TableCell>
+      {status === 'active' ? (
+        <Chip color="primary" className={styles.pill} label="Active" />
+      ) : status === PENDING_ADDITION ? (
+        <Chip color="secondary" className={styles.pill} label="Pending Addition" />
+      ) : status === PENDING_REMOVAL ? (
+        <Chip color="secondary" className={styles.pill} label="Pending Removal" />
+      ) : status === FAIL_ADDITION ? (
+        <Grid container>
+          <Chip className={styles.pill} label="Addition Failed" />
+          <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(identifier)} label="Clear" />
+        </Grid>
+      ) : status === FAIL_REMOVAL ? (
+        <Grid container>
+          <Chip className={styles.pill} label="Removal Failed" />
+          <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(identifier)} label="Clear" />
+        </Grid>
+      ) : (
+        <div />
+      )}
+    </TableCell>
+    <TableCell>
+      {isAdmin && status === 'active' && (
+        <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(identifier)} />
+      )}
+    </TableCell>
+  </TableRow>
 );
 
 EnodeRow.propTypes = {

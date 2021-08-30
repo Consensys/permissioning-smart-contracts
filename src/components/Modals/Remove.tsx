@@ -1,45 +1,31 @@
 // Libs
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Modal, Card, Button, Flex, Box, Heading, Text } from 'rimble-ui';
+import { Dialog, Button, DialogTitle, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
 // Styles
-import styles from './styles.module.scss';
 import { ModalDisplay } from '../../constants/modals';
 
 const RemoveModal: React.FC<{
-  closeModal: (e: Event) => void;
+  closeModal: (e: MouseEvent) => void;
   isOpen: boolean;
-  handleSubmit: (e: Event) => void;
+  handleSubmit: (e: MouseEvent) => void;
   display: ModalDisplay;
 }> = ({ closeModal, isOpen, handleSubmit, display }) => (
-  <Modal isOpen={isOpen}>
-    <Card width={'700px'} p={0}>
-      <Button.Text
-        icononly
-        icon={'Close'}
-        mainColor={'moon-gray'}
-        top={0}
-        right={0}
-        mt={3}
-        mr={3}
-        onClick={closeModal}
-        className={styles.closeIcon}
-      />
-      <Box p={4} mb={3}>
-        <Heading.h3>{display.heading}</Heading.h3>
-        <Text className={styles.break}>{display.subHeading}</Text>
-      </Box>
-      <Flex px={4} py={3} borderTop={1} borderStyle={'solid'} borderColor={'#E8E8E8'} justifyContent={'flex-end'}>
-        <Button.Outline mainColor="black" onClick={closeModal}>
-          Cancel
-        </Button.Outline>
-        <Button variant="danger" ml={3} onClick={handleSubmit}>
-          Remove
-        </Button>
-      </Flex>
-    </Card>
-  </Modal>
+  <Dialog open={isOpen} onClose={closeModal} aria-labelledby="form-dialog-title">
+    <DialogTitle id="form-dialog-title">{display.heading}</DialogTitle>
+    <DialogContent>
+      <DialogContentText>
+        {display.subHeading} {display.label}
+      </DialogContentText>
+    </DialogContent>
+
+    <DialogActions>
+      <Button onClick={closeModal}>Cancel</Button>
+      <Button color="primary" onClick={handleSubmit}>
+        Remove
+      </Button>
+    </DialogActions>
+  </Dialog>
 );
 
 RemoveModal.propTypes = {

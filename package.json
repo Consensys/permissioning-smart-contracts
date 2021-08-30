@@ -42,15 +42,16 @@
     ]
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "@truffle/hdwallet-provider": "^1.4.3",
     "@types/classnames": "^2.2.8",
     "@types/enzyme": "^3.9.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
-    "@types/jest": "^24.0.13",
+    "@types/jest": "27.0.1",
     "@types/node": "^12.0.4",
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
-    "@types/styled-components": "^4.1.15",
     "classnames": "^2.3.1",
     "dotenv": "^10.0.0",
     "ethers": "^4.0.47",
@@ -62,8 +63,6 @@
     "react-dom": "16.14.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
-    "rimble-ui": "0.8.0",
-    "styled-components": "^4.2.0",
     "typescript": "^3.5.1",
     "web3": "1.5.2",
     "web3-utils": "1.5.2"

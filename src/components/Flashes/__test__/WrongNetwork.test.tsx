@@ -22,7 +22,7 @@ describe('<WrongNetwork />', () => {
   });
 
   it('contains an element of class wrongNetworkMessage', () => {
-    expect(wrapper.find('Text.wrongNetworkMessage')).toHaveLength(1);
+    expect(wrapper.find('div.wrongNetworkMessage')).toHaveLength(1);
   });
 
   it('has props networkId=0', () => {

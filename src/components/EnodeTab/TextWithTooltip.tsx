@@ -1,8 +1,7 @@
 // Libs
 import React from 'react';
 import classnames from 'classnames';
-// Rimble Components
-import { Tooltip, Text } from 'rimble-ui';
+import { Tooltip, Typography } from '@material-ui/core';
 // Constants
 import { PENDING_ADDITION, PENDING_REMOVAL } from '../../constants/transactions';
 // Styles
@@ -17,11 +16,11 @@ type TextWithTooltip = {
 const TextWithTooltip: React.FC<TextWithTooltip> = ({ status, isAdmin, text }) => {
   return status === PENDING_ADDITION || status === PENDING_REMOVAL || !isAdmin ? (
     <Tooltip
-      placement="center"
-      message={isAdmin ? 'This transaction is pending.' : 'You must be an admin to perform modifications.'}
-      variant="dark"
+      title={isAdmin ? 'This transaction is pending.' : 'You must be an admin to perform modifications.'}
+      placement="bottom"
     >
-      <Text
+      <Typography
+        variant="body1"
         className={classnames(
           styles.ellipsis,
           status === PENDING_REMOVAL
@@ -30,15 +29,16 @@ const TextWithTooltip: React.FC<TextWithTooltip> = ({ status, isAdmin, text }) =
             ? styles.pendingAddition
             : styles.lock
         )}
-        fontSize="14px"
       >
         {text}
-      </Text>
+      </Typography>
     </Tooltip>
   ) : (
-    <Text className={styles.ellipsis} fontSize="14px">
-      {text}
-    </Text>
+    <Tooltip title={text} placement="bottom">
+      <Typography variant="body1" className={styles.ellipsis}>
+        {text}
+      </Typography>
+    </Tooltip>
   );
 };
 

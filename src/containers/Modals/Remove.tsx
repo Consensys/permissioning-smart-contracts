@@ -1,5 +1,5 @@
 // Libs
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import PropTypes from 'prop-types';
 // Components
 import RemoveModal from '../../components/Modals/Remove';
@@ -12,12 +12,12 @@ const RemoveModalContainer: React.FC<{
   value: string | boolean;
   display: ModalDisplay;
 }> = ({ isOpen, closeModal, handleRemove, value, display }) => {
-  const handleSubmit = (e: Event) => {
+  const handleSubmit = (e: MouseEvent) => {
     e.preventDefault();
     handleRemove(value);
   };
 
-  const handleClose = (e: Event) => {
+  const handleClose = (e: MouseEvent) => {
     e.preventDefault();
     closeModal();
   };

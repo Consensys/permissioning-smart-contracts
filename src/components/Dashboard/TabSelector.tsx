@@ -1,8 +1,7 @@
 // Libs
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Flex, Box, Text } from 'rimble-ui';
+import { Grid, Box, Typography } from '@material-ui/core';
 // Constants
 import tabs from '../../constants/tabs';
 // Styles
@@ -14,7 +13,7 @@ type TabSelector = {
 };
 
 const TabSelector: React.FC<TabSelector> = ({ tab, setTab }) => (
-  <Flex height="33px" className={styles.choicesContainer}>
+  <Grid container className={styles.choicesContainer}>
     {tabs.map(({ id, text }) => (
       <Box
         key={id}
@@ -23,12 +22,10 @@ const TabSelector: React.FC<TabSelector> = ({ tab, setTab }) => (
         px={3}
         onClick={() => setTab(id)}
       >
-        <Text fontWeight="600" textAlign="center">
-          {text}
-        </Text>
+        <Typography variant="subtitle1">{text}</Typography>
       </Box>
     ))}
-  </Flex>
+  </Grid>
 );
 
 TabSelector.propTypes = {

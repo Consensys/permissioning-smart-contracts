@@ -1,5 +1,5 @@
 // Libs
-import React, { useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import PropTypes from 'prop-types';
 // Components
 import AddModal from '../../components/Modals/Add';
@@ -21,14 +21,14 @@ const AddModalContainer: React.FC<{
     setValidation(validation);
   };
 
-  const handleSubmit = (e: Event) => {
+  const handleSubmit = (e: MouseEvent) => {
     e.preventDefault();
     setInput('');
     setValidation({ valid: false });
     handleAdd(input);
   };
 
-  const handleClose = (e: Event) => {
+  const handleClose = (e: MouseEvent) => {
     e.preventDefault();
     setInput('');
     setValidation({ valid: false });

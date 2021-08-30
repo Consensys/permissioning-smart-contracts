@@ -1,21 +1,19 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-// Rimble Components
-import { Text, Flex, Flash, Icon } from 'rimble-ui';
-// Styles
-import styles from './styles.module.scss';
+import { Grid, Box, Typography } from '@material-ui/core';
+import WarningIcon from '@material-ui/icons/Warning';
 
 const NoContract: React.FC<{ tabName: string }> = ({ tabName }) => (
-  <Flash variant="danger">
-    <Flex alignItems="center">
-      <Icon name="Warning" className={styles.icon} />
-      <Text>
-        Unable to locate <Text.span fontWeight={'bold'}>{tabName}</Text.span> contract. Please review the Dapp
-        configuration and confirm that the contract is correctly deployed.
-      </Text>
-    </Flex>
-  </Flash>
+  <Box>
+    <Grid container alignItems="center">
+      <WarningIcon />
+      <Typography variant="body1" color="error">
+        Unable to locate {tabName} contract. Please review the Dapp configuration and confirm that the contract is
+        correctly deployed.
+      </Typography>
+    </Grid>
+  </Box>
 );
 
 NoContract.propTypes = {
