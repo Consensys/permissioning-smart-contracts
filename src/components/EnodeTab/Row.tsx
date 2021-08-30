@@ -62,6 +62,8 @@ const EnodeRow: React.FC<EnodeRow> = ({
       ) : (
         <div />
       )}
+    </TableCell>
+    <TableCell>
       {isAdmin && status === 'active' && (
         <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(identifier)} />
       )}

@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 
 const EmptyRow: React.FC<{}> = () => (
   <TableRow>
-    <TableCell colSpan={4} className={styles.emptyLine}>
+    <TableCell colSpan={5} className={styles.emptyLine}>
       No nodes have been added.
     </TableCell>
   </TableRow>
