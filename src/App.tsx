@@ -1,7 +1,6 @@
 // Libs
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider } from 'styled-components';
 // Components
 import Layout from './components/Layout/Layout';
 import Initializer from './containers/Layout/Initializer';
@@ -14,6 +13,7 @@ import theme from './constants/theme';
 import { NetworkProvider } from './context/network';
 import { Config, configPromise } from './util/configLoader';
 import { ConfigDataProvider } from './context/configData';
+import { createTheme, ThemeProvider } from '@material-ui/core';
 
 export const initApp = async ({ target }: { target: HTMLElement }) => {
   const config = await configPromise;
@@ -22,7 +22,7 @@ export const initApp = async ({ target }: { target: HTMLElement }) => {
 
 const App: React.FC<{ config: Config }> = ({ config }) => (
   <ConfigDataProvider config={config}>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={createTheme(theme)}>
       <NetworkProvider>
         <Layout>
           <Initializer NoProvider={NoProviderFlash} WrongNetwork={WrongNetworkFlash}>
