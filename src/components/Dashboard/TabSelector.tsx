@@ -22,7 +22,7 @@ const TabSelector: React.FC<TabSelector> = ({ tab, setTab }) => (
         px={3}
         onClick={() => setTab(id)}
       >
-        <Typography variant="body1">{text}</Typography>
+        <Typography variant="subtitle1">{text}</Typography>
       </Box>
     ))}
   </Grid>

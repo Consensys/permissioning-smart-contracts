@@ -35,7 +35,6 @@ const AddModal: React.FC<{
       <TextField
         autoFocus
         placeholder={display.inputPlaceholder}
-        id="xyz"
         value={input}
         onChange={modifyInput}
         className={styles.fieldInput}
@@ -53,9 +52,7 @@ const AddModal: React.FC<{
     </DialogContent>
 
     <DialogActions>
-      <Button color="secondary" onClick={closeModal}>
-        Cancel
-      </Button>
+      <Button onClick={closeModal}>Cancel</Button>
       <Button color="primary" onClick={handleSubmit}>
         Submit
       </Button>

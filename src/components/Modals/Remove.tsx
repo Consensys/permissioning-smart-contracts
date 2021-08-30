@@ -20,9 +20,7 @@ const RemoveModal: React.FC<{
     </DialogContent>
 
     <DialogActions>
-      <Button color="secondary" onClick={closeModal}>
-        Cancel
-      </Button>
+      <Button onClick={closeModal}>Cancel</Button>
       <Button color="primary" onClick={handleSubmit}>
         Remove
       </Button>
