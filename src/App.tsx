@@ -9,11 +9,11 @@ import NoProviderFlash from './components/Flashes/NoProvider';
 import WrongNetworkFlash from './components/Flashes/WrongNetwork';
 // Theme
 import theme from './constants/theme';
+import { createTheme, ThemeProvider } from '@material-ui/core';
 // Context
 import { NetworkProvider } from './context/network';
 import { Config, configPromise } from './util/configLoader';
 import { ConfigDataProvider } from './context/configData';
-import { createTheme, ThemeProvider } from '@material-ui/core';
 
 export const initApp = async ({ target }: { target: HTMLElement }) => {
   const config = await configPromise;
