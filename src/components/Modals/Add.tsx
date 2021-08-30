@@ -53,7 +53,7 @@ const AddModal: React.FC<{
 
     <DialogActions>
       <Button onClick={closeModal}>Cancel</Button>
-      <Button color="primary" onClick={handleSubmit}>
+      <Button disabled={!validationResult.valid} color="primary" onClick={handleSubmit}>
         Submit
       </Button>
     </DialogActions>
