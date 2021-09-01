@@ -18,7 +18,7 @@
     "coverage:contracts": "yarn truffle run coverage",
     "coverage": "yarn run coverage:contracts",
     "build:app": "sh scripts/wrap_env.sh 'yarn react-scripts build'",
-    "build:contracts": "yarn truffle compile && yarn typechain --target ethers --outDir ./src/chain/@types 'src/chain/abis/*.json'",
+    "build:contracts": "yarn truffle compile && yarn typechain --target ethers-v4 --out-dir ./src/chain/@types 'src/chain/abis/*.json'",
     "build": "yarn run build:contracts && yarn run build:app",
     "start": "sh scripts/wrap_env.sh 'yarn react-scripts start'",
     "eject": "yarn react-scripts eject"
@@ -54,7 +54,7 @@
     "@types/react-dom": "^16.8.4",
     "classnames": "^2.3.1",
     "dotenv": "^10.0.0",
-    "ethers": "^4.0.47",
+    "ethers": "^4.0.49",
     "idx": "^2.5.6",
     "jest-junit": "^12.2.0",
     "node-sass": "4.14.1",
@@ -68,6 +68,7 @@
     "web3-utils": "1.5.2"
   },
   "devDependencies": {
+    "@typechain/ethers-v4": "^5.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.13.1",
     "enzyme-to-json": "^3.3.5",
@@ -84,7 +85,7 @@
     "truffle": "5.0.17",
     "truffle-typings": "^1.0.8",
     "ts-jest": "^27.0.5",
-    "typechain": "0.3.21"
+    "typechain": "^5.0.0"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
