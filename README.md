@@ -24,7 +24,7 @@ Run `yarn install` to initialize project dependencies. This step is only require
 for the first time.
 
 ### Linting
-Linting is set up using solium. To run it over your code execute `yarn run lint`.
+Linting is set up for contracts using `solium`, and for source files using `prettier`. To run linting over your code execute `yarn run lint`.
 
 ### Testing
 `yarn test`
