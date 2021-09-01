@@ -44,7 +44,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "@truffle/hdwallet-provider": "^1.4.3",
+    "@truffle/hdwallet-provider": "^1.5.0",
     "@types/classnames": "^2.2.8",
     "@types/enzyme": "^3.9.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
@@ -61,7 +61,7 @@
     "pad-ipv6": "^1.0.2",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-router-dom": "^5.0.0",
+    "react-router-dom": "^5.2.1",
     "react-scripts": "3.0.1",
     "typescript": "^3.5.1",
     "web3": "1.5.2",
@@ -72,18 +72,18 @@
     "enzyme-adapter-react-16": "^1.13.1",
     "enzyme-to-json": "^3.3.5",
     "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-prettier": "4.0.0",
     "husky": "3.0.3",
     "istanbul": "^0.4.5",
     "lint-staged": "11.1.2",
     "mocha-junit-reporter": "2.0.0",
     "mocha-multi-reporters": "^1.1.7",
-    "prettier": "1.18.2",
+    "prettier": "2.2.1",
     "solidity-coverage": "^0.7.1",
     "solium": "1.2.5",
     "truffle": "5.0.17",
     "truffle-typings": "^1.0.8",
-    "ts-jest": "27.0.4",
+    "ts-jest": "^27.0.5",
     "typechain": "0.3.21"
   },
   "lint-staged": {
@@ -95,7 +95,9 @@
     "useTabs": false,
     "tabWidth": 2,
     "singleQuote": true,
-    "printWidth": 120
+    "printWidth": 120,
+    "trailingComma": "none",
+    "arrowParens": "avoid"
   },
   "husky": {
     "hooks": {
