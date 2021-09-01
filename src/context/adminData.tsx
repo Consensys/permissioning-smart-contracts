@@ -40,14 +40,10 @@ export const AdminDataProvider: React.FC = (props: React.Props<{}>) => {
   const [adminContract, setAdminContract] = useState<Admin | undefined>(undefined);
   const [userAddress, setUserAddress] = useState<string | undefined>(undefined);
 
-  const value = useMemo(() => ({ admins, setAdmins, adminContract, setAdminContract, userAddress, setUserAddress }), [
-    admins,
-    setAdmins,
-    adminContract,
-    setAdminContract,
-    userAddress,
-    setUserAddress
-  ]);
+  const value = useMemo(
+    () => ({ admins, setAdmins, adminContract, setAdminContract, userAddress, setUserAddress }),
+    [admins, setAdmins, adminContract, setAdminContract, userAddress, setUserAddress]
+  );
 
   const { accountIngressContract, nodeIngressContract } = useNetwork();
 
@@ -113,17 +109,15 @@ export const useAdminData = () => {
       : undefined;
   }, [admins]);
 
-  const dataReady = useMemo(() => adminContract !== undefined && admins !== undefined && userAddress !== undefined, [
-    adminContract,
-    admins,
-    userAddress
-  ]);
+  const dataReady = useMemo(
+    () => adminContract !== undefined && admins !== undefined && userAddress !== undefined,
+    [adminContract, admins, userAddress]
+  );
 
-  const isAdmin = useMemo(() => (dataReady && admins ? admins.includes(userAddress!) : false), [
-    dataReady,
-    admins,
-    userAddress
-  ]);
+  const isAdmin = useMemo(
+    () => (dataReady && admins ? admins.includes(userAddress!) : false),
+    [dataReady, admins, userAddress]
+  );
 
   return {
     dataReady,
