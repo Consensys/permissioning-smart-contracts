@@ -1,4 +1,4 @@
-const NodeIngressContract = artifacts.require("NodeIngress.sol");
+const NodeIngress = artifacts.require("NodeIngress.sol");
 const NodeRules = artifacts.require("NodeRules.sol");
 const AdminContract = artifacts.require("Admin.sol");
 const RulesStorage = artifacts.require('NodeStorage.sol');
@@ -20,7 +20,7 @@ contract ("Node Ingress (no contracts registered)", (accounts) => {
     let storageContract;
 
     beforeEach("create a new contract for each test", async () => {
-        nodeIngressContract = await NodeIngressContract.new();
+        nodeIngressContract = await NodeIngress.new();
         adminContract = await AdminContract.new();
 
         // set the storage
@@ -171,7 +171,7 @@ contract("Ingress contract", (accounts) => {
     let storageContract;
 
     beforeEach("Setup contract registry", async () => {
-        nodeIngressContract = await NodeIngressContract.new();
+        nodeIngressContract = await NodeIngress.new();
         adminContract = await AdminContract.new();
         await nodeIngressContract.setContractAddress(ADMIN, adminContract.address);
 

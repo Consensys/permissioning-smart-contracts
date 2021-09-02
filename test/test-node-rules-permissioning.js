@@ -1,7 +1,7 @@
-const NodeIngressContract = artifacts.require('NodeIngress.sol');
+const NodeIngress = artifacts.require('NodeIngress.sol');
 const NodeRules = artifacts.require('NodeRules.sol');
 const RulesStorage = artifacts.require('NodeStorage.sol');
-const AdminContract = artifacts.require('Admin.sol');
+const Admin = artifacts.require('Admin.sol');
 
 // Contract keys
 const RULES_NAME = "0x72756c6573000000000000000000000000000000000000000000000000000000";
@@ -31,9 +31,9 @@ contract("NodeRules (Permissioning)", (accounts) => {
   let storageContract;
 
   before(async () => {
-    nodeIngressContract = await NodeIngressContract.new();
+    nodeIngressContract = await NodeIngress.new();
 
-    adminContract = await AdminContract.new();
+    adminContract = await Admin.new();
     await nodeIngressContract.setContractAddress(ADMIN_NAME, adminContract.address);
 
     // set the storage
