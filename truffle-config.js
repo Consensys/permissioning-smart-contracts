@@ -18,7 +18,7 @@ if (endpoint === undefined) {
 
 module.exports = {
   networks: {
-    development: {
+    besu: {
      provider: () => new HDWalletProvider(privateKey, endpoint),
      network_id: "*",
      from: address
