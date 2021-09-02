@@ -9,7 +9,7 @@ Version 1 of these contracts was audited by a third party. Read the report [here
 The contents of this repository are Apache 2.0 licensed.
 **Important:** The dependency chain for this Dapp includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
 
-## Usings
+## Using
 You probably got here from Besu.
 The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
 describes how to use the contracts for onchain permissioning with Besu.
