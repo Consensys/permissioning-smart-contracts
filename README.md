@@ -82,7 +82,7 @@ Snapshots are compared as part of the test suite, to check any changes made to t
 1. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
-1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest)
+1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/ConsenSys/permissioning-smart-contracts/releases/latest)
 1. Unpack the distribution into a folder that will be available to your webserver
 1. Add to the root of that folder a file `config.json` with the following contents
 
