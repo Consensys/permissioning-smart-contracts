@@ -9,7 +9,7 @@ Version 1 of these contracts was audited by a third party. Read the report [here
 The contents of this repository are Apache 2.0 licensed.
 **Important:** The dependency chain for this Dapp includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
 
-## Usings
+## Using
 You probably got here from Besu.
 The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
 describes how to use the contracts for onchain permissioning with Besu.
@@ -24,7 +24,7 @@ Run `yarn install` to initialize project dependencies. This step is only require
 for the first time.
 
 ### Linting
-Linting is set up using solium. To run it over your code execute `yarn run lint`.
+Linting is set up for contracts using `solium`, and for source files using `prettier`. To run linting over your code execute `yarn run lint`.
 
 ### Testing
 `yarn test`
@@ -82,7 +82,7 @@ Snapshots are compared as part of the test suite, to check any changes made to t
 1. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
 
 ### Deploying the Dapp
-1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest)
+1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/ConsenSys/permissioning-smart-contracts/releases/latest)
 1. Unpack the distribution into a folder that will be available to your webserver
 1. Add to the root of that folder a file `config.json` with the following contents
 
