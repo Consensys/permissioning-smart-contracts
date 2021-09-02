@@ -12,9 +12,10 @@ export default () => {
     });
   }, []);
 
-  const updateTransaction = useCallback((identifier: string, status: string) => addTransaction(identifier, status), [
-    addTransaction
-  ]);
+  const updateTransaction = useCallback(
+    (identifier: string, status: string) => addTransaction(identifier, status),
+    [addTransaction]
+  );
 
   const deleteTransaction = useCallback((identifier: string) => {
     setTransactions(transactions => {
