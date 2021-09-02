@@ -10,7 +10,7 @@ const web3Factory = async () => {
   if (web3) return web3;
 
   if (window.ethereum) {
-    await window.ethereum.request({ method: 'eth_requestAccounts'});
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
   }
 
   web3 = new Web3(Web3.givenProvider);
