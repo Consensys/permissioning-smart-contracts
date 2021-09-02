@@ -13,7 +13,7 @@
     "test:app": "yarn react-scripts test --env=jsdom --watchAll=false",
     "test:app:watch": "yarn react-scripts test --env=jsdom",
     "test:app:ci": "yarn react-scripts test --reporters=default --reporters=jest-junit",
-    "test:contracts": "yarn truffle test --network develop",
+    "test:contracts": "yarn truffle test",
     "test": "yarn run test:contracts && yarn run test:app",
     "coverage:contracts": "yarn truffle run coverage",
     "coverage": "yarn run coverage:contracts",
@@ -82,7 +82,7 @@
     "prettier": "2.3.2",
     "solidity-coverage": "^0.7.1",
     "solium": "1.2.5",
-    "truffle": "5.0.17",
+    "truffle": "5.0.44",
     "truffle-typings": "^1.0.8",
     "ts-jest": "^27.0.5",
     "typechain": "^5.0.0"

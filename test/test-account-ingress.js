@@ -1,5 +1,5 @@
-const AccountIngressContract = artifacts.require("AccountIngress.sol");
-const AdminContract = artifacts.require("Admin.sol");
+const AccountIngress = artifacts.require("AccountIngress.sol");
+const Admin = artifacts.require("Admin.sol");
 
 const RULES="0x72756c6573000000000000000000000000000000000000000000000000000000";
 const ADMIN="0x61646d696e697374726174696f6e000000000000000000000000000000000000";
@@ -11,8 +11,8 @@ contract ("Account Ingress (no contracts registered)", (accounts) => {
     let adminContract;
 
     beforeEach("create a new contract for each test", async () => {
-        accountIngressContract = await AccountIngressContract.new();
-        adminContract = await AdminContract.new();
+        accountIngressContract = await AccountIngress.new();
+        adminContract = await Admin.new();
     })
 
     it("should allow any account if rules contract has not been registered", async () => {
