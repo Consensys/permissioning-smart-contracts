@@ -21,8 +21,7 @@
     "build:contracts": "yarn truffle compile && yarn typechain --target ethers-v4 --out-dir ./src/chain/@types 'src/chain/abis/*.json'",
     "build": "yarn run build:contracts && yarn run build:app",
     "start": "sh scripts/wrap_env.sh 'yarn react-scripts start'",
-    "eject": "yarn react-scripts eject",
-    "prepare": "husky install"
+    "eject": "yarn react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -75,7 +74,7 @@
     "enzyme-to-json": "^3.3.5",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
-    "husky": "^7.0.0",
+    "husky": "4.3.8",
     "istanbul": "^0.4.5",
     "lint-staged": "11.1.2",
     "mocha-junit-reporter": "2.0.0",
