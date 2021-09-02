@@ -34,15 +34,10 @@ type Admin = {
 
 const AdminTabContainer: React.FC<AdminTabContainerProps> = ({ isOpen }) => {
   const { admins, isAdmin, userAddress, dataReady, adminContract } = useAdminData();
-  const {
-    list,
-    modals,
-    toggleModal,
-    addTransaction,
-    updateTransaction,
-    deleteTransaction,
-    openToast
-  } = useTab(admins || [], (identifier: string) => ({ address: identifier }));
+  const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
+    admins || [],
+    (identifier: string) => ({ address: identifier })
+  );
 
   if (!!adminContract) {
     const handleAdd = async (value: string) => {
