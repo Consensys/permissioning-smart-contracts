@@ -81,7 +81,7 @@
     "mocha-junit-reporter": "2.0.0",
     "mocha-multi-reporters": "^1.1.7",
     "prettier": "2.3.2",
-    "solidity-coverage": "^0.7.1",
+    "solidity-coverage": "^0.7.17",
     "truffle": "5.0.17",
     "truffle-typings": "^1.0.8",
     "ts-jest": "^27.0.5",
