@@ -56,15 +56,19 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function transactionAllowed(
         address sender,
-        address, // target
+        address target, // target
         uint256, // value
         uint256, // gasPrice
         uint256, // gasLimit
         bytes calldata // payload
     ) external view returns (bool) {
         if (accountPermitted(sender)) {
-            return true;
+            if (target == address(0)) {
+                // contract creation
+                return getCanCreateContracts(sender);
+            }
         }
+        // should admins have all the permissions?
         if (isAuthorizedAdmin(sender)) {
             return true;
         }
@@ -91,6 +95,14 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         bool removed = remove(account);
         emit AccountRemoved(removed, account);
         return removed;
+    }
+    
+    function setCreateContractPermission(address _account, bool _allowed) public onlyAdmin returns (bool){
+        return setCanCreateContracts(_account, _allowed);
+    }
+
+    function getCreateContractPermission(address _account) public onlyAdmin returns (bool){
+        return getCanCreateContracts(_account);
     }
 
     function getSize() external view returns (uint) {

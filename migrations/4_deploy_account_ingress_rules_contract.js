@@ -78,6 +78,9 @@ module.exports = async(deployer, network) => {
         if (allowlistedAccounts.length > 0) {
             await accountRulesContract.addAccounts(allowlistedAccounts);
             console.log ("   > Initial Allowlisted Accounts added: " + allowlistedAccounts);
+            // set these accounts to be able to deploy contracts
+            await accountRulesContract.setCreateContractPermission(allowlistedAccounts[0], true);
+            console.log(">>> gave contract creation permission to " + allowlistedAccounts[0]);
         }
     }
 
