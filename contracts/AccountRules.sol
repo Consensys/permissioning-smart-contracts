@@ -13,7 +13,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     // this will be used to protect data when upgrading contracts
     bool private readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint private version = 3000000;
+    uint private version = 3001000;
 
     AccountIngress private ingressContract;
 
@@ -62,14 +62,15 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         uint256, // gasLimit
         bytes calldata // payload
     ) external view returns (bool) {
+        // admins have all the permissions
+        if (isAuthorizedAdmin(sender)) {
+            return true;
+        }
         if (accountPermitted(sender)) {
             if (target == address(0)) {
                 // contract creation
                 return getCanCreateContracts(sender);
-            }
-        }
-        // should admins have all the permissions?
-        if (isAuthorizedAdmin(sender)) {
+            } 
             return true;
         }
         return false;

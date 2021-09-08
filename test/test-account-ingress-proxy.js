@@ -8,6 +8,7 @@ const ADMIN='0x61646d696e697374726174696f6e000000000000000000000000000000000000'
 
 var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
 var address2 = "0xf17f52151EbEF6C7334FAD080c5704D77216b732".toLowerCase();
+var addressZero = "0x0000000000000000000000000000000000000000".toLowerCase();
 
 contract ('AccountIngress (proxying permissioning check to rules contract)', () => {
 
@@ -61,8 +62,14 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
     // Verify that the accounts are now permitted
     result2 = await accountRulesContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
     result = await accountIngressContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
-    assert.equal(result, true, "Transaction SHOULD be allowed after accounts have been registered");
-    assert.equal(result, result2, "Call and proxy call did NOT return the same value");
+    assert.ok(result, "Transaction SHOULD be allowed after accounts have been registered");
+    assert.ok(result2, "Call and proxy call did NOT return the same value");
+
+    // Verify can not create contracts
+    result2 = await accountRulesContract.transactionAllowed(address1, addressZero, 0, 1, 2, RULES);
+    result = await accountIngressContract.transactionAllowed(address1, addressZero, 0, 1, 2, RULES);
+    assert.notOk(result, "Create contract transaction SHOULD NOT be allowed without specific permissions");
+    assert.notOk(result2, "Call and proxy call did NOT return the same value");
   });
 
   it('Should permit changing active AccountRules contract addresses WHILE keeping existing storage', async () => {
@@ -96,7 +103,7 @@ contract ('AccountIngress (proxying permissioning check to rules contract)', () 
     // Verify that the newly registered contract is the initial version
     let contract = await AccountRules.at(result);
     result = await contract.getContractVersion();
-    assert.equal(web3.utils.toDecimal(result), 3000000, 'Initial contract is NOT the correct version');
+    assert.equal(web3.utils.toDecimal(result), 3001000, 'Initial contract is NOT the correct version');
 
     // Verify that the accounts are permitted
     result = await accountIngressContract.transactionAllowed(address1, address2, 0, 1, 2, RULES);
