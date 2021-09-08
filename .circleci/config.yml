@@ -266,7 +266,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
             tags:
               only:
                 - /.*/
