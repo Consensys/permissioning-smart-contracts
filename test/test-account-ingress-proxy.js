@@ -6,9 +6,9 @@ const RulesStorage = artifacts.require('AccountStorage.sol');
 const RULES='0x72756c6573000000000000000000000000000000000000000000000000000000';
 const ADMIN='0x61646d696e697374726174696f6e000000000000000000000000000000000000';
 
-var address1 = "0xdE3422671D38EcdD7A75702Db7f54d4b30C022Ea".toLowerCase();
-var address2 = "0xf17f52151EbEF6C7334FAD080c5704D77216b732".toLowerCase();
-var addressZero = "0x0000000000000000000000000000000000000000".toLowerCase();
+var address1 = "0xde3422671d38ecdd7a75702db7f54d4b30c022ea";
+var address2 = "0xf17f52151EbEF6C7334FAD080c5704D77216b732";
+var addressZero = "0x0000000000000000000000000000000000000000";
 
 contract ('AccountIngress (proxying permissioning check to rules contract)', () => {
 

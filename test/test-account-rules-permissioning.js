@@ -11,6 +11,7 @@ var address1 = "0xde3422671d38ecdd7a75702db7f54d4b30c022ea";
 var address2 = "0x470f4787c58eeec8be0282e1cdf7534b1a095201";
 var address3 = "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73";
 var address4 = "0xc8381e432a2840308697029c23bb0a2d81563b94";
+var addressZero = "0x0000000000000000000000000000000000000000";
 
 const newAdmin = "f17f52151EbEF6C7334FAD080c5704D77216b732";
 
@@ -100,6 +101,17 @@ contract("Account Rules (Permissioning)", (accounts) => {
 
     permitted = await rulesContract.transactionAllowed(address2, address1, txValue, txGasPrice, txGasLimit, txPayload);
     assert.equal(permitted, true, 'expected permitted address2');
+  });
+
+  it('should allow a (create contract) transaction from account added to the allowlist', async () => {
+    let tx = await rulesContract.setCreateContractPermission(address1, true);
+    assert.ok(tx.receipt.status);
+
+    let contractCreationPermitted = await rulesContract.transactionAllowed(address1, addressZero, txValue, txGasPrice, txGasLimit, txPayload);
+    assert.equal(contractCreationPermitted, true, 'expected permitted (create contract) address1');
+
+    contractCreationPermitted = await rulesContract.transactionAllowed(address2, addressZero, txValue, txGasPrice, txGasLimit, txPayload);
+    assert.equal(contractCreationPermitted, false, 'expected not permitted (create contract) address2');
   });
 
   it('should NOT allow transaction from account removed from allowlist', async () => {
