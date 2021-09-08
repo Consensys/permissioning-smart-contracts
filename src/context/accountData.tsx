@@ -3,7 +3,7 @@ import { AccountRules } from '../chain/@types/AccountRules';
 import { accountRulesFactory } from '../chain/contracts/AccountRules';
 import { useNetwork } from './network';
 
-type Account = { address: string };
+type Account = { address: string; canCreateContracts: boolean };
 
 type ContextType =
   | {
@@ -31,10 +31,10 @@ const loadAccountData = (
     accountRulesContract.functions.getSize().then(listSize => {
       const listElementsPromises = [];
       for (let i = 0; listSize.gt(i); i++) {
-        listElementsPromises.push(accountRulesContract.functions.getByIndex(i));
+        listElementsPromises.push(accountRulesContract.functions.getByIndexWithExtraPermissions(i));
       }
       Promise.all(listElementsPromises).then(responses => {
-        setAccountList(responses.map(address => ({ address })));
+        setAccountList(responses.map(([address, canCreateContracts]) => ({ address, canCreateContracts })));
       });
     });
   }
@@ -98,7 +98,7 @@ export const AccountDataProvider: React.FC<{}> = props => {
  *  false otherwise
  *  - userAddress: Address of the user
  *  - isReadOnly: Account contract is lock or unlock,
- *  - allowlist: list of permitted accounts from Account contract,
+ *  - allowlist: list of permitted accounts from Account contract, and any extra permissions
  */
 export const useAccountData = () => {
   const context = useContext(AccountDataContext);
@@ -118,6 +118,7 @@ export const useAccountData = () => {
       .map(account => ({
         ...account,
         identifier: account.address.toLowerCase(),
+        canCreateContracts: account.canCreateContracts,
         status: 'active'
       }))
       .reverse();

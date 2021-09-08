@@ -11,13 +11,21 @@ import styles from './styles.module.scss';
 
 type AccountRow = {
   address: string;
+  canCreateContracts: boolean;
   status: string;
   isAdmin: boolean;
   deleteTransaction: (address: string) => void;
   openRemoveModal: (address: string) => void;
 };
 
-const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTransaction, openRemoveModal }) => (
+const AccountRow: React.FC<AccountRow> = ({
+  address,
+  canCreateContracts,
+  status,
+  isAdmin,
+  deleteTransaction,
+  openRemoveModal
+}) => (
   <TableRow className={styles.row}>
     <TableCell>
       <TextWithTooltip status={status} text={address} isAdmin={isAdmin} />
@@ -49,7 +57,7 @@ const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTran
       </Grid>
     </TableCell>
     <TableCell>
-      <Checkbox checked={isAdmin} color="primary" />
+      <Checkbox checked={canCreateContracts} color="primary" />
     </TableCell>
   </TableRow>
 );

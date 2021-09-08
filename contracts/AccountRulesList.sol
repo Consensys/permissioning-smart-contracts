@@ -65,7 +65,9 @@ contract AccountRulesList {
 
     // TODO does this make sense... how do we do this in an extensible way
     function getByIndexWithExtraPermissions(uint index) public view returns (address account, bool canCreateContracts) {
-        return (accountStorage.getByIndex(index), getCanCreateContracts(account));
+        address acc = accountStorage.getByIndex(index);
+        bool cc = getCanCreateContracts(acc);
+        return (acc, cc);
     }
 
     function getAccounts() public view returns (address[] memory){
