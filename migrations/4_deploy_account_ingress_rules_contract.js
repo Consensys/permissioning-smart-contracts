@@ -16,22 +16,17 @@ let accountIngress = process.env.ACCOUNT_INGRESS_CONTRACT_ADDRESS;
 let accountStorage = process.env.ACCOUNT_STORAGE_CONTRACT_ADDRESS;
 let retainCurrentRulesContract = AllowlistUtils.getRetainAccountRulesContract();
 
- function logCurrentAllowlist(instance) {
-
-
+ async function logCurrentAllowlist(instance) {
+    
+    let s = await instance.getSize();
     console.log("\n<<< start of current ACCOUNT allowlist >>>");
-    logAllowlistEntry(instance, 0);
-    logAllowlistEntry(instance, 1);
-    logAllowlistEntry(instance, 2);
-    logAllowlistEntry(instance, 3);
+    for (i = 0; i < s; i ++) {
+        let x = await instance.getByIndexWithExtraPermissions(i);
+        console.log("\n" + i + "::" + x[0] + " " + x[1]);
+    }
     console.log("\n<<< end of current ACCOUNT allowlist >>>");
 }
 
-async function logAllowlistEntry(instance, i) {
-    let x = await instance.getByIndexWithExtraPermissions(i);
-    // console.log(x);
-    console.log(i + "::" + x[0] + " " + x[1]);
-}
 module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract
     if (retainCurrentRulesContract) {
