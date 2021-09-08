@@ -17,7 +17,7 @@ contract AccountStorage {
 
     address[] public allowlist;
     mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
-    mapping (address => bool) private createContractPermissions; 
+    mapping (address => bool) private createContractPermissions;
 
     constructor (AccountIngress _ingressContract) public {
         ingressContract = _ingressContract;
@@ -79,6 +79,7 @@ contract AccountStorage {
         }
         return false;
     }
+
     function setCanCreateContract(address _account, bool _allowed) public onlyLatestVersion returns (bool){
         // assuming they are already on the list
         require(indexOf[_account] != 0, "add account to the allowlist before setting create contract permission");

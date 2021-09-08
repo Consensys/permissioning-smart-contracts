@@ -70,7 +70,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
             if (target == address(0)) {
                 // contract creation
                 return getCanCreateContracts(sender);
-            } 
+            }
             return true;
         }
         return false;
@@ -97,7 +97,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         emit AccountRemoved(removed, account);
         return removed;
     }
-    
+
     function setCreateContractPermission(address _account, bool _allowed) public onlyAdmin returns (bool){
         return setCanCreateContracts(_account, _allowed);
     }
