@@ -30,6 +30,7 @@ const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransac
           <TableRow>
             <TableCell className={styles.headerCell}>Account Address</TableCell>
             <TableCell className={styles.headerCell}>Status</TableCell>
+            <TableCell className={styles.headerCell}>Create contracts?</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

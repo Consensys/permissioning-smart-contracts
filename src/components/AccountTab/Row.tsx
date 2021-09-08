@@ -1,7 +1,7 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Chip, Grid, TableCell, TableRow } from '@material-ui/core';
+import { Checkbox, Chip, Grid, TableCell, TableRow } from '@material-ui/core';
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -47,6 +47,9 @@ const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTran
           <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(address)} />
         )}
       </Grid>
+    </TableCell>
+    <TableCell>
+      <Checkbox checked={isAdmin} color="primary" />
     </TableCell>
   </TableRow>
 );
