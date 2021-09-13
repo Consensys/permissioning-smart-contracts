@@ -96,7 +96,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     const handleModify = async (value: string) => {
       try {
         // TODO newValue should be passed in as param
-        var newValue = true;
+        var newValue = false;
+        console.log('handleModify (' + value + ')');
         const est = await accountRulesContract!.estimate.setCreateContractPermission(value, newValue);
         const tx = await accountRulesContract!.functions.setCreateContractPermission(value, newValue, {
           gasLimit: est.toNumber() * 2
