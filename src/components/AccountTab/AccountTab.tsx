@@ -5,19 +5,26 @@ import PropTypes from 'prop-types';
 import AccountTable from './Table';
 import AddModal from '../../containers/Modals/Add';
 import RemoveModal from '../../containers/Modals/Remove';
+import ModifyModal from '../../containers/Modals/Modify';
 // Constants
-import { addAccountDisplay, removeAccountDisplay } from '../../constants/modals';
+import {
+  addAccountDisplay,
+  removeAccountDisplay,
+  toggleCreateContractPermissionAccountDisplay
+} from '../../constants/modals';
 
 type AccountTab = {
   list: any[];
   modals: {
     add: boolean;
     remove: boolean | string;
+    modify: string;
     lock: boolean;
   };
-  toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
+  toggleModal: (name: 'add' | 'remove' | 'modify' | 'lock') => (value?: boolean | string) => void;
   handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
+  handleModify: (value: any) => Promise<void>;
   isAdmin: boolean;
   deleteTransaction: (identifier: string) => void;
   isValid: (address: string) => { valid: boolean };
@@ -31,6 +38,7 @@ const AccountTab: React.FC<AccountTab> = ({
   toggleModal,
   handleAdd,
   handleRemove,
+  handleModify,
   isAdmin,
   deleteTransaction,
   isValid,
@@ -61,6 +69,13 @@ const AccountTab: React.FC<AccountTab> = ({
           handleRemove={handleRemove}
           display={removeAccountDisplay(modals.remove)}
         />
+        <ModifyModal
+          isOpen={Boolean(modals.modify) && isAdmin}
+          value={modals.modify}
+          closeModal={() => toggleModal('modify')(false)}
+          handleModify={handleModify}
+          display={toggleCreateContractPermissionAccountDisplay(modals.modify)}
+        />
       </Fragment>
     )}
   </Fragment>
@@ -71,6 +86,7 @@ AccountTab.propTypes = {
   modals: PropTypes.shape({
     add: PropTypes.bool.isRequired,
     remove: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
+    modify: PropTypes.string.isRequired,
     lock: PropTypes.bool.isRequired
   }).isRequired,
   toggleModal: PropTypes.func.isRequired,

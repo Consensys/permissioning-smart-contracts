@@ -11,7 +11,7 @@ import styles from './styles.module.scss';
 
 type AccountTable = {
   list: { address: string; status: string; canCreateContracts: boolean }[];
-  toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
+  toggleModal: (name: 'add' | 'remove' | 'modify' | 'lock') => (value?: boolean | string) => void;
   deleteTransaction: (identifier: string) => void;
   isAdmin: boolean;
   isReadOnly: boolean;
@@ -43,6 +43,7 @@ const AccountTable: React.FC<AccountTable> = ({ list, toggleModal, deleteTransac
               isAdmin={isAdmin}
               deleteTransaction={deleteTransaction}
               openRemoveModal={toggleModal('remove')}
+              openModifyModal={toggleModal('modify')}
             />
           ))}
           {list.length === 0 && <EmptyRow />}

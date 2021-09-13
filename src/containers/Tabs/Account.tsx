@@ -19,6 +19,8 @@ import {
   FAIL_ADDITION,
   PENDING_REMOVAL,
   FAIL_REMOVAL,
+  PENDING_MODIFY,
+  FAIL_MODIFY,
   SUCCESS,
   FAIL
 } from '../../constants/transactions';
@@ -79,7 +81,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
-        openToast(value, SUCCESS, `Removal of account processed: ${value}`);
+        openToast(value, SUCCESS, `Modify of account processed: ${value}`);
         deleteTransaction(value);
       } catch (e) {
         console.log('error', e);
@@ -87,6 +89,29 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         updateTransaction(value, FAIL_REMOVAL);
         errorToast(e, value, openToast, () =>
           openToast(value, FAIL, 'Could not remove account', `${value} was unable to be removed. Please try again.`)
+        );
+      }
+    };
+
+    const handleModify = async (value: string) => {
+      try {
+        // TODO newValue should be passed in as param
+        var newValue = true;
+        const est = await accountRulesContract!.estimate.setCreateContractPermission(value, newValue);
+        const tx = await accountRulesContract!.functions.setCreateContractPermission(value, newValue, {
+          gasLimit: est.toNumber() * 2
+        });
+        toggleModal('modify')(false);
+        addTransaction(value, PENDING_MODIFY);
+        await tx.wait(1); // wait on receipt confirmations
+        openToast(value, SUCCESS, `Modify permissions of account processed: ${value}`);
+        deleteTransaction(value);
+      } catch (e) {
+        console.log('error', e);
+        toggleModal('modify')(false);
+        updateTransaction(value, FAIL_MODIFY);
+        errorToast(e, value, openToast, () =>
+          openToast(value, FAIL, 'Could not modify permissions for account', `${value}. Please try again.`)
         );
       }
     };
@@ -122,6 +147,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
           toggleModal={toggleModal}
           handleAdd={handleAdd}
           handleRemove={handleRemove}
+          handleModify={handleModify}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
           isValid={isValidAccount}

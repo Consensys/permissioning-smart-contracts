@@ -51,3 +51,8 @@ export const removeEnodeDisplay: (value: string) => ModalDisplay = value => ({
   heading: 'Are you sure?',
   subHeading: `Remove node “${identifierToEnodeId(value)}”?`
 });
+
+export const toggleCreateContractPermissionAccountDisplay: (value: string) => ModalDisplay = value => ({
+  heading: 'Are you sure?',
+  subHeading: `Modify create contract permission for account “${value}”?`
+});

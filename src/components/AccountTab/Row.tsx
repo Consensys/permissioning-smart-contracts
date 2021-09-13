@@ -16,6 +16,7 @@ type AccountRow = {
   isAdmin: boolean;
   deleteTransaction: (address: string) => void;
   openRemoveModal: (address: string) => void;
+  openModifyModal: (address: string) => void;
 };
 
 const AccountRow: React.FC<AccountRow> = ({
@@ -24,7 +25,8 @@ const AccountRow: React.FC<AccountRow> = ({
   status,
   isAdmin,
   deleteTransaction,
-  openRemoveModal
+  openRemoveModal,
+  openModifyModal
 }) => (
   <TableRow className={styles.row}>
     <TableCell>
@@ -57,7 +59,12 @@ const AccountRow: React.FC<AccountRow> = ({
       </Grid>
     </TableCell>
     <TableCell>
-      <Checkbox checked={canCreateContracts} color="primary" />
+      <Checkbox
+        checked={canCreateContracts}
+        color="primary"
+        onChange={() => openModifyModal(address)}
+        disabled={false}
+      />
     </TableCell>
   </TableRow>
 );
@@ -67,7 +74,8 @@ AccountRow.propTypes = {
   status: PropTypes.string.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
-  openRemoveModal: PropTypes.func.isRequired
+  openRemoveModal: PropTypes.func.isRequired,
+  openModifyModal: PropTypes.func.isRequired
 };
 
 export default AccountRow;
