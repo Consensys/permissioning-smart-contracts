@@ -50,12 +50,13 @@ export const identifierToParams = (identifier: string) => {
   };
 };
 
-export const identifierToEnodeId = (identifier: string) => {
-  if (identifier) {
-    const [enodeId] = identifier.split('_');
+export const identifierToEnodeId = (identifier: string | boolean) => {
+  if (!identifier) {
+    return '';
+  } else {
+    const [enodeId] = identifier.toString().split('_');
     return `${enodeId}`;
   }
-  return '';
 };
 
 export const isValidEnode = (str: string) => {

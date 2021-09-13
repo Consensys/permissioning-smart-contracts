@@ -12,7 +12,7 @@ type EnodeTab = {
   list: (Enode & { identifier: string; status: string })[];
   modals: {
     add: boolean;
-    remove: string;
+    remove: string | boolean;
     lock: boolean;
   };
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
