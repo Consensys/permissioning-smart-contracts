@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 // Components
 import ModifyModal from '../../components/Modals/Modify';
 import { ModalDisplay } from '../../constants/modals';
+import AccountWithPermissions from '../../components/AccountTab/AccountWithPermissions';
 
 const ModifyModalContainer: React.FC<{
   isOpen: boolean;
   closeModal: () => void;
-  handleModify: (value: string | boolean) => void;
-  value: string | boolean;
+  handleModify: (value: any) => void;
+  value: AccountWithPermissions;
   display: ModalDisplay;
 }> = ({ isOpen, closeModal, handleModify, value, display }) => {
   const handleSubmit = (e: MouseEvent) => {
@@ -29,7 +30,7 @@ ModifyModalContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   handleModify: PropTypes.func.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired,
+  value: PropTypes.any.isRequired,
   display: PropTypes.any.isRequired
 };
 

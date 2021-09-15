@@ -24,6 +24,7 @@ import {
   SUCCESS,
   FAIL
 } from '../../constants/transactions';
+import AccountWithPermissions from '../../components/AccountTab/AccountWithPermissions';
 
 type AccountTabContainerProps = {
   isOpen: boolean;
@@ -93,15 +94,18 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       }
     };
 
-    const handleModify = async (value: string) => {
+    const handleModify = async (account: AccountWithPermissions) => {
+      var value = account.address;
       try {
-        // TODO newValue should be passed in as param
-        var newValue = false;
-        console.log('handleModify (' + value + ')');
-        const est = await accountRulesContract!.estimate.setCreateContractPermission(value, newValue);
-        const tx = await accountRulesContract!.functions.setCreateContractPermission(value, newValue, {
-          gasLimit: est.toNumber() * 2
-        });
+        console.log('handleModify (' + value + ' ' + account.canCreateContracts + ')');
+        const est = await accountRulesContract!.estimate.setCreateContractPermission(value, account.canCreateContracts);
+        const tx = await accountRulesContract!.functions.setCreateContractPermission(
+          value,
+          account.canCreateContracts,
+          {
+            gasLimit: est.toNumber() * 2
+          }
+        );
         toggleModal('modify')(false);
         addTransaction(value, PENDING_MODIFY);
         await tx.wait(1); // wait on receipt confirmations

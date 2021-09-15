@@ -8,6 +8,7 @@ import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '
 import TextWithTooltip from './TextWithTooltip';
 // Styles
 import styles from './styles.module.scss';
+import AccountWithPermissions from './AccountWithPermissions';
 
 type AccountRow = {
   address: string;
@@ -16,7 +17,7 @@ type AccountRow = {
   isAdmin: boolean;
   deleteTransaction: (address: string) => void;
   openRemoveModal: (address: string) => void;
-  openModifyModal: (address: string) => void;
+  openModifyModal: (acc: AccountWithPermissions) => void;
 };
 
 const AccountRow: React.FC<AccountRow> = ({
@@ -62,7 +63,7 @@ const AccountRow: React.FC<AccountRow> = ({
       <Checkbox
         checked={canCreateContracts}
         color="primary"
-        onChange={() => openModifyModal(address)}
+        onChange={() => openModifyModal(new AccountWithPermissions(address, !canCreateContracts))}
         disabled={false}
       />
     </TableCell>

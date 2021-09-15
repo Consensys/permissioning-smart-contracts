@@ -12,16 +12,19 @@ import {
   removeAccountDisplay,
   toggleCreateContractPermissionAccountDisplay
 } from '../../constants/modals';
+import AccountWithPermissions from './AccountWithPermissions';
 
 type AccountTab = {
   list: any[];
   modals: {
     add: boolean;
     remove: boolean | string;
-    modify: string;
+    modify: boolean | string | AccountWithPermissions;
     lock: boolean;
   };
-  toggleModal: (name: 'add' | 'remove' | 'modify' | 'lock') => (value?: boolean | string) => void;
+  toggleModal: (
+    name: 'add' | 'remove' | 'modify' | 'lock'
+  ) => (value?: boolean | string | AccountWithPermissions) => void;
   handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
   handleModify: (value: any) => Promise<void>;
@@ -71,10 +74,16 @@ const AccountTab: React.FC<AccountTab> = ({
         />
         <ModifyModal
           isOpen={Boolean(modals.modify) && isAdmin}
-          value={modals.modify}
+          value={
+            modals.modify instanceof AccountWithPermissions
+              ? modals.modify
+              : new AccountWithPermissions(modals.modify.toString(), false)
+          }
           closeModal={() => toggleModal('modify')(false)}
           handleModify={handleModify}
-          display={toggleCreateContractPermissionAccountDisplay(modals.modify)}
+          display={toggleCreateContractPermissionAccountDisplay(
+            modals.modify instanceof AccountWithPermissions ? modals.modify.address : '(could not resolve account)'
+          )}
         />
       </Fragment>
     )}

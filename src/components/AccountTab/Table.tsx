@@ -8,10 +8,13 @@ import AccountRow from './Row';
 import EmptyRow from './EmptyRow';
 // Styles
 import styles from './styles.module.scss';
+import AccountWithPermissions from './AccountWithPermissions';
 
 type AccountTable = {
   list: { address: string; status: string; canCreateContracts: boolean }[];
-  toggleModal: (name: 'add' | 'remove' | 'modify' | 'lock') => (value?: boolean | string) => void;
+  toggleModal: (
+    name: 'add' | 'remove' | 'modify' | 'lock'
+  ) => (value?: boolean | string | AccountWithPermissions) => void;
   deleteTransaction: (identifier: string) => void;
   isAdmin: boolean;
   isReadOnly: boolean;
