@@ -102,7 +102,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         return setCanCreateContracts(_account, _allowed);
     }
 
-    function getCreateContractPermission(address _account) public view onlyAdmin returns (bool){
+    function getCreateContractPermission(address _account) public view returns (bool){
         return getCanCreateContracts(_account);
     }
 

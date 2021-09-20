@@ -9,7 +9,6 @@ class AccountWithPermissions {
     this.canCreateContracts = canCreateContracts;
     this.status = 'NEW';
     this.isAdmin = false;
-    console.log('creating a new AccountWithPermissions' + address + 'ccc:' + canCreateContracts);
   }
 }
 
