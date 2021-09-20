@@ -29,8 +29,7 @@ module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract
     if (retainCurrentRulesContract) {
         console.log("not deploying NodeRules because retain=" + retainCurrentRulesContract);
-        let nodeRulesContract = await NodeRules.deployed();
-        logCurrentAllowlist(nodeRulesContract);
+        logCurrentAllowlist(await Rules.deployed());
         return;
     }
     if (! nodeIngress) {
