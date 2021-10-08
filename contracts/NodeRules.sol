@@ -138,4 +138,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     function triggerRulesChangeEvent(bool addsRestrictions) public {
         nodeIngressContract.emitRulesChangeEvent(addsRestrictions);
     }
+
+    function activateHostValidation(bool useIP) external onlyAdmin onlyOnEditMode returns (bool) {
+        return upgradeHostValidation(useIP);
+    }
 }
