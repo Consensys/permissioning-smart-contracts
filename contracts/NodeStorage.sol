@@ -61,7 +61,7 @@ contract NodeStorage {
         return indexOf[calculateKey(_enodeId, _ip, _port)] != 0;
     }
 
-    function add(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
+    function add(string memory _enodeId, string memory _ip, uint16 _port) public onlyLatestVersion returns (bool) {
         uint256 key = calculateKey(_enodeId, _ip, _port);
         if (indexOf[key] == 0) {
             indexOf[key] = allowlist.push(enode(_enodeId, _ip, _port));
@@ -70,7 +70,7 @@ contract NodeStorage {
         return false;
     }
 
-    function remove(string memory _enodeId, string memory _ip, uint16 _port) public returns (bool) {
+    function remove(string memory _enodeId, string memory _ip, uint16 _port) public onlyLatestVersion returns (bool) {
         uint256 key = calculateKey(_enodeId, _ip, _port);
         uint256 index = indexOf[key];
 
