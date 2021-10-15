@@ -93,7 +93,7 @@ contract("NodeRules (Permissioning without Host)", (accounts) => {
     assert.ok(permitted, 'expected node 1 added to be in list');
   });
   
-  it('should allow a connection between nodes added to the list', async () => {
+  it('should allow a connection between nodes added in to the list', async () => {
     let permitted = await nodeRulesContract.connectionAllowed(enode1, node1Host, node1Port);
     assert.equal(permitted, true, 'expected permitted node1');
 
