@@ -114,7 +114,7 @@ contract NodeStorage {
         }
 
         hostValidation = activate;
-        
+
         for (uint256 index = 0; index < allowlist.length; index++) {
             entry = allowlist[index];
             indexOf[calculateKey(entry.enodeId, entry.ip, entry.port)] = index + 1;
@@ -122,7 +122,6 @@ contract NodeStorage {
 
         return true;
     }
-
 
     function calculateKey(string memory _enodeId, string memory _host, uint16 _port) public view returns(uint256) {
         if (hostValidation) {
