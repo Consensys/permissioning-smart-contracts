@@ -40,7 +40,7 @@ contract("NodeRules (Permissioning without Host)", (accounts) => {
     storageContract = await RulesStorage.new(nodeIngressContract.address);
     console.log("   >>> Storage contract deployed with address = " + storageContract.address);
 
-    await storageContract.upgradeHostValidation(false);
+    await storageContract.setValidateEnodeIdOnly(false);
     console.log("   >>> Storage update to work without IP in validation ");
 
     nodeRulesContract = await NodeRules.new(nodeIngressContract.address, storageContract.address);

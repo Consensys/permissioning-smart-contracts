@@ -140,6 +140,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     }
 
     function activateHostValidation(bool useHost) external onlyAdmin onlyOnEditMode returns (bool) {
-        return upgradeHostValidation(useHost);
+        return setValidateEnodeIdOnly(useHost);
     }
 }

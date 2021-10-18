@@ -101,7 +101,7 @@ contract NodeStorage {
         }
     }
 
-    function upgradeHostValidation (bool activate) public onlyLatestVersion returns (bool) {
+    function setValidateEnodeIdOnly (bool activate) public onlyLatestVersion returns (bool) {
         if (hostValidation == activate) {
             return true;
         }
@@ -127,6 +127,6 @@ contract NodeStorage {
         if (hostValidation) {
             return uint256(keccak256(abi.encodePacked(_enodeId, _host, _port)));
         }
-        return uint256(keccak256(abi.encodePacked(_enodeId, _port)));
+        return uint256(keccak256(abi.encodePacked(_enodeId)));
     }
 }

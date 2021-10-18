@@ -46,7 +46,7 @@ contract NodeRulesList {
         return nodeStorage.getByIndex(index);
     }
 
-    function upgradeHostValidation(bool useHost) internal returns (bool) {
-        return nodeStorage.upgradeHostValidation(useHost);
+    function setValidateEnodeIdOnly(bool useHost) internal returns (bool) {
+        return nodeStorage.setValidateEnodeIdOnly(useHost);
     }
 }
