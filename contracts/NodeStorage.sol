@@ -27,11 +27,11 @@ contract NodeStorage {
     enode[] public allowlist;
     mapping (uint256 => uint256) private indexOf; //1-based indexing. 0 means non-existent
 
-    bool private hostValidation;
+    bool private onlyUseEnodeId;
 
     constructor (NodeIngress _ingressContract) public {
         ingressContract = _ingressContract;
-        hostValidation = true;
+        onlyUseEnodeId = false;
     }
 
     modifier onlyLatestVersion() {
@@ -101,8 +101,8 @@ contract NodeStorage {
         }
     }
 
-    function setValidateEnodeIdOnly (bool activate) public onlyLatestVersion returns (bool) {
-        if (hostValidation == activate) {
+    function setValidateEnodeIdOnly (bool _onlyUseEnodeId) public onlyLatestVersion returns (bool) {
+        if (onlyUseEnodeId == _onlyUseEnodeId) {
             return true;
         }
 
@@ -113,7 +113,7 @@ contract NodeStorage {
             indexOf[calculateKey(entry.enodeId, entry.ip, entry.port)] = 0;
         }
 
-        hostValidation = activate;
+        onlyUseEnodeId = _onlyUseEnodeId;
 
         for (uint256 index = 0; index < allowlist.length; index++) {
             entry = allowlist[index];
@@ -124,7 +124,7 @@ contract NodeStorage {
     }
 
     function calculateKey(string memory _enodeId, string memory _host, uint16 _port) public view returns(uint256) {
-        if (hostValidation) {
+        if (!onlyUseEnodeId) {
             return uint256(keccak256(abi.encodePacked(_enodeId, _host, _port)));
         }
         return uint256(keccak256(abi.encodePacked(_enodeId)));
