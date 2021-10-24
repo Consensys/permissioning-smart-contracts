@@ -45,4 +45,8 @@ contract NodeRulesList {
     function getByIndex(uint index) external view returns (string memory enodeId, string memory host, uint16 port) {
         return nodeStorage.getByIndex(index);
     }
+
+    function setValidateEnodeIdOnly(bool _onlyUseEnodeId) internal returns (bool) {
+        return nodeStorage.setValidateEnodeIdOnly(_onlyUseEnodeId);
+    }
 }

@@ -27,8 +27,11 @@ contract NodeStorage {
     enode[] public allowlist;
     mapping (uint256 => uint256) private indexOf; //1-based indexing. 0 means non-existent
 
+    bool private onlyUseEnodeId;
+
     constructor (NodeIngress _ingressContract) public {
         ingressContract = _ingressContract;
+        onlyUseEnodeId = false;
     }
 
     modifier onlyLatestVersion() {
@@ -57,21 +60,21 @@ contract NodeStorage {
         return allowlist.length;
     }
 
-    function exists(string memory _enodeId, string memory _ip, uint16 _port) public view returns (bool) {
-        return indexOf[calculateKey(_enodeId, _ip, _port)] != 0;
+    function exists(string memory _enodeId, string memory _host, uint16 _port) public view returns (bool) {
+        return indexOf[calculateKey(_enodeId, _host, _port)] != 0;
     }
 
-    function add(string memory _enodeId, string memory _ip, uint16 _port) public onlyLatestVersion returns (bool) {
-        uint256 key = calculateKey(_enodeId, _ip, _port);
+    function add(string memory _enodeId, string memory _host, uint16 _port) public onlyLatestVersion returns (bool) {
+        uint256 key = calculateKey(_enodeId, _host, _port);
         if (indexOf[key] == 0) {
-            indexOf[key] = allowlist.push(enode(_enodeId, _ip, _port));
+            indexOf[key] = allowlist.push(enode(_enodeId, _host, _port));
             return true;
         }
         return false;
     }
 
-    function remove(string memory _enodeId, string memory _ip, uint16 _port) public onlyLatestVersion returns (bool) {
-        uint256 key = calculateKey(_enodeId, _ip, _port);
+    function remove(string memory _enodeId, string memory _host, uint16 _port) public onlyLatestVersion returns (bool) {
+        uint256 key = calculateKey(_enodeId, _host, _port);
         uint256 index = indexOf[key];
 
         if (index > 0 && index <= allowlist.length) { //1 based indexing
@@ -98,7 +101,32 @@ contract NodeStorage {
         }
     }
 
-    function calculateKey(string memory _enodeId, string memory _ip, uint16 _port) public pure returns(uint256) {
-        return uint256(keccak256(abi.encodePacked(_enodeId, _ip, _port)));
+    function setValidateEnodeIdOnly (bool _onlyUseEnodeId) public onlyLatestVersion returns (bool) {
+        if (onlyUseEnodeId == _onlyUseEnodeId) {
+            return true;
+        }
+
+        // First we reset old map entries
+        enode memory entry;
+        for (uint256 index = 0; index < allowlist.length; index++) {
+            entry = allowlist[index];
+            indexOf[calculateKey(entry.enodeId, entry.ip, entry.port)] = 0;
+        }
+
+        onlyUseEnodeId = _onlyUseEnodeId;
+
+        for (uint256 index = 0; index < allowlist.length; index++) {
+            entry = allowlist[index];
+            indexOf[calculateKey(entry.enodeId, entry.ip, entry.port)] = index + 1;
+        }
+
+        return true;
+    }
+
+    function calculateKey(string memory _enodeId, string memory _host, uint16 _port) public view returns(uint256) {
+        if (!onlyUseEnodeId) {
+            return uint256(keccak256(abi.encodePacked(_enodeId, _host, _port)));
+        }
+        return uint256(keccak256(abi.encodePacked(_enodeId)));
     }
 }
