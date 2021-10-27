@@ -138,4 +138,8 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     function triggerRulesChangeEvent(bool addsRestrictions) public {
         nodeIngressContract.emitRulesChangeEvent(addsRestrictions);
     }
+
+    function activateValidationEnodeIdOnly(bool _onlyUseEnodeId) external onlyAdmin onlyOnEditMode returns (bool) {
+        return setValidateEnodeIdOnly(_onlyUseEnodeId);
+    }
 }
