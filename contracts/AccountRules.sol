@@ -99,11 +99,11 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         emit AccountRemoved(removed, account);
         return removed;
     }
-    
+
     function setCreateContractPermission(address _account, bool _allowed) public onlyAdmin returns (bool){
         return setCanCreateContracts(_account, _allowed);
     }
-    
+
     function getCreateContractPermission(address _account) public onlyAdmin returns (bool){
         return getCanCreateContracts(_account);
     }

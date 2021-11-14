@@ -72,17 +72,22 @@ module.exports = async(deployer, network) => {
     await storageInstance.upgradeVersion(Rules.address);
     console.log("   >>> Set storage owner to Rules.address " + Rules.address);
 
+    let createdOrMigratedAccounts;
     if (AllowlistUtils.isInitialAllowlistedAccountsAvailable()) {
         console.log("   > Adding Initial Allowlisted Accounts ...");
-        let allowlistedAccounts = AllowlistUtils.getInitialAllowlistedAccounts();
-        if (allowlistedAccounts.length > 0) {
+        createdOrMigratedAccounts = AllowlistUtils.getInitialAllowlistedAccounts();
+        if (createdOrMigratedAccounts.length > 0) {
             await accountRulesContract.addAccounts(allowlistedAccounts);
             console.log ("   > Initial Allowlisted Accounts added: " + allowlistedAccounts);
-            // set these accounts to be able to deploy contracts
-            await accountRulesContract.setCreateContractPermission(allowlistedAccounts[0], true);
-            console.log(">>> gave contract creation permission to " + allowlistedAccounts[0]);
         }
-        
+    }else{
+        createdOrMigratedAccounts = await accountRulesContract.getAccounts();
+    }
+
+    // set these accounts to be able to deploy contracts
+    for (const account of createdOrMigratedAccounts) {
+        await accountRulesContract.setCreateContractPermission(account, true);
+        console.log(">>> gave contract creation permission to " + account);
     }
 
     await accountIngressInstance.setContractAddress(rulesContractName, Rules.address);
