@@ -1,4 +1,4 @@
-pragma solidity 0.5.9;
+pragma solidity >=0.5.9;
 
 import "./AccountRulesList.sol";
 import "./AccountStorage.sol";
