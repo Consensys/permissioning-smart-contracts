@@ -2,9 +2,9 @@ pragma solidity 0.5.9;
 
 import "./Admin.sol";
 import "./NodeIngress.sol";
+import "./Types.sol";
 
-
-contract NodeStorage {
+contract NodeStorage is Types{
     event VersionChange(
         address oldAddress,
         address newAddress
@@ -13,33 +13,34 @@ contract NodeStorage {
     address private latestVersion = msg.sender;
     address private owner = msg.sender;
 
-    NodeIngress private ingressContract;
+    NodeIngress internal ingressContract;
 
+    
 
-
-    // struct size = 82 bytes
-    struct enode {
-        string enodeId;
-        string ip;
-        uint16 port;
-    }
-
-    enode[] public allowlist;
+    Enode[] public allowlist;
     mapping (uint256 => uint256) private indexOf; //1-based indexing. 0 means non-existent
+    mapping (bytes32 => bool) private allowGroups;
 
-    bool private onlyUseEnodeId;
+    bool internal onlyUseEnodeId;
 
-    constructor (NodeIngress _ingressContract) public {
+   /* constructor (address[] _owners, uint _required,NodeIngress _ingressContract) validRequirement(_owners.length, _required) public {
         ingressContract = _ingressContract;
         onlyUseEnodeId = false;
-    }
+
+        for (uint i=0; i<_owners.length; i++) {
+            require(!isOwner[_owners[i]] && _owners[i] != 0);
+            isOwner[_owners[i]] = true;
+        }
+        owners = _owners;
+        required = _required;
+    }*/
 
     modifier onlyLatestVersion() {
         require(msg.sender == latestVersion, "only the latestVersion can modify the list");
         _;
     }
 
-    modifier onlyAdmin() {
+    modifier ownerExists() {
         if (address(0) == address(ingressContract)) {
             require(msg.sender == owner, "only owner permitted since ingressContract is explicitly set to zero");
         } else {
@@ -51,7 +52,13 @@ contract NodeStorage {
         _;
     }
 
-    function upgradeVersion(address _newVersion) public onlyAdmin {
+    function getOwnersSize() public view returns(uint256){
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        return Admin(adminContractAddress).size();
+    }
+
+    function upgradeVersion(address _newVersion) public ownerExists {
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
     }
@@ -60,29 +67,67 @@ contract NodeStorage {
         return allowlist.length;
     }
 
-    function exists(string memory _enodeId, string memory _host, uint16 _port) public view returns (bool) {
-        return indexOf[calculateKey(_enodeId, _host, _port)] != 0;
+    function getOwner(uint256 index) internal view returns(address){
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        return Admin(adminContractAddress).getOwner(index);
     }
 
-    function add(string memory _enodeId, string memory _host, uint16 _port) public onlyLatestVersion returns (bool) {
-        uint256 key = calculateKey(_enodeId, _host, _port);
+    function exists(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns (bool) {
+        return indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)] != 0;
+    }
+
+    function groupConnectionAllowed(
+        bytes32 sourceEnodeHigh,
+        bytes32 sourceEnodeLow,
+        bytes16 sourceEnodeIp,
+        uint16 sourceEnodePort,
+        bytes32 destinationEnodeHigh,
+        bytes32 destinationEnodeLow,
+        bytes16 destinationEnodeIp,
+        uint16 destinationEnodePort) public view returns (bool){
+        if (exists(sourceEnodeHigh,sourceEnodeLow,sourceEnodeIp,sourceEnodePort) && exists(destinationEnodeHigh,destinationEnodeLow,destinationEnodeIp,destinationEnodePort)){    
+            Enode memory source = allowlist[indexOf[calculateKey(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort)]-1];
+            Enode memory destination = allowlist[indexOf[calculateKey(destinationEnodeHigh, destinationEnodeLow, destinationEnodeIp, destinationEnodePort)]-1];        
+
+            return allowGroups[keccak256(abi.encodePacked(source.group, destination.group))];
+        }
+        else{
+            return false;
+        }
+    }
+
+    function addConnectionAllowed(bytes32 groupSource, bytes32 groupDestination)public returns(bool){
+        allowGroups[keccak256(abi.encodePacked(groupSource, groupDestination))]=true;
+        allowGroups[keccak256(abi.encodePacked(groupDestination, groupSource))]=true;
+        return true;
+    }
+
+    function removeConnection(bytes32 groupSource, bytes32 groupDestination)public returns(bool){
+        allowGroups[keccak256(abi.encodePacked(groupSource, groupDestination))]=false;
+        allowGroups[keccak256(abi.encodePacked(groupDestination, groupSource))]=false;
+        return true;
+    }
+
+    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) public onlyLatestVersion returns (bool) {
+        uint256 key = calculateKey(_enodeHigh, _enodeLow , _ip, _port);
         if (indexOf[key] == 0) {
-            indexOf[key] = allowlist.push(enode(_enodeId, _host, _port));
+            indexOf[key] = allowlist.push(Enode(_enodeHigh, _enodeLow, _ip, _port, NodeType(_nodeType), _geoHash, _name, _organization, _did, _group));
             return true;
         }
         return false;
     }
 
-    function remove(string memory _enodeId, string memory _host, uint16 _port) public onlyLatestVersion returns (bool) {
-        uint256 key = calculateKey(_enodeId, _host, _port);
+    function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public onlyLatestVersion returns (bool) {
+        uint256 key = calculateKey(_enodeHigh, _enodeLow,_ip, _port);
         uint256 index = indexOf[key];
 
         if (index > 0 && index <= allowlist.length) { //1 based indexing
             //move last item into index being vacated (unless we are dealing with last index)
             if (index != allowlist.length) {
-                enode memory lastEnode = allowlist[allowlist.length - 1];
+                Enode memory lastEnode = allowlist[allowlist.length - 1];
                 allowlist[index - 1] = lastEnode;
-                indexOf[calculateKey(lastEnode.enodeId, lastEnode.ip, lastEnode.port)] = index;
+                indexOf[calculateKey(lastEnode.enodeHigh, lastEnode.enodeLow, lastEnode.ip, lastEnode.port)] = index;
             }
 
             //shrink array
@@ -94,10 +139,21 @@ contract NodeStorage {
         return false;
     }
 
-    function getByIndex(uint index) external view returns (string memory enodeId, string memory ip, uint16 port) {
+    function getByIndex(uint index) external view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port, NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group) {
         if (index >= 0 && index < size()) {
-            enode memory item = allowlist[index];
-            return (item.enodeId, item.ip, item.port);
+            Enode memory item = allowlist[index];
+            return (item.enodeHigh, item.enodeLow, item.ip, item.port, item.nodeType, item.geoHash, item.name, item.organization, item.did, item.group);
+        }
+    }
+
+    function getByEnode(
+        bytes32 _enodeHigh,
+        bytes32 _enodeLow,
+        bytes16 _ip,
+        uint16 _port)public view returns (NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group) {
+        Enode memory item = allowlist[indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)]-1];
+        if(item.port!=0){
+            return (item.nodeType, item.geoHash, item.name, item.organization, item.did, item.group);
         }
     }
 
@@ -107,26 +163,26 @@ contract NodeStorage {
         }
 
         // First we reset old map entries
-        enode memory entry;
+        Enode memory entry;
         for (uint256 index = 0; index < allowlist.length; index++) {
             entry = allowlist[index];
-            indexOf[calculateKey(entry.enodeId, entry.ip, entry.port)] = 0;
+            indexOf[calculateKey(entry.enodeHigh, entry.enodeLow, entry.ip, entry.port)] = 0;
         }
 
         onlyUseEnodeId = _onlyUseEnodeId;
 
         for (uint256 index = 0; index < allowlist.length; index++) {
             entry = allowlist[index];
-            indexOf[calculateKey(entry.enodeId, entry.ip, entry.port)] = index + 1;
+            indexOf[calculateKey(entry.enodeHigh, entry.enodeLow, entry.ip, entry.port)] = index + 1;
         }
 
         return true;
     }
 
-    function calculateKey(string memory _enodeId, string memory _host, uint16 _port) public view returns(uint256) {
+    function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns(uint256) {
         if (!onlyUseEnodeId) {
-            return uint256(keccak256(abi.encodePacked(_enodeId, _host, _port)));
+            return uint256(keccak256(abi.encodePacked(_enodeHigh, _enodeLow, _ip, _port)));
         }
-        return uint256(keccak256(abi.encodePacked(_enodeId)));
+        return uint256(keccak256(abi.encodePacked(_enodeHigh,_enodeLow)));
     }
 }

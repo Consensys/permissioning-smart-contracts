@@ -1,16 +1,9 @@
 pragma solidity 0.5.9;
 
 import "./NodeStorage.sol";
+import "./Types.sol";
 
-
-contract NodeRulesList {
-
-    // struct size = 82 bytes
-    struct enode {
-        string enodeId;
-        string host;
-        uint16 port;
-    }
+contract NodeRulesList is Types{
 
     NodeStorage private nodeStorage;
 
@@ -26,23 +19,43 @@ contract NodeRulesList {
         return nodeStorage.size();
     }
 
-    function exists(string memory _enodeId, string memory _host, uint16 _port) internal view returns (bool) {
-        return nodeStorage.exists(_enodeId, _host, _port);
+    function exists(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal view returns (bool) {
+        return nodeStorage.exists(_enodeHigh, _enodeLow, _ip, _port);
     }
 
-    function add(string memory _enodeId, string memory _host, uint16 _port) internal returns (bool) {
-        return nodeStorage.add(_enodeId, _host, _port);
+    function groupConnectionAllowed(
+        bytes32 _sourceEnodeHigh,
+        bytes32 _sourceEnodeLow,
+        bytes16 _sourceEnodeIp,
+        uint16 _sourceEnodePort,
+        bytes32 _destinationEnodeHigh,
+        bytes32 _destinationEnodeLow,
+        bytes16 _destinationEnodeIp,
+        uint16 _destinationEnodePort) internal view returns (bool){
+            return nodeStorage.groupConnectionAllowed(_sourceEnodeHigh, _sourceEnodeLow, _sourceEnodeIp,_sourceEnodePort,_destinationEnodeHigh,_destinationEnodeLow,_destinationEnodeIp,_destinationEnodePort);
+        }
+
+    function _addConnectionAllowed(bytes32 _groupSource, bytes32 _groupDestination) internal returns (bool){
+        return nodeStorage.addConnectionAllowed(_groupSource, _groupDestination);
     }
 
-    function remove(string memory _enodeId, string memory _host, uint16 _port) internal returns (bool) {
-        return nodeStorage.remove(_enodeId, _host, _port);
+    function _removeConnection(bytes32 _groupSource, bytes32 _groupDestination) internal returns (bool){
+        return nodeStorage.removeConnection(_groupSource,_groupDestination);
     }
 
-    function calculateKey(string memory _enodeId, string memory _host, uint16 _port) public view returns(uint256) {
-        return nodeStorage.calculateKey(_enodeId, _host, _port);
+    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) internal returns (bool) {
+        return nodeStorage.add(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
     }
 
-    function getByIndex(uint index) external view returns (string memory enodeId, string memory host, uint16 port) {
+    function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal returns (bool) {
+        return nodeStorage.remove(_enodeHigh, _enodeLow , _ip, _port);
+    }
+
+    function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns(uint256) {
+        return nodeStorage.calculateKey(_enodeHigh, _enodeLow , _ip, _port);
+    }
+
+    function getByIndex(uint index) external view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port, NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group) {
         return nodeStorage.getByIndex(index);
     }
 

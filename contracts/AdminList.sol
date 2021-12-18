@@ -17,12 +17,16 @@ contract AdminList {
     address[] public allowlist;
     mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
 
-    function size() internal view returns (uint256) {
+    function size() public view returns (uint256) {
         return allowlist.length;
     }
 
     function exists(address _account) internal view returns (bool) {
         return indexOf[_account] != 0;
+    }
+
+    function getOwner(uint index) public view returns(address){
+        return allowlist[index];
     }
 
     function add(address _account) internal returns (bool) {

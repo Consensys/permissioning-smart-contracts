@@ -10,23 +10,23 @@ contract ExposedNodeRulesList is NodeRulesList {
         return setStorage(_storage);
     }
 
-    function _calculateKey(string calldata _enodeId, string calldata _host, uint16 _port) external view returns(uint256) {
-        return calculateKey(_enodeId, _host, _port);
+    function _calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) external view returns(uint256) {
+        return calculateKey(_enodeHigh, _enodeLow, _ip, _port);
     }
 
     function _size() external view returns (uint256) {
         return size();
     }
 
-    function _exists(string calldata _enodeId, string calldata _host, uint16 _port) external view returns (bool) {
-        return exists(_enodeId, _host, _port);
+    function _exists(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) external view returns (bool) {
+        return exists(_enodeHigh, _enodeLow, _ip, _port);
     }
 
-    function _add(string calldata _enodeId, string calldata _host, uint16 _port) external returns (bool) {
-        return add(_enodeId, _host, _port);
+    function _add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string calldata _name, string calldata _organization, string calldata _did, bytes32 _group) external returns (bool) {
+        return add(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
     }
 
-    function _remove(string calldata _enodeId, string calldata _host, uint16 _port) external returns (bool) {
-        return remove(_enodeId, _host, _port);
+    function _remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) external returns (bool) {
+        return remove(_enodeHigh, _enodeLow, _ip, _port);
     }
 }
