@@ -6,7 +6,7 @@ analyze:
     mode: quick
     async: false
     create-group: true
-    solc: 0.5.9
+    solc: 0.7.0
     remappings:
         - "@openzeppelin=node_modules/@openzeppelin"
     targets:
