@@ -33,7 +33,7 @@ contract Admin is AdminProxy, AdminList {
         add(msg.sender);
     }
 
-    function isAuthorized(address _address) override public view returns (bool) {
+    function isAuthorized(address _address) public override view returns (bool) {
         return exists(_address);
     }
 

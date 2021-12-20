@@ -88,7 +88,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         string calldata enodeId,
         string calldata enodeHost,
         uint16 enodePort
-    ) override external view returns (bool) {
+    ) external override view returns (bool) {
         return
             enodePermitted (
                 enodeId,
