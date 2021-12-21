@@ -12,7 +12,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.6.0 <0.9.0;
 
 import "./Admin.sol";
 import "./NodeIngress.sol";
@@ -43,7 +43,7 @@ contract NodeStorage {
 
     bool private onlyUseEnodeId;
 
-    constructor (NodeIngress _ingressContract) {
+    constructor (NodeIngress _ingressContract) public {
         ingressContract = _ingressContract;
         onlyUseEnodeId = false;
     }

@@ -12,7 +12,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.6.0 <0.9.0;
 
 import "./AdminProxy.sol";
 import "./AdminList.sol";
@@ -29,7 +29,7 @@ contract Admin is AdminProxy, AdminList {
         _;
     }
 
-    constructor() {
+    constructor() public {
         add(msg.sender);
     }
 

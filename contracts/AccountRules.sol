@@ -12,7 +12,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.6.0 <0.9.0;
 
 import "./AccountRulesProxy.sol";
 import "./AccountRulesList.sol";
@@ -41,7 +41,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         _;
     }
 
-    constructor (AccountIngress _ingressContract, AccountStorage _storage) {
+    constructor (AccountIngress _ingressContract, AccountStorage _storage) public {
         setStorage(_storage);
         ingressContract = _ingressContract;
     }

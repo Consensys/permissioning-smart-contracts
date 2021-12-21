@@ -2847,16 +2847,16 @@
     "module" "^1.2.5"
     "original-require" "^1.0.1"
 
-"@truffle/db-loader@^0.0.22":
-  "integrity" "sha512-1t+4bvZD79ITFCPHR6hutplabqGlLx0LZricywE+ijp1oNcTsEf9f5dB1Pk7i3t03qaa93WGAqwjfe5RFqX/Ig=="
-  "resolved" "https://registry.npmjs.org/@truffle/db-loader/-/db-loader-0.0.22.tgz"
-  "version" "0.0.22"
+"@truffle/db-loader@^0.0.21":
+  "integrity" "sha512-ExRrWvXQ4Qn+cAXF2quzNJSEPUTGSZWo/M1M0w2hchK+9ewU81VH+NukOE7PXmSzJDcVTzIdtEvujvbcHeV1ug=="
+  "resolved" "https://registry.npmjs.org/@truffle/db-loader/-/db-loader-0.0.21.tgz"
+  "version" "0.0.21"
   dependencies:
-    "@truffle/db" "^0.5.43"
+    "@truffle/db" "^0.5.42"
   optionalDependencies:
-    "@truffle/db" "^0.5.43"
+    "@truffle/db" "^0.5.42"
 
-"@truffle/db@^0.5.43":
+"@truffle/db@^0.5.42":
   "integrity" "sha512-YtD3JbROGNwZBSijjJVckZqcP9DrMPKqPUDcWpbOtJxmlzcoHa+Tiu+V3kGluT8qOkcGKUUU1fDTeI7XZdKtgw=="
   "resolved" "https://registry.npmjs.org/@truffle/db/-/db-0.5.43.tgz"
   "version" "0.5.43"
@@ -2881,7 +2881,7 @@
     "pouchdb-find" "^7.0.0"
     "web3-utils" "1.5.3"
 
-"@truffle/debugger@^9.2.7":
+"@truffle/debugger@^9.2.6":
   "integrity" "sha512-3UkJFmq9eg5WGf3PSzupWiehZsBMysJCMqbGssVx2DXwjmebKkHnMhfpRAHKtLKSJgBnSmWM45i4Kj8YwbSXfA=="
   "resolved" "https://registry.npmjs.org/@truffle/debugger/-/debugger-9.2.7.tgz"
   "version" "9.2.7"
@@ -13781,18 +13781,18 @@
   dependencies:
     "minimist" "0.0.8"
 
-"mocha-junit-reporter@2.0.0":
-  "integrity" "sha512-20HoWh2HEfhqmigfXOKUhZQyX23JImskc37ZOhIjBKoBEsb+4cAFRJpAVhFpnvsztLklW/gFVzsrobjLwmX4lA=="
-  "resolved" "https://registry.yarnpkg.com/mocha-junit-reporter/-/mocha-junit-reporter-2.0.0.tgz"
-  "version" "2.0.0"
+"mocha-junit-reporter@2.0.2":
+  "integrity" "sha512-vYwWq5hh3v1lG0gdQCBxwNipBfvDiAM1PHroQRNp96+2l72e9wEUTw+mzoK+O0SudgfQ7WvTQZ9Nh3qkAYAjfg=="
+  "resolved" "https://registry.npmjs.org/mocha-junit-reporter/-/mocha-junit-reporter-2.0.2.tgz"
+  "version" "2.0.2"
   dependencies:
     "debug" "^2.2.0"
     "md5" "^2.1.0"
     "mkdirp" "~0.5.1"
-    "strip-ansi" "^4.0.0"
+    "strip-ansi" "^6.0.1"
     "xml" "^1.0.0"
 
-"mocha-multi-reporters@^1.1.7":
+"mocha-multi-reporters@1.5.1":
   "integrity" "sha512-Yb4QJOaGLIcmB0VY7Wif5AjvLMUFAdV57D2TWEva1Y0kU/3LjKpeRVmlMIfuO1SVbauve459kgtIizADqxMWPg=="
   "resolved" "https://registry.yarnpkg.com/mocha-multi-reporters/-/mocha-multi-reporters-1.5.1.tgz"
   "version" "1.5.1"
@@ -14757,7 +14757,7 @@
 
 "original-require@^1.0.1":
   "integrity" "sha1-DxMEcVhM0zURxew4yNWSE/msXiA="
-  "resolved" "https://registry.yarnpkg.com/original-require/-/original-require-1.0.1.tgz"
+  "resolved" "https://registry.npmjs.org/original-require/-/original-require-1.0.1.tgz"
   "version" "1.0.1"
 
 "original@^1.0.0":
@@ -19474,14 +19474,14 @@
   "resolved" "https://registry.npmjs.org/trim-right/-/trim-right-1.0.1.tgz"
   "version" "1.0.1"
 
-"truffle@5.4.25":
-  "integrity" "sha512-MU6rUp9guqr4pvNoFxkXh5kjAokYeq3nMfEshCqFyf5Rp5qS4omPyppuxsQZnqx2HBtKoPqsY5efmWq40PAvhQ=="
-  "resolved" "https://registry.npmjs.org/truffle/-/truffle-5.4.25.tgz"
-  "version" "5.4.25"
+"truffle@5.4.24":
+  "integrity" "sha512-9eTzJzECzWzh2QL1ng0KWesQ1spLSKIh5KFbjBIcLNrvwcZGZy1Ns5fsgt1/qb+4gqgusxn0zmPOnaYRdwBVJQ=="
+  "resolved" "https://registry.npmjs.org/truffle/-/truffle-5.4.24.tgz"
+  "version" "5.4.24"
   dependencies:
-    "@truffle/db" "^0.5.43"
-    "@truffle/db-loader" "^0.0.22"
-    "@truffle/debugger" "^9.2.7"
+    "@truffle/db" "^0.5.42"
+    "@truffle/db-loader" "^0.0.21"
+    "@truffle/debugger" "^9.2.6"
     "@truffle/preserve-fs" "^0.2.4"
     "@truffle/preserve-to-buckets" "^0.2.4"
     "@truffle/preserve-to-filecoin" "^0.2.4"
@@ -19490,7 +19490,7 @@
     "mocha" "8.1.2"
     "original-require" "^1.0.1"
   optionalDependencies:
-    "@truffle/db" "^0.5.43"
+    "@truffle/db" "^0.5.42"
     "@truffle/preserve-fs" "^0.2.4"
     "@truffle/preserve-to-buckets" "^0.2.4"
     "@truffle/preserve-to-filecoin" "^0.2.4"

@@ -12,7 +12,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.6.0 <0.9.0;
 
 import "./NodeRulesProxy.sol";
 import "./NodeRulesList.sol";
@@ -57,7 +57,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         _;
     }
 
-    constructor (NodeIngress _nodeIngressAddress, NodeStorage _storage) {
+    constructor (NodeIngress _nodeIngressAddress, NodeStorage _storage) public {
         setStorage(_storage);
         nodeIngressContract = _nodeIngressAddress;
     }

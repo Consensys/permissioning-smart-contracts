@@ -12,7 +12,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.6.0 <0.9.0;
 
 import "./Admin.sol";
 import "./AccountIngress.sol";
@@ -32,7 +32,7 @@ contract AccountStorage {
     address[] public allowlist;
     mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
 
-    constructor (AccountIngress _ingressContract) {
+    constructor (AccountIngress _ingressContract) public {
         ingressContract = _ingressContract;
         add(msg.sender);
     }
