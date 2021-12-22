@@ -1,4 +1,18 @@
-pragma solidity 0.5.9;
+/*
+ * Copyright ConsenSys AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+pragma solidity >=0.6.0 <0.9.0;
 
 import "./Admin.sol";
 import "./NodeIngress.sol";
@@ -67,7 +81,8 @@ contract NodeStorage {
     function add(string memory _enodeId, string memory _host, uint16 _port) public onlyLatestVersion returns (bool) {
         uint256 key = calculateKey(_enodeId, _host, _port);
         if (indexOf[key] == 0) {
-            indexOf[key] = allowlist.push(enode(_enodeId, _host, _port));
+            allowlist.push(enode(_enodeId, _host, _port));
+            indexOf[key] = allowlist.length;
             return true;
         }
         return false;
@@ -86,7 +101,7 @@ contract NodeStorage {
             }
 
             //shrink array
-            allowlist.length -= 1; // mythx-disable-line SWC-101
+            allowlist.pop();
             indexOf[key] = 0;
             return true;
         }
