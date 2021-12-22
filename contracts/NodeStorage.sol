@@ -12,10 +12,9 @@ contract NodeStorage is Types{
     // initialize this to the deployer of this contract
     address private latestVersion = msg.sender;
     address private owner = msg.sender;
+    address private nodeRules = msg.sender;
 
     NodeIngress internal ingressContract;
-
-    
 
     Enode[] public allowlist;
     mapping (uint256 => uint256) private indexOf; //1-based indexing. 0 means non-existent
@@ -23,31 +22,24 @@ contract NodeStorage is Types{
 
     bool internal onlyUseEnodeId;
 
-   /* constructor (address[] _owners, uint _required,NodeIngress _ingressContract) validRequirement(_owners.length, _required) public {
-        ingressContract = _ingressContract;
-        onlyUseEnodeId = false;
-
-        for (uint i=0; i<_owners.length; i++) {
-            require(!isOwner[_owners[i]] && _owners[i] != 0);
-            isOwner[_owners[i]] = true;
-        }
-        owners = _owners;
-        required = _required;
-    }*/
-
     modifier onlyLatestVersion() {
         require(msg.sender == latestVersion, "only the latestVersion can modify the list");
         _;
     }
 
-    modifier ownerExists() {
+    modifier onlyNodeRules() {
+        require(msg.sender == nodeRules, "only the NodeRules contract can call");
+        _;
+    }
+
+    modifier ownerExists(address sender) {
         if (address(0) == address(ingressContract)) {
-            require(msg.sender == owner, "only owner permitted since ingressContract is explicitly set to zero");
+            require(sender == owner, "only owner permitted since ingressContract is explicitly set to zero");
         } else {
             address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
             require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-            require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
+            require(Admin(adminContractAddress).isAuthorized(sender), "Sender not authorized");
         }
         _;
     }
@@ -58,16 +50,21 @@ contract NodeStorage is Types{
         return Admin(adminContractAddress).size();
     }
 
-    function upgradeVersion(address _newVersion) public ownerExists {
+    function upgradeVersion(address _newVersion) public ownerExists(msg.sender) {
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
+    }
+
+    function updateNodeRules(address _nodeRules) public ownerExists(msg.sender) {
+        emit VersionChange(nodeRules, _nodeRules);
+        nodeRules = _nodeRules;
     }
 
     function size() public view returns (uint256) {
         return allowlist.length;
     }
 
-    function getOwner(uint256 index) internal view returns(address){
+    function getOwner(uint256 index) internal onlyNodeRules view returns(address){
         address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         return Admin(adminContractAddress).getOwner(index);
@@ -97,28 +94,28 @@ contract NodeStorage is Types{
         }
     }
 
-    function addConnectionAllowed(bytes32 groupSource, bytes32 groupDestination)public returns(bool){
+    function addConnectionAllowed(bytes32 groupSource, bytes32 groupDestination)public onlyNodeRules returns(bool){
         allowGroups[keccak256(abi.encodePacked(groupSource, groupDestination))]=true;
         allowGroups[keccak256(abi.encodePacked(groupDestination, groupSource))]=true;
         return true;
     }
 
-    function removeConnection(bytes32 groupSource, bytes32 groupDestination)public returns(bool){
+    function removeConnection(bytes32 groupSource, bytes32 groupDestination)public onlyNodeRules returns(bool){
         allowGroups[keccak256(abi.encodePacked(groupSource, groupDestination))]=false;
         allowGroups[keccak256(abi.encodePacked(groupDestination, groupSource))]=false;
         return true;
     }
 
-    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) public onlyLatestVersion returns (bool) {
+    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) internal onlyNodeRules returns (bool) {
         uint256 key = calculateKey(_enodeHigh, _enodeLow , _ip, _port);
         if (indexOf[key] == 0) {
-            indexOf[key] = allowlist.push(Enode(_enodeHigh, _enodeLow, _ip, _port, NodeType(_nodeType), _geoHash, _name, _organization, _did, _group));
+            indexOf[key] = allowlist.push(Enode(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group));
             return true;
         }
         return false;
     }
 
-    function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public onlyLatestVersion returns (bool) {
+    function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public onlyNodeRules returns (bool) {
         uint256 key = calculateKey(_enodeHigh, _enodeLow,_ip, _port);
         uint256 index = indexOf[key];
 

@@ -119,3 +119,5 @@ junit.xml
 
 # VSCode settings
 .vscode/
+
+.openzeppelin/.session

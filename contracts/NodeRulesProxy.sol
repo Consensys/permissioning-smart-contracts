@@ -2,11 +2,13 @@ pragma solidity 0.5.9;
 
 interface NodeRulesProxy {
     function connectionAllowed(
-        string calldata sourceEnodeId,
-        string calldata sourceEnodeHost,
+        bytes32 sourceEnodeHigh,
+        bytes32 sourceEnodeLow,
+        bytes16 sourceEnodeIp,
         uint16 sourceEnodePort,
-        string calldata destinationEnodeId,
-        string calldata destinationEnodeHost,
+        bytes32 destinationEnodeHigh,
+        bytes32 destinationEnodeLow,
+        bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
-    ) external view returns (bool);
+    ) external view returns (bytes32);
 }

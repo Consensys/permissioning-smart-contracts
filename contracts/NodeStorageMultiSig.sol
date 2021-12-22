@@ -17,27 +17,29 @@ contract NodeStorageMultiSig is NodeStorage{
     }
 
     modifier transactionExists(uint transactionId) {
-        require(transactions[transactionId].node.port != 0);
+        Transaction memory txn = transactions[transactionId];
+        Enode memory enode = txn.node;
+        require(enode.port != 0, "Transaction doesn't exist");
         _;
     }
 
     modifier confirmed(uint transactionId, address owner) {
-        require(confirmations[transactionId][owner]);
+        require(confirmations[transactionId][owner], "Transaction is not confirmed");
         _;
     }
 
     modifier notConfirmed(uint transactionId, address owner) {
-        require(!confirmations[transactionId][owner]);
+        require(!confirmations[transactionId][owner], "Transaction is already confirmed");
         _;
     }
 
     modifier notExecuted(uint transactionId) {
-        require(!transactions[transactionId].executed);
+        require(!transactions[transactionId].executed, "Transaction was executed");
         _;
     }
 
     modifier notNull(uint16 _port) {
-        require(_port != 0);
+        require(_port > 0, "Port have to be greater than 0");
         _;
     }
 
@@ -68,7 +70,7 @@ contract NodeStorageMultiSig is NodeStorage{
     /// @param _required Number of required confirmations.
     function changeRequirement(uint _required)
         public
-        ownerExists()
+        ownerExists(msg.sender)
         validRequirement(getOwnersSize(), _required)
     {
         required = _required;
@@ -77,34 +79,37 @@ contract NodeStorageMultiSig is NodeStorage{
 
     /// @dev Allows an owner to submit and confirm a transaction.
     /// @return Returns transaction ID.
-    function submitTransaction(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group)
+    function submitTransaction(address sender, bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group)
         public
-        returns (uint transactionId)
+        onlyNodeRules
+        returns (bool)
     {
-        transactionId = addTransaction(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
-        confirmTransaction(transactionId);
+        uint256 transactionId = addTransaction(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
+        confirmTransaction(sender, transactionId);
     }
 
     /// @dev Allows an owner to confirm a transaction.
     /// @param transactionId Transaction ID.
-    function confirmTransaction(uint transactionId)
+    function confirmTransaction(address sender, uint transactionId)
         public
-        ownerExists()
+        ownerExists(sender)
         transactionExists(transactionId)
-        notConfirmed(transactionId, msg.sender)
+        notConfirmed(transactionId, sender)
+        onlyNodeRules
     {
-        confirmations[transactionId][msg.sender] = true;
-        emit Confirmation(msg.sender, transactionId);
-        executeTransaction(transactionId);
+        confirmations[transactionId][sender] = true;
+        emit Confirmation(sender, transactionId);
+        executeTransaction(sender, transactionId);
     }
 
     /// @dev Allows an owner to revoke a confirmation for a transaction.
     /// @param transactionId Transaction ID.
-    function revokeConfirmation(uint transactionId)
+    function revokeConfirmation(address sender, uint transactionId)
         public
-        ownerExists()
+        ownerExists(sender)
         confirmed(transactionId, msg.sender)
         notExecuted(transactionId)
+        onlyNodeRules
     {
         confirmations[transactionId][msg.sender] = false;
         emit Revocation(msg.sender, transactionId);
@@ -112,10 +117,10 @@ contract NodeStorageMultiSig is NodeStorage{
 
     /// @dev Allows anyone to execute a confirmed transaction.
     /// @param transactionId Transaction ID.
-    function executeTransaction(uint transactionId)
-        public
-        ownerExists()
-        confirmed(transactionId, msg.sender)
+    function executeTransaction(address sender, uint transactionId)
+        internal
+        ownerExists(sender)
+        confirmed(transactionId, sender)
         notExecuted(transactionId)
     {
         if (isConfirmed(transactionId)) {

@@ -8,7 +8,7 @@ import "./Admin.sol";
 
 contract NodeRules is NodeRulesProxy, NodeRulesList {
 
-    event NodeAdded(
+    event TransactionAdded(
         bool nodeAdded,
         bytes32 enodeHigh,
         bytes32 enodeLow,
@@ -45,7 +45,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         _;
     }
 
-    constructor (NodeIngress _nodeIngressAddress, NodeStorage _storage) public {
+    constructor (NodeIngress _nodeIngressAddress, NodeStorageMultiSig _storage) public {
         setStorage(_storage);
         nodeIngressContract = _nodeIngressAddress;
     }
@@ -81,7 +81,7 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         bytes32 destinationEnodeLow,
         bytes16 destinationEnodeIp,
         uint16 destinationEnodePort
-    ) external view returns (bool) {
+    ) external view returns (bytes32) {
         if (groupConnectionAllowed(
             sourceEnodeHigh,
             sourceEnodeLow,
@@ -93,9 +93,9 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
             destinationEnodePort
         ))
          {
-            return true;
+            return 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         } else {
-            return false;
+            return 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         }
     }
 
@@ -107,6 +107,11 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return _removeConnection(_groupSource, _groupDestination);
     }
 
+    function confirmTransaction(uint256 _transactionId) public onlyAdmin returns (bool){
+        bool confirmed = _confirmTransaction(_transactionId);
+        return confirmed;
+    }
+
     function addEnode(
         bytes32 enodeHigh,
         bytes32 enodeLow,
@@ -114,17 +119,17 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         uint16 port,
         NodeType nodeType,
         bytes6 geoHash,
-        string calldata name,
-        string calldata organization,
-        string calldata did,
+        string memory name,
+        string memory organization,
+        string memory did,
         bytes32 group
-    ) external onlyAdmin onlyOnEditMode returns (bool) {
+    ) public onlyAdmin onlyOnEditMode returns (bool) {
         bool added = add(enodeHigh,enodeLow, ip, port, nodeType, geoHash, name, organization, did, group);
 
         /*if (added) {
             triggerRulesChangeEvent(false);
         }*/
-        emit NodeAdded(
+        emit TransactionAdded(
             added,
             enodeHigh,
             enodeLow,
@@ -143,9 +148,9 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     ) external onlyAdmin onlyOnEditMode returns (bool) {
         bool removed = remove(enodeHigh, enodeLow, ip, port);
 
-        if (removed) {
+        /*if (removed) {
             triggerRulesChangeEvent(true);
-        }
+        }*/
         emit NodeRemoved(
             removed,
             enodeHigh,

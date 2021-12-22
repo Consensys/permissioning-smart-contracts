@@ -1,0 +1,40 @@
+{
+  "contracts": {},
+  "solidityLibs": {},
+  "proxies": {
+    "permissioning-contract/Admin": [
+      {
+        "address": "0x82d6EB6cfd8DBb61cffc3A40D26D1020c502f191",
+        "kind": "NonProxy",
+        "bytecodeHash": "521681fcfca491e7d90872262a26e1d2b259d7828052c32cc6412e0a8b3f1f00"
+      }
+    ],
+    "permissioning-contract/NodeIngress": [
+      {
+        "address": "0x0000000000000000000000000000000000009999",
+        "kind": "NonProxy",
+        "bytecodeHash": "e88c37f7e45feb4fc9ec89ea2baffdb6bd6c17aae2ca1a6bf790d287c2554ed3"
+      }
+    ],
+    "permissioning-contract/NodeStorageMultiSig": [
+      {
+        "address": "0x9443b4b64D62023A80Cbb691C4C763ff62018d0C",
+        "kind": "NonProxy",
+        "bytecodeHash": "ee4343bb4b08d2bc795246d06c1b27a7565dc54be59c97836a0f32101632ac14"
+      }
+    ],
+    "permissioning-contract/NodeRules": [
+      {
+        "address": "0x7742d8109dBb59463701CE769758F5905587B909",
+        "kind": "NonProxy",
+        "bytecodeHash": "e10249821dae027f0ee7b0a6a16a3df87210007f20272429362ba25847093b8f"
+      },
+      {
+        "address": "0x4c580660eFdFb422fB52a192F0A521B846635893",
+        "kind": "NonProxy",
+        "bytecodeHash": "1131101ad9c4ffda6a73c618d4a799bec082d15985280253ab9f59c6fafa60d1"
+      }
+    ]
+  },
+  "manifestVersion": "2.2"
+}

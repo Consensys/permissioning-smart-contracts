@@ -15,8 +15,8 @@ contract Admin is AdminProxy, AdminList {
         _;
     }
 
-    constructor() public {
-        add(msg.sender);
+    constructor(address[] memory _owners) public {
+        addAll(_owners);
     }
 
     function isAuthorized(address _address) public view returns (bool) {
@@ -41,8 +41,8 @@ contract Admin is AdminProxy, AdminList {
         return removed;
     }
 
-    function getAdmins() external view returns (address[] memory){
-        return allowlist; // mythx-disable-line SWC-128
+    function getOwners() external view returns (address[] memory){
+        return owners; // mythx-disable-line SWC-128
     }
 
     function addAdmins(address[] calldata accounts) external onlyAdmin returns (bool) {

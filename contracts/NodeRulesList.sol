@@ -1,13 +1,13 @@
 pragma solidity 0.5.9;
 
-import "./NodeStorage.sol";
+import "./NodeStorageMultiSig.sol";
 import "./Types.sol";
 
 contract NodeRulesList is Types{
 
-    NodeStorage private nodeStorage;
+    NodeStorageMultiSig private nodeStorage;
 
-    function setStorage(NodeStorage _storage) internal {
+    function setStorage(NodeStorageMultiSig _storage) internal {
         nodeStorage = _storage;
     }
 
@@ -44,11 +44,17 @@ contract NodeRulesList is Types{
     }
 
     function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) internal returns (bool) {
-        return nodeStorage.add(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
+        nodeStorage.submitTransaction(msg.sender,_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
+        return true;
     }
 
     function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal returns (bool) {
         return nodeStorage.remove(_enodeHigh, _enodeLow , _ip, _port);
+    }
+
+    function _confirmTransaction(uint256 transactionId) internal returns (bool){
+        nodeStorage.confirmTransaction(msg.sender, transactionId);
+        return true;
     }
 
     function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns(uint256) {

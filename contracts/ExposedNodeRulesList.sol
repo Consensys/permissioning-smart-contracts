@@ -1,12 +1,12 @@
 pragma solidity 0.5.9;
 
 import "./NodeRulesList.sol";
-import "./NodeStorage.sol";
+import "./NodeStorageMultiSig.sol";
 
 
 contract ExposedNodeRulesList is NodeRulesList {
 
-    function _setStorage(NodeStorage _storage) public {
+    function _setStorage(NodeStorageMultiSig _storage) public {
         return setStorage(_storage);
     }
 
