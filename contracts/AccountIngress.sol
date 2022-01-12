@@ -18,8 +18,8 @@ contract AccountIngress is Ingress {
         uint256 value,
         uint256 gasPrice,
         uint256 gasLimit,
-        bytes calldata payload
-    ) external view returns (bool) {
+        bytes memory payload
+    ) public view returns (bool) {
         if(getContractAddress(RULES_CONTRACT) == address(0)) {
             return true;
         }

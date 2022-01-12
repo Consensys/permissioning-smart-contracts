@@ -5,9 +5,12 @@ import "./AccountRulesList.sol";
 import "./AccountIngress.sol";
 import "./Admin.sol";
 import "./AccountStorage.sol";
+import "./lib/LibBytesV06.sol";
 
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
+
+    using LibBytesV06 for bytes;
 
     // in read-only mode rules can't be added/removed
     // this will be used to protect data when upgrading contracts
@@ -16,6 +19,8 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     uint private version = 3000000;
 
     AccountIngress private ingressContract;
+
+    address private relayHub;
 
     modifier onlyOnEditMode() {
         require(!readOnlyMode, "In read only mode: rules cannot be modified");
@@ -27,7 +32,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         _;
     }
 
-    constructor (AccountIngress _ingressContract, AccountStorage _storage) public {
+    constructor (AccountIngress _ingressContract, AccountStorageMultiSig _storage) public {
         setStorage(_storage);
         ingressContract = _ingressContract;
     }
@@ -56,55 +61,134 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     function transactionAllowed(
         address sender,
-        address, // target
+        address target,
         uint256, // value
-        uint256, // gasPrice
-        uint256, // gasLimit
-        bytes calldata // payload
-    ) external view returns (bool) {
-        if (accountPermitted(sender)) {
-            return true;
+        uint256 gasPrice,
+        uint256 gasLimit,
+        bytes memory payload  //0xf8...+RLP user
+    ) public view returns (bool) {
+        if (gasPrice>0){
+            return false;
         }
-        if (isAuthorizedAdmin(sender)) {
-            return true;
+
+        if (!accountPermitted(sender) || !destinationPermitted(target)) {
+            return false;
         }
-        return false;
+
+        uint256 gasLimitRequired = payload.length * 105 + 300000; // dinamica + estática
+
+        if (gasLimit<gasLimitRequired){
+            return false;
+        }
+
+        bytes4 func = readBytes4(payload);
+
+        if (func==0x1416862c || func==0x3ef54cef) {
+            (uint gasLimitTx, address writerAddress, uint256 expiration) = getProtectionParameters(payload);
+            
+            if (gasLimit != gasLimitTx){
+                return false;
+            }
+
+            if (expiration < block.timestamp){
+                return false;
+            }
+
+            if (writerAddress != sender){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     function accountPermitted(
         address _account
     ) public view returns (bool) {
-        return exists(_account);
+        return existsAccount(_account);
+    }
+
+    function destinationPermitted(
+        address _target
+    ) public view returns (bool) {
+        return existsTarget(_target);
+    }
+
+    function confirmTransaction(uint256 _transactionId) public onlyAdmin returns (bool){
+        bool confirmed = _confirmTransaction(_transactionId);
+        return confirmed;
     }
 
     function addAccount(
         address account
     ) external onlyAdmin onlyOnEditMode returns (bool) {
-        bool added = add(account);
+        bool added = _addNewAccount(account);
         emit AccountAdded(added, account);
+        if (added){
+            bytes memory payload = abi.encodeWithSignature("addNode(address)",account);
+            (bool cResponse, bytes memory result) = relayHub.call(payload);
+            added = cResponse;
+            require (cResponse, "Node haven't been added to GasLimit");
+        }
         return added;
     }
 
     function removeAccount(
         address account
     ) external onlyAdmin onlyOnEditMode returns (bool) {
-        bool removed = remove(account);
+        bool removed = _removeAccount(account);
         emit AccountRemoved(removed, account);
         return removed;
     }
 
-    function getSize() external view returns (uint) {
-        return size();
+    function getSizeAccounts() external view returns (uint) {
+        return _sizeAccounts();
     }
 
-    function addAccounts(address[] calldata accounts) external onlyAdmin returns (bool) {
-        return addAll(accounts);
+    function getSizeTargets() external view returns (uint) {
+        return _sizeTargets();
     }
+
+    /*
+    function addAccounts(address[] calldata accounts) external onlyAdmin returns (bool) {
+        return _addAllAccounts(accounts);
+    }*/
 
     function isAuthorizedAdmin(address user) private view returns (bool) {
         address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         return Admin(adminContractAddress).isAuthorized(user);
+    }
+
+    function setRelay(address _relayHub) public onlyAdmin returns (bool) {
+        relayHub = _relayHub;
+        emit RelayHubSet(_relayHub);
+    }
+
+    function readBytes4(bytes memory b) internal pure returns(bytes4 result){
+        assembly {
+            result := mload(add(b, 32))
+            // Solidity does not require us to clean the trailing bytes.
+            // We do it anyway
+            result := and(result, 0xFFFFFFFF00000000000000000000000000000000000000000000000000000000)
+        }
+        return result;
+    }
+
+    // Besu add n bytes for padding at the end of data payload, it to complete 32 bytes 
+    // (https://github.com/hyperledger/besu/blob/master/ethereum/permissioning/src/main/java/org/hyperledger/besu/ethereum/permissioning/TransactionSmartContractPermissioningController.java#L201)
+    function getProtectionParameters(bytes memory b) internal pure returns(uint256, address, uint256){
+        uint256 gasLimit = b.readUint256(132); //132, because gasLimit is fifth parameter of payload  
+        uint256 sizeRLP = b.readUint256(164);  //164, because size of RLP is sixth parameter of payload
+        uint256 remainder = (sizeRLP + 196) % 32;  //196 because data bytes start after 196 bytes
+        uint256 paddingZeros = 32 - remainder + 4;  //complete to 32 bytes with zeros plus 4 bytes for function name
+        bytes memory nodeBytes = new bytes(20);
+        nodeBytes = b.slice(b.length-20-32-paddingZeros,b.length-32-paddingZeros);
+        bytes memory expirationBytes = new bytes(32);
+        expirationBytes = b.slice(b.length-32-paddingZeros,b.length-paddingZeros);
+        address nodeAddress = nodeBytes.readAddress(0);
+        uint256 expiration = expirationBytes.readUint256(0);
+        return (gasLimit, nodeAddress, expiration);
     }
 }

@@ -65,6 +65,14 @@ contract NodeRulesList is Types{
         return nodeStorage.getByIndex(index);
     }
 
+    /*function getByEnode(
+         bytes32 _enodeHigh,
+        bytes32 _enodeLow,
+        bytes16 _ip,
+        uint16 _port)public view returns (NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group) {
+        return nodeStorage.getByEnode()
+    }*/
+
     function setValidateEnodeIdOnly(bool _onlyUseEnodeId) internal returns (bool) {
         return nodeStorage.setValidateEnodeIdOnly(_onlyUseEnodeId);
     }

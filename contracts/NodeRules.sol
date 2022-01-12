@@ -182,16 +182,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         }
     }*/
 
-    /*function getByEnode(
-        string memory enodeId,
-        string memory host,
-        uint16 port)public view returns (NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group) {
-        enode memory item = allowlist[indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)]-1];
-        if(item.enodeHigh!=0){
-            return (item.nodeType, item.geoHash, item.name, item.organization, item.did, item.group);
-        }
-    }*/
-
     function triggerRulesChangeEvent(bool addsRestrictions) public {
         nodeIngressContract.emitRulesChangeEvent(addsRestrictions);
     }

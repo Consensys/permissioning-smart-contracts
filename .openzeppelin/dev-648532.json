@@ -34,6 +34,34 @@
         "kind": "NonProxy",
         "bytecodeHash": "1131101ad9c4ffda6a73c618d4a799bec082d15985280253ab9f59c6fafa60d1"
       }
+    ],
+    "permissioning-contract/AccountIngress": [
+      {
+        "address": "0x0000000000000000000000000000000000008888",
+        "kind": "NonProxy",
+        "bytecodeHash": "40c28e21d5c22478011e387bf2f02d06e9cabebefa5681b17e9957a9b93968b6"
+      }
+    ],
+    "permissioning-contract/AccountStorage": [
+      {
+        "address": "0xeaB19600c60d014372c9763b9C6642893F5b724f",
+        "kind": "NonProxy",
+        "bytecodeHash": "13ff2ad900481a0b769dcc875251528e750be99a72bf34cc25b183446ed639db"
+      }
+    ],
+    "permissioning-contract/AccountStorageMultiSig": [
+      {
+        "address": "0x2543Ca585f87B3eC1ea1d2c33CC7d3aCAF807587",
+        "kind": "NonProxy",
+        "bytecodeHash": "e157aab336ae3c648767d2b3359bed7047107230d3a76eb2f03cf6d71d1e92cb"
+      }
+    ],
+    "permissioning-contract/AccountRules": [
+      {
+        "address": "0x0ae2Da68515Ef8DC4bBCa1fA1bcE00C508b2Af4B",
+        "kind": "NonProxy",
+        "bytecodeHash": "47e02e80df48cf369d5eb32c802be52523074f0878cdbf135a36f62014e94f4b"
+      }
     ]
   },
   "manifestVersion": "2.2"

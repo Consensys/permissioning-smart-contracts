@@ -12,19 +12,34 @@ contract AccountStorage {
     // initialize this to the deployer of this contract
     address private latestVersion = msg.sender;
     address private owner = msg.sender;
+    address private accountRules = msg.sender;
 
-    AccountIngress private ingressContract;
+    AccountIngress internal ingressContract;
 
-    address[] public allowlist;
-    mapping (address => uint256) private indexOf; //1 based indexing. 0 means non-existent
-
-    constructor (AccountIngress _ingressContract) public {
-        ingressContract = _ingressContract;
-        add(msg.sender);
-    }
+    address[] public accountAllowList;
+    address[] public targetAllowList;
+    mapping (address => uint256) private accountIndexOf; //1 based indexing. 0 means non-existent
+    mapping (address => uint256) private targetIndexOf; //1 based indexing. 0 means non-existent
 
     modifier onlyLatestVersion() {
         require(msg.sender == latestVersion, "only the latestVersion can modify the list");
+        _;
+    }
+
+    modifier onlyAccountRules() {
+        require(msg.sender == accountRules, "only the AccountRules contract can call");
+        _;
+    }
+
+    modifier ownerExists(address sender) {
+        if (address(0) == address(ingressContract)) {
+            require(sender == owner, "only owner permitted since ingressContract is explicitly set to zero");
+        } else {
+            address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+
+            require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+            require(Admin(adminContractAddress).isAuthorized(sender), "Sender not authorized");
+        }
         _;
     }
 
@@ -40,50 +55,105 @@ contract AccountStorage {
         _;
     }
 
-    function upgradeVersion(address _newVersion) public onlyAdmin {
+    function getOwnersSize() internal view returns(uint256){
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        return Admin(adminContractAddress).size();
+    }
+
+    function upgradeVersion(address _newVersion) public ownerExists(msg.sender) {
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
     }
 
-    function size() public view returns (uint256) {
-        return allowlist.length;
+    function updateAccountRules(address _accountRules) public ownerExists(msg.sender) {
+        emit VersionChange(accountRules, _accountRules);
+        accountRules = _accountRules;
     }
 
-    function exists(address _account) public view returns (bool) {
-        return indexOf[_account] != 0;
+    function sizeAccounts() public view onlyAccountRules returns (uint256) {
+        return accountAllowList.length;
     }
 
-    function add(address _account) public onlyLatestVersion returns (bool) {
-        if (indexOf[_account] == 0) {
-            indexOf[_account] = allowlist.push(_account);
+    function sizeTargets() public view onlyAccountRules returns (uint256) {
+        return targetAllowList.length;
+    }
+
+    function getOwner(uint256 index) internal onlyAccountRules view returns(address){
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
+        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
+        return Admin(adminContractAddress).getOwner(index);
+    }
+
+    function existsAccount(address _account) public view onlyAccountRules returns (bool) {
+        return accountIndexOf[_account] != 0;
+    }
+
+    function existsTarget(address _target) public view onlyAccountRules returns (bool) {
+        return targetIndexOf[_target] != 0;
+    }
+
+    function addAccount(address _account) public onlyAccountRules returns (bool) {
+        if (accountIndexOf[_account] == 0) {
+            accountIndexOf[_account] = accountAllowList.push(_account);
             return true;
         }
         return false;
     }
 
-    function remove(address _account) public onlyLatestVersion returns (bool) {
-        uint256 index = indexOf[_account];
-        if (index > 0 && index <= allowlist.length) { //1-based indexing
+    function removeAccount(address _account) public onlyAccountRules returns (bool) {
+        uint256 index = accountIndexOf[_account];
+        if (index > 0 && index <= accountAllowList.length) { //1-based indexing
             //move last address into index being vacated (unless we are dealing with last index)
-            if (index != allowlist.length) {
-                address lastAccount = allowlist[allowlist.length - 1];
-                allowlist[index - 1] = lastAccount;
-                indexOf[lastAccount] = index;
+            if (index != accountAllowList.length) {
+                address lastAccount = accountAllowList[accountAllowList.length - 1];
+                accountAllowList[index - 1] = lastAccount;
+                accountIndexOf[lastAccount] = index;
             }
 
             //shrink array
-            allowlist.length -= 1; // mythx-disable-line SWC-101
-            indexOf[_account] = 0;
+            accountAllowList.length -= 1; // mythx-disable-line SWC-101
+            accountIndexOf[_account] = 0;
+            return true;
+        }
+        return false;
+    }
+
+    function addTarget(address _target) public onlyAccountRules returns (bool) {
+        if (targetIndexOf[_target] == 0) {
+            targetIndexOf[_target] = targetAllowList.push(_target);
+            return true;
+        }
+        return false;
+    }
+
+    function removeTarget(address _target) public onlyAccountRules returns (bool) {
+        uint256 index = targetIndexOf[_target];
+        if (index > 0 && index <= targetAllowList.length) { //1-based indexing
+            //move last address into index being vacated (unless we are dealing with last index)
+            if (index != targetAllowList.length) {
+                address lastAccount = targetAllowList[targetAllowList.length - 1];
+                targetAllowList[index - 1] = lastAccount;
+                targetIndexOf[lastAccount] = index;
+            }
+
+            //shrink array
+            targetAllowList.length -= 1;
+            targetIndexOf[_target] = 0;
             return true;
         }
         return false;
     }
 
     function getByIndex(uint index) public view returns (address account) {
-        return allowlist[index];
+        return accountAllowList[index];
     }
 
-    function getAccounts() public view returns (address[] memory){
-        return allowlist;
+    function getAccounts() public view onlyAccountRules returns (address[] memory){
+        return accountAllowList;
+    }
+
+    function getTargets() public view onlyAccountRules returns (address[] memory){
+        return targetAllowList;
     }
 }

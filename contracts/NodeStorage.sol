@@ -44,7 +44,7 @@ contract NodeStorage is Types{
         _;
     }
 
-    function getOwnersSize() public view returns(uint256){
+    function getOwnersSize() internal view returns(uint256){
         address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         return Admin(adminContractAddress).size();
@@ -82,7 +82,7 @@ contract NodeStorage is Types{
         bytes32 destinationEnodeHigh,
         bytes32 destinationEnodeLow,
         bytes16 destinationEnodeIp,
-        uint16 destinationEnodePort) public view returns (bool){
+        uint16 destinationEnodePort) public view onlyNodeRules returns (bool){
         if (exists(sourceEnodeHigh,sourceEnodeLow,sourceEnodeIp,sourceEnodePort) && exists(destinationEnodeHigh,destinationEnodeLow,destinationEnodeIp,destinationEnodePort)){    
             Enode memory source = allowlist[indexOf[calculateKey(sourceEnodeHigh, sourceEnodeLow, sourceEnodeIp, sourceEnodePort)]-1];
             Enode memory destination = allowlist[indexOf[calculateKey(destinationEnodeHigh, destinationEnodeLow, destinationEnodeIp, destinationEnodePort)]-1];        
@@ -176,7 +176,7 @@ contract NodeStorage is Types{
         return true;
     }
 
-    function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns(uint256) {
+    function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view onlyNodeRules returns(uint256) {
         if (!onlyUseEnodeId) {
             return uint256(keccak256(abi.encodePacked(_enodeHigh, _enodeLow, _ip, _port)));
         }
