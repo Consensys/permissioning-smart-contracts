@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-/* The adress used when sending transactions to the node */
+/* The address used when sending transactions to the node */
 var address = process.env.BESU_NODE_PERM_ACCOUNT;
 
 /* The private key associated with the address above */
@@ -34,7 +34,7 @@ module.exports = {
 
   compilers: {
     solc: {
-      version: "0.5.9",
+      version: "0.8.6",
       settings: {
        optimizer: {
          enabled: false,
