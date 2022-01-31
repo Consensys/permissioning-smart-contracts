@@ -79,7 +79,7 @@ contract AccountStorage {
         return targetAllowList.length;
     }
 
-    function getOwner(uint256 index) internal onlyAccountRules view returns(address){
+    function getOwner(uint256 index) internal view returns(address){
         address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         return Admin(adminContractAddress).getOwner(index);
