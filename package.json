@@ -62,6 +62,7 @@
     "react-router-dom": "^5.2.1",
     "react-scripts": "3.4.4",
     "sass": "*",
+    "simple-get": "^4.0.1",
     "typescript": "^3.5.1",
     "web3": "^1.5.3",
     "web3-utils": "^1.5.3"
