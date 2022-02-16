@@ -73,6 +73,9 @@ module.exports = async(deployer, network) => {
     console.log("   > Rules.address " + Rules.address);
     let nodeRulesContract = await Rules.deployed();
     
+    // storage -> rules
+    await storageInstance.upgradeVersion(Rules.address);
+    console.log("   >>> Set storage owner to Rules.address " + Rules.address);
 
     await nodeIngressInstance.setContractAddress(rulesContractName, Rules.address);
     console.log("   > Updated NodeIngress contract with NodeRules address = " + Rules.address);
