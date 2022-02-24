@@ -18,6 +18,8 @@ import styles from './styles.module.scss';
 type EnodeRow = {
   isAdmin: boolean;
   deleteTransaction: (address: string) => void;
+  handleConfirm: (transactionId: number) => void;
+  handleRevoke: (transactionId: number) => void;
   openRemoveModal: (address: string) => void;
   enodeHigh: string;
   enodeLow: string;
@@ -30,11 +32,14 @@ type EnodeRow = {
   did: string;
   status: string;
   identifier: string;
+  transactionId: number;
 };
 
 const EnodeRow: React.FC<EnodeRow> = ({
   isAdmin,
   deleteTransaction,
+  handleConfirm, 
+  handleRevoke,
   openRemoveModal,
   enodeHigh,
   enodeLow,
@@ -46,7 +51,8 @@ const EnodeRow: React.FC<EnodeRow> = ({
   organization,
   name,
   status,
-  identifier
+  identifier,
+  transactionId,
   
 }) => (
   <tr className={styles.row}>
@@ -130,6 +136,27 @@ const EnodeRow: React.FC<EnodeRow> = ({
         )}
       </Flex>
     </td>
+    <td>
+    <Flex alignItems="center">
+    {isAdmin && status === 'pendingAddition' && (
+      <Button icon="CheckCircle" size="medium" mainColor="#25D78F" onClick={() => handleConfirm(transactionId)} isAdmin={isAdmin}>
+        Confirm 
+      </Button>
+   
+    )}
+     </Flex>
+    </td>
+    <td>
+    <Flex alignItems="center">
+    {isAdmin &&  (status === 'pendingAddition' ) && (
+      <Button icon="Cancel" mainColor="#FF6666" onClick={() => handleRevoke(transactionId)} isAdmin={isAdmin}>
+        Revoke
+      </Button>
+    )}
+    </Flex>
+    
+    </td>
+
   </tr>
 );
 

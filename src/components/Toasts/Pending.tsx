@@ -1,7 +1,11 @@
 // Libs
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Snackbar } from '@material-ui/core';
+// import { Snackbar } from '@material-ui/core';
+
+// Rimble Components
+import { ToastMessage } from 'rimble-ui';
+
 // Styles
 import styles from './styles.module.scss';
 
@@ -11,7 +15,14 @@ type PendingToast = {
 };
 
 const PendingToast: React.FC<PendingToast> = ({ message, closeToast }) => (
-  <Snackbar message={message} open={true} onClose={closeToast} className={styles.fadeIn} />
+  <ToastMessage.Processing
+    minWidth="300px"
+    zIndex="2"
+    message={message}
+    closeElem
+    closeFunction={closeToast}
+    className={styles.fadeIn}
+  />
 );
 
 PendingToast.propTypes = {

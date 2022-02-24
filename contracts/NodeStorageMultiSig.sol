@@ -12,6 +12,7 @@ contract NodeStorageMultiSig is NodeStorage{
     uint public transactionCount;
 
     struct Transaction {
+        uint transactionId;
         Enode node;
         bool executed;
     }
@@ -107,12 +108,12 @@ contract NodeStorageMultiSig is NodeStorage{
     function revokeConfirmation(address sender, uint transactionId)
         public
         ownerExists(sender)
-        confirmed(transactionId, msg.sender)
+        confirmed(transactionId, sender)
         notExecuted(transactionId)
         onlyNodeRules
     {
-        confirmations[transactionId][msg.sender] = false;
-        emit Revocation(msg.sender, transactionId);
+        confirmations[transactionId][sender] = false;
+        emit Revocation(sender, transactionId);
     }
 
     /// @dev Allows anyone to execute a confirmed transaction.
@@ -178,6 +179,7 @@ contract NodeStorageMultiSig is NodeStorage{
         });
 
         transactions[transactionId] = Transaction({
+            transactionId:transactionId,
             node: enode,
             executed: false
         });
@@ -261,6 +263,14 @@ contract NodeStorageMultiSig is NodeStorage{
         _transactionIds = new uint[](to - from);
         for (i=from; i<to; i++)
             _transactionIds[i - from] = transactionIdsTemp[i];
+    }
+
+    /// @dev Returns list of transaction  in defined range.
+    /// @param transactionId Transaction ID.
+    /// @return Returns transaction
+    function getTransaction(uint transactionId) public view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port, NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group, uint transactionid, bool executed){
+         Transaction memory txn = transactions[transactionId];
+        return (txn.node.enodeHigh, txn.node.enodeLow, txn.node.ip, txn.node.port, txn.node.nodeType, txn.node.geoHash, txn.node.name, txn.node.organization, txn.node.did, txn.node.group, txn.transactionId,txn.executed );
     }
 
     /*

@@ -33,7 +33,10 @@ contract AccountRulesList {
     function setStorage(AccountStorageMultiSig _storage) internal {
         accountStorage = _storage;
     }
-
+    
+    function getStorage() public view  returns (address){
+        return address(accountStorage);
+    }
     function upgradeVersion(address _newVersion) internal {
         accountStorage.upgradeVersion(_newVersion);
     }
@@ -81,6 +84,10 @@ contract AccountRulesList {
 
     function _confirmTransaction(uint256 transactionId) internal returns (bool){
         accountStorage.confirmTransaction(msg.sender, transactionId);
+        return true;
+    }
+    function _revokeConfirmation(uint256 transactionId) internal returns (bool){
+        accountStorage.revokeConfirmation(msg.sender, transactionId);
         return true;
     }
 

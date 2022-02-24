@@ -1,14 +1,18 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+//import { Grid } from '@material-ui/core';
 import styles from './styles.module.scss';
+import { Flex, Heading } from 'rimble-ui';
 
 const Footer: React.FC<{}> = () => {
   return (
-    <Grid>
-      <a href="https://consensys.net/quorum" target="_blank" rel="noopener noreferrer" className={styles.footerLogo}>
-        Created by ConsenSys
+    <div>
+      <a href="http://www.pegasys.tech" target="_blank" rel="noopener noreferrer" className={styles.footerLogo}>
+        Created by PegaSys
       </a>
-    </Grid>
+      <a href="http://www.lacchain.net" target="_blank" rel="noopener noreferrer" className={styles.footerLogo2}>
+        Adapted by LACCHAIN
+      </a>
+    </div>
   );
 };
 

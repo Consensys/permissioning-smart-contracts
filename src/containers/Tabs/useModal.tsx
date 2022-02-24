@@ -14,6 +14,7 @@ export default () => {
 
   const toggleModal = useCallback(
     (modal: 'add' | 'remove' | 'lock') => (value?: string | boolean) => {
+   
       setModals(modals => ({
         ...modals,
         [modal]: value ? value : !modals[modal]

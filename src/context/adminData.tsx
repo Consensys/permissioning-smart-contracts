@@ -22,7 +22,7 @@ const loadAdminData = (adminContract: Admin | undefined, setAdmins: (admins: str
   if (adminContract === undefined) {
     setAdmins(undefined);
   } else {
-    adminContract.functions.getAdmins().then(admins => {
+    adminContract.functions.getOwners().then(admins => {
       setAdmins(admins);
     });
   }

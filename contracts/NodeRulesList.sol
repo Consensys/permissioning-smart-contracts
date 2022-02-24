@@ -11,6 +11,9 @@ contract NodeRulesList is Types{
         nodeStorage = _storage;
     }
 
+    function getStorage() public view  returns (address){
+        return address(nodeStorage);
+    }
     function upgradeVersion(address _newVersion) internal {
         nodeStorage.upgradeVersion(_newVersion);
     }
@@ -57,6 +60,11 @@ contract NodeRulesList is Types{
         return true;
     }
 
+    function _revokeConfirmation(uint256 transactionId) internal returns (bool){
+        nodeStorage.revokeConfirmation(msg.sender, transactionId);
+        return true;
+    }
+
     function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns(uint256) {
         return nodeStorage.calculateKey(_enodeHigh, _enodeLow , _ip, _port);
     }
@@ -65,14 +73,7 @@ contract NodeRulesList is Types{
         return nodeStorage.getByIndex(index);
     }
 
-    /*function getByEnode(
-         bytes32 _enodeHigh,
-        bytes32 _enodeLow,
-        bytes16 _ip,
-        uint16 _port)public view returns (NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group) {
-        return nodeStorage.getByEnode()
-    }*/
-
+   
     function setValidateEnodeIdOnly(bool _onlyUseEnodeId) internal returns (bool) {
         return nodeStorage.setValidateEnodeIdOnly(_onlyUseEnodeId);
     }

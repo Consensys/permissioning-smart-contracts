@@ -12,6 +12,7 @@ contract AccountStorageMultiSig is AccountStorage{
     uint public transactionCount;
 
     struct Transaction {
+        uint transactionId;
         address account_target;
         bool isAccount;
         bool executed;
@@ -108,12 +109,12 @@ contract AccountStorageMultiSig is AccountStorage{
     function revokeConfirmation(address sender, uint transactionId)
         public
         ownerExists(sender)
-        confirmed(transactionId, msg.sender)
+        confirmed(transactionId, sender)
         notExecuted(transactionId)
         onlyAccountRules
     {
-        confirmations[transactionId][msg.sender] = false;
-        emit Revocation(msg.sender, transactionId);
+        confirmations[transactionId][sender] = false;
+        emit Revocation(sender, transactionId);
     }
 
     /// @dev Allows anyone to execute a confirmed transaction.
@@ -176,6 +177,7 @@ contract AccountStorageMultiSig is AccountStorage{
         transactionId = transactionCount;
 
         transactions[transactionId] = Transaction({
+            transactionId:transactionId,
             account_target: _account_target,
             isAccount: _isAccount,
             executed: false
@@ -262,6 +264,13 @@ contract AccountStorageMultiSig is AccountStorage{
             _transactionIds[i - from] = transactionIdsTemp[i];
     }
 
+    /// @dev Returns list of transaction  in defined range.
+    /// @param transactionId Transaction ID.
+    /// @return Returns transaction
+    function getTransaction(uint transactionId) public view returns (address ,bool, bool,uint ) {
+         Transaction memory txn = transactions[transactionId];
+        return (txn.account_target, txn.isAccount,txn.executed , txn.transactionId);
+    }
     /*
      *  Events
      */
