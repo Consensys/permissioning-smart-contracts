@@ -1,7 +1,12 @@
 // Libs
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Chip, Grid, TableCell, TableRow } from '@material-ui/core';
+
+//import { Chip, Grid, TableCell, TableRow } from '@material-ui/core';
+
+// Rimble Components
+import { Pill, Flex, Button } from 'rimble-ui';
+
 // Constant
 import { PENDING_ADDITION, PENDING_REMOVAL, FAIL_ADDITION, FAIL_REMOVAL } from '../../constants/transactions';
 // Components
@@ -19,39 +24,59 @@ type AdminRow = {
 };
 
 const AdminRow: React.FC<AdminRow> = ({ address, status, isSelf, isAdmin, deleteTransaction, openRemoveModal }) => (
-  <TableRow className={styles.row}>
-    <TableCell>
-      <Grid container alignItems="center" className={styles.tooltipFix}>
+  <tr className={styles.row}>
+    <td>
+      <Flex alignItems="center" className={styles.tooltipFix}>
         <TextWithTooltip status={status} text={address} isAdmin={isAdmin} />
-      </Grid>
-    </TableCell>
-    <TableCell>
-      <Grid container justifyContent="space-between" alignItems="center">
+      </Flex>
+    </td>
+    <td>
+      <Flex justifyContent="space-between" alignItems="center">
         {status === 'active' ? (
-          <Chip color="primary" className={styles.pill} label="Active" />
+          <Pill color="#018002" className={styles.pill}>
+            Active
+          </Pill>
         ) : status === PENDING_ADDITION ? (
-          <Chip color="secondary" className={styles.pill} label="Pending Addition" />
+          <Pill color="#FFA505" className={styles.pill}>
+            Pending Addition
+          </Pill>
         ) : status === PENDING_REMOVAL ? (
-          <Chip color="secondary" className={styles.pill} label="Pending Removal" />
+          <Pill color="#FFA505" className={styles.pill}>
+            Pending Removal
+          </Pill>
         ) : status === FAIL_ADDITION ? (
-          <Grid>
-            <Chip className={styles.pill} label="Addition Failed" />
-            <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(address)} label="Clear" />
-          </Grid>
+          <Flex>
+            <Pill color="#FF1C1E" className={styles.pill}>
+              Addition Failed
+            </Pill>
+            <Pill color="green" ml={2} className={styles.pill} onClick={() => deleteTransaction(address)}>
+              Clear
+            </Pill>
+          </Flex>
         ) : status === FAIL_REMOVAL ? (
-          <Grid>
-            <Chip className={styles.pill} label="Removal Failed" />
-            <Chip color="secondary" className={styles.pill} onClick={() => deleteTransaction(address)} label="Clear" />
-          </Grid>
+          <Flex>
+            <Pill color="#FF1C1E" className={styles.pill}>
+              Removal Failed
+            </Pill>
+            <Pill color="green" ml={2} className={styles.pill} onClick={() => deleteTransaction(address)}>
+              Clear
+            </Pill>
+          </Flex>
         ) : (
           <div />
         )}
         {!isSelf && isAdmin && status === 'active' && (
-          <Chip className={styles.removeIcon} onDelete={() => openRemoveModal(address)} />
+          <Button.Text
+            mainColor="#CCC"
+            icon="Delete"
+            icononly
+            className={styles.removeIcon}
+            onClick={() => openRemoveModal(address)}
+          />
         )}
-      </Grid>
-    </TableCell>
-  </TableRow>
+      </Flex>
+    </td>
+  </tr>
 );
 
 AdminRow.propTypes = {

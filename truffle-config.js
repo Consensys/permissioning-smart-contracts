@@ -2,6 +2,7 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
 const path = require("path");
 const dotenv = require('dotenv');
 
+
 dotenv.config();
 
 /* The adress used when sending transactions to the node */
@@ -12,16 +13,20 @@ var privateKey = process.env.BESU_NODE_PERM_KEY;
 
 /* The endpoint of the Ethereum node */
 var endpoint = process.env.BESU_NODE_PERM_ENDPOINT;
+const privateKeyProvider = new HDWalletProvider(privateKey, "http://34.139.37.41:4545");
+
 if (endpoint === undefined) {
   endpoint = "http://127.0.0.1:8545";
 }
 
 module.exports = {
   networks: {
-    besu: {
-     provider: () => new HDWalletProvider(privateKey, endpoint),
-     network_id: "*",
-     from: address
+    development: {
+    // provider: () => new HDWalletProvider(privateKey, endpoint),
+    provider: privateKeyProvider,
+     network_id: "648532",
+     gasPrice: 0
+     //from: address
     },
     ganache: {
       host: '127.0.0.1',

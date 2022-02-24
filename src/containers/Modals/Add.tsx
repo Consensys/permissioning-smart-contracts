@@ -17,13 +17,14 @@ const AddModalContainer: React.FC<{
 
   const modifyInput = ({ target: { value } }: { target: { value: string } }) => {
     const validation = isValid(value);
+
     setInput(value);
     setValidation(validation);
   };
 
   const handleSubmit = (e: MouseEvent) => {
     e.preventDefault();
-    setInput('');
+   // setInput('');
     setValidation({ valid: false });
     handleAdd(input);
   };

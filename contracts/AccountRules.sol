@@ -119,6 +119,11 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         return confirmed;
     }
 
+    function revokeConfirmation(uint256 _transactionId) public onlyAdmin returns (bool){
+        bool confirmed = _revokeConfirmation(_transactionId);
+        return confirmed;
+    }
+    
     function addAccount(
         address account
     ) external onlyAdmin onlyOnEditMode returns (bool) {

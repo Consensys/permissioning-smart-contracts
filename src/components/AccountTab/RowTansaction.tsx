@@ -14,13 +14,18 @@ import styles from './styles.module.scss';
 
 type AccountRow = {
   address: string;
+  transactionId:number;
+  executed:boolean;
   status: string;
   isAdmin: boolean;
   deleteTransaction: (address: string) => void;
+  handleConfirm: (transactionId: number) => void;
+  handleRevoke: (transactionId: number) => void;
+  
   openRemoveModal: (address: string) => void;
 };
 
-const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTransaction,openRemoveModal }) => (
+const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin,transactionId, deleteTransaction, handleConfirm, handleRevoke,openRemoveModal }) => (
   <tr className={styles.row}>
     <td>
       <Flex alignItems="center" className={styles.tooltipFix}>
@@ -74,6 +79,26 @@ const AccountRow: React.FC<AccountRow> = ({ address, status, isAdmin, deleteTran
       </Flex>
     </td>
  
+    <td>
+    <Flex alignItems="center">
+    {isAdmin && status === 'pendingAddition' && (
+      <Button icon="CheckCircle" size="medium" mainColor="#25D78F" onClick={() => handleConfirm(transactionId)} isAdmin={isAdmin}>
+        Confirm
+      </Button>
+   
+    )}
+     </Flex>
+    </td>
+    <td>
+    <Flex alignItems="center">
+    {isAdmin &&  (status === 'pendingAddition' ) && (
+      <Button icon="Cancel" mainColor="#FF6666" onClick={() => handleRevoke(transactionId)} isAdmin={isAdmin}>
+        Revoke
+      </Button>
+    )}
+    </Flex>
+    
+    </td>
   </tr>
 );
 

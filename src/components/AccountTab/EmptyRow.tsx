@@ -3,11 +3,14 @@ import { TableCell, TableRow } from '@material-ui/core';
 import React from 'react';
 // Styles
 import styles from './styles.module.scss';
+type EmptyRow = {
+  type: string;
 
-const EmptyRow: React.FC<{}> = () => (
+};
+const EmptyRow: React.FC<EmptyRow> = ({type}) => (
   <TableRow>
     <TableCell colSpan={2} className={styles.emptyLine}>
-      No accounts have been added.
+      No {type} have been added.
     </TableCell>
   </TableRow>
 );

@@ -2,17 +2,10 @@
 import React, { MouseEvent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import {
-  Dialog,
-  Button,
-  DialogTitle,
-  TextField,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Typography
-} from '@material-ui/core';
-// Styles
+// Rimble Components
+import { Modal, Card, Button, Flex, Box, Heading, Form, Text } from 'rimble-ui';
+
+
 import styles from './styles.module.scss';
 import { ModalDisplay } from '../../constants/modals';
 
@@ -25,39 +18,70 @@ const AddModal: React.FC<{
   closeModal: (e: MouseEvent) => void;
   display: ModalDisplay;
 }> = ({ input, validationResult, modifyInput, handleSubmit, isOpen, closeModal, display }) => (
-  <Dialog open={isOpen} onClose={closeModal} aria-labelledby="form-dialog-title">
-    <DialogTitle id="form-dialog-title">{display.heading}</DialogTitle>
-    <DialogContent>
-      <DialogContentText>
-        {display.subHeading}
-        {display.label}
-      </DialogContentText>
-      <TextField
-        autoFocus
-        placeholder={display.inputPlaceholder}
-        value={input}
-        onChange={modifyInput}
-        className={styles.fieldInput}
-        required
-        fullWidth
+  <Modal isOpen={isOpen}>
+    <Card width={'700px'} p={0}>
+      <Button.Text
+        icononly
+        icon={'Close'}
+        mainColor={'moon-gray'}
+        top={0}
+        right={0}
+        mt={3}
+        mr={3}
+        onClick={closeModal}
+        className={styles.closeIcon}
       />
-      <Typography
-        gutterBottom
-        className={
-          !validationResult.valid && input ? classnames(styles.errorMessage, styles.show) : styles.errorMessage
-        }
-      >
-        {validationResult.msg ? validationResult.msg : display.errorMessage}
-      </Typography>
-    </DialogContent>
-
-    <DialogActions>
-      <Button onClick={closeModal}>Cancel</Button>
-      <Button disabled={!validationResult.valid} color="primary" onClick={handleSubmit}>
-        Submit
-      </Button>
-    </DialogActions>
-  </Dialog>
+      <Form onSubmit={handleSubmit}>
+        <Box p={4} mb={3}>
+          <Heading.h3>{display.heading}</Heading.h3>
+          <Text>{display.subHeading}</Text>
+          <Form.Field
+            mt={3}
+            label={display.label}
+            className={input ? `${validationResult.valid ? styles.validField : styles.invalidField}` : null}
+          >
+            <Form.Input
+              width={1}
+              type="text"
+              name="input"
+              placeholder={display.inputPlaceholder}
+              value={input}
+              onChange={modifyInput}
+              className={styles.fieldInput}
+              required
+            />
+          </Form.Field>
+          <Text
+            color="red"
+            height="30px"
+            fontSize="14px"
+            className={
+              !validationResult.valid && input ? classnames(styles.errorMessage, styles.show) : styles.errorMessage
+            }
+          >
+            {validationResult.msg ? validationResult.msg : display.errorMessage}
+          </Text>
+        </Box>
+        <Flex px={4} py={3} borderTop={1} borderStyle={'solid'} borderColor={'#E8E8E8'} justifyContent={'flex-end'}>
+          <Button.Outline type="button" mainColor="black" onClick={closeModal}>
+            Cancel
+          </Button.Outline>
+          <Button
+            type="submit"
+            ml={3}
+            color="white"
+            bg="pegasys"
+            hovercolor="#25D78F"
+            border={1}
+            onClick={handleSubmit}
+           // disabled={!validationResult.valid}
+          >
+            {display.submitText}
+          </Button>
+        </Flex>
+      </Form>
+    </Card>
+  </Modal>
 );
 
 AddModal.propTypes = {

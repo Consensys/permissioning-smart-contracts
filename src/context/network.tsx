@@ -5,8 +5,13 @@ import { useConfig } from '../context/configData';
 import { providerFactory } from '../chain/provider';
 import { AccountIngress } from '../chain/@types/AccountIngress';
 import { accountIngressFactory } from '../chain/contracts/AccountIngress';
+
+
+
 import { NodeIngress } from '../chain/@types/NodeIngress';
 import { nodeIngressFactory } from '../chain/contracts/NodeIngress';
+
+
 
 type ContextType =
   | {
@@ -15,8 +20,10 @@ type ContextType =
       contracts: {
         accountIngressContract?: AccountIngress;
         setAccountIngressContract: React.Dispatch<React.SetStateAction<AccountIngress | undefined>>;
+
         nodeIngressContract?: NodeIngress;
         setNodeIngressContract: React.Dispatch<React.SetStateAction<NodeIngress | undefined>>;
+
       };
     }
   | undefined;
@@ -30,14 +37,16 @@ const NetworkContext = createContext<ContextType>(undefined);
 export const NetworkProvider: React.FC<{}> = props => {
   const [accountIngressContract, setAccountIngressContract] = useState<AccountIngress | undefined>(undefined);
   const [nodeIngressContract, setNodeIngressContract] = useState<NodeIngress | undefined>(undefined);
-  const [networkId, setNetworkId] = useState<number | undefined>(undefined);
 
+  const [networkId, setNetworkId] = useState<number | undefined>(undefined);
   const config = useConfig();
 
   useEffect(() => {
     providerFactory().then(provider => {
       accountIngressFactory(config, provider).then(accountIngress => setAccountIngressContract(accountIngress));
       nodeIngressFactory(config, provider).then(nodeIngress => setNodeIngressContract(nodeIngress));
+
+
     });
   }, [config]);
 
@@ -49,7 +58,8 @@ export const NetworkProvider: React.FC<{}> = props => {
         accountIngressContract,
         setAccountIngressContract,
         nodeIngressContract,
-        setNodeIngressContract
+        setNodeIngressContract,
+
       }
     }),
     [
@@ -57,6 +67,7 @@ export const NetworkProvider: React.FC<{}> = props => {
       setAccountIngressContract,
       nodeIngressContract,
       setNodeIngressContract,
+
       networkId,
       setNetworkId
     ]
@@ -85,12 +96,13 @@ export const useNetwork = () => {
 
   useEffect(() => {
     const ingress = contracts.accountIngressContract || contracts.nodeIngressContract;
-    if (ingress === undefined) {
+
+    if (ingress === undefined ) {
       setNetworkId(undefined);
     } else {
       ingress.provider.getNetwork().then(network => setNetworkId(network.chainId));
     }
-  }, [contracts.accountIngressContract, contracts.nodeIngressContract, setNetworkId]);
+  }, [contracts.accountIngressContract, contracts.nodeIngressContract,setNetworkId]);
 
   const isCorrectNetwork = useMemo(() => {
     if (networkId === undefined) {
@@ -104,6 +116,8 @@ export const useNetwork = () => {
     isCorrectNetwork,
     networkId,
     accountIngressContract: contracts.accountIngressContract,
-    nodeIngressContract: contracts.nodeIngressContract
+    nodeIngressContract: contracts.nodeIngressContract,
+
+     
   };
 };

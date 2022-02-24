@@ -8,17 +8,23 @@ import { useAccountData } from '../../context/accountData';
 import { useAdminData } from '../../context/adminData';
 // Utils
 import useTab from './useTab';
+import useTransactionTab from './useTransactionTab';
 import { errorToast } from '../../util/tabTools';
 // Components
 import AccountTab from '../../components/AccountTab/AccountTab';
 import LoadingPage from '../../components/LoadingPage/LoadingPage';
 import NoContract from '../../components/Flashes/NoContract';
+
 // Constants
 import {
   PENDING_ADDITION,
   FAIL_ADDITION,
   PENDING_REMOVAL,
   FAIL_REMOVAL,
+  PENDING_CONFIRM,
+  FAIL_CONFIRM,
+  PENDING_REVOKE,
+  FAIL_REVOKE,
   SUCCESS,
   FAIL
 } from '../../constants/transactions';
@@ -29,16 +35,22 @@ type AccountTabContainerProps = {
 
 type Account = {
   address: string;
+  // isAccount:boolean;
+  // executed: boolean;
   identifier: string;
   status: string;
 };
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { allowlist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
+  const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract , accountStorageMultiSigContract} = useAccountData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
     allowlist,
+    (identifier: string) => ({ address: identifier })
+  );
+  const { listTransaction} = useTransactionTab(
+    allowTransactionlist,
     (identifier: string) => ({ address: identifier })
   );
 
@@ -90,6 +102,44 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         );
       }
     };
+    const handleConfirm = async (value: number) => {
+      try {
+        const est = await accountRulesContract!.estimate.confirmTransaction(value);
+        const tx = await accountRulesContract!.functions.confirmTransaction(value, { gasLimit: est.toNumber() * 2 });
+        //toggleModal('add')(false);
+        addTransaction(value.toString(), PENDING_CONFIRM);
+        await tx.wait(1); // wait on receipt confirmations
+        openToast(value.toString(), SUCCESS, `Confirm of account processed: ${value}`);
+        deleteTransaction(value.toString());
+      } catch (e) {
+        console.log('error', e);
+       // toggleModal('add')(false);
+        updateTransaction(value.toString(), FAIL_CONFIRM);
+        errorToast(e, value.toString(), openToast, () =>
+          openToast(value.toString(), FAIL, 'Could not Confirm account', `${value} was unable to be Confirmend. Please try again.`)
+        );
+      }
+    };
+
+    const handleRevoke= async (value: number) => {
+      try {
+        const est = await accountRulesContract!.estimate.revokeConfirmation(value);
+        const tx = await accountRulesContract!.functions.revokeConfirmation(value, { gasLimit: est.toNumber() * 2 });
+       // toggleModal('remove')(false);
+        addTransaction(value.toString(), PENDING_REVOKE);
+        await tx.wait(1); // wait on receipt confirmations
+        openToast(value.toString(), SUCCESS, `Revoke of account processed: ${value}`);
+        deleteTransaction(value.toString());
+      } catch (e) {
+        console.log('error', e);
+        //toggleModal('remove')(false);
+        updateTransaction(value.toString(), FAIL_REVOKE);
+        errorToast(e, value.toString(), openToast, () =>
+          openToast(value.toString(), FAIL, 'Could not Revoke account', `${value} was unable to be Revoked. Please try again.`)
+        );
+      }
+    };
+
 
     const isValidAccount = (address: string) => {
       let isValidAddress = isAddress(address);
@@ -118,10 +168,13 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       return (
         <AccountTab
           list={list}
+          listTransaction={listTransaction}
           modals={modals}
           toggleModal={toggleModal}
           handleAdd={handleAdd}
           handleRemove={handleRemove}
+          handleConfirm={handleConfirm}
+          handleRevoke={handleRevoke}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
           isValid={isValidAccount}

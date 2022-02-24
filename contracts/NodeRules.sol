@@ -112,6 +112,12 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return confirmed;
     }
 
+    function revokeConfirmation(uint256 _transactionId) public onlyAdmin returns (bool){
+        bool confirmed = _revokeConfirmation(_transactionId);
+        return confirmed;
+    }
+
+
     function addEnode(
         bytes32 enodeHigh,
         bytes32 enodeLow,

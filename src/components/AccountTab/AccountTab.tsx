@@ -10,6 +10,7 @@ import { addAccountDisplay, removeAccountDisplay } from '../../constants/modals'
 
 type AccountTab = {
   list: any[];
+  listTransaction:any[];
   modals: {
     add: boolean;
     remove: boolean | string;
@@ -18,6 +19,8 @@ type AccountTab = {
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
   handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
+  handleConfirm:(value: any) => Promise<void>;
+  handleRevoke:(value: any) => Promise<void>;
   isAdmin: boolean;
   deleteTransaction: (identifier: string) => void;
   isValid: (address: string) => { valid: boolean };
@@ -27,10 +30,13 @@ type AccountTab = {
 
 const AccountTab: React.FC<AccountTab> = ({
   list,
+  listTransaction,
   modals,
   toggleModal,
   handleAdd,
   handleRemove,
+  handleConfirm,
+  handleRevoke,
   isAdmin,
   deleteTransaction,
   isValid,
@@ -42,9 +48,12 @@ const AccountTab: React.FC<AccountTab> = ({
       <Fragment>
         <AccountTable
           list={list}
+          listTransaction={listTransaction}
           toggleModal={toggleModal}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
+          handleConfirm={handleConfirm}
+          handleRevoke={handleRevoke}
           isReadOnly={isReadOnly}
         />
         <AddModal
@@ -76,6 +85,8 @@ AccountTab.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   handleAdd: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
+  handleConfirm: PropTypes.func.isRequired,
+  handleRevoke: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
   isValid: PropTypes.func.isRequired,
