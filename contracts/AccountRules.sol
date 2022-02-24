@@ -12,11 +12,15 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
 
     using LibBytesV06 for bytes;
 
+    event RelayHubSet(
+        address newRelayHub
+    );
+
     // in read-only mode rules can't be added/removed
     // this will be used to protect data when upgrading contracts
     bool private readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint private version = 3000000;
+    uint private version = 1000000;
 
     AccountIngress private ingressContract;
 
@@ -125,12 +129,13 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
     
     function addAccount(
-        address account
+        address account,
+        uint8 nodeType
     ) external onlyAdmin onlyOnEditMode returns (bool) {
         bool added = _addNewAccount(account);
         emit AccountAdded(added, account);
         if (added){
-            bytes memory payload = abi.encodeWithSignature("addNode(address)",account);
+            bytes memory payload = abi.encodeWithSignature("addNode(address,uint8)",account,nodeType);
             (bool cResponse, bytes memory result) = relayHub.call(payload);
             added = cResponse;
             require (cResponse, "Node haven't been added to GasLimit");
@@ -159,6 +164,22 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         return _addAllAccounts(accounts);
     }*/
 
+    function addTarget(
+        address target
+    ) public onlyAdmin onlyOnEditMode returns (bool) {
+        bool added = _addNewTarget(target);
+        emit TargetAdded(added, target);
+        return added;
+    }
+
+    function removeTarget(
+        address target
+    ) public onlyAdmin onlyOnEditMode returns (bool) {
+        bool removed = _removeTarget(target);
+        emit TargetRemoved(removed, target);
+        return removed;
+    }
+
     function isAuthorizedAdmin(address user) private view returns (bool) {
         address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
@@ -184,10 +205,13 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     // Besu add n bytes for padding at the end of data payload, it to complete 32 bytes 
     // (https://github.com/hyperledger/besu/blob/master/ethereum/permissioning/src/main/java/org/hyperledger/besu/ethereum/permissioning/TransactionSmartContractPermissioningController.java#L201)
     function getProtectionParameters(bytes memory b) internal pure returns(uint256, address, uint256){
-        uint256 gasLimit = b.readUint256(132); //132, because gasLimit is fifth parameter of payload  
+        uint256 gasLimit = b.readUint256(4); //4, because gasLimit is first parameter of payload  
         uint256 sizeRLP = b.readUint256(164);  //164, because size of RLP is sixth parameter of payload
         uint256 remainder = (sizeRLP + 196) % 32;  //196 because data bytes start after 196 bytes
         uint256 paddingZeros = 32 - remainder + 4;  //complete to 32 bytes with zeros plus 4 bytes for function name
+        if (paddingZeros >= 32){
+            paddingZeros = paddingZeros - 32;
+        }
         bytes memory nodeBytes = new bytes(20);
         nodeBytes = b.slice(b.length-20-32-paddingZeros,b.length-32-paddingZeros);
         bytes memory expirationBytes = new bytes(32);
