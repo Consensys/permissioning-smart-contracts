@@ -1,13 +1,9 @@
 import AccountIngress from '../chain/abis/AccountIngress.json';
 import NodeIngress from '../chain/abis/NodeIngress.json';
-import AccountStorageMultiSig from '../chain/abis/AccountStorageMultiSig.json';
-import NodeStorageMultiSig from '../chain/abis/NodeStorageMultiSig.json';
 
 export type Config = {
   accountIngressAddress: string;
-  accountStorageMultiSigAddress: string;
   nodeIngressAddress: string;
-  nodeStorageMultiSigAddress: string;
   networkId: string;
 };
 
@@ -29,11 +25,8 @@ const loadConfig = async (): Promise<Config> => {
   } else {
     // ganache vs besu
     // if env variables exists, then we will assume we are connecting to besu, otherwise we will assume ganache
-
     let accountIngressAddress = process.env.REACT_APP_ACCOUNT_INGRESS_CONTRACT_ADDRESS;
     let nodeIngressAddress = process.env.REACT_APP_NODE_INGRESS_CONTRACT_ADDRESS;
-    let accountStorageMultiSigAddress  = process.env.REACT_APP_ACCOUNT_STORAGE_MULTISIG_CONTRACT_ADDRESS;
-    let nodeStorageMultiSigAddress= process.env.REACT_APP_NODE_STORAGE_MULTISIG_CONTRACT_ADDRESS;
     let networkId = process.env.REACT_APP_CHAIN_ID;
 
     if (accountIngressAddress) {
@@ -42,18 +35,12 @@ const loadConfig = async (): Promise<Config> => {
       if (!nodeIngressAddress) {
         throw new Error('Node Ingress Address environment variable is missing');
       }
-      if (!accountStorageMultiSigAddress){
-        throw new Error('Acccount Storage Multisig  Address environment variable is missing');
-      }
-      if (!nodeStorageMultiSigAddress){
-        throw new Error('Node Storage Multisig  Address environment variable is missing');
-      }
 
       if (!networkId) {
         throw new Error('Network Id environment variable is missing');
       }
 
-      return { accountIngressAddress,accountStorageMultiSigAddress, nodeIngressAddress, nodeStorageMultiSigAddress,networkId };
+      return { accountIngressAddress, nodeIngressAddress, networkId };
     }
 
     console.log('Using truffle (develop) defaults');
@@ -71,25 +58,12 @@ const loadConfig = async (): Promise<Config> => {
     }
     nodeIngressAddress = (nodeIngressNetworks[0] as { address: string }).address;
 
-
-    const accountStorageMultiSigNetworks = Object.values(AccountStorageMultiSig.networks);
-    if (accountStorageMultiSigNetworks.length === 0) {
-      throw new Error("Account Storage Multisig  Contract abi doesn't contain any networks, probably not deployed");
-    }
-    accountStorageMultiSigAddress = (accountStorageMultiSigNetworks[0] as { address: string }).address;
-
-    const nodeStorageMultiSigNetworks = Object.values(NodeStorageMultiSig.networks);
-    if (nodeStorageMultiSigNetworks.length === 0) {
-      throw new Error("Node  Storage Multisig  Contract abi doesn't contain any networks, probably not deployed");
-    }
-    nodeStorageMultiSigAddress = (nodeStorageMultiSigNetworks[0] as { address: string }).address;
-
     // if we haven't errored by this point then we're being driven by env and until we do it better we should accept any network
     const nodeIngressNetworkId = Object.keys(NodeIngress.networks)[0]
       ? (Object.keys(NodeIngress.networks)[0] as string)
       : 'any';
 
-    return { accountIngressAddress, accountStorageMultiSigAddress,nodeIngressAddress, nodeStorageMultiSigAddress,networkId: nodeIngressNetworkId };
+    return { accountIngressAddress, nodeIngressAddress, networkId: nodeIngressNetworkId };
   }
 };
 
