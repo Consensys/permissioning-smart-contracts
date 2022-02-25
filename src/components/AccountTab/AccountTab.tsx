@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 // Components
 import AccountTable from './Table';
-import AddModal from '../../containers/Modals/Add';
+import AddModal from '../../containers/Modals/AddAccount';
 import RemoveModal from '../../containers/Modals/Remove';
 // Constants
 import { addAccountDisplay, removeAccountDisplay } from '../../constants/modals';
@@ -17,7 +17,7 @@ type AccountTab = {
     lock: boolean;
   };
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
-  handleAdd: (value: any) => Promise<void>;
+  handleAdd: (value: any ,membresiaType:string) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
   handleConfirm:(value: any) => Promise<void>;
   handleRevoke:(value: any) => Promise<void>;

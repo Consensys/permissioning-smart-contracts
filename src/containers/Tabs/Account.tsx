@@ -55,9 +55,30 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
   );
 
   if (!!accountRulesContract) {
-    const handleAdd = async (value: string) => {
+    const handleAdd = async (value: string, membresiaType: string) => {
+
+      let membresiaTypeValue = 1
+     switch (membresiaType) {
+      case 'Basic':
+        membresiaTypeValue=1
+   
+        break;
+      case 'Standard':
+        membresiaTypeValue=2
+     
+        break;
+      case 'Premium':
+        membresiaTypeValue=3
+      
+        break;
+
+      default:
+        membresiaTypeValue=1
+
+    }
+
       try {
-        const tx = await accountRulesContract!.functions.addAccount(value);
+        const tx = await accountRulesContract!.functions.addAccount(value,membresiaTypeValue);
         toggleModal('add')(false);
         addTransaction(value, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
