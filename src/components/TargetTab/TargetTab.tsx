@@ -3,10 +3,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 // Components
 import AccountTable from './Table';
-import AddModal from '../../containers/Modals/AddAccount';
+import AddModal from '../../containers/Modals/Add';
 import RemoveModal from '../../containers/Modals/Remove';
 // Constants
-import { addAccountDisplay, removeAccountDisplay } from '../../constants/modals';
+import { addTargetDisplay, removeTargetDisplay } from '../../constants/modals';
 
 type AccountTab = {
   list: any[];
@@ -17,7 +17,7 @@ type AccountTab = {
     lock: boolean;
   };
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
-  handleAdd: (value: any ,membresiaType:string) => Promise<void>;
+  handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
   handleConfirm:(value: any) => Promise<void>;
   handleRevoke:(value: any) => Promise<void>;
@@ -28,7 +28,7 @@ type AccountTab = {
   isReadOnly: boolean;
 };
 
-const AccountTab: React.FC<AccountTab> = ({
+const TargetTab: React.FC<AccountTab> = ({
   list,
   listTransaction,
   modals,
@@ -60,7 +60,7 @@ const AccountTab: React.FC<AccountTab> = ({
           isOpen={Boolean(modals.add) && isAdmin}
           closeModal={() => toggleModal('add')(false)}
           handleAdd={handleAdd}
-          display={addAccountDisplay}
+          display={addTargetDisplay}
           isValid={isValid}
         />
         <RemoveModal
@@ -68,14 +68,14 @@ const AccountTab: React.FC<AccountTab> = ({
           value={modals.remove}
           closeModal={() => toggleModal('remove')(false)}
           handleRemove={handleRemove}
-          display={removeAccountDisplay(modals.remove)}
+          display={removeTargetDisplay(modals.remove)}
         />
       </Fragment>
     )}
   </Fragment>
 );
 
-AccountTab.propTypes = {
+TargetTab.propTypes = {
   list: PropTypes.array.isRequired,
   modals: PropTypes.shape({
     add: PropTypes.bool.isRequired,
@@ -93,4 +93,4 @@ AccountTab.propTypes = {
   isReadOnly: PropTypes.bool.isRequired
 };
 
-export default AccountTab;
+export default TargetTab;

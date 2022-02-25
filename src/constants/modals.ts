@@ -32,7 +32,21 @@ export const addAccountDisplay: ModalDisplay = {
   subHeading: ''
 };
 
+export const addTargetDisplay: ModalDisplay = {
+  submitText: 'Add Target',
+  errorMessage: 'Target address is not valid.',
+  inputPlaceholder: 'Ex: 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A',
+  label: 'Target Address',
+  heading: 'Add Target',
+  subHeading: ''
+};
+
 export const removeAccountDisplay: (value: string | boolean) => ModalDisplay = value => ({
+  heading: 'Are you sure?',
+  subHeading: `Remove account “${value}”?`
+});
+
+export const removeTargetDisplay: (value: string | boolean) => ModalDisplay = value => ({
   heading: 'Are you sure?',
   subHeading: `Remove account “${value}”?`
 });

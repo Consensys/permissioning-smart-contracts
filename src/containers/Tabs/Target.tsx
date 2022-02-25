@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import { isAddress } from 'web3-utils';
 import idx from 'idx';
 // Context
-import { useAccountData } from '../../context/accountData';
+import { useTargetData } from '../../context/targetData';
 import { useAdminData } from '../../context/adminData';
 // Utils
 import useTab from './useTab';
 import useTransactionTab from './useTransactionTab';
 import { errorToast } from '../../util/tabTools';
 // Components
-import AccountTab from '../../components/AccountTab/AccountTab';
+import TargetTab from '../../components/TargetTab/TargetTab';
 import LoadingPage from '../../components/LoadingPage/LoadingPage';
 import NoContract from '../../components/Flashes/NoContract';
 
@@ -43,7 +43,7 @@ type Account = {
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract , accountStorageMultiSigContract} = useAccountData();
+  const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract , accountStorageMultiSigContract} = useTargetData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
     allowlist,
@@ -55,71 +55,53 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
   );
 
   if (!!accountRulesContract) {
-    const handleAdd = async (value: string, membresiaType: string) => {
-
-      let membresiaTypeValue = 1
-     switch (membresiaType) {
-      case 'Basic':
-        membresiaTypeValue=1
-   
-        break;
-      case 'Standard':
-        membresiaTypeValue=2
-     
-        break;
-      case 'Premium':
-        membresiaTypeValue=3
-      
-        break;
-
-      default:
-        membresiaTypeValue=1
-
-    }
-
+    const handleAdd = async (value: string) => {
+      console.log("add Target")
+      console.log(value)
       try {
-        const tx = await accountRulesContract!.functions.addAccount(value,membresiaTypeValue);
+        const tx = await accountRulesContract!.functions.addTarget(value);
         toggleModal('add')(false);
         addTransaction(value, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
-        const addEvent = receipt.events!.filter(e => e.event && e.event === 'AccountAdded').pop();
+        const addEvent = receipt.events!.filter(e => e.event && e.event === 'TargetAdded').pop();
         if (!addEvent) {
-          openToast(value, FAIL, `Error while processing account: ${value}`);
+          openToast(value, FAIL, `Error while processing target: ${value}`);
         } else {
           const addSuccessResult = idx(addEvent, _ => _.args[0]);
           if (addSuccessResult === undefined) {
-            openToast(value, FAIL, `Error while adding account: ${value}`);
+            openToast(value, FAIL, `Error while adding target: ${value}`);
           } else if (Boolean(addSuccessResult)) {
-            openToast(value, SUCCESS, `New account added: ${value}`);
+            openToast(value, SUCCESS, `New target added: ${value}`);
           } else {
-            openToast(value, FAIL, `Account "${value}" is already added`);
+            openToast(value, FAIL, `Target "${value}" is already added`);
           }
         }
         deleteTransaction(value);
       } catch (e) {
+        console.log(e)
         toggleModal('add')(false);
         updateTransaction(value, FAIL_ADDITION);
         errorToast(e, value, openToast, () =>
-          openToast(value, FAIL, 'Could not add account', `${value} was unable to be added. Please try again.`)
+          openToast(value, FAIL, 'Could not add target', `${value} was unable to be added. Please try again.`)
         );
       }
     };
 
     const handleRemove = async (value: string) => {
       try {
-        const est = await accountRulesContract!.estimate.removeAccount(value);
-        const tx = await accountRulesContract!.functions.removeAccount(value, { gasLimit: est.toNumber() * 2 });
+        const est = await accountRulesContract!.estimate.removeTarget(value);
+        const tx = await accountRulesContract!.functions.removeTarget(value, { gasLimit: est.toNumber() * 2 });
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
-        openToast(value, SUCCESS, `Removal of account processed: ${value}`);
+        openToast(value, SUCCESS, `Removal of target processed: ${value}`);
         deleteTransaction(value);
       } catch (e) {
         console.log('error', e);
         toggleModal('remove')(false);
         updateTransaction(value, FAIL_REMOVAL);
         errorToast(e, value, openToast, () =>
-          openToast(value, FAIL, 'Could not remove account', `${value} was unable to be removed. Please try again.`)
+          openToast(value, FAIL, 'Could not remove target', `${value} was unable to be removed. Please try again.`)
         );
       }
     };
@@ -130,14 +112,14 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
         //toggleModal('add')(false);
         addTransaction(value.toString(), PENDING_CONFIRM);
         await tx.wait(1); // wait on receipt confirmations
-        openToast(value.toString(), SUCCESS, `Confirm of account processed: ${value}`);
+        openToast(value.toString(), SUCCESS, `Confirm of target processed: ${value}`);
         deleteTransaction(value.toString());
       } catch (e) {
         console.log('error', e);
        // toggleModal('add')(false);
         updateTransaction(value.toString(), FAIL_CONFIRM);
         errorToast(e, value.toString(), openToast, () =>
-          openToast(value.toString(), FAIL, 'Could not Confirm account', `${value} was unable to be Confirmend. Please try again.`)
+          openToast(value.toString(), FAIL, 'Could not Confirm target', `${value} was unable to be Confirmend. Please try again.`)
         );
       }
     };
@@ -149,14 +131,14 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
        // toggleModal('remove')(false);
         addTransaction(value.toString(), PENDING_REVOKE);
         await tx.wait(1); // wait on receipt confirmations
-        openToast(value.toString(), SUCCESS, `Revoke of account processed: ${value}`);
+        openToast(value.toString(), SUCCESS, `Revoke of target processed: ${value}`);
         deleteTransaction(value.toString());
       } catch (e) {
         console.log('error', e);
         //toggleModal('remove')(false);
         updateTransaction(value.toString(), FAIL_REVOKE);
         errorToast(e, value.toString(), openToast, () =>
-          openToast(value.toString(), FAIL, 'Could not Revoke account', `${value} was unable to be Revoked. Please try again.`)
+          openToast(value.toString(), FAIL, 'Could not Revoke target', `${value} was unable to be Revoked. Please try again.`)
         );
       }
     };
@@ -175,7 +157,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       if (isDuplicateAccount) {
         return {
           valid: false,
-          msg: 'Account address is already added.'
+          msg: 'Target address is already added.'
         };
       }
 
@@ -187,7 +169,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     const allDataReady: boolean = dataReady && adminDataReady;
     if (isOpen && allDataReady) {
       return (
-        <AccountTab
+        <TargetTab
           list={list}
           listTransaction={listTransaction}
           modals={modals}
@@ -209,7 +191,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
       return <div />;
     }
   } else if (isOpen && !accountRulesContract) {
-    return <NoContract tabName="Account Rules" />;
+    return <NoContract tabName="Target Rules" />;
   } else {
     return <div />;
   }
