@@ -148,6 +148,9 @@ contract AccountStorage {
     function getByIndex(uint index) public view returns (address account) {
         return accountAllowList[index];
     }
+    function getTargetByIndex(uint index) public view returns (address account) {
+        return targetAllowList[index];
+    }
 
     function getAccounts() public view onlyAccountRules returns (address[] memory){
         return accountAllowList;

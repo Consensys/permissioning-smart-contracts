@@ -109,6 +109,9 @@ contract AccountRulesList {
     function getByIndex(uint index) public view returns (address account) {
         return accountStorage.getByIndex(index);
     }
+     function getTargetByIndex(uint index) public view returns (address account) {
+        return accountStorage.getTargetByIndex(index);
+    }
 
     function getAccounts() public view returns (address[] memory){
         return accountStorage.getAccounts();
