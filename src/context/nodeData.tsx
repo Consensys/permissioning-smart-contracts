@@ -134,12 +134,24 @@ export const NodeDataProvider: React.FC<{}> = props => {
 
             contract.removeAllListeners('TransactionAdded');
             contract.removeAllListeners('NodeRemoved');
+            storageContract.removeAllListeners('Confirmation');
+            storageContract.removeAllListeners('Revocation');
+            
+            
+            
             contract.on('TransactionAdded', () => {
               loadNodeData(contract,nodeStorageMultiSigContract, setNodeList,setNodeTransactionList, setNodeReadOnly);
             });
             contract.on('NodeRemoved', () => {
               loadNodeData(contract, nodeStorageMultiSigContract,setNodeList, setNodeTransactionList,setNodeReadOnly);
             });
+            storageContract.on('Confirmation', () => {
+              loadNodeData(contract, nodeStorageMultiSigContract,setNodeList, setNodeTransactionList,setNodeReadOnly);
+            });
+            storageContract.on('Revocation', () => {
+              loadNodeData(contract, nodeStorageMultiSigContract,setNodeList, setNodeTransactionList,setNodeReadOnly);
+            });
+
           });
             
         });

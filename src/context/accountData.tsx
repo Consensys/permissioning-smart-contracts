@@ -63,8 +63,8 @@ const loadAccountData = (
         }
      
         Promise.all(listElementsPromisesTransaction).then(responses => {
-
-          setAccountTransactionList(responses.map(transaction => ({address:transaction[0],isAccount:transaction[1],executed:transaction[2],transactionId: transaction[3].toNumber() })));
+          const responseF= responses.filter(transaction => transaction[1] );
+          setAccountTransactionList(responseF.map(transaction => ({address:transaction[0],isAccount:transaction[1],executed:transaction[2],transactionId: transaction[3].toNumber() })));
           
         });
       });
@@ -119,6 +119,8 @@ export const AccountDataProvider: React.FC<{}> = props => {
 
           contract.removeAllListeners('AccountAdded');
           contract.removeAllListeners('AccountRemoved');
+          storageContract.removeAllListeners('Confirmation');
+          storageContract.removeAllListeners('Revocation')
           contract.on('AccountAdded', (success, account, event) => {
             if (success) {
               loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
@@ -129,7 +131,16 @@ export const AccountDataProvider: React.FC<{}> = props => {
               loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
             }
           });
-
+          storageContract.on('Confirmation', (success, account, event) => {
+            if (success) {
+              loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
+            }
+          });
+          storageContract.on('Revocation', (success, account, event) => {
+            if (success) {
+              loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
+            }
+          });
         });
         
 
