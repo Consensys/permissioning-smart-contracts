@@ -2,7 +2,7 @@
 import React, { MouseEvent, useState } from 'react';
 import PropTypes from 'prop-types';
 // Components
-import AddModal from '../../components/Modals/Add';
+import AddModal from '../../components/Modals/AddTarget';
 import { ModalDisplay } from '../../constants/modals';
 
 const AddModalContainer: React.FC<{

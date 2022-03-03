@@ -10,7 +10,7 @@ import { ModalDisplay } from '../../constants/modals';
 const AddModalContainer: React.FC<{
   isOpen: boolean;
   closeModal: () => void;
-  handleAdd: (enode: string,nodeType:string, nodeName:string,nodeOrganization:string ) => void;
+  handleAdd: (enode: string,nodeType:string, nodeName:string,nodeOrganization:string ,nodeGeoHash:string , nodeDid:string) => void;
   isValid: (value: string) => { valid: boolean; msg?: string };
   display: ModalDisplay;
 }> = ({ isOpen, closeModal, handleAdd, isValid, display }) => {
@@ -18,6 +18,8 @@ const AddModalContainer: React.FC<{
   const [nodeType, setNodeType] = useState("");
   const [nodeName, setNodeName] = useState("");
   const [nodeOrganization, setNodeOrganization] = useState("");
+  const [nodeDid, setNodeDid] = useState("");
+  const [nodeGeoHash, setNodeGeoHash] = useState("");
 
   const [validation, setValidation] = useState({ valid: false });
 
@@ -46,11 +48,23 @@ const AddModalContainer: React.FC<{
    // setValidation(validation);
   };
  
+  const modifyNodeDid = ({ target: { value } }: { target: { value: string , } }) => {
+    // const validation = isValid(value);
+    setNodeDid(value);
+    // setValidation(validation);
+   };
+
+   const modifyNodeGeoHash = ({ target: { value } }: { target: { value: string , } }) => {
+    // const validation = isValid(value);
+    setNodeGeoHash(value);
+    // setValidation(validation);
+   };
+
   const handleSubmit = (e: MouseEvent) => {
     e.preventDefault();
     setEnode("");
     setValidation({ valid: false });
-    handleAdd(enode,nodeType, nodeName,nodeOrganization);
+    handleAdd(enode,nodeType, nodeName,nodeOrganization, nodeGeoHash,nodeDid);
   };
 
   const handleClose = (e: MouseEvent) => {
@@ -66,11 +80,15 @@ const AddModalContainer: React.FC<{
      nodeType={nodeType}
      nodeName={nodeName}
      nodeOrganization={nodeOrganization}
+     nodeDid={nodeDid}
+     nodeGeoHash={nodeGeoHash}
       validationResult={validation}
       modifyEnode={modifyEnode}
       modifyNodeType={modifyNodeType}
       modifyNodeName={modifyNodeName}
       modifyNodeOrganization={modifyNodeOrganization}
+      modifyNodeDid={modifyNodeDid}
+      modifyNodeGeoHash={modifyNodeGeoHash}
       handleSubmit={handleSubmit}
       isOpen={isOpen}
       closeModal={handleClose}
