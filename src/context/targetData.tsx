@@ -63,8 +63,8 @@ const loadAccountData = (
         }
      
         Promise.all(listElementsPromisesTransaction).then(responses => {
-
-          setAccountTransactionList(responses.map(transaction => ({address:transaction[0],isAccount:transaction[1],executed:transaction[2],transactionId: transaction[3].toNumber() })));
+          const responseF= responses.filter(transaction => transaction[1]== false );
+          setAccountTransactionList(responseF.map(transaction => ({address:transaction[0],isAccount:transaction[1],executed:transaction[2],transactionId: transaction[3].toNumber() })));
           
         });
       });
@@ -117,14 +117,27 @@ export const TargetDataProvider: React.FC<{}> = props => {
         accountStorageMultiSigFactory(contract).then(storageContract => { 
           setAccountStorageMultiSigContract(storageContract);
 
-          contract.removeAllListeners('AccountAdded');
-          contract.removeAllListeners('AccountRemoved');
-          contract.on('AccountAdded', (success, account, event) => {
+          contract.removeAllListeners('TargetAdded');
+          contract.removeAllListeners('TargetRemoved');
+          storageContract.removeAllListeners('Confirmation');
+          storageContract.removeAllListeners('Revocation')
+          
+          contract.on('TargetAdded', (success, account, event) => {
             if (success) {
               loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
             }
           });
-          contract.on('AccountRemoved', (success, account, event) => {
+          contract.on('TargetRemoved', (success, account, event) => {
+            if (success) {
+              loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
+            }
+          });
+          storageContract.on('Confirmation', (success, account, event) => {
+            if (success) {
+              loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
+            }
+          });
+          storageContract.on('Revocation', (success, account, event) => {
             if (success) {
               loadAccountData(contract, accountStorageMultiSigContract,setAccountList,setAccountTransactionList, setAccountReadOnly);
             }

@@ -17,7 +17,7 @@ type EnodeTab = {
     lock: boolean;
   };
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
-  handleAdd: (enode:string,nodeType:string, nodeName:string,nodeOrganization:string) => Promise<void>;
+  handleAdd: (enode:string,nodeType:string, nodeName:string,nodeOrganization:string,nodeGeoHash:string , nodeDid:string) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
   handleConfirm:(value: any) => Promise<void>;
   handleRevoke:(value: any) => Promise<void>;

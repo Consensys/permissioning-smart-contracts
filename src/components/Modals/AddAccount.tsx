@@ -90,7 +90,7 @@ const AddModal: React.FC<{
             hovercolor="#25D78F"
             border={1}
             onClick={handleSubmit}
-           // disabled={!validationResult.valid}
+            disabled={!validationResult.valid}
           >
             {display.submitText}
           </Button>

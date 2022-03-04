@@ -13,17 +13,22 @@ const AddModal: React.FC<{
   nodeType:String;
   nodeName:String;
   nodeOrganization:String;
+  nodeGeoHash:String;
+  nodeDid:String;
   validationResult: { valid: boolean; msg?: string };
  
   modifyEnode: (input: { target: { name: string; value: string } }) => void;
   modifyNodeType: (input: { target: { name: string; value: string } }) => void;
   modifyNodeName: (input: { target: { name: string; value: string } }) => void;
   modifyNodeOrganization: (input: { target: { name: string; value: string } }) => void;
+  modifyNodeDid: (input: { target: { name: string; value: string } }) => void;
+  modifyNodeGeoHash: (input: { target: { name: string; value: string } }) => void;
+
   handleSubmit: (e: MouseEvent) => void;
   isOpen: boolean;
   closeModal: (e: MouseEvent) => void;
   display: ModalDisplay;
-}> = ({ enode,nodeType,nodeName,nodeOrganization, validationResult, modifyEnode,modifyNodeType, modifyNodeName,modifyNodeOrganization,handleSubmit, isOpen, closeModal, display }) => (
+}> = ({ enode,nodeType,nodeName,nodeOrganization,nodeDid,nodeGeoHash, validationResult, modifyEnode,modifyNodeType, modifyNodeName,modifyNodeOrganization,modifyNodeDid,modifyNodeGeoHash,handleSubmit, isOpen, closeModal, display }) => (
   <Modal isOpen={isOpen}>
     <Card width={'700px'} p={0}>
       <Button.Text
@@ -87,22 +92,7 @@ const AddModal: React.FC<{
               required
             />
           </Form.Field>
-          {/* <Form.Field
-            mt={3}
-            label="Node DID"
-            className={node.did ? `${validationResult.valid ? styles.validField : styles.invalidField}` : null}
-          >
-            <Form.Input
-              width={1}
-              type="text"
-              name="did"
-              placeholder="did:ethr:lacchain:0x00000000000000000000000000000000000000"
-              value={node.did}
-              onChange={modifyInput}
-              className={styles.fieldInput}
-              required
-            />
-          </Form.Field> */}
+      
           <Form.Field
             mt={3}
             label="Organization"
@@ -119,6 +109,39 @@ const AddModal: React.FC<{
               required
             />
           </Form.Field>
+          <Form.Field
+            mt={3}
+            label="Geo Hash"
+            //className={nodeDid ? `${validationResult.valid ? styles.validField : styles.invalidField}` : null}
+          >
+            <Form.Input
+              width={1}
+              type="text"
+              name="geoHash"
+              placeholder=""
+              value={nodeGeoHash }
+              onChange={modifyNodeGeoHash}
+              className={styles.fieldInput}
+              required
+            />
+          </Form.Field> 
+
+            <Form.Field
+            mt={3}
+            label="Node DID"
+            //className={nodeDid ? `${validationResult.valid ? styles.validField : styles.invalidField}` : null}
+          >
+            <Form.Input
+              width={1}
+              type="text"
+              name="did"
+              placeholder="did:ethr:lacchain:0x00000000000000000000000000000000000000"
+              value={nodeDid }
+              onChange={modifyNodeDid}
+              className={styles.fieldInput}
+              required
+            />
+          </Form.Field> 
           <Text
             color="red"
             height="30px"

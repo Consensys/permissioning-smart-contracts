@@ -59,7 +59,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   );
 
   if (!!nodeRulesContract) {
-    const handleAdd = async (enode:string,nodeType:string, nodeName:string,nodeOrganization:string) => {
+    const handleAdd = async (enode:string,nodeType:string, nodeName:string,nodeOrganization:string, nodeGeoHash:string , nodeDid:string) => {
      //const { enode, type, organization, name, did, group } = value;
      // const { enodeHigh, enodeLow, ip, port } = enodeToParams(enode);
      let group = ""
@@ -85,10 +85,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         nodeTypeValue=3
         group=""
     }
-    const did ='N/A'
+    //const did ='N/A'
    // const organization='lacchain'
     const { enodeHigh, enodeLow, ip, port} = enodeToParams(enode);
-    const geoHash ="0x00646a6e3431" //await getGeohash(ip);
+    //const geoHash ="0x00646a6e3431" //await getGeohash(ip);
     
       const identifier = paramsToIdentifier({
         enodeHigh,
@@ -96,10 +96,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         ip,
         port,
         nodeType: nodeTypeValue,
-        geoHash,
+        geoHash:nodeGeoHash,
         name:nodeName,
         organization:nodeOrganization,
-        did,
+        did:nodeDid,
         group
       });
       try {
@@ -111,10 +111,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
           // @ts-ignore
          // utils.hexlify(types[nodeType]),
          nodeTypeValue,
-          geoHash,
+         nodeGeoHash,
           nodeName,
           nodeOrganization,
-          did,
+          nodeDid,
           group
         );
       
@@ -245,7 +245,13 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     };
 
     const isDuplicateEnode = (enode: string) => {
-      return false; //list.filter((item: Enode) => isEqual(item, enodeToParams(enode))).length > 0;
+      //return list.filter((item: Enode) => isEqual(item, enodeToParams(enode))).length > 0;
+      let lat =list.filter((item: Enode) =>{ 
+       let newT= enodeToParams(enode)
+        return (item.enodeHigh=== newT.enodeHigh && item.enodeLow===newT.enodeLow && item.ip=== newT.ip )
+      }).length > 0;
+      console.log(lat)
+      return lat
     };
 
     const isValid = (enode: string) => {
