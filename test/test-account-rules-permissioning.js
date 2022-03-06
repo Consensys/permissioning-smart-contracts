@@ -137,7 +137,7 @@ contract("Account Rules (Permissioning)", (accounts) => {
 
   it('should not allow non-admin account to remove from allowlist', async () => {
     try {
-      await rulesContract.addAccount(address1, { from: accounts[1] });
+      await rulesContract.removeAccount(address1, { from: accounts[1] });
       expect.fail(null, null, "Modifier was not enforced")
     } catch(err) {
       expect(err.reason).to.contain('Sender not authorized');
