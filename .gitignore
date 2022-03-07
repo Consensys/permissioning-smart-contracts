@@ -120,5 +120,6 @@ junit.xml
 # VSCode settings
 .vscode/
 
-.openzeppelin/.session
+.openzeppelin/
+networks.js
 docker/certs
