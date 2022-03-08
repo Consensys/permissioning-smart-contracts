@@ -110,7 +110,7 @@ contract Admin is AdminProxy, AdminList {
         if (isConfirmed(transactionId)) {
             Transaction storage txn = transactions[transactionId];
             txn.executed = true;
-            if (add(txn.newAdmin))
+            if (_addAdmin(txn.newAdmin))
                 emit Execution(transactionId);
             else {
                 emit ExecutionFailure(transactionId);
@@ -261,7 +261,7 @@ contract Admin is AdminProxy, AdminList {
         return exists(_address);
     }
 
-    function addAdmin(address _address) external onlyAdmin returns (bool) {
+    function _addAdmin(address _address) internal returns (bool) {
         if (msg.sender == _address) {
             emit AdminAdded(false, _address, "Adding own account as Admin is not permitted");
             return false;
