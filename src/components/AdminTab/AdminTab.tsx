@@ -10,6 +10,7 @@ import { addAdminDisplay, removeAdminDisplay } from '../../constants/modals';
 
 type AdminTab = {
   list: { address: string; status: string }[];
+  listTransaction: any[];
   userAddress?: string;
   modals: {
     add: boolean;
@@ -19,6 +20,8 @@ type AdminTab = {
   toggleModal: (name: 'add' | 'remove' | 'lock') => (value?: boolean | string) => void;
   handleAdd: (value: any) => Promise<void>;
   handleRemove: (value: any) => Promise<void>;
+  handleConfirm: (value: any) => Promise<void>;
+  handleRevoke: (value: any) => Promise<void>;
   isAdmin: boolean;
   deleteTransaction: (identifier: string) => void;
   isValid: (address: string) => { valid: boolean; msg?: string };
@@ -27,11 +30,14 @@ type AdminTab = {
 
 const AdminTab: React.FC<AdminTab> = ({
   list,
+  listTransaction,
   userAddress,
   modals,
   toggleModal,
   handleAdd,
   handleRemove,
+  handleConfirm,
+  handleRevoke,
   isAdmin,
   deleteTransaction,
   isValid,
@@ -42,10 +48,13 @@ const AdminTab: React.FC<AdminTab> = ({
       <Fragment>
         <AdminTable
           list={list}
+          listTransaction={listTransaction}
           userAddress={userAddress}
           toggleModal={toggleModal}
           isAdmin={isAdmin}
           deleteTransaction={deleteTransaction}
+          handleConfirm={handleConfirm}
+          handleRevoke={handleRevoke}
         />
         <AddModal
           isOpen={modals.add && isAdmin}
@@ -77,6 +86,8 @@ AdminTab.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   handleAdd: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
+  handleConfirm: PropTypes.func.isRequired,
+  handleRevoke: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   deleteTransaction: PropTypes.func.isRequired,
   isValid: PropTypes.func.isRequired
