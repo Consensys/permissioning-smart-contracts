@@ -65,7 +65,7 @@ contract Admin is AdminProxy, AdminList {
 
     /// @dev Allows an owner to submit and confirm a transaction.
     /// @return Returns transaction ID.
-    function submitTransaction(address _newAdmin, bool _isAccount)
+    function addAdmin(address _newAdmin)
         public
         onlyAdmin()
         returns (bool)
@@ -253,7 +253,8 @@ contract Admin is AdminProxy, AdminList {
         _;
     }
 
-    constructor(address[] memory _owners) public {
+    constructor(address[] memory _owners, uint _required) public validRequirement(_owners.length, _required){
+        required = _required;
         addAll(_owners);
     }
 
