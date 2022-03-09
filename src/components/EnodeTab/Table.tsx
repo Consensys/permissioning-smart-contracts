@@ -27,7 +27,7 @@ type EnodeTable = {
 
 const EnodeTable: React.FC<EnodeTable> = ({ list, listTransaction,toggleModal, deleteTransaction,  handleConfirm,handleRevoke,isAdmin }) => (
   <Box mt={5}>
-    <EnodeTableTransactionHeader number={listTransaction.length}  />
+    <EnodeTableTransactionHeader number={listTransaction.length} isAdmin={isAdmin}  />
     <Table mt={4}>
       <thead>
         <tr>
@@ -44,7 +44,7 @@ const EnodeTable: React.FC<EnodeTable> = ({ list, listTransaction,toggleModal, d
       </thead>
       <tbody>
         {listTransaction.map(enode => (
-          <EnodeRowTransaction
+          isAdmin && <EnodeRowTransaction
             key={enode.identifier}
             isAdmin={isAdmin}
             deleteTransaction={deleteTransaction}
@@ -58,7 +58,7 @@ const EnodeTable: React.FC<EnodeTable> = ({ list, listTransaction,toggleModal, d
       </tbody>
     </Table>
     <br/>
-    <EnodeTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
+    <EnodeTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin}  isAdmin ={isAdmin}/>
     <Table mt={4}>
       <thead>
         <tr>
@@ -73,7 +73,7 @@ const EnodeTable: React.FC<EnodeTable> = ({ list, listTransaction,toggleModal, d
       </thead>
       <tbody>
         {list.map(enode => (
-          <EnodeRow
+          isAdmin&& <EnodeRow
             key={enode.identifier}
             isAdmin={isAdmin}
             deleteTransaction={deleteTransaction}

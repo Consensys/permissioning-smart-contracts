@@ -27,6 +27,7 @@ const AccountTable: React.FC<AccountTable> = ({ list, listTransaction,toggleModa
     <TableContainer component={Paper}>
       <AccountTableTransactionHeader
         number={listTransaction.length}
+        isAdmin={isAdmin}
       />
       <Table size="small">
         <TableHead>
@@ -40,7 +41,7 @@ const AccountTable: React.FC<AccountTable> = ({ list, listTransaction,toggleModa
         <TableBody>
         
           {listTransaction.map(({ address, status,transactionId,executed }) => (
-            <AccountRowTransaction
+            isAdmin && <AccountRowTransaction
               key={address}
               address={address}
               status={status}
@@ -62,6 +63,7 @@ const AccountTable: React.FC<AccountTable> = ({ list, listTransaction,toggleModa
         number={list.length}
         openAddModal={() => toggleModal('add')(true)}
         disabledAdd={!isAdmin || isReadOnly}
+        isAdmin={isAdmin}
       />
       <Table size="small">
         <TableHead>
@@ -74,7 +76,7 @@ const AccountTable: React.FC<AccountTable> = ({ list, listTransaction,toggleModa
         <TableBody>
         
           {list.map(({ address, status }) => (
-            <AccountRow
+           isAdmin && <AccountRow
               key={address}
               address={address}
               status={status}

@@ -36,7 +36,7 @@ const AdminTable: React.FC<AdminTable> = ({
 }) => (
   <Box mt={5}>
     <TableContainer component={Paper}>
-      <AdminTableTransactionHeader number={listTransaction.length} />
+      <AdminTableTransactionHeader number={listTransaction.length} isAdmin={isAdmin} />
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -48,7 +48,7 @@ const AdminTable: React.FC<AdminTable> = ({
         </TableHead>
         <TableBody>
           {listTransaction.map(({ address, status, transactionId, executed }) => (
-            <AdminRowTransaction
+            isAdmin && <AdminRowTransaction
               key={address}
               address={address}
               status={status}
@@ -66,7 +66,7 @@ const AdminTable: React.FC<AdminTable> = ({
       </Table>
     </TableContainer>
     <TableContainer component={Paper}>
-      <AdminTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} />
+      <AdminTableHeader number={list.length} openAddModal={() => toggleModal('add')(true)} disabledAdd={!isAdmin} isAdmin={isAdmin}/>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -76,7 +76,7 @@ const AdminTable: React.FC<AdminTable> = ({
         </TableHead>
         <TableBody>
           {list.map(({ address, status }) => (
-            <AdminRow
+          isAdmin &&  <AdminRow
               key={address}
               address={address}
               status={status}

@@ -7,12 +7,13 @@ import { Flex, Box, Heading, Button } from 'rimble-ui';
 
 type TableHeader = {
   number: number;
+  isAdmin: boolean;
 };
 
-const TableHeader: React.FC<TableHeader> = ({ number }) => (
+const TableHeader: React.FC<TableHeader> = ({ number , isAdmin}) => (
   <Flex alignItems="center" justifyContent="space-between">
     <Box>
-      <Heading.h2 fontWeight="700">Transactions ({number})</Heading.h2>
+      <Heading.h2 fontWeight="700">Transactions ({isAdmin && number})</Heading.h2>
     </Box>
   </Flex>
 );
