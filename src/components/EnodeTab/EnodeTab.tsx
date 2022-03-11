@@ -26,9 +26,21 @@ type EnodeTab = {
   isValid: (address: string) => { valid: boolean };
   isOpen: boolean;
   isReadOnly: boolean;
+  modifySelectType: (input: { target: { value: string } }) => void;
+  selectTypeSearch : string;
+  modifyInputSearchOrganization: (input: { target: { value: string } }) => void;
+  inputSearchOrganization : string;
+  handleSearch: (e: MouseEvent) => void;
+  handleClear: (e: MouseEvent) => void;
 };
 
 const EnodeTab: React.FC<EnodeTab> = ({
+  inputSearchOrganization,
+  modifyInputSearchOrganization,
+  modifySelectType,
+  selectTypeSearch,
+  handleSearch,
+  handleClear,
   list,
   listTransaction,
   modals,
@@ -47,6 +59,12 @@ const EnodeTab: React.FC<EnodeTab> = ({
     {isOpen && (
       <Fragment>
         <EnodeTable
+        inputSearchOrganization={inputSearchOrganization}
+        modifyInputSearchOrganization={modifyInputSearchOrganization}
+         modifySelectType={modifySelectType}
+         selectTypeSearch={selectTypeSearch}
+         handleSearch={handleSearch}
+         handleClear={handleClear}
           list={list}
           listTransaction={listTransaction}
           toggleModal={toggleModal}

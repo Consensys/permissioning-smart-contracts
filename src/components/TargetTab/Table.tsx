@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TableContainer, Paper, Table, Box, TableHead, TableRow, TableBody, TableCell } from '@material-ui/core';
+import {  Button, Flex, Heading, Form, Text } from 'rimble-ui';
 // Components
 import AccountTableHeader from './TableHeader';
 import AccountTableTransactionHeader from './TableTransactionHeader';
@@ -20,9 +21,13 @@ type AccountTable = {
   handleRevoke: (identifier: number) => void;
   isAdmin: boolean;
   isReadOnly: boolean;
+  modifyInputSearch: (input: { target: { value: string } }) => void;
+  handleSearch: (e: MouseEvent) => void;
+  handleClear: (e: MouseEvent) => void;
+  inputSearch : string;
 };
 
-const AccountTable: React.FC<AccountTable> = ({ list, listTransaction,toggleModal, deleteTransaction, handleConfirm,handleRevoke,isAdmin, isReadOnly }) => (
+const AccountTable: React.FC<AccountTable> = ({ modifyInputSearch,inputSearch,handleSearch, handleClear, list, listTransaction,toggleModal, deleteTransaction, handleConfirm,handleRevoke,isAdmin, isReadOnly }) => (
   <Box mt={5}>
     <TableContainer component={Paper}>
       <AccountTableTransactionHeader
@@ -65,6 +70,43 @@ const AccountTable: React.FC<AccountTable> = ({ list, listTransaction,toggleModa
         disabledAdd={!isAdmin || isReadOnly}
         isAdmin={isAdmin}
       />
+      <Flex alignItems="center" justifyContent="space-between">
+     
+     <Form.Input
+         width={1}
+         type="text"
+         name="input"
+         placeholder="Search"
+         onChange={modifyInputSearch}
+         value={inputSearch}
+         className={styles.fieldInput}
+         required
+       />
+           <Button
+       type="submit"
+       ml={3}
+       color="white"
+       bg="pegasys"
+       hovercolor="#25D78F"
+       border={1}
+       onClick={handleSearch}
+
+     >
+     Search
+     </Button>
+     <Button
+       type="submit"
+       ml={3}
+       color="white"
+       bg="pegasys"
+       hovercolor="#25D78F"
+       border={1}
+       onClick={handleClear}
+
+     >
+     Clear
+     </Button>
+ </Flex>
       <Table size="small">
         <TableHead>
           <TableRow>

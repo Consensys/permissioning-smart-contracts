@@ -26,9 +26,17 @@ type AccountTab = {
   isValid: (address: string) => { valid: boolean };
   isOpen: boolean;
   isReadOnly: boolean;
+  modifyInputSearch: (input: { target: { value: string } }) => void;
+  inputSearch : string;
+  handleSearch: (e: MouseEvent) => void;
+  handleClear: (e: MouseEvent) => void;
 };
 
 const TargetTab: React.FC<AccountTab> = ({
+  modifyInputSearch,
+  inputSearch,
+  handleSearch,
+  handleClear,
   list,
   listTransaction,
   modals,
@@ -47,6 +55,10 @@ const TargetTab: React.FC<AccountTab> = ({
     {isOpen && (
       <Fragment>
         <AccountTable
+        modifyInputSearch={modifyInputSearch}
+        inputSearch={inputSearch}
+        handleSearch={handleSearch}
+        handleClear={handleClear}
           list={list}
           listTransaction={listTransaction}
           toggleModal={toggleModal}

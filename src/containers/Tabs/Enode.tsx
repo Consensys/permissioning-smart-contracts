@@ -1,5 +1,5 @@
 // Libs
-import React from 'react';
+import React, {useState,useMemo} from 'react';
 import PropTypes from 'prop-types';
 import idx from 'idx';
 import { utils } from 'ethers';
@@ -46,6 +46,58 @@ type EnodeTabContainerProps = {
 
 const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
  // const types = { Bootnode: 0, Validator: 1, Writer: 2, Observer: 3 };
+
+ const [selectTypeSearch, setSelectTypeSearch] = useState('');
+ const [searchType, setSearchType] = useState("")
+ const [searchOrganization, setSearchOrganization] = useState("")
+ const [inputSearchOrganization, setInputSearchOrganization] = useState('');
+ 
+ const modifySelectType = ({ target: { value } }: { target: { value: string } }) => {
+  setSelectTypeSearch(value);
+ };
+ const modifyInputSearchOrganization = ({ target: { value } }: { target: { value: string } }) => {
+  setInputSearchOrganization(value);
+ };
+
+ const getType= (value: string) =>{
+    let nodeTypeValue = ""
+    switch (value) {
+    case 'Bootnode':
+      nodeTypeValue="0"
+    
+      break;
+    case 'Validator':
+      nodeTypeValue="1"
+
+      break;
+    case 'Writer':
+      nodeTypeValue="2"
+
+      break;
+    case 'Observer':
+      nodeTypeValue="3"
+
+      break;
+    default:
+      nodeTypeValue=""
+  
+  }
+  return nodeTypeValue
+ }
+ const handleSearch = (e: MouseEvent) => {
+   e.preventDefault();
+   setSearchType(selectTypeSearch)
+   setSearchOrganization(inputSearchOrganization)
+ };
+ 
+ const handleClear = (e: MouseEvent) => {
+   e.preventDefault();
+   setSearchType("")
+   setSelectTypeSearch("")
+   setSearchOrganization("")
+   setInputSearchOrganization("")
+ };
+
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
   const { allowlist,allowlistTransacion, isReadOnly, dataReady, nodeRulesContract } = useNodeData();
 
@@ -58,6 +110,19 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     identifierToParamsTransaction
   );
 
+  const listFilter=useMemo(()=>  list.filter(row=> {
+  
+    if (searchType===""){
+      return  row.organization .toString().includes(searchOrganization);
+    }else if (searchOrganization==""){
+      return row.nodeType .toString().includes(getType(searchType)  );
+    }else{
+      return row.nodeType .toString().includes(getType(searchType)  ) && row.organization .toString().includes(searchOrganization);
+    }
+    
+  }
+  ),[searchType,searchOrganization,list])
+  
   if (!!nodeRulesContract) {
     const handleAdd = async (enode:string,nodeType:string, nodeName:string,nodeOrganization:string, nodeGeoHash:string , nodeDid:string) => {
      //const { enode, type, organization, name, did, group } = value;
@@ -275,7 +340,13 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     if (isOpen && allDataReady) {
       return (
         <EnodeTab
-          list={list}
+        selectTypeSearch={selectTypeSearch}
+        modifySelectType={modifySelectType}
+        handleSearch={handleSearch}
+        handleClear={handleClear}
+        inputSearchOrganization={inputSearchOrganization}
+        modifyInputSearchOrganization={modifyInputSearchOrganization}
+          list={listFilter}
           listTransaction={listTransaction}
           modals={modals}
           toggleModal={toggleModal}
