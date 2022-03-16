@@ -3,6 +3,7 @@ import React, {useState,useMemo} from 'react';
 import PropTypes from 'prop-types';
 import idx from 'idx';
 import { utils } from 'ethers';
+import hexToIp from '../../util/ipConverter';
 // Context
 import { useAdminData } from '../../context/adminData';
 import { useNodeData } from '../../context/nodeData';
@@ -111,13 +112,31 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
   );
 
   const listFilter=useMemo(()=>  list.filter(row=> {
+    //  return  row.organization .toString().includes(searchOrganization) || row.ip.includes( searchOrganization ) ;
   
     if (searchType===""){
-      return  row.organization .toString().includes(searchOrganization);
+      
+      const {enodeHigh} = enodeToParams(searchOrganization)
+      console.log(enodeHigh)
+      if (enodeHigh==""){
+        return  row.organization .toString().includes(searchOrganization) 
+      || hexToIp(row.ip).includes( searchOrganization ) ;
+      }else{
+        return    row.enodeHigh.includes(enodeHigh);
+      }
+      
     }else if (searchOrganization==""){
-      return row.nodeType .toString().includes(getType(searchType)  );
+      return row.nodeType .toString().includes(getType(searchType)  ) ;
     }else{
-      return row.nodeType .toString().includes(getType(searchType)  ) && row.organization .toString().includes(searchOrganization);
+      const {enodeHigh} = enodeToParams(searchOrganization)
+      if (enodeHigh==""){
+        return row.nodeType .toString().includes(getType(searchType)  ) 
+        && (row.organization .toString().includes(searchOrganization )  || hexToIp(row.ip).includes( searchOrganization )  );
+      }else{
+        return row.nodeType .toString().includes(getType(searchType)  ) 
+        && (  row.enodeHigh.includes(enodeHigh));
+      }
+      
     }
     
   }
