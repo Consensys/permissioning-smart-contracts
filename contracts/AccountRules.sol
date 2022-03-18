@@ -2,11 +2,8 @@ pragma solidity 0.5.9;
 
 import "./AccountRulesProxy.sol";
 import "./AccountRulesList.sol";
-import "./AccountIngress.sol";
 import "./Admin.sol";
-import "./AccountStorage.sol";
 import "./lib/LibBytesV06.sol";
-
 
 contract AccountRules is AccountRulesProxy, AccountRulesList {
 
@@ -22,8 +19,6 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint private version = 1000000;
 
-    AccountIngress private ingressContract;
-
     address private relayHub;
 
     modifier onlyOnEditMode() {
@@ -32,11 +27,11 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     }
 
     modifier onlyAdmin() {
-        require(isAuthorizedAdmin(msg.sender), "Sender not authorized");
+        require(isAuthorizedAdmin(msg.sender), "Sender is not admin authorized");
         _;
     }
 
-    constructor (AccountIngress _ingressContract, AccountStorageMultiSig _storage) public {
+    constructor (AccountIngress _ingressContract, AccountStorage _storage) public {
         setStorage(_storage);
         ingressContract = _ingressContract;
     }
@@ -117,16 +112,6 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     ) public view returns (bool) {
         return existsTarget(_target);
     }
-
-    function confirmTransaction(uint256 _transactionId) public onlyAdmin returns (bool){
-        bool confirmed = _confirmTransaction(_transactionId);
-        return confirmed;
-    }
-
-    function revokeConfirmation(uint256 _transactionId) public onlyAdmin returns (bool){
-        bool confirmed = _revokeConfirmation(_transactionId);
-        return confirmed;
-    }
     
     function addAccount(
         address account,
@@ -138,7 +123,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
             bytes memory payload = abi.encodeWithSignature("addNode(address,uint8)",account,nodeType);
             (bool cResponse, bytes memory result) = relayHub.call(payload);
             added = cResponse;
-            require (cResponse, "Node haven't been added to GasLimit");
+            require (cResponse, string(result));
         }
         return added;
     }
@@ -159,11 +144,6 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         return _sizeTargets();
     }
 
-    /*
-    function addAccounts(address[] calldata accounts) external onlyAdmin returns (bool) {
-        return _addAllAccounts(accounts);
-    }*/
-
     function addTarget(
         address target
     ) public onlyAdmin onlyOnEditMode returns (bool) {
@@ -178,6 +158,10 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         bool removed = _removeTarget(target);
         emit TargetRemoved(removed, target);
         return removed;
+    }
+
+    function uodateStorage_AccountRules(address _newAccountRules) public onlyAdmin returns (bool){
+        return _updateStorage_AccountRules(_newAccountRules);
     }
 
     function isAuthorizedAdmin(address user) private view returns (bool) {

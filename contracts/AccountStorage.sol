@@ -43,30 +43,12 @@ contract AccountStorage {
         _;
     }
 
-    modifier onlyAdmin() {
-        if (address(0) == address(ingressContract)) {
-            require(msg.sender == owner, "only owner permitted since ingressContract is explicitly set to zero");
-        } else {
-            address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
-
-            require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-            require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
-        }
-        _;
-    }
-
-    function getOwnersSize() internal view returns(uint256){
-        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
-        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-        return Admin(adminContractAddress).size();
-    }
-
     function upgradeVersion(address _newVersion) public ownerExists(msg.sender) {
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
     }
 
-    function updateAccountRules(address _accountRules) public ownerExists(msg.sender) {
+    function updateAccountRules(address _accountRules) public onlyAccountRules {
         emit VersionChange(accountRules, _accountRules);
         accountRules = _accountRules;
     }
@@ -77,12 +59,6 @@ contract AccountStorage {
 
     function sizeTargets() public view onlyAccountRules returns (uint256) {
         return targetAllowList.length;
-    }
-
-    function getOwner(uint256 index) internal view returns(address){
-        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
-        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-        return Admin(adminContractAddress).getOwner(index);
     }
 
     function existsAccount(address _account) public view onlyAccountRules returns (bool) {
