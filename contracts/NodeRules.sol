@@ -2,7 +2,6 @@ pragma solidity 0.5.9;
 
 import "./NodeRulesProxy.sol";
 import "./NodeRulesList.sol";
-import "./NodeIngress.sol";
 import "./Admin.sol";
 
 
@@ -30,24 +29,22 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
     // version of this contract: semver like 1.2.14 represented like 001002014
     uint private version = 3000000;
 
-    NodeIngress private nodeIngressContract;
-
     modifier onlyOnEditMode() {
         require(!readOnlyMode, "In read only mode: rules cannot be modified");
         _;
     }
 
     modifier onlyAdmin() {
-        address adminContractAddress = nodeIngressContract.getContractAddress(nodeIngressContract.ADMIN_CONTRACT());
+        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
 
         require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
         require(Admin(adminContractAddress).isAuthorized(msg.sender), "Sender not authorized");
         _;
     }
 
-    constructor (NodeIngress _nodeIngressAddress, NodeStorageMultiSig _storage) public {
+    constructor (NodeIngress _nodeIngressAddress, NodeStorage _storage) public {
         setStorage(_storage);
-        nodeIngressContract = _nodeIngressAddress;
+        ingressContract = _nodeIngressAddress;
     }
 
     // VERSION
@@ -107,17 +104,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return _removeConnection(_groupSource, _groupDestination);
     }
 
-    function confirmTransaction(uint256 _transactionId) public onlyAdmin returns (bool){
-        bool confirmed = _confirmTransaction(_transactionId);
-        return confirmed;
-    }
-
-    function revokeConfirmation(uint256 _transactionId) public onlyAdmin returns (bool){
-        bool confirmed = _revokeConfirmation(_transactionId);
-        return confirmed;
-    }
-
-
     function addEnode(
         bytes32 enodeHigh,
         bytes32 enodeLow,
@@ -172,6 +158,10 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return size();
     }
 
+    function updateStorage_NodeRules(address _newNodeRules) public onlyAdmin returns (bool){
+        return _updateStorage_NodeRules(_newNodeRules);
+    }
+
     /*function getByIndex(uint index) public view returns (
         string memory enodeId,
         string memory host,
@@ -188,9 +178,9 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         }
     }*/
 
-    function triggerRulesChangeEvent(bool addsRestrictions) public {
-        nodeIngressContract.emitRulesChangeEvent(addsRestrictions);
-    }
+    /*function triggerRulesChangeEvent(bool addsRestrictions) public {
+        ingressContract.emitRulesChangeEvent(addsRestrictions);
+    } */
 
     function activateValidationEnodeIdOnly(bool _onlyUseEnodeId) external onlyAdmin onlyOnEditMode returns (bool) {
         return setValidateEnodeIdOnly(_onlyUseEnodeId);

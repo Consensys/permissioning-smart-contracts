@@ -1,137 +1,104 @@
 pragma experimental ABIEncoderV2;
 pragma solidity 0.5.9;
 
-import "./NodeStorage.sol";
+import "./MultisignatureAdminProxy.sol";
 
-contract NodeStorageMultiSig is NodeStorage{
+contract MultisignatureRelay is MultisignatureAdminProxy{
     uint public constant MAX_OWNER_COUNT = 20;
 
-    mapping (uint => Transaction) public transactions;
-    mapping (uint => mapping (address => bool)) public confirmations;
-    uint public required;
+    mapping (uint256 => Transaction) public transactions;
+    mapping (uint256 => mapping (address => bool)) public confirmations;
+    uint256[] private transactionIds;
+    mapping (bytes32 => bool) private transactionHashes;
     uint public transactionCount;
 
     struct Transaction {
-        uint transactionId;
-        Enode node;
+        uint256 transactionId;
+        bytes32 trxHash;
+        address to;
+        bytes payload;
         bool executed;
     }
 
-    modifier transactionExists(uint transactionId) {
+    modifier transactionIdExists(uint256 transactionId) {
         Transaction memory txn = transactions[transactionId];
-        Enode memory enode = txn.node;
-        require(enode.port != 0, "Transaction doesn't exist");
+        bytes memory payload = txn.payload;
+        require(payload.length>0, "Transaction doesn't exist");
         _;
     }
 
-    modifier confirmed(uint transactionId, address owner) {
+    modifier confirmed(uint256 transactionId, address owner) {
         require(confirmations[transactionId][owner], "Transaction is not confirmed");
         _;
     }
 
-    modifier notConfirmed(uint transactionId, address owner) {
+    modifier notConfirmed(uint256 transactionId, address owner) {
         require(!confirmations[transactionId][owner], "Transaction is already confirmed");
         _;
     }
 
-    modifier notExecuted(uint transactionId) {
+    modifier notExecuted(uint256 transactionId) {
         require(!transactions[transactionId].executed, "Transaction was executed");
         _;
     }
 
-    modifier notNull(uint16 _port) {
-        require(_port > 0, "Port have to be greater than 0");
+    modifier notNull(bytes memory payload) {
+        require(payload.length > 0 , "payload should not be empty");
         _;
-    }
-
-    modifier validRequirement(uint ownerCount, uint _required) {
-        require(ownerCount <= MAX_OWNER_COUNT
-            && _required <= ownerCount
-            && _required != 0
-            && ownerCount != 0);
-        _;
-    }
-
-    /*
-     * Public functions
-     */
-    /// @dev Contract constructor sets initial owners and required number of confirmations.
-    /// @param _owners List of initial owners.
-    /// @param _required Number of required confirmations.
-    constructor(address _ingressContract, address[] memory _owners, uint _required)
-        public
-        validRequirement(_owners.length, _required)
-    {
-        ingressContract = NodeIngress(_ingressContract);
-        onlyUseEnodeId = false;
-        required = _required;
-    }
-
-    /// @dev Allows to change the number of required confirmations. Transaction has to be sent by wallet.
-    /// @param _required Number of required confirmations.
-    function changeRequirement(uint _required)
-        public
-        ownerExists(msg.sender)
-        validRequirement(getOwnersSize(), _required)
-    {
-        required = _required;
-        emit RequirementChange(_required);
     }
 
     /// @dev Allows an owner to submit and confirm a transaction.
     /// @return Returns transaction ID.
-    function submitTransaction(address sender, bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group)
+    function submitTransaction(address _to, bytes memory _payload)
         public
-        onlyNodeRules
+        ownerExists(msg.sender)
         returns (bool)
     {
-        uint256 transactionId = addTransaction(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
-        confirmTransaction(sender, transactionId);
+        uint256 transactionId = addTransaction(_to, _payload);
+        confirmTransaction(transactionId);
     }
 
     /// @dev Allows an owner to confirm a transaction.
     /// @param transactionId Transaction ID.
-    function confirmTransaction(address sender, uint transactionId)
+    function confirmTransaction(uint256 transactionId)
         public
-        ownerExists(sender)
-        transactionExists(transactionId)
-        notConfirmed(transactionId, sender)
-        onlyNodeRules
+        ownerExists(msg.sender)
+        transactionIdExists(transactionId)
+        notConfirmed(transactionId, msg.sender)
     {
-        confirmations[transactionId][sender] = true;
-        emit Confirmation(sender, transactionId);
-        executeTransaction(sender, transactionId);
+        confirmations[transactionId][msg.sender] = true;
+        emit Confirmation(msg.sender,transactionId);
+        executeTransaction(transactionId);
     }
 
     /// @dev Allows an owner to revoke a confirmation for a transaction.
     /// @param transactionId Transaction ID.
-    function revokeConfirmation(address sender, uint transactionId)
+    function revokeConfirmation(uint256 transactionId)
         public
-        ownerExists(sender)
-        confirmed(transactionId, sender)
+        ownerExists(msg.sender)
+        confirmed(transactionId, msg.sender)
         notExecuted(transactionId)
-        onlyNodeRules
     {
-        confirmations[transactionId][sender] = false;
-        emit Revocation(sender, transactionId);
+        confirmations[transactionId][msg.sender] = false;
+        emit Revocation(msg.sender, transactionId);
     }
 
     /// @dev Allows anyone to execute a confirmed transaction.
     /// @param transactionId Transaction ID.
-    function executeTransaction(address sender, uint transactionId)
-        internal
-        ownerExists(sender)
-        confirmed(transactionId, sender)
+    function executeTransaction(uint256 transactionId)
+        private
+        ownerExists(msg.sender)
+        confirmed(transactionId, msg.sender)
         notExecuted(transactionId)
     {
         if (isConfirmed(transactionId)) {
             Transaction storage txn = transactions[transactionId];
-            Enode memory enode = txn.node;
-            txn.executed = true;
-            if (add(enode.enodeHigh, enode.enodeLow, enode.ip, enode.port, enode.nodeType, enode.geoHash, enode.name, enode.organization, enode.did, enode.group))
+            txn.executed = true; 
+            (bool executed, bytes memory output) = _executeCall(txn.to,txn.payload);
+            if (executed) //we don't need to save transactions after execution
                 emit Execution(transactionId);
             else {
-                emit ExecutionFailure(transactionId);
+                emit ExecutionFailure(transactionId, output);
                 txn.executed = false;
             }
         }
@@ -140,11 +107,12 @@ contract NodeStorageMultiSig is NodeStorage{
     /// @dev Returns the confirmation status of a transaction.
     /// @param transactionId Transaction ID.
     /// @return Confirmation status.
-    function isConfirmed(uint transactionId)
+    function isConfirmed(uint256 transactionId)
         public
         view
         returns (bool)
     {
+        uint256 required = getRequiredCount();
         uint count = 0;
         for (uint i=0; i<getOwnersSize(); i++) {
             if (confirmations[transactionId][getOwner(i)])
@@ -159,30 +127,23 @@ contract NodeStorageMultiSig is NodeStorage{
      */
     /// @dev Adds a new transaction to the transaction mapping, if transaction does not exist yet.
     /// @return Returns transaction ID.
-    function addTransaction(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group)
-        internal
-        notNull(_port)
-        returns (uint transactionId)
+    function addTransaction(address _to, bytes memory _payload)
+        private
+        notNull(_payload)
+        returns (uint256 transactionId)
     {
+        bytes32 _trxHash = keccak256(abi.encodePacked(_to, _payload));  
+        _transactionExists(_trxHash);
         transactionId = transactionCount;
-        Enode memory enode = Enode({
-            enodeHigh: _enodeHigh,
-            enodeLow: _enodeLow, 
-            ip: _ip,
-            port: _port,
-            nodeType: _nodeType,
-            geoHash: _geoHash,
-            name: _name,
-            organization: _organization,
-            did: _did,
-            group: _group
-        });
 
         transactions[transactionId] = Transaction({
-            transactionId:transactionId,
-            node: enode,
+            transactionId: transactionId,
+            trxHash: _trxHash,
+            to: _to,
+            payload: _payload,
             executed: false
         });
+        transactionHashes[_trxHash] = true;
         transactionCount += 1;
         emit Submission(transactionId);
     }
@@ -193,7 +154,7 @@ contract NodeStorageMultiSig is NodeStorage{
     /// @dev Returns number of confirmations of a transaction.
     /// @param transactionId Transaction ID.
     /// @return Number of confirmations.
-    function getConfirmationCount(uint transactionId)
+    function getConfirmationCount(uint256 transactionId)
         public
         view
         returns (uint count)
@@ -221,7 +182,7 @@ contract NodeStorageMultiSig is NodeStorage{
     /// @dev Returns array with owner addresses, which confirmed transaction.
     /// @param transactionId Transaction ID.
     /// @return Returns array of owner addresses.
-    function getConfirmations(uint transactionId)
+    function getConfirmations(uint256 transactionId)
         public
         view
         returns (address[] memory _confirmations)
@@ -268,19 +229,28 @@ contract NodeStorageMultiSig is NodeStorage{
     /// @dev Returns list of transaction  in defined range.
     /// @param transactionId Transaction ID.
     /// @return Returns transaction
-    function getTransaction(uint transactionId) public view returns (bytes32 enodeHigh, bytes32 enodeLow, bytes16 ip, uint16 port, NodeType nodeType, bytes6 geoHash, string memory name, string memory organization, string memory did, bytes32 group, uint transactionid, bool executed){
-         Transaction memory txn = transactions[transactionId];
-        return (txn.node.enodeHigh, txn.node.enodeLow, txn.node.ip, txn.node.port, txn.node.nodeType, txn.node.geoHash, txn.node.name, txn.node.organization, txn.node.did, txn.node.group, txn.transactionId,txn.executed );
+    function getTransactionPayload(uint transactionId) public view returns (bytes memory, bool) {
+        Transaction memory txn = transactions[transactionId];
+        return (txn.payload, txn.executed);
     }
 
+    /**
+     * @param _trustedRecipient contract destination
+     * @param _payload to execute in a recipient contract
+     */
+    function _executeCall(address _trustedRecipient, bytes memory _payload) private returns (bool success, bytes memory output){
+        (success, output) = _trustedRecipient.call(_payload);
+    }
+
+    function _transactionExists(bytes32 _trxHash)private view returns (bool){ 
+        require(!transactionHashes[_trxHash], "A same transaction already exist");
+    }
     /*
      *  Events
      */
-    event Confirmation(address indexed sender, uint indexed transactionId);
-    event Revocation(address indexed sender, uint indexed transactionId);
-    event Submission(uint indexed transactionId);
-    event Execution(uint indexed transactionId);
-    event ExecutionFailure(uint indexed transactionId);
-    event RequirementChange(uint required);
-
+    event Confirmation(address indexed sender, uint256 indexed transactionId);
+    event Revocation(address indexed sender, uint256 indexed transactionId);
+    event Submission(uint256 indexed transactionId);
+    event Execution(uint256 indexed transactionId);
+    event ExecutionFailure(uint256 indexed transactionId, bytes payload);
 }

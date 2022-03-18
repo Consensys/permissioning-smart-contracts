@@ -1,9 +1,13 @@
 pragma solidity 0.5.9;
 
-import "./AccountStorageMultiSig.sol";
+import "./AccountStorage.sol";
+import "./MultisignatureRelay.sol";
+import "./lib/LibBytesV06.sol";
 
+contract AccountRulesList is MultisignatureRelay {
 
-contract AccountRulesList {
+    using LibBytesV06 for bytes;
+
     event AccountAdded(
         bool accountAdded,
         address accountAddress
@@ -28,9 +32,9 @@ contract AccountRulesList {
         address newRelayHub
     );
 
-    AccountStorageMultiSig private accountStorage;
+    AccountStorage private accountStorage;
 
-    function setStorage(AccountStorageMultiSig _storage) internal {
+    function setStorage(AccountStorage _storage) internal {
         accountStorage = _storage;
     }
     
@@ -58,11 +62,12 @@ contract AccountRulesList {
     }
 
     function _addNewAccount(address _account) internal returns (bool) {
-        accountStorage.submitTransaction(msg.sender,_account,true);
+        bytes memory _payload = abi.encodeWithSignature("addAccount(address)", _account, true);
+        submitTransaction(address(accountStorage),_payload);
         return true;
     }
 
-    function _addAllAccounts(address[] memory accounts) internal returns (bool) {
+    /*function _addAllAccounts(address[] memory accounts) internal returns (bool) {
         bool allAdded = true;
         for (uint i = 0; i < accounts.length; i++) {
             bool added = _addNewAccount(accounts[i]);
@@ -71,26 +76,29 @@ contract AccountRulesList {
         }
 
         return allAdded;
-    }
+    }*/
 
     function _removeAccount(address _account) internal returns (bool) {
-        return accountStorage.removeAccount(_account);
+        bytes memory _payload = abi.encodeWithSignature("removeAccount(address)", _account, true);
+        return submitTransaction(address(accountStorage), _payload);
     }
 
     function _addNewTarget(address _target) internal returns (bool) {
-        accountStorage.submitTransaction(msg.sender,_target,false);
+        bytes memory _payload = abi.encodeWithSignature("addTarget(address)", _target, false);
+        submitTransaction(address(accountStorage), _payload);
         return true;
     }
 
     function _confirmTransaction(uint256 transactionId) internal returns (bool){
-        accountStorage.confirmTransaction(msg.sender, transactionId);
+        confirmTransaction(transactionId);
         return true;
     }
     function _revokeConfirmation(uint256 transactionId) internal returns (bool){
-        accountStorage.revokeConfirmation(msg.sender, transactionId);
+        revokeConfirmation(transactionId);
         return true;
     }
 
+    /*
     function _addAllTargets(address[] memory targets) internal returns (bool) {
         bool allAdded = true;
         for (uint i = 0; i < targets.length; i++) {
@@ -100,16 +108,23 @@ contract AccountRulesList {
         }
 
         return allAdded;
-    }
+    }*/
 
     function _removeTarget(address _target) internal returns (bool) {
-        return accountStorage.removeTarget(_target);
+        bytes memory _payload = abi.encodeWithSignature("removeTarget(address)", _target, false);
+        return submitTransaction(address(accountStorage), _payload);
     }
 
+    function _updateStorage_AccountRules(address _newAccountRules) internal returns (bool) {
+        bytes memory _payload = abi.encodeWithSignature("updateAccountRules(address)", _newAccountRules);
+        return submitTransaction(address(accountStorage), _payload);
+    }
+    
     function getByIndex(uint index) public view returns (address account) {
         return accountStorage.getByIndex(index);
     }
-     function getTargetByIndex(uint index) public view returns (address account) {
+    
+    function getTargetByIndex(uint index) public view returns (address account) {
         return accountStorage.getTargetByIndex(index);
     }
 
@@ -119,5 +134,12 @@ contract AccountRulesList {
 
     function getTargets() public view returns (address[] memory){
         return accountStorage.getTargets();
+    }
+
+    function getTransaction(uint transactionId) public view returns (address, bool, bool, uint ) {
+        (bytes memory payload, bool executed) = getTransactionPayload(transactionId);
+        
+        (address _account_target, bool _isAccount) = abi.decode(payload.slice(4,payload.length),(address,bool));
+        return (_account_target, _isAccount, executed, transactionId);
     }
 }

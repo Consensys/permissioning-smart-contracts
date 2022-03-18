@@ -1,13 +1,17 @@
 pragma solidity 0.5.9;
 
-import "./NodeStorageMultiSig.sol";
+import "./NodeStorage.sol";
 import "./Types.sol";
+import "./MultisignatureRelay.sol";
+import "./lib/LibBytesV06.sol";
 
-contract NodeRulesList is Types{
+contract NodeRulesList is MultisignatureRelay, Types{
 
-    NodeStorageMultiSig private nodeStorage;
+    using LibBytesV06 for bytes;
 
-    function setStorage(NodeStorageMultiSig _storage) internal {
+    NodeStorage private nodeStorage;
+
+    function setStorage(NodeStorage _storage) internal {
         nodeStorage = _storage;
     }
 
@@ -39,30 +43,28 @@ contract NodeRulesList is Types{
         }
 
     function _addConnectionAllowed(bytes32 _groupSource, bytes32 _groupDestination) internal returns (bool){
-        return nodeStorage.addConnectionAllowed(_groupSource, _groupDestination);
+        bytes memory _payload = abi.encodeWithSignature("addConnectionAllowed(bytes32,bytes32)", _groupSource, _groupDestination, true);
+        return submitTransaction(address(nodeStorage), _payload);
     }
 
     function _removeConnection(bytes32 _groupSource, bytes32 _groupDestination) internal returns (bool){
-        return nodeStorage.removeConnection(_groupSource,_groupDestination);
+        bytes memory _payload = abi.encodeWithSignature("removeConnection(bytes32,bytes32)", _groupSource, _groupDestination, false);
+        return submitTransaction(address(nodeStorage), _payload);
     }
 
     function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) internal returns (bool) {
-        nodeStorage.submitTransaction(msg.sender,_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group);
-        return true;
+        bytes memory _payload = abi.encodeWithSignature("add(bytes32,bytes32,bytes16,uint16,NodeType,bytes6,string,string,string,bytes32)", _enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group, true);
+        return submitTransaction(address(nodeStorage), _payload);
     }
 
     function remove(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) internal returns (bool) {
-        return nodeStorage.remove(_enodeHigh, _enodeLow , _ip, _port);
+        bytes memory _payload = abi.encodeWithSignature("remove(bytes32,bytes32,bytes16,uint16)",_enodeHigh, _enodeLow , _ip, _port, false);
+        return submitTransaction(address(nodeStorage), _payload);
     }
 
-    function _confirmTransaction(uint256 transactionId) internal returns (bool){
-        nodeStorage.confirmTransaction(msg.sender, transactionId);
-        return true;
-    }
-
-    function _revokeConfirmation(uint256 transactionId) internal returns (bool){
-        nodeStorage.revokeConfirmation(msg.sender, transactionId);
-        return true;
+    function _updateStorage_NodeRules(address _newNodeRules) internal returns (bool) {
+        bytes memory _payload = abi.encodeWithSignature("updateNodeRules(address)", _newNodeRules);
+        return submitTransaction(address(nodeStorage), _payload);
     }
 
     function calculateKey(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns(uint256) {
@@ -73,8 +75,17 @@ contract NodeRulesList is Types{
         return nodeStorage.getByIndex(index);
     }
 
-   
     function setValidateEnodeIdOnly(bool _onlyUseEnodeId) internal returns (bool) {
         return nodeStorage.setValidateEnodeIdOnly(_onlyUseEnodeId);
+    }
+
+    function getTransaction(uint transactionId) public view returns (bytes memory,bool){
+        (bytes memory payload, bool executed) = getTransactionPayload(transactionId);
+        //return abi.decode(payload.slice(4,payload.length),(bytes32,bytes32,bytes16,uint16,NodeType,bytes6,string,string,string,bytes32));
+        //{
+        //    (enodeHigh, enodeLow, ip, port, nodeType, , name, organization,,) = abi.decode(payload.slice(4,payload.length),(bytes32,bytes32,bytes16,uint16,NodeType,bytes6,string,string,string,bytes32));
+        //}
+        //return (enodeHigh, enodeLow, ip, port, nodeType, geoHash, name, organization, did, group, transactionId, executed );
+        return (payload, executed);
     }
 }

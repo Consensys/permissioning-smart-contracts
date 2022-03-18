@@ -44,33 +44,21 @@ contract NodeStorage is Types{
         _;
     }
 
-    function getOwnersSize() internal view returns(uint256){
-        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
-        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-        return Admin(adminContractAddress).size();
-    }
-
     function upgradeVersion(address _newVersion) public ownerExists(msg.sender) {
         emit VersionChange(latestVersion, _newVersion);
         latestVersion = _newVersion;
     }
 
-    function updateNodeRules(address _nodeRules) public ownerExists(msg.sender) {
+    function updateNodeRules(address _nodeRules) public onlyNodeRules {
         emit VersionChange(nodeRules, _nodeRules);
         nodeRules = _nodeRules;
     }
 
-    function size() public view returns (uint256) {
+    function size() public view onlyNodeRules returns (uint256) {
         return allowlist.length;
     }
 
-    function getOwner(uint256 index) internal  view returns(address){
-        address adminContractAddress = ingressContract.getContractAddress(ingressContract.ADMIN_CONTRACT());
-        require(adminContractAddress != address(0), "Ingress contract must have Admin contract registered");
-        return Admin(adminContractAddress).getOwner(index);
-    }
-
-    function exists(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view returns (bool) {
+    function exists(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port) public view onlyNodeRules returns (bool) {
         return indexOf[calculateKey(_enodeHigh, _enodeLow, _ip, _port)] != 0;
     }
 
@@ -106,7 +94,7 @@ contract NodeStorage is Types{
         return true;
     }
 
-    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) internal onlyNodeRules returns (bool) {
+    function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) public onlyNodeRules returns (bool) {
         uint256 key = calculateKey(_enodeHigh, _enodeLow , _ip, _port);
         if (indexOf[key] == 0) {
             indexOf[key] = allowlist.push(Enode(_enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group));

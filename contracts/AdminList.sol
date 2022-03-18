@@ -1,7 +1,5 @@
 pragma solidity 0.5.9;
 
-
-
 contract AdminList {
     event AdminAdded(
         bool adminAdded,
@@ -25,7 +23,7 @@ contract AdminList {
         return indexOf[_account] != 0;
     }
 
-    function getOwner(uint index) public view returns(address){
+    function getAdmin(uint index) public view returns(address){
         return owners[index];
     }
 

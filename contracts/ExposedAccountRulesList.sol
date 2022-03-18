@@ -1,12 +1,12 @@
 pragma solidity 0.5.9;
 
 import "./AccountRulesList.sol";
-import "./AccountStorageMultiSig.sol";
+import "./AccountStorage.sol";
 
 
 contract ExposedAccountRulesList is AccountRulesList {
 
-    function _setStorage(AccountStorageMultiSig _storage) public {
+    function _setStorage(AccountStorage _storage) public {
         return setStorage(_storage);
     }
 
@@ -22,9 +22,9 @@ contract ExposedAccountRulesList is AccountRulesList {
         return _addNewAccount(_account);
     }
 
-    function _addAll(address[] calldata accounts) external returns (bool) {
+/*    function _addAll(address[] calldata accounts) external returns (bool) {
         return _addAllAccounts(accounts);
-    }
+    }*/
 
     function _remove(address _account) external returns (bool) {
         return _removeAccount(_account);
