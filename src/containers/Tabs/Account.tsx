@@ -1,5 +1,5 @@
 // Libs
-import React from 'react';
+import React,{useState,useMemo} from 'react';
 import PropTypes from 'prop-types';
 import { isAddress } from 'web3-utils';
 import idx from 'idx';
@@ -42,6 +42,28 @@ type Account = {
 };
 
 const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => {
+  const [inputSearch, setInputSearch] = useState('');
+const [search, setSearch] = useState("")
+
+const modifyInputSearch = ({ target: { value } }: { target: { value: string } }) => {
+ 
+  setInputSearch(value);
+ 
+};
+
+const handleSearch = (e: MouseEvent) => {
+  e.preventDefault();
+  setSearch(inputSearch)
+};
+
+const handleClear = (e: MouseEvent) => {
+  e.preventDefault();
+  setSearch("")
+  setInputSearch("")
+};
+
+
+
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
   const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract , accountStorageMultiSigContract} = useAccountData();
 
@@ -49,6 +71,14 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     allowlist,
     (identifier: string) => ({ address: identifier })
   );
+
+  
+  const listFilter=useMemo(()=>  list.filter(row=> {
+    console.log("process filter")
+    return row.address.toUpperCase().includes(search.toUpperCase());
+  }
+  ),[search,list])
+
   const { listTransaction} = useTransactionTab(
     allowTransactionlist,
     (identifier: string) => ({ address: identifier })
@@ -188,7 +218,11 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     if (isOpen && allDataReady) {
       return (
         <AccountTab
-          list={list}
+        modifyInputSearch={modifyInputSearch}
+        inputSearch={inputSearch}
+        handleSearch={handleSearch}
+        handleClear={handleClear}
+          list={listFilter}
           listTransaction={listTransaction}
           modals={modals}
           toggleModal={toggleModal}
