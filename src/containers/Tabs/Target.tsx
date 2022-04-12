@@ -63,7 +63,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
   };
 
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract , accountStorageMultiSigContract} = useTargetData();
+  const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract } = useTargetData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
     allowlist,
@@ -71,7 +71,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
   );
 
   const listFilter=useMemo(()=>  list.filter(row=> {
-    console.log("process filter")
+   
     return row.address.toUpperCase().includes(search.toUpperCase());
   }
   ),[search,list])
@@ -83,8 +83,7 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
 
   if (!!accountRulesContract) {
     const handleAdd = async (value: string) => {
-      console.log("add Target")
-      console.log(value)
+
       try {
         const tx = await accountRulesContract!.functions.addTarget(value);
         toggleModal('add')(false);

@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 //import { Grid, Button, Icon, Typography } from '@material-ui/core';
 // Rimble Components
-import { Flex, Box, Heading, Button } from 'rimble-ui';
+import { Flex, Box, Heading } from 'rimble-ui';
 
 type TableHeader = {
   number: number;

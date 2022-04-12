@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TableContainer, Paper, Table, Box, TableHead, TableRow, TableBody, TableCell } from '@material-ui/core';
-import {  Button, Flex, Heading, Form, Text } from 'rimble-ui';
+import {  Button, Flex, Form } from 'rimble-ui';
 // Components
 import AccountTableHeader from './TableHeader';
 import AccountTableTransactionHeader from './TableTransactionHeader';

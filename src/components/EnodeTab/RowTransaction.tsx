@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 // Rimble Components
 import { Pill, Flex, Button } from 'rimble-ui';
-import web3 from 'web3';
+
 // Util Helper
 import hexToIp from '../../util/ipConverter';
 // Constant

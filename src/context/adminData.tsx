@@ -43,7 +43,7 @@ const loadAdminData = (
         }
 
         Promise.all(listElementsPromisesTransaction).then(responses => {
-          const responseF = responses.filter(transaction => transaction[1] == false);
+          const responseF = responses.filter(transaction => transaction[1] === false);
           setAdminTransactionList(
             responseF.map(transaction => ({
               address: transaction[0],

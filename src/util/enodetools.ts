@@ -3,7 +3,7 @@ import request from 'request';
 import web3 from 'web3';
 // @ts-ignore
 import ngeohash from 'ngeohash';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
+//import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 // export type Enode = {
 //   enodeId: string;
