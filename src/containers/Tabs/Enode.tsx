@@ -16,9 +16,7 @@ import {
   paramsToIdentifier,
   enodeToParams,
   Enode,
-  isEqual,
-  isValidEnode,
-  getGeohash
+  isValidEnode
 } from '../../util/enodetools';
 import { errorToast } from '../../util/tabTools';
 // Components
@@ -38,8 +36,8 @@ import {
   SUCCESS,
   FAIL
 } from '../../constants/transactions';
-import { CollectionsOutlined } from '@material-ui/icons';
-//import { group } from 'console';
+//import { CollectionsOutlined } from '@material-ui/icons';
+
 
 type EnodeTabContainerProps = {
   isOpen: boolean;
@@ -117,23 +115,23 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
     if (searchType===""){
       
       const {enodeHigh} = enodeToParams(searchOrganization)
-      console.log(enodeHigh)
-      if (enodeHigh==""){
-        return  row.organization .toString().includes(searchOrganization) 
+ 
+      if (enodeHigh===""){
+        return  row.organization.toString().includes(searchOrganization) 
       || hexToIp(row.ip).includes( searchOrganization ) ;
       }else{
         return    row.enodeHigh.includes(enodeHigh);
       }
       
-    }else if (searchOrganization==""){
-      return row.nodeType .toString().includes(getType(searchType)  ) ;
+    }else if (searchOrganization===""){
+      return row.nodeType.toString().includes(getType(searchType)  ) ;
     }else{
       const {enodeHigh} = enodeToParams(searchOrganization)
-      if (enodeHigh==""){
-        return row.nodeType .toString().includes(getType(searchType)  ) 
-        && (row.organization .toString().includes(searchOrganization )  || hexToIp(row.ip).includes( searchOrganization )  );
+      if (enodeHigh===""){
+        return row.nodeType.toString().includes(getType(searchType)  ) 
+        && (row.organization.toString().includes(searchOrganization )  || hexToIp(row.ip).includes( searchOrganization )  );
       }else{
-        return row.nodeType .toString().includes(getType(searchType)  ) 
+        return row.nodeType.toString().includes(getType(searchType)  ) 
         && (  row.enodeHigh.includes(enodeHigh));
       }
       
@@ -275,12 +273,14 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
       
       try {
         const est = await nodeRulesContract!.estimate.confirmTransaction(value);
+        
         const tx = await nodeRulesContract!.functions.confirmTransaction(
           value,
           {
             gasLimit: est.toNumber() * 2
           }
         );
+
         //toggleModal('remove')(false);
         addTransaction(value.toString(), PENDING_CONFIRM);
         await tx.wait(1); // wait on recehostt confirmations
@@ -334,7 +334,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
        let newT= enodeToParams(enode)
         return (item.enodeHigh=== newT.enodeHigh && item.enodeLow===newT.enodeLow && item.ip=== newT.ip )
       }).length > 0;
-      console.log(lat)
+     
       return lat
     };
 

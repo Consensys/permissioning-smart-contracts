@@ -2,10 +2,8 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { NodeRules } from '../chain/@types/NodeRules';
 import { nodeRulesFactory } from '../chain/contracts/NodeRules';
-import { NodeStorageMultiSig } from '../chain/@types/NodeStorageMultiSig';
-import { nodeStorageMultiSigFactory } from '../chain/contracts/NodeStorageMultiSig';
 import { useNetwork } from './network';
-
+import { ethers } from 'ethers';
 // Utils
 import { paramsToIdentifier,paramsToIdentifierTransaction, Enode as RawEnode , EnodeTransaction as RawEnodeTransaction } from '../util/enodetools';
 
@@ -22,21 +20,19 @@ type ContextType =
       setNodeReadOnly: React.Dispatch<React.SetStateAction<boolean | undefined>>;
       nodeRulesContract?: NodeRules;
       setNodeRulesContract: React.Dispatch<React.SetStateAction<NodeRules | undefined>>;
-      nodeStorageMultiSigContract?:NodeStorageMultiSig;
-      setNodeStorageMultiSigContract: React.Dispatch<React.SetStateAction<NodeStorageMultiSig | undefined>>;
     }
   | undefined;
 
 const DataContext = createContext<ContextType>(undefined);
-
+const AbiCoder =ethers.utils.defaultAbiCoder
 const loadNodeData = (
   nodeRulesContract: NodeRules | undefined,
-  nodeStorageMultiSigContract: NodeStorageMultiSig | undefined,
+
   setNodeList: (node: Enode[]) => void,
   setNodeTransactionList: (node: EnodeTransacion[]) => void,
   setNodeReadOnly: (readOnly?: boolean) => void
 ) => {
-  if (nodeRulesContract === undefined || nodeStorageMultiSigContract === undefined) {
+  if (nodeRulesContract === undefined ) {
     setNodeList([]);
     setNodeTransactionList([]);
     setNodeReadOnly(undefined);
@@ -61,30 +57,36 @@ const loadNodeData = (
     });
   
 
-    nodeStorageMultiSigContract.functions.getTransactionCount(true,false).then(countTransaction =>{
+    nodeRulesContract.functions.getTransactionCount(true,false).then(countTransaction =>{
    
-      nodeStorageMultiSigContract.functions.getTransactionIds(0,countTransaction,true,false).then(listTransaction=>{
+      nodeRulesContract.functions.getTransactionIds(0,countTransaction,true,false).then(listTransaction=>{
           const listElementsPromisesTransaction = [];
  
           for (let i = 0; i< listTransaction.length; i++) {
     
-            listElementsPromisesTransaction.push(nodeStorageMultiSigContract.functions.getTransaction(listTransaction[i]));
+            listElementsPromisesTransaction.push(nodeRulesContract.functions.getTransaction(listTransaction[i]));
           }
+
           Promise.all(listElementsPromisesTransaction).then(responses => {
             const updatedNodeList = responses.map(r => {
-                    const withStringyPort = { 
-                      enodeHigh: r.enodeHigh,
-                      enodeLow: r.enodeLow,
-                      ip: r.ip,
-                      port: r.port.toString(),
-                      nodeType: r.nodeType,
-                      geoHash: r.geoHash,
-                      organization: r.organization,
-                      name: r.name,
-                      did: r.did,
-                      group: r.group,
-                      executed:r.executed ,
-                       transactionId:r.transactionid.toNumber()
+                  const payload = r[0]
+                  const executed= r[1]
+                  const transactionID = r[2]
+               
+                  const decode= AbiCoder.decode([  "bytes32","bytes32","bytes16","uint16","uint8","bytes6","string","string","string","bytes32"],"0x"+ payload.slice(10,payload.length));
+                    const withStringyPort = {         
+                      enodeHigh: decode[0],
+                      enodeLow: decode[1],
+                      ip: decode[2],
+                      port: decode[3].toString(),
+                      nodeType: decode[4],
+                      geoHash: decode[5],
+                      organization: decode[6],
+                      name: decode[7],
+                      did: decode[8],
+                      group: decode[9],
+                      executed:executed ,
+                       transactionId:transactionID.toNumber()
                        };
                     return {
                       ...withStringyPort,
@@ -114,10 +116,10 @@ export const NodeDataProvider: React.FC<{}> = props => {
   const [nodeTransactionList, setNodeTransactionList] = useState<EnodeTransacion[]>([]);
   const [nodeReadOnly, setNodeReadOnly] = useState<boolean | undefined>(undefined);
   const [nodeRulesContract, setNodeRulesContract] = useState<NodeRules | undefined>(undefined);
-  const [ nodeStorageMultiSigContract,setNodeStorageMultiSigContract] = useState<NodeStorageMultiSig | undefined>(undefined);
+
   const value = useMemo(
-    () => ({ nodeList, setNodeList,nodeTransactionList, setNodeTransactionList, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract , nodeStorageMultiSigContract,setNodeStorageMultiSigContract}),
-    [nodeList, setNodeList,nodeTransactionList, setNodeTransactionList, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract, nodeStorageMultiSigContract,setNodeStorageMultiSigContract]
+    () => ({ nodeList, setNodeList,nodeTransactionList, setNodeTransactionList, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract }),
+    [nodeList, setNodeList,nodeTransactionList, setNodeTransactionList, nodeReadOnly, setNodeReadOnly, nodeRulesContract, setNodeRulesContract]
   );
 
   const { nodeIngressContract } = useNetwork();
@@ -129,36 +131,35 @@ export const NodeDataProvider: React.FC<{}> = props => {
       
         nodeRulesFactory(nodeIngressContract).then(contract => {
           setNodeRulesContract(contract);
-          nodeStorageMultiSigFactory(contract).then(storageContract => { 
-            setNodeStorageMultiSigContract(storageContract);
+
 
             contract.removeAllListeners('TransactionAdded');
             contract.removeAllListeners('NodeRemoved');
-            storageContract.removeAllListeners('Confirmation');
-            storageContract.removeAllListeners('Revocation');
+            contract.removeAllListeners('Confirmation');
+            contract.removeAllListeners('Revocation');
             
             
             
             contract.on('TransactionAdded', () => {
-              loadNodeData(contract,nodeStorageMultiSigContract, setNodeList,setNodeTransactionList, setNodeReadOnly);
+              loadNodeData(contract, setNodeList,setNodeTransactionList, setNodeReadOnly);
             });
             contract.on('NodeRemoved', () => {
-              loadNodeData(contract, nodeStorageMultiSigContract,setNodeList, setNodeTransactionList,setNodeReadOnly);
+              loadNodeData(contract,setNodeList, setNodeTransactionList,setNodeReadOnly);
             });
-            storageContract.on('Confirmation', () => {
-              loadNodeData(contract, nodeStorageMultiSigContract,setNodeList, setNodeTransactionList,setNodeReadOnly);
+            contract.on('Confirmation', () => {
+              loadNodeData(contract,setNodeList, setNodeTransactionList,setNodeReadOnly);
             });
-            storageContract.on('Revocation', () => {
-              loadNodeData(contract, nodeStorageMultiSigContract,setNodeList, setNodeTransactionList,setNodeReadOnly);
+            contract.on('Revocation', () => {
+              loadNodeData(contract,setNodeList, setNodeTransactionList,setNodeReadOnly);
             });
 
-          });
+    
             
         });
 
 
     }
-  }, [nodeIngressContract,nodeStorageMultiSigContract]);
+  }, [nodeIngressContract]);
 
   return <DataContext.Provider value={value} {...props} />;
 };
@@ -178,11 +179,11 @@ export const useNodeData = () => {
     throw new Error('useNodeData must be used within a NodeDataProvider.');
   }
 
-  const { nodeList, setNodeList, nodeTransactionList, setNodeTransactionList,nodeReadOnly, setNodeReadOnly, nodeRulesContract ,nodeStorageMultiSigContract} = context;
+  const { nodeList, setNodeList, nodeTransactionList, setNodeTransactionList,nodeReadOnly, setNodeReadOnly, nodeRulesContract } = context;
 
   useEffect(() => {
-    loadNodeData(nodeRulesContract,nodeStorageMultiSigContract, setNodeList,setNodeTransactionList, setNodeReadOnly);
-  }, [nodeRulesContract,nodeStorageMultiSigContract, setNodeList,setNodeTransactionList, setNodeReadOnly]);
+    loadNodeData(nodeRulesContract, setNodeList,setNodeTransactionList, setNodeReadOnly);
+  }, [nodeRulesContract, setNodeList,setNodeTransactionList, setNodeReadOnly]);
 
   const formattedNodeList = useMemo(() => {
     return nodeList.map(enode => ({ ...enode, status: 'active'})).reverse();
@@ -194,14 +195,13 @@ export const useNodeData = () => {
 
   const dataReady = useMemo(() => {
     return nodeRulesContract !== undefined && nodeReadOnly !== undefined && nodeList !== undefined  && nodeTransactionList !== undefined; 
-  }, [nodeRulesContract,nodeStorageMultiSigContract, nodeReadOnly, nodeList,nodeTransactionList]);
+  }, [nodeRulesContract, nodeReadOnly, nodeList,nodeTransactionList]);
 
   return {
     dataReady,
     allowlist: formattedNodeList,
     allowlistTransacion: formattedNodeTransactionList,
     isReadOnly: nodeReadOnly,
-    nodeRulesContract,
-    nodeStorageMultiSigContract
+    nodeRulesContract
   };
 };

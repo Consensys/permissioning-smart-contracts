@@ -2,37 +2,11 @@
   "contracts": {},
   "solidityLibs": {},
   "proxies": {
-    "permissioning-contract/Admin": [
-      {
-        "address": "0x82d6EB6cfd8DBb61cffc3A40D26D1020c502f191",
-        "kind": "NonProxy",
-        "bytecodeHash": "521681fcfca491e7d90872262a26e1d2b259d7828052c32cc6412e0a8b3f1f00"
-      }
-    ],
     "permissioning-contract/NodeIngress": [
       {
         "address": "0x0000000000000000000000000000000000009999",
         "kind": "NonProxy",
         "bytecodeHash": "e88c37f7e45feb4fc9ec89ea2baffdb6bd6c17aae2ca1a6bf790d287c2554ed3"
-      }
-    ],
-    "permissioning-contract/NodeStorageMultiSig": [
-      {
-        "address": "0x9443b4b64D62023A80Cbb691C4C763ff62018d0C",
-        "kind": "NonProxy",
-        "bytecodeHash": "ee4343bb4b08d2bc795246d06c1b27a7565dc54be59c97836a0f32101632ac14"
-      }
-    ],
-    "permissioning-contract/NodeRules": [
-      {
-        "address": "0x7742d8109dBb59463701CE769758F5905587B909",
-        "kind": "NonProxy",
-        "bytecodeHash": "e10249821dae027f0ee7b0a6a16a3df87210007f20272429362ba25847093b8f"
-      },
-      {
-        "address": "0x4c580660eFdFb422fB52a192F0A521B846635893",
-        "kind": "NonProxy",
-        "bytecodeHash": "1131101ad9c4ffda6a73c618d4a799bec082d15985280253ab9f59c6fafa60d1"
       }
     ],
     "permissioning-contract/AccountIngress": [
@@ -42,25 +16,39 @@
         "bytecodeHash": "40c28e21d5c22478011e387bf2f02d06e9cabebefa5681b17e9957a9b93968b6"
       }
     ],
-    "permissioning-contract/AccountStorage": [
+    "permissioning-contract/Admin": [
       {
-        "address": "0xeaB19600c60d014372c9763b9C6642893F5b724f",
+        "address": "0xa4B5eE2906090ce2cDbf5dfff944db26f397037D",
         "kind": "NonProxy",
-        "bytecodeHash": "13ff2ad900481a0b769dcc875251528e750be99a72bf34cc25b183446ed639db"
+        "bytecodeHash": "749ef5a05ad9f0472783a514ad181b9a8e265fc14d5fc9f6c2c723ed9d84bcae"
       }
     ],
-    "permissioning-contract/AccountStorageMultiSig": [
+    "permissioning-contract/AccountStorage": [
       {
-        "address": "0x2543Ca585f87B3eC1ea1d2c33CC7d3aCAF807587",
+        "address": "0x77933B7dCA2bD4202D6489b5446159eD647a0ff7",
         "kind": "NonProxy",
-        "bytecodeHash": "e157aab336ae3c648767d2b3359bed7047107230d3a76eb2f03cf6d71d1e92cb"
+        "bytecodeHash": "850cf1d127b50b2d65b7636ca4243dd5c657dcf27f7ec81a6769522ff30755d4"
       }
     ],
     "permissioning-contract/AccountRules": [
       {
-        "address": "0x0ae2Da68515Ef8DC4bBCa1fA1bcE00C508b2Af4B",
+        "address": "0xfd18c909C3fA8885d2728Bc6BCe6C9A6cD6d975a",
         "kind": "NonProxy",
-        "bytecodeHash": "47e02e80df48cf369d5eb32c802be52523074f0878cdbf135a36f62014e94f4b"
+        "bytecodeHash": "c1a0ee1157a84f573c024aa4681611f9e6c4a81abee3b8d6b09f4fc20c5aebf7"
+      }
+    ],
+    "permissioning-contract/NodeStorage": [
+      {
+        "address": "0xf7b56632Caa727C35cfB1F83D848852DcA7dF1f6",
+        "kind": "NonProxy",
+        "bytecodeHash": "3073f7bef4d1ae811a062d543be00f5b0b4e4ba34be78cf5c811d83dd194dd5d"
+      }
+    ],
+    "permissioning-contract/NodeRules": [
+      {
+        "address": "0x3f368B441c289c4418EE37276e0e0a219A903eB9",
+        "kind": "NonProxy",
+        "bytecodeHash": "d316c3393bb1b525eeb57dfe446f4364ec2025cc0c6b494922829d6f10caa3c7"
       }
     ]
   },

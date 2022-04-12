@@ -53,7 +53,7 @@ contract NodeRulesList is MultisignatureRelay, Types{
     }
 
     function add(bytes32 _enodeHigh, bytes32 _enodeLow, bytes16 _ip, uint16 _port, NodeType _nodeType, bytes6 _geoHash, string memory _name, string memory _organization, string memory _did, bytes32 _group) internal returns (bool) {
-        bytes memory _payload = abi.encodeWithSignature("add(bytes32,bytes32,bytes16,uint16,NodeType,bytes6,string,string,string,bytes32)", _enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group, true);
+        bytes memory _payload = abi.encodeWithSignature("add(bytes32,bytes32,bytes16,uint16,uint8,bytes6,string,string,string,bytes32)", _enodeHigh, _enodeLow, _ip, _port, _nodeType, _geoHash, _name, _organization, _did, _group, true);
         return submitTransaction(address(nodeStorage), _payload);
     }
 
@@ -79,13 +79,13 @@ contract NodeRulesList is MultisignatureRelay, Types{
         return nodeStorage.setValidateEnodeIdOnly(_onlyUseEnodeId);
     }
 
-    function getTransaction(uint transactionId) public view returns (bytes memory,bool){
+    function getTransaction(uint transactionId) public view returns (bytes memory,bool,uint ){
         (bytes memory payload, bool executed) = getTransactionPayload(transactionId);
         //return abi.decode(payload.slice(4,payload.length),(bytes32,bytes32,bytes16,uint16,NodeType,bytes6,string,string,string,bytes32));
         //{
         //    (enodeHigh, enodeLow, ip, port, nodeType, , name, organization,,) = abi.decode(payload.slice(4,payload.length),(bytes32,bytes32,bytes16,uint16,NodeType,bytes6,string,string,string,bytes32));
         //}
         //return (enodeHigh, enodeLow, ip, port, nodeType, geoHash, name, organization, did, group, transactionId, executed );
-        return (payload, executed);
+        return (payload, executed, transactionId);
     }
 }

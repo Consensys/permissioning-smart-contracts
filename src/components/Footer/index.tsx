@@ -1,7 +1,7 @@
 import React from 'react';
 //import { Grid } from '@material-ui/core';
 import styles from './styles.module.scss';
-import { Flex, Heading } from 'rimble-ui';
+//import { Flex, Heading } from 'rimble-ui';
 
 const Footer: React.FC<{}> = () => {
   return (

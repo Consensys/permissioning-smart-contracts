@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Rimble Components
-import { Flex, Box, Heading, Button } from 'rimble-ui';
+import { Flex, Box, Heading } from 'rimble-ui';
 //import { Grid, Button, Icon, Typography } from '@material-ui/core';
 
 type TableHeader = {

@@ -65,7 +65,7 @@ const handleClear = (e: MouseEvent) => {
 
 
   const { isAdmin, dataReady: adminDataReady } = useAdminData();
-  const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract , accountStorageMultiSigContract} = useAccountData();
+  const { allowlist, allowTransactionlist, isReadOnly, dataReady, accountRulesContract } = useAccountData();
 
   const { list, modals, toggleModal, addTransaction, updateTransaction, deleteTransaction, openToast } = useTab(
     allowlist,
@@ -74,7 +74,7 @@ const handleClear = (e: MouseEvent) => {
 
   
   const listFilter=useMemo(()=>  list.filter(row=> {
-    console.log("process filter")
+   
     return row.address.toUpperCase().includes(search.toUpperCase());
   }
   ),[search,list])
@@ -87,7 +87,8 @@ const handleClear = (e: MouseEvent) => {
   if (!!accountRulesContract) {
     const handleAdd = async (value: string, membresiaType: string) => {
 
-      let membresiaTypeValue = 1
+
+    let membresiaTypeValue = 1
      switch (membresiaType) {
       case 'Basic':
         membresiaTypeValue=1
@@ -109,9 +110,11 @@ const handleClear = (e: MouseEvent) => {
 
       try {
         const tx = await accountRulesContract!.functions.addAccount(value,membresiaTypeValue);
+    
         toggleModal('add')(false);
         addTransaction(value, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
+     
         const addEvent = receipt.events!.filter(e => e.event && e.event === 'AccountAdded').pop();
         if (!addEvent) {
           openToast(value, FAIL, `Error while processing account: ${value}`);
