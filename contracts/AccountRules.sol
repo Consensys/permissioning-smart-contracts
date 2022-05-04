@@ -160,7 +160,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
         return removed;
     }
 
-    function uodateStorage_AccountRules(address _newAccountRules) public onlyAdmin returns (bool){
+    function updateStorage_AccountRules(address _newAccountRules) public onlyAdmin returns (bool){
         return _updateStorage_AccountRules(_newAccountRules);
     }
 

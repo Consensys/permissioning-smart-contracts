@@ -22,7 +22,6 @@ if (endpoint === undefined) {
 module.exports = {
   networks: {
     development: {
-    // provider: () => new HDWalletProvider(privateKey, endpoint),
     provider: privateKeyProvider,
      network_id: "648532",
      gasPrice: 0

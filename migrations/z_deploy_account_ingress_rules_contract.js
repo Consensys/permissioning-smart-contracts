@@ -21,6 +21,14 @@ async function logCurrentAllowlist(instance) {
     console.log(currentAllowlist);
     console.log("\n<<< end of current ACCOUNT allowlist >>>");
 }
+
+async function logCurrentTargetlist(instance) {
+    let currentTargetlist = await instance.getTargets();
+    console.log("\n<<< current TARGET allowlist >>>");
+    console.log(currentTargetlist);
+    console.log("\n<<< end of current TARGET allowlist >>>");
+}
+
 module.exports = async(deployer, network) => {
     // exit early if we are NOT redeploying this contract
     if (retainCurrentRulesContract) {
@@ -45,10 +53,6 @@ module.exports = async(deployer, network) => {
         console.error("   > Predeployed AccountIngress contract is not responding like an AccountIngress contract at address = " + accountIngress);
     }
 
-    const admin = await Admin.deployed();
-    await accountIngressInstance.setContractAddress(adminContractName, admin.address);
-    console.log("   > Updated AccountIngress with Admin address = " + admin.address);
-
     // STORAGE
     var storageInstance;
     if (! accountStorage) {
@@ -66,23 +70,5 @@ module.exports = async(deployer, network) => {
     // rules -> storage
     await deployer.deploy(Rules, accountIngress, accountStorage);
     console.log("   > Rules deployed with AccountIngress.address = " + accountIngress + "\n   > and storageAddress = " + accountStorage);
-    let accountRulesContract = await Rules.deployed();
-
-    // storage -> rules
-    await storageInstance.upgradeVersion(Rules.address);
-    console.log("   >>> Set storage owner to Rules.address " + Rules.address);
-
-    if (AllowlistUtils.isInitialAllowlistedAccountsAvailable()) {
-        console.log("   > Adding Initial Allowlisted Accounts ...");
-        let allowlistedAccounts = AllowlistUtils.getInitialAllowlistedAccounts();
-        if (allowlistedAccounts.length > 0) {
-            await accountRulesContract.addAccounts(allowlistedAccounts);
-            console.log ("   > Initial Allowlisted Accounts added: " + allowlistedAccounts);
-        }
-    }
-
-    await accountIngressInstance.setContractAddress(rulesContractName, Rules.address);
-    console.log("   > Updated AccountIngress contract with Rules address = " + Rules.address);
-
-    logCurrentAllowlist(accountRulesContract);
+    console.log("   > Rules.address " + Rules.address);
 }

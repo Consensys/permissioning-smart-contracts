@@ -49,10 +49,6 @@ module.exports = async(deployer, network) => {
         console.error("   > Predeployed NodeIngress contract is not responding like an NodeIngress contract at address = " + nodeIngress);
     }
 
-    const admin = await Admin.deployed()
-    await nodeIngressInstance.setContractAddress(adminContractName, admin.address);
-    console.log("   > Updated NodeIngress with Admin  address = " + admin.address);
-
     // STORAGE
     var storageInstance;
     if (! nodeStorage) {
@@ -72,26 +68,8 @@ module.exports = async(deployer, network) => {
     console.log("   > Rules deployed with NodeIngress.address = " + nodeIngress + "\n   > and storageAddress = " + nodeStorage);
     console.log("   > Rules.address " + Rules.address);
     let nodeRulesContract = await Rules.deployed();
-    
 
-    await nodeIngressInstance.setContractAddress(rulesContractName, Rules.address);
-    console.log("   > Updated NodeIngress contract with NodeRules address = " + Rules.address);
+    let sizeNodesStorage = await storageInstance.size()    
 
-    if(AllowlistUtils.isInitialAllowlistedNodesAvailable()) {
-        console.log("   > Adding Initial Allowlisted eNodes ...");
-        let allowlistedNodes = AllowlistUtils.getInitialAllowlistedNodes();
-        for (i = 0; i < allowlistedNodes.length; i++) {
-            let enode = allowlistedNodes[i];
-            const { enodeId, host, port } = AllowlistUtils.enodeToParams(enode);
-            
-            let result = await nodeRulesContract.addEnode(
-                enodeId,
-                host,    
-                Web3Utils.toBN(port)
-            );
-            console.log("     > eNode added: " + enode );
-        }
-    }
-
-    logCurrentAllowlist(nodeRulesContract);
+    console.log("Size enodes" + sizeNodesStorage) 
 }
