@@ -81,6 +81,7 @@ contract MultisignatureRelay is MultisignatureAdminProxy{
     {
         confirmations[transactionId][msg.sender] = false;
         emit Revocation(msg.sender, transactionId);
+        removeTransaction(transactionId);
     }
 
     /// @dev Allows anyone to execute a confirmed transaction.
@@ -92,15 +93,25 @@ contract MultisignatureRelay is MultisignatureAdminProxy{
         notExecuted(transactionId)
     {
         if (isConfirmed(transactionId)) {
-            Transaction storage txn = transactions[transactionId];
-            txn.executed = true; 
+            Transaction storage txn = transactions[transactionId]; 
             (bool executed, bytes memory output) = _executeCall(txn.to,txn.payload);
-            if (executed) //we don't need to save transactions after execution
-                emit Execution(transactionId);
-            else {
-                emit ExecutionFailure(transactionId, output);
-                txn.executed = false;
-            }
+            require(executed, "failed execution on storage"); //we don't need to save transactions after execution
+            txn.executed = true;
+            emit Execution(transactionId);
+        }
+    }
+
+    /// @dev Allows anyone to remove a transaction.
+    /// @param transactionId Transaction ID.
+    function removeTransaction(uint256 transactionId)
+        private
+        ownerExists(msg.sender)
+        notExecuted(transactionId)
+    {
+        if (getConfirmationCount(transactionId)==0) {
+            Transaction storage txn = transactions[transactionId];
+            txn.executed = true;
+            emit RemoveTransaction(msg.sender, transactionId);
         }
     }
 
@@ -132,7 +143,7 @@ contract MultisignatureRelay is MultisignatureAdminProxy{
         notNull(_payload)
         returns (uint256 transactionId)
     {
-        bytes32 _trxHash = keccak256(abi.encodePacked(_to, _payload));  
+        bytes32 _trxHash = keccak256(abi.encodePacked(_to, _payload, block.number));  
         _transactionExists(_trxHash);
         transactionId = transactionCount;
 
@@ -252,5 +263,6 @@ contract MultisignatureRelay is MultisignatureAdminProxy{
     event Revocation(address indexed sender, uint256 indexed transactionId);
     event Submission(uint256 indexed transactionId);
     event Execution(uint256 indexed transactionId);
-    event ExecutionFailure(uint256 indexed transactionId, bytes payload);
+    event RemoveTransaction(address indexed sender,uint256 indexed transactionId);
+//    event ExecutionFailure(uint256 indexed transactionId, bytes payload);
 }
