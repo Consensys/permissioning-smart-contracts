@@ -162,26 +162,6 @@ contract NodeRules is NodeRulesProxy, NodeRulesList {
         return _updateStorage_NodeRules(_newNodeRules);
     }
 
-    /*function getByIndex(uint index) public view returns (
-        string memory enodeId,
-        string memory host,
-        uint16 port, 
-        NodeType nodeType, 
-        bytes6 geoHash, 
-        string memory name, 
-        string memory organization, 
-        string memory did, 
-        bytes32 group) {
-        if (index >= 0 && index < size()) {
-            enode memory item = allowlist[index];
-            return (item.enodeHigh, item.enodeLow, item.ip, item.port, item.nodeType, item.geoHash, item.name, item.organization, item.did, item.group);
-        }
-    }*/
-
-    /*function triggerRulesChangeEvent(bool addsRestrictions) public {
-        ingressContract.emitRulesChangeEvent(addsRestrictions);
-    } */
-
     function activateValidationEnodeIdOnly(bool _onlyUseEnodeId) external onlyAdmin onlyOnEditMode returns (bool) {
         return setValidateEnodeIdOnly(_onlyUseEnodeId);
     }
