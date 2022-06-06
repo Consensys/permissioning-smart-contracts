@@ -31,7 +31,7 @@ const AddModalContainer: React.FC<{
   
   const handleSubmit = (e: MouseEvent) => {
     e.preventDefault();
-   // setInput('');
+   setInput('');
     setValidation({ valid: false });
     handleAdd(input,membresiaType);
   };
