@@ -111,11 +111,8 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
 
   const listFilter=useMemo(()=>  list.filter(row=> {
     //  return  row.organization .toString().includes(searchOrganization) || row.ip.includes( searchOrganization ) ;
-  
     if (searchType===""){
-      
       const {enodeHigh} = enodeToParams(searchOrganization)
- 
       if (enodeHigh===""){
         return  row.organization.toString().includes(searchOrganization) 
       || hexToIp(row.ip).includes( searchOrganization ) ;
@@ -133,19 +130,17 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
       }else{
         return row.nodeType.toString().includes(getType(searchType)  ) 
         && (  row.enodeHigh.includes(enodeHigh));
-      }
-      
-    }
-    
+      }   
+    } 
   }
-  ),[searchType,searchOrganization,list])
+  ),[searchType,searchOrganization,list]);
   
   if (!!nodeRulesContract) {
     const handleAdd = async (enode:string,nodeType:string, nodeName:string,nodeOrganization:string, nodeGeoHash:string , nodeDid:string) => {
      //const { enode, type, organization, name, did, group } = value;
      // const { enodeHigh, enodeLow, ip, port } = enodeToParams(enode);
      let group = ""
-     let nodeTypeValue = 3
+     let nodeTypeValue = 0
      switch (nodeType) {
       case 'Bootnode':
         nodeTypeValue=0
@@ -164,11 +159,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         group=""
         break;
       default:
-        nodeTypeValue=3
+        nodeTypeValue=0
         group=""
     }
-    //const did ='N/A'
-   // const organization='lacchain'
+
     const { enodeHigh, enodeLow, ip, port} = enodeToParams(enode);
     //const geoHash ="0x00646a6e3431" //await getGeohash(ip);
     
@@ -184,7 +178,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         did:nodeDid,
         group
       });
+
       try {
+        // console.log("nodeName:" +nodeName )
+        // console.log("nodeOrganization:" +nodeOrganization )
         const tx = await nodeRulesContract!.functions.addEnode(
           utils.hexlify(enodeHigh),
           utils.hexlify(enodeLow),
@@ -240,7 +237,10 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
           utils.hexlify(enodeHigh),
           utils.hexlify(enodeLow),
           utils.hexlify(ip),
-          utils.bigNumberify(port)
+          utils.bigNumberify(port),
+          {
+            gasLimit:  300000
+          }
         );
         const tx = await nodeRulesContract!.functions.removeEnode(
           utils.hexlify(enodeHigh),
@@ -248,7 +248,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
           utils.hexlify(ip),
           utils.bigNumberify(port),
           {
-            gasLimit: est.toNumber() * 2
+            gasLimit: est.toNumber() + 300000
           }
         );
         toggleModal('remove')(false);
@@ -277,7 +277,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         const tx = await nodeRulesContract!.functions.confirmTransaction(
           value,
           {
-            gasLimit: est.toNumber() * 2
+            gasLimit: est.toNumber()  + 300000
           }
         );
 
@@ -306,7 +306,7 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         const tx = await nodeRulesContract!.functions.revokeConfirmation(
           value,
           {
-            gasLimit: est.toNumber() * 2
+            gasLimit: est.toNumber() + 300000
           }
         );
         //toggleModal('remove')(false);
