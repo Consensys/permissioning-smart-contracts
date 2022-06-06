@@ -38,7 +38,7 @@ const loadAdminData = (
       adminContract.functions.getTransactionIds(0, countTransaction, true, false).then(listTransaction => {
         const listElementsPromisesTransaction = [];
         for (let i = 0; i < listTransaction.length; i++) {
-          console.log(adminContract.functions.getTransaction(listTransaction[i]));
+        //  console.log(adminContract.functions.getTransaction(listTransaction[i]));
           listElementsPromisesTransaction.push(adminContract.functions.getTransaction(listTransaction[i]));
         }
 
