@@ -109,7 +109,9 @@ const handleClear = (e: MouseEvent) => {
     }
 
       try {
-        const tx = await accountRulesContract!.functions.addAccount(value,membresiaTypeValue);
+       
+        const est = await accountRulesContract!.estimate.addAccount(value,membresiaTypeValue ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.addAccount(value,membresiaTypeValue,  { gasLimit: est.toNumber() + 300000 });
     
         toggleModal('add')(false);
         addTransaction(value, PENDING_ADDITION);
@@ -140,8 +142,8 @@ const handleClear = (e: MouseEvent) => {
 
     const handleRemove = async (value: string) => {
       try {
-        const est = await accountRulesContract!.estimate.removeAccount(value);
-        const tx = await accountRulesContract!.functions.removeAccount(value, { gasLimit: est.toNumber() * 2 });
+        const est = await accountRulesContract!.estimate.removeAccount(value  ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.removeAccount(value, { gasLimit: est.toNumber() + 300000 });
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
@@ -158,8 +160,8 @@ const handleClear = (e: MouseEvent) => {
     };
     const handleConfirm = async (value: number) => {
       try {
-        const est = await accountRulesContract!.estimate.confirmTransaction(value);
-        const tx = await accountRulesContract!.functions.confirmTransaction(value, { gasLimit: est.toNumber() * 2 });
+        const est = await accountRulesContract!.estimate.confirmTransaction(value  ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.confirmTransaction(value, { gasLimit: est.toNumber() + 300000 });
         //toggleModal('add')(false);
         addTransaction(value.toString(), PENDING_CONFIRM);
         await tx.wait(1); // wait on receipt confirmations
@@ -177,8 +179,8 @@ const handleClear = (e: MouseEvent) => {
 
     const handleRevoke= async (value: number) => {
       try {
-        const est = await accountRulesContract!.estimate.revokeConfirmation(value);
-        const tx = await accountRulesContract!.functions.revokeConfirmation(value, { gasLimit: est.toNumber() * 2 });
+        const est = await accountRulesContract!.estimate.revokeConfirmation(value  ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.revokeConfirmation(value, { gasLimit: est.toNumber() + 300000 });
        // toggleModal('remove')(false);
         addTransaction(value.toString(), PENDING_REVOKE);
         await tx.wait(1); // wait on receipt confirmations

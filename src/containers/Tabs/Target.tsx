@@ -85,7 +85,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     const handleAdd = async (value: string) => {
 
       try {
-        const tx = await accountRulesContract!.functions.addTarget(value);
+        const est = await accountRulesContract!.estimate.addTarget(value ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.addTarget(value ,{ gasLimit: est.toNumber() + 300000 });
         toggleModal('add')(false);
         addTransaction(value, PENDING_ADDITION);
         const receipt = await tx.wait(1); // wait on receipt confirmations
@@ -115,8 +116,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
 
     const handleRemove = async (value: string) => {
       try {
-        const est = await accountRulesContract!.estimate.removeTarget(value);
-        const tx = await accountRulesContract!.functions.removeTarget(value, { gasLimit: est.toNumber() * 2 });
+        const est = await accountRulesContract!.estimate.removeTarget(value ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.removeTarget(value, { gasLimit: est.toNumber() + 300000 });
         toggleModal('remove')(false);
         addTransaction(value, PENDING_REMOVAL);
         await tx.wait(1); // wait on receipt confirmations
@@ -133,8 +134,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
     };
     const handleConfirm = async (value: number) => {
       try {
-        const est = await accountRulesContract!.estimate.confirmTransaction(value);
-        const tx = await accountRulesContract!.functions.confirmTransaction(value, { gasLimit: est.toNumber() * 2 });
+        const est = await accountRulesContract!.estimate.confirmTransaction(value ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.confirmTransaction(value, { gasLimit: est.toNumber() + 300000 });
         //toggleModal('add')(false);
         addTransaction(value.toString(), PENDING_CONFIRM);
         await tx.wait(1); // wait on receipt confirmations
@@ -152,8 +153,8 @@ const AccountTabContainer: React.FC<AccountTabContainerProps> = ({ isOpen }) => 
 
     const handleRevoke= async (value: number) => {
       try {
-        const est = await accountRulesContract!.estimate.revokeConfirmation(value);
-        const tx = await accountRulesContract!.functions.revokeConfirmation(value, { gasLimit: est.toNumber() * 2 });
+        const est = await accountRulesContract!.estimate.revokeConfirmation(value ,{ gasLimit:  300000 });
+        const tx = await accountRulesContract!.functions.revokeConfirmation(value, { gasLimit: est.toNumber() + 300000 });
        // toggleModal('remove')(false);
         addTransaction(value.toString(), PENDING_REVOKE);
         await tx.wait(1); // wait on receipt confirmations
