@@ -15,7 +15,8 @@ const AddModalContainer: React.FC<{
   display: ModalDisplay;
 }> = ({ isOpen, closeModal, handleAdd, isValid, display }) => {
   const [enode, setEnode] = useState("");
-  const [nodeType, setNodeType] = useState("");
+  
+  const [nodeType, setNodeType] = useState("Bootnode");
   const [nodeName, setNodeName] = useState("");
   const [nodeOrganization, setNodeOrganization] = useState("");
   const [nodeDid, setNodeDid] = useState("");
