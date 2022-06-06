@@ -75,7 +75,7 @@ const loadNodeData = (
                   const executed= r[1]
                   const transactionID = r[2]
                   const nameFunc = payload.slice(2,10);
-                  console.log(nameFunc)
+                 // console.log(nameFunc)
                   let  withStringyPort={enodeHigh: "",
                     enodeLow: "",
                     ip: "",

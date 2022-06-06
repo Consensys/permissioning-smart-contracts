@@ -200,19 +200,22 @@ const EnodeTabContainer: React.FC<EnodeTabContainerProps> = ({ isOpen }) => {
         toggleModal('add')(false);
         addTransaction(identifier, PENDING_ADDITION);
         const receipt = await tx.wait(3); // wait on receipt confirmations
-     
-        const addEvent = receipt.events!.filter(e => e.event && e.event === 'NodeAdded').pop();
+      
+       // const addEvent = receipt.events!.filter(e => e.event && e.event === 'NodeAdded').pop();
+        const addEvent = receipt.events!.filter(e => e.event && e.event === 'TransactionAdded').pop();
         if (!addEvent) {
           openToast(enode, FAIL, `Error while processing node: ${enode}`);
         } else {
           const addSuccessResult = idx(addEvent, _ => _.args[0]);
+          
           if (addSuccessResult === undefined) {
             openToast(enode, FAIL, `Error while adding node: ${enode}`);
-          } else if (Boolean(addSuccessResult)) {
+          }else{ //else if (Boolean(addSuccessResult)) {
             openToast(enode, SUCCESS, `New node added: ${enode}`);
-          } else {
-            openToast(enode, FAIL, `Node "${enode}" is already added`);
           }
+          // } else {
+          //   openToast(enode, FAIL, `Node "${enode}" is already added`);
+          // }
         }
         deleteTransaction(identifier);
       } catch (e) {
