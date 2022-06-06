@@ -63,38 +63,74 @@ const loadNodeData = (
           const listElementsPromisesTransaction = [];
  
           for (let i = 0; i< listTransaction.length; i++) {
-    
-            listElementsPromisesTransaction.push(nodeRulesContract.functions.getTransaction(listTransaction[i]));
+            if (listTransaction[i].toNumber() !==0){
+              //console.log("id-transacion-"+listTransaction[i])
+              listElementsPromisesTransaction.push(nodeRulesContract.functions.getTransaction(listTransaction[i]));
+            }
           }
-
+          
           Promise.all(listElementsPromisesTransaction).then(responses => {
             const updatedNodeList = responses.map(r => {
                   const payload = r[0]
                   const executed= r[1]
                   const transactionID = r[2]
-               
-                  const decode= AbiCoder.decode([  "bytes32","bytes32","bytes16","uint16","uint8","bytes6","string","string","string","bytes32"],"0x"+ payload.slice(10,payload.length));
-                    const withStringyPort = {         
+                  const nameFunc = payload.slice(2,10);
+                  console.log(nameFunc)
+                  let  withStringyPort={enodeHigh: "",
+                    enodeLow: "",
+                    ip: "",
+                    port: "",
+                    nodeType: 0,
+                    geoHash: "",
+                    organization: "",
+                    name: "",
+                    did: "",
+                    group: "",
+                    executed:executed ,
+                      transactionId:transactionID.toNumber()
+                      }
+
+                  if (nameFunc ==="2444b823"){//remove
+                    const   decode= AbiCoder.decode([  "bytes32","bytes32","bytes16","uint16"],"0x"+ payload.slice(10,payload.length));
+                     withStringyPort = {         
                       enodeHigh: decode[0],
                       enodeLow: decode[1],
                       ip: decode[2],
                       port: decode[3].toString(),
-                      nodeType: decode[4],
-                      geoHash: decode[5],
-                      organization: decode[6],
-                      name: decode[7],
-                      did: decode[8],
-                      group: decode[9],
+                      nodeType: 0,
+                      geoHash: "",
+                      organization: "",
+                      name: "",
+                      did: "",
+                      group: "",
                       executed:executed ,
                        transactionId:transactionID.toNumber()
                        };
-                    return {
-                      ...withStringyPort,
-                      identifier: paramsToIdentifierTransaction(withStringyPort)
-                    };
-                  });
-                  
-                  setNodeTransactionList(updatedNodeList);
+                  }else if (nameFunc ==="afe76f5c"){
+                    const decode= AbiCoder.decode([  "bytes32","bytes32","bytes16","uint16","uint8","bytes6","string","string","string","bytes32"],"0x"+ payload.slice(10,payload.length));
+                       withStringyPort = {         
+                        enodeHigh: decode[0],
+                        enodeLow: decode[1],
+                        ip: decode[2],
+                        port: decode[3].toString(),
+                        nodeType: decode[4],
+                        geoHash: decode[5],
+                        name: decode[6],
+                        organization: decode[7],
+                        did: decode[8],
+                        group: decode[9],
+                        executed:executed ,
+                        transactionId:transactionID.toNumber()
+                        };
+                        
+                  }
+                return {
+                  ...withStringyPort,
+                  identifier: paramsToIdentifierTransaction(withStringyPort)
+                };
+                });
+                    
+                setNodeTransactionList(updatedNodeList);
             
           });
           
