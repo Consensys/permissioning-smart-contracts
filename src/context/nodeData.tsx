@@ -56,15 +56,15 @@ const loadNodeData = (
       });
     });
   
-
     nodeRulesContract.functions.getTransactionCount(true,false).then(countTransaction =>{
-   
+     // console.log("countTransaction:"+countTransaction)
       nodeRulesContract.functions.getTransactionIds(0,countTransaction,true,false).then(listTransaction=>{
           const listElementsPromisesTransaction = [];
- 
+          console.log(listTransaction.length)
           for (let i = 0; i< listTransaction.length; i++) {
-            if (listTransaction[i].toNumber() !==0){
-              //console.log("id-transacion-"+listTransaction[i])
+            console.log(listTransaction[i].toNumber())
+            if (listTransaction[i].toNumber() >=0){
+           //   console.log("id-transacion-"+listTransaction[i])
               listElementsPromisesTransaction.push(nodeRulesContract.functions.getTransaction(listTransaction[i]));
             }
           }
@@ -75,7 +75,7 @@ const loadNodeData = (
                   const executed= r[1]
                   const transactionID = r[2]
                   const nameFunc = payload.slice(2,10);
-                 // console.log(nameFunc)
+                  console.log(nameFunc)
                   let  withStringyPort={enodeHigh: "",
                     enodeLow: "",
                     ip: "",
