@@ -77,8 +77,8 @@ module.exports = async(deployer, network) => {
         console.log("   > Adding Initial Allowlisted Accounts ...");
         createdOrMigratedAccounts = AllowlistUtils.getInitialAllowlistedAccounts();
         if (createdOrMigratedAccounts.length > 0) {
-            await accountRulesContract.addAccounts(allowlistedAccounts);
-            console.log ("   > Initial Allowlisted Accounts added: " + allowlistedAccounts);
+            await accountRulesContract.addAccounts(createdOrMigratedAccounts);
+            console.log ("   > Initial Allowlisted Accounts added: " + createdOrMigratedAccounts);
         }
     }else{
         createdOrMigratedAccounts = await accountRulesContract.getAccounts();
