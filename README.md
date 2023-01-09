@@ -1,7 +1,7 @@
 # Permissioning Smart Contracts
-## ⚠️ Project Deprecation Notice ⚠️
+## ⚠️ Project Archival Notice ⚠️
 
-This repository is deprecated and archived. 
+This repository is archived. 
 
 You can still use onchain permissioning with [Besu](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/) however we do not plan to further develop either the specific implementation of these contracts or the dapp that is contained in this repository. 
 
