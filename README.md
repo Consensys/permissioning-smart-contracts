@@ -3,8 +3,7 @@
 
 This repository is deprecated and archived. 
 
-You can still use onchain permissioning with Besu however we do not plan to further develop either the specific implementation of these contracts or the dapp that is contained in this repository. 
-The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
+You can still use onchain permissioning with [Besu](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/) however we do not plan to further develop either the specific implementation of these contracts or the dapp that is contained in this repository. 
 
 Additionally, due to outdated dependencies, the below instructions to build and run the dapp may not work for new users.
 
