@@ -1,10 +1,15 @@
 # Permissioning Smart Contracts
+## ⚠️ Project Archival Notice ⚠️
+
+This repository is archived. 
+
+You can still use onchain permissioning with [Besu](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/) however we do not plan to further develop either the specific implementation of these contracts or the dapp that is contained in this repository. 
+
+Additionally, due to outdated dependencies, the below instructions to build and run the dapp may not work for new users.
 
 ## Audit
 Version 1 of these contracts was audited by a third party. Read the report [here](https://consensys.net/diligence/audits/2019/08/pegasys-permissioning/)
 
-## Production use
-[Please contact us](https://consensys.net/quorum/contact-us) if you have questions. Additionally we would love to hear from you if you are considering using this implementation of onchain permissioning in a production environment.
 ## License
 The contents of this repository are Apache 2.0 licensed.
 **Important:** The dependency chain for this Dapp includes [web3js](https://github.com/ethereum/web3.js/) which is LGPL licensed.
@@ -78,8 +83,7 @@ Snapshots are compared as part of the test suite, to check any changes made to t
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma-separated multiple addresses can be specified
   - `INITIAL_ALLOWLISTED_ACCOUNTS`: The permitted account addresses. Comma-separated multiple addresses can be specified
   - `INITIAL_ALLOWLISTED_NODES`: The enode URLs of permitted nodes. Comma-separated multiple nodes can be specified
-1. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step
-1. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
+1. With these environment variables provided, run `truffle migrate --reset` to deploy the contracts. The console will display the addresses of the contracts deployed. 
 
 ### Deploying the Dapp
 1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/ConsenSys/permissioning-smart-contracts/releases/latest)
